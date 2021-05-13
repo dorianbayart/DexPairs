@@ -1,0 +1,20 @@
+{
+  "name": "pancake-stats",
+  "version": "0.0.1",
+  "description": "Grab stats from Pancake's API and store it on Aleph.im !",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "crypto",
+    "bsc",
+    "pancake",
+    "alephim"
+  ],
+  "author": "Dorian Bayart",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}

@@ -1,0 +1,274 @@
+body {
+  font-family: Sans-Serif;
+}
+
+header {
+  font-size: xxx-large;
+  padding: 12px 24px;
+  display: inline-flex;
+  align-items: baseline;
+  width: 40%;
+}
+header .version {
+  font-size: x-large;
+  font-style: italic;
+  margin-left: 0.5em;
+}
+header .version .low {
+  font-size: small;
+}
+
+#menu {
+  font-size: large;
+  display: inline-flex;
+  padding: 12px 24px;
+  width: 40%;
+}
+#menu .menu-item {
+  flex-grow: 1;
+  cursor: pointer;
+  margin: 0 0 0 4em;
+  text-align: center;
+  padding: 0.5em;
+  border-bottom: 1px white solid;
+}
+#menu .menu-item:hover {
+  border-bottom: 1px lightgray solid;
+}
+#menu .menu-item .low {
+  font-size: x-small;
+}
+
+.flex-column {
+  display: flex;
+  flex-flow: column;
+}
+.left-menu {
+  flex: 0 0 175px;
+}
+
+#flex-main {
+  display: flex;
+}
+
+#flex-pair {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  margin: auto;
+}
+
+
+#top {
+  display: flex;
+  flex-wrap: nowrap;
+  font-size: small;
+}
+.top-token {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 25%;
+
+  margin: 1em;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 0.5em 1em;
+
+  cursor: pointer;
+}
+.top-token:hover {
+  box-shadow: 1px 1px 12px #BBB;
+}
+.top-symbol {
+  flex: 60%;
+}
+.top-price {
+  flex: 50%;
+  text-align: end;
+}
+
+#search {
+  margin: 0.5em 1em;
+}
+#search_field {
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 1em;
+  font-size: initial;
+}
+
+#list {
+
+  margin: 0.5em 1em;
+  max-height: 50vh;
+  overflow-y: scroll;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 1em;
+}
+#list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#list li {
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 12px;
+}
+#list li:hover {
+  background-color: #EFEFEF;
+}
+
+
+#token, #base {
+  display: inline-flex;
+  flex: 40%;
+  flex-wrap: wrap;
+  margin: 0.5em 1em;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+#token #token_symbol,
+#token #token_name,
+#token #token_price,
+#token #token_price_BNB,
+#base #base_symbol,
+#base #base_select,
+#base #base_name,
+#base #base_price,
+#base #base_price_BNB {
+  display: inline-block;
+
+}
+#token #token_symbol,
+#token #token_name,
+#token #token_address,
+#token #token_price,
+#token #token_price_BNB,
+#base #base_symbol,
+#base #base_select,
+#base #base_name,
+#base #base_address,
+#base #base_price,
+#base #base_price_BNB {
+  flex: 40%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 3px 12px;
+  display: flex;
+  align-items: end;
+}
+#token #token_symbol,
+#token #token_price,
+#base #base_symbol,
+#base #base_select,
+#base #base_price {
+  font-size: larger;
+}
+#token #token_address,
+#token #token_price,
+#base #base_address,
+#base #base_price {
+  flex: initial;
+}
+#token #token_price,
+#token #token_price_BNB,
+#base #base_price,
+#base #base_price_BNB {
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+#token #token_address,
+#token #token_price_BNB,
+#base #base_address,
+#base #base_price_BNB {
+  font-size: small;
+}
+
+#token #token_price_BNB,
+#base #base_price_BNB {
+  display: none;
+}
+
+#base #base_change {
+  border-radius: 12px;
+  width: 28px;
+  height: 28px;
+  padding: 8px;
+  margin: 0;
+  border: none;
+  background-color: white;
+  transition: padding 80ms ease-in-out;
+  z-index: 1;
+  cursor: pointer;
+}
+#base #base_change:hover {
+  padding: 6px;
+}
+#base #base_change:active {
+  background-color: whitesmoke;
+}
+#base #base_change img {
+  width: 100%;
+  background: white;
+}
+#base #base_change:active img {
+  background: whitesmoke;
+}
+
+#base #base_symbol {
+  padding: 3px;
+}
+#base #base_select {
+  display: none;
+  font-size: small;
+  cursor: pointer;
+}
+
+#chart {
+  margin: 0.5em 1em;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 1em;
+  width: auto;
+  max-height: 50vh;
+}
+#myChart {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#swapper_token, #swapper_base {
+  margin: 1em;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 0.5em 1em;
+  flex: 40%;
+  font-size: large;
+  max-width: 120px;
+}
+
+#swapper_switch {
+  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: padding 80ms ease-in-out;
+}
+#swapper_switch:hover {
+  border-color: lightgray;
+  padding: 2px;
+}
+#swapper_switch:active {
+  background-color: whitesmoke;
+}
+#swapper_switch img {
+  width: 100%;
+}

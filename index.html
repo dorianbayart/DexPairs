@@ -1,0 +1,97 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>DexPairs</title>
+  <meta name="description" content="Check the historical price of any pair token you want !">
+  <meta name="author" content="Dorian Bayart">
+
+  <link rel="stylesheet" href="design.css">
+  <script src="https://momentjs.com/downloads/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+
+</head>
+
+<body>
+  <header>
+    DexPairs
+    <span class='version'>
+      <span class='low'>
+        pre
+      </span>
+      ALPHA
+    </span>
+  </header>
+
+  <div id='menu'>
+    <div id='menu-charts' class='menu-item'>
+      Charts
+    </div>
+    <div id='menu-wallet' class='menu-item'>
+      Wallet
+      <span class='low'>
+        Soon
+      </span>
+    </div>
+  </div>
+
+  <div id='top' class='flex-row'>
+  </div>
+  <div id='flex-main'>
+    <div class="flex-column left-menu">
+      <div id='search'>
+        <input type='text' id='search_field' placeholder='Search'>
+      </div>
+      <div id='order-list'>
+        
+      </div>
+      <div id='list'></div>
+    </div>
+    <div class='flex-column'>
+      <div id='flex-pair'>
+        <div id='token'>
+          <div id='token_symbol'></div>
+          <div id='token_price'></div>
+          <div id='token_name'></div>
+          <div id='token_address'></div>
+          <div id='token_price_BNB'></div>
+        </div>
+        <button id='swapper_switch' title='Switch'>
+          <img src="https://cdn0.iconfinder.com/data/icons/google-material-design-3-0/48/ic_swap_horiz_48px-256.png">
+        </button>
+        <div id='base'>
+          <button id='base_change' title='Edit'>
+            <img src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/edit-change-pencil-512.png">
+          </button>
+          <div id='base_symbol'></div>
+          <select id='base_select'></select>
+          <div id='base_price'></div>
+          <div id='base_name'></div>
+          <div id='base_address'></div>
+          <div id='base_price_BNB'></div>
+        </div>
+      </div>
+      <div id='chart'>
+        <canvas id="myChart"></canvas>
+      </div>
+      <div id='flex-pair'>
+        <div id='swapper_token_symbol'></div>
+        <input type='number' id='swapper_token' min='0' step='0.0000000000000001'>
+
+        <input type='number' id='swapper_base' min='0' step='0.0000000000000001'>
+        <div id='swapper_base_symbol'></div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <script src="script.js"></script>
+</body>
+</html>
