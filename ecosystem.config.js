@@ -15,7 +15,7 @@ module.exports = {
     //ignore_watch : ["node_modules", "file"],
     //instances: 1,
     //exec_mode: "cluster",
-    increment_var : 'PORT',
+    //increment_var : 'PORT',
     env_production: {
       NODE_ENV: "production",
       PORT: 3001,
@@ -29,8 +29,8 @@ module.exports = {
       ref  : 'origin/main',
       repo : 'git@github.com:dorianbayart/DexPairs.git',
       path : '/home/dexpairs/prod',
-      'pre-deploy-local': '',
-      'post-deploy' : 'npm install && pm2 startOrRestart ecosystem.config.js --env production',
+      'pre-deploy-local': 'pwd && ls -al',
+      'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js --env production && pm2 save',
       'pre-setup': '',
       env_production: {
         NODE_ENV: "production"
