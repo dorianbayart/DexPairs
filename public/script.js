@@ -49,7 +49,7 @@ function getTop() {
   xmlhttp.open("GET", "/top", true)
   xmlhttp.send()
 
-  setTimeout(function(){ getSimple() }, 60000);
+  setTimeout(function(){ getTop() }, 60000);
 }
 
 
