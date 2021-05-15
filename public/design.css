@@ -3,26 +3,18 @@ body {
 }
 
 header {
-  font-size: xxx-large;
   padding: 12px 24px;
   display: inline-flex;
   align-items: baseline;
   width: 40%;
 }
 header .version {
-  font-size: x-large;
   font-style: italic;
   margin-left: 0.5em;
 }
-header .version .low {
-  font-size: small;
-}
 
 #menu {
-  font-size: large;
   display: inline-flex;
-  padding: 12px 24px;
-  width: 40%;
 }
 #menu .menu-item {
   flex-grow: 1;
@@ -35,16 +27,11 @@ header .version .low {
 #menu .menu-item:hover {
   border-bottom: 1px lightgray solid;
 }
-#menu .menu-item .low {
-  font-size: x-small;
-}
 
 .flex-column {
   display: flex;
   flex-flow: column;
-}
-.left-menu {
-  flex: 0 0 175px;
+  max-width: 100%;
 }
 
 #flex-main {
@@ -62,18 +49,16 @@ header .version .low {
 #top {
   display: flex;
   flex-wrap: nowrap;
-  font-size: small;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 .top-token {
   display: flex;
   flex-wrap: wrap;
   flex: 25%;
 
-  margin: 1em;
   border: 1px solid #CCC;
   border-radius: 12px;
-  padding: 0.5em 1em;
-
   cursor: pointer;
 }
 .top-token:hover {
@@ -87,24 +72,19 @@ header .version .low {
   text-align: end;
 }
 
-#search {
-  margin: 0.5em 1em;
-}
+
 #search_field {
   border: 1px solid #CCC;
   border-radius: 12px;
   padding: 1em;
-  font-size: initial;
 }
 
 #list {
-
-  margin: 0.5em 1em;
   max-height: 50vh;
   overflow-y: scroll;
+  overflow-x: hidden;
   border: 1px solid #CCC;
   border-radius: 12px;
-  padding: 1em;
 }
 #list ul {
   list-style: none;
@@ -113,7 +93,6 @@ header .version .low {
 }
 #list li {
   cursor: pointer;
-  padding: 6px 12px;
   border-radius: 12px;
 }
 #list li:hover {
@@ -125,10 +104,8 @@ header .version .low {
   display: inline-flex;
   flex: 40%;
   flex-wrap: wrap;
-  margin: 0.5em 1em;
   border: 1px solid #CCC;
   border-radius: 12px;
-  padding: 12px;
 }
 
 #token #token_symbol,
@@ -185,7 +162,7 @@ header .version .low {
 #token #token_price_BNB,
 #base #base_address,
 #base #base_price_BNB {
-  font-size: small;
+  font-size: 0.85em;
 }
 
 #token #token_price_BNB,
@@ -224,17 +201,14 @@ header .version .low {
 }
 #base #base_select {
   display: none;
-  font-size: small;
+  font-size: 0.85em;
   cursor: pointer;
 }
 
 #chart {
-  margin: 0.5em 1em;
   border: 1px solid #CCC;
   border-radius: 12px;
-  padding: 1em;
   width: auto;
-  max-height: 50vh;
 }
 #myChart {
   max-width: 100%;
@@ -242,13 +216,10 @@ header .version .low {
 }
 
 #swapper_token, #swapper_base {
-  margin: 1em;
   border: 1px solid #CCC;
   border-radius: 12px;
-  padding: 0.5em 1em;
-  flex: 40%;
-  font-size: large;
   max-width: 120px;
+  text-align: center;
 }
 
 #swapper_switch {
