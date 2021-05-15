@@ -3,12 +3,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>DexPairs</title>
   <meta name="description" content="Check the historical price of any pair token you want !">
   <meta name="author" content="Dorian Bayart">
 
   <link rel="stylesheet" href="design.css">
+  <link rel="stylesheet" href="responsive.css">
   <script defer src="https://momentjs.com/downloads/moment.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
@@ -42,9 +44,7 @@
   </div>
   <div id='flex-main'>
     <div class="flex-column left-menu">
-      <div id='search'>
-        <input type='text' id='search_field' placeholder='Search'>
-      </div>
+      <input type='text' id='search_field' placeholder='Search'>
       <div id='order-list'>
 
       </div>

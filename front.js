@@ -71,7 +71,7 @@ launch()
 
 
 /* server */
-const port = 3001
+const port = process.env.PORT || 3001
 const app = express()
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
@@ -91,6 +91,7 @@ app.get('/charts/:token/:base', (req, res) => {
 
 app.get('/script.js', (req, res) => res.sendFile(path.join(__dirname, '/public/script.js')))
 app.get('/design.css', (req, res) => res.sendFile(path.join(__dirname, '/public/design.css')))
+app.get('/responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/responsive.css')))
 
 app.listen(port, () => console.log(`Frontend start at ${port}`))
 
