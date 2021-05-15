@@ -99,7 +99,7 @@ async function launch() {
 
       // update tokens charts
       if(tokens_charts[symbol]) {
-        if(tokens_charts[symbol].chart_1mn[tokens_charts[symbol].chart_1mn.length-1]['t'] !== time) {
+        if(tokens_charts[symbol].chart_1mn[tokens_charts[symbol].chart_1mn.length-1]['t'] < time) {
           tokens_charts[symbol].chart_1mn.push({
             t: time,
             price: price,
@@ -186,7 +186,7 @@ launch()
 
 
 /* server */
-const port = 3000
+const port = process.env.PORT || 3000
 const app = express()
 
 app.get('/list', (req, res) => res.json({tokens: tokens_list}))
