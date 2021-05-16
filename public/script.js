@@ -186,9 +186,15 @@ function setToken(symbol) {
   document.getElementById('token_symbol').innerHTML = symbol
   document.getElementById('token_name').innerHTML = simple[symbol]['name']
   let address = simple[symbol]['address'].slice(0, 5) + '...' + simple[symbol]['address'].slice(-5)
-  document.getElementById('token_address').innerHTML = address
+  let a = document.createElement('a')
+  a.href = 'https://bscscan.com/address/' + simple[symbol]['address']
+  a.target = '_blank'
+  a.innerHTML = address
+  document.getElementById('token_address').innerHTML = null
+  document.getElementById('token_address').appendChild(a)
+  //document.getElementById('token_address').innerHTML = address
   document.getElementById('token_price').innerHTML = '$ ' + precise(simple[symbol]['price'])
-  document.getElementById('token_price_BNB').innerHTML = 'BNB ' + precise(simple[symbol]['price_BNB'])
+  //document.getElementById('token_price_BNB').innerHTML = 'BNB ' + precise(simple[symbol]['price_BNB'])
 }
 
 // set information of the base token
@@ -196,9 +202,15 @@ function setBase(symbol) {
   document.getElementById('base_symbol').innerHTML = symbol
   document.getElementById('base_name').innerHTML = simple[symbol]['name']
   let address = simple[symbol]['address'].slice(0, 5) + '...' + simple[symbol]['address'].slice(-5)
-  document.getElementById('base_address').innerHTML = address
+  let a = document.createElement('a')
+  a.href = 'https://bscscan.com/address/' + simple[symbol]['address']
+  a.target = '_blank'
+  a.innerHTML = address
+  document.getElementById('base_address').innerHTML = null
+  document.getElementById('base_address').appendChild(a)
+  //document.getElementById('base_address').innerHTML = address
   document.getElementById('base_price').innerHTML = '$ ' + precise(simple[symbol]['price'])
-  document.getElementById('base_price_BNB').innerHTML = 'BNB ' + precise(simple[symbol]['price_BNB'])
+  //document.getElementById('base_price_BNB').innerHTML = 'BNB ' + precise(simple[symbol]['price_BNB'])
 }
 
 function setSwapperToken() {
@@ -287,9 +299,9 @@ getTop()
 
 
 function updateCharts() {
-  let timeData = tokenCharts.chart_1mn.map(coords => new Date(coords.t))
-  let tokenData = tokenCharts.chart_1mn.map(coords => {
-    const baseCoords = baseCharts.chart_1mn.find(base => base.t === coords.t)
+  let timeData = tokenCharts.chart_often.map(coords => new Date(coords.t))
+  let tokenData = tokenCharts.chart_often.map(coords => {
+    const baseCoords = baseCharts.chart_often.find(base => base.t === coords.t)
     return baseCoords ? coords.price / baseCoords.price : null
   })
   //let data =
@@ -299,7 +311,7 @@ function updateCharts() {
     myChart.data.datasets[0].label = selectedToken + '/' + selectedBase
     myChart.data.datasets[0].data = tokenData
     myChart.options.scales.y.title.text = selectedBase
-    myChart.update('active')
+    myChart.update()
   } else {
     myChart = new Chart(ctx, {
         type: 'line',
@@ -308,8 +320,9 @@ function updateCharts() {
             datasets: [{
                 label: selectedToken + '/' + selectedBase,
                 data: tokenData,
-                backgroundColor: '#FF000088',
+                backgroundColor: '#0000FF88',
                 borderColor: '#0000FF88',
+                radius: 0,
                 tension: 0.3
             }]
         },
@@ -317,6 +330,7 @@ function updateCharts() {
           responsive: true,
           maintainAspectRatio: false,
           aspectRatio: 0.75,
+          radius: 0,
           interaction: {
             intersect: false,
           },
@@ -324,7 +338,7 @@ function updateCharts() {
             x: {
               type: 'time',
               time: {
-                unit: 'hour'
+                //unit: 'day'
               },
             },
             y: {

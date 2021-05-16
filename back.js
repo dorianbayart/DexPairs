@@ -82,7 +82,7 @@ async function launch() {
       const symbol = tokens[token].symbol
       const name = tokens[token].name
       const price = tokens[token].price
-      const price_BNB = tokens[token].price_BNB
+      //const price_BNB = tokens[token].price_BNB
 
       // update tokens list
       if(!tokens_list.includes(symbol)) {
@@ -94,29 +94,55 @@ async function launch() {
         address: address,
         name: name,
         price: price,
-        price_BNB: price_BNB
+        //price_BNB: price_BNB
       }
 
       // update tokens charts
+      //
       if(tokens_charts[symbol]) {
-        if(tokens_charts[symbol].chart_1mn[tokens_charts[symbol].chart_1mn.length-1]['t'] < time) {
-          tokens_charts[symbol].chart_1mn.push({
+        if(tokens_charts[symbol].chart_often[tokens_charts[symbol].chart_often.length-1]['t'] < time) {
+          tokens_charts[symbol].chart_often.push({
             t: time,
             price: price,
-            price_BNB: price_BNB
+            //price_BNB: price_BNB
           })
-          tokens_charts[symbol].chart_1mn = tokens_charts[symbol].chart_1mn.slice(-60)
+          tokens_charts[symbol].chart_often = tokens_charts[symbol].chart_often.slice(-60)
         }
       } else {
         tokens_charts[symbol] = {
           address: address,
           name: name,
-          chart_1mn: [{
+          chart_often: [{
             t: time,
             price: price,
-            price_BNB: price_BNB
+            //price_BNB: price_BNB
           }]
         }
+      }
+      if(tokens_charts[symbol].chart_4h &&
+         (time - tokens_charts[symbol].chart_4h[tokens_charts[symbol].chart_4h.length-1]['t']) > 14400000) {
+        const val1 = tokens_charts[symbol].chart_often[tokens_charts[symbol].chart_often.length-2]
+        const val2 = tokens_charts[symbol].chart_often[tokens_charts[symbol].chart_often.length-1]
+        const v1 = val1.price
+        const t1 = val1.t
+        const v2 = val2.price
+        const t2 = val2.t
+        const a = (t2 - t1) / (v2 - v1)
+        const b = v1 - a * t1
+        const tx = tokens_charts[symbol].chart_4h[tokens_charts[symbol].chart_4h.length-1]['t'] + 14400000
+        const vx = a * tx + b
+        tokens_charts[symbol].chart_4h.push({
+          t: tx,
+          price: vx,
+          //price_BNB: price_BNB
+        })
+        tokens_charts[symbol].chart_4h = tokens_charts[symbol].chart_4h.slice(-60)
+      } else {
+        tokens_charts[symbol].chart_4h = [{
+          t: time,
+          price: price,
+          //price_BNB: price_BNB
+        }]
       }
     }
   }
@@ -130,14 +156,14 @@ async function launch() {
     const symbol = tokens[token].symbol
     const name = tokens[token].name
     const price = tokens[token].price
-    const price_BNB = tokens[token].price_BNB
+    //const price_BNB = tokens[token].price_BNB
 
     top_tokens[symbol] = {
       address: address,
       name: name,
       price: price,
-      price_BNB: price_BNB,
-      chart: tokens_charts[symbol].chart_1mn
+      //price_BNB: price_BNB,
+      chart: tokens_charts[symbol].chart_often
     }
   }
 

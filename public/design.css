@@ -2,24 +2,31 @@ body {
   font-family: Sans-Serif;
 }
 
+#header {
+  display: flex;
+  align-items: baseline;
+}
+
 header {
-  padding: 12px 24px;
   display: inline-flex;
   align-items: baseline;
-  width: 40%;
 }
 header .version {
   font-style: italic;
   margin-left: 0.5em;
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap-reverse;
 }
 
 #menu {
   display: inline-flex;
+  flex: auto;
 }
 #menu .menu-item {
   flex-grow: 1;
   cursor: pointer;
-  margin: 0 0 0 4em;
+  margin: 0 5%;
   text-align: center;
   padding: 0.5em;
   border-bottom: 1px white solid;
@@ -76,7 +83,6 @@ header .version {
 #search_field {
   border: 1px solid #CCC;
   border-radius: 12px;
-  padding: 1em;
 }
 
 #list {
@@ -214,12 +220,22 @@ header .version {
   max-width: 100%;
   max-height: 100%;
 }
+#source {
+  color: grey;
+  text-align: end;
+  font-style: italic;
+  font-size: 0.8rem;
+}
 
 #swapper_token, #swapper_base {
   border: 1px solid #CCC;
   border-radius: 12px;
   max-width: 120px;
   text-align: center;
+  flex: auto;
+}
+#swapper_token_symbol, #swapper_base_symbol {
+  margin: 0.25em;
 }
 
 #swapper_switch {

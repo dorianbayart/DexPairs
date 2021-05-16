@@ -79,7 +79,6 @@ app.get('/list', (req, res) => res.json({tokens: tokens_list}))
 app.get('/top', (req, res) => res.json(top_tokens))
 app.get('/simple', (req, res) => res.json(tokens_data))
 app.get('/charts/:token', (req, res) => {
-  console.log(req.params.token)
   res.json(tokens_charts[req.params.token])
 })
 app.get('/charts/:token/:base', (req, res) => {

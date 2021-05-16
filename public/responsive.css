@@ -5,17 +5,18 @@ body {
 }
 header {
   font-size: 3rem;
+  padding: 12px 24px;
 }
 header .version {
   font-size: 0.5em;
 }
 header .version .low {
   font-size: 0.5em;
+  margin-right: 0.5em;
 }
 #menu {
   font-size: 1.2rem;
   padding: 12px 24px;
-  width: 40%;
 }
 #menu .menu-item {
 
@@ -39,6 +40,7 @@ header .version .low {
 }
 #search_field {
   margin: 0.5em 1em;
+  padding: 1em;
 }
 #search_field {
   font-size: initial;
@@ -55,9 +57,12 @@ header .version .low {
   padding: 12px;
 }
 #chart {
-  margin: 0.5em 1em;
+  margin: 0.5em 1em 1em;
   padding: 1em;
   max-height: 40vh;
+}
+#source {
+  margin-top: 2em;
 }
 #swapper_token, #swapper_base {
   width: 30%;
@@ -73,6 +78,7 @@ header .version .low {
   }
   header {
     font-size: 2rem;
+    padding: 8px 16px;
   }
   #menu {
     padding: 6px 12px;
@@ -84,6 +90,7 @@ header .version .low {
   }
   #search_field {
     margin: 0.25em 0.5em;
+    padding: 0.5em 1em;
   }
   #list {
     margin: 0.25em 0.5em;
@@ -97,9 +104,12 @@ header .version .low {
     padding: 8px;
   }
   #chart {
-    margin: 0.25em 0.5em;
+    margin: 0.25em 0.5em 1em;
     padding: 0.5em;
-    max-height: 35vh;
+    max-height: 45vh;
+  }
+  #source {
+    margin-top: 1.25em;
   }
   #swapper_token, #swapper_base {
     margin: 0.5em;
@@ -114,6 +124,7 @@ header .version .low {
   }
   header {
     font-size: 1.5rem;
+    padding: 6px 12px;
   }
   #menu {
     padding: 3px 6px;
@@ -135,14 +146,15 @@ header .version .low {
   }
   #search_field {
     margin: 0.1em 0.25em;
+    padding: 0.25em 1em;
   }
   #list {
     margin: 0.1em 0.25em;
     padding: 0.25em;
-    max-height: 15vh;
+    max-height: 14vh;
   }
   #list li {
-    display: inline flow-root list-item;
+    display: inline-flex;
     padding: 10px;
   }
   #token, #base {
@@ -150,9 +162,12 @@ header .version .low {
     padding: 4px;
   }
   #chart {
-    margin: 0.1em 0.25em;
+    margin: 0.1em 0.25em 1em;
     padding: 0.25em;
-    max-height: 30vh;
+    max-height: 50vh;
+  }
+  #source {
+    margin-top: 0.5em;
   }
   #swapper_token, #swapper_base {
     margin: 0.25em;
