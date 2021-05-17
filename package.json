@@ -1,7 +1,7 @@
 {
-  "name": "pancake-stats",
+  "name": "DexPairs",
   "version": "0.0.1",
-  "description": "Grab stats from Pancake's API and store it on Aleph.im !",
+  "description": "Fetch stats from Pancake's API and explore them !",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -10,7 +10,7 @@
     "crypto",
     "bsc",
     "pancake",
-    "alephim"
+    "prices"
   ],
   "author": "Dorian Bayart",
   "license": "ISC",

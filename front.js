@@ -77,8 +77,8 @@ const app = express()
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
 app.get('/token/:token', (req, res) => {
   if(
-          Object.keys(tokens_list).includes(req.params.token) ||
-          Object.keys(tokens_data).findIndex(symbol => tokens_data[symbol].address === req.params.token) !== -1  
+          tokens_list.includes(req.params.token) ||
+          Object.keys(tokens_data).findIndex(symbol => tokens_data[symbol].address === req.params.token) !== -1
   ) {
             res.sendFile(path.join(__dirname, '/index.html'))
   } else {
