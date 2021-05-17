@@ -187,7 +187,7 @@ function setToken(symbol) {
   document.getElementById('token_name').innerHTML = simple[symbol]['name']
   let address = simple[symbol]['address'].slice(0, 5) + '...' + simple[symbol]['address'].slice(-5)
   let a = document.createElement('a')
-  a.href = 'https://bscscan.com/address/' + simple[symbol]['address']
+  a.href = 'https://bscscan.com/token/' + simple[symbol]['address']
   a.target = '_blank'
   a.innerHTML = address
   document.getElementById('token_address').innerHTML = null
@@ -203,7 +203,7 @@ function setBase(symbol) {
   document.getElementById('base_name').innerHTML = simple[symbol]['name']
   let address = simple[symbol]['address'].slice(0, 5) + '...' + simple[symbol]['address'].slice(-5)
   let a = document.createElement('a')
-  a.href = 'https://bscscan.com/address/' + simple[symbol]['address']
+  a.href = 'https://bscscan.com/token/' + simple[symbol]['address']
   a.target = '_blank'
   a.innerHTML = address
   document.getElementById('base_address').innerHTML = null
