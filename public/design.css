@@ -5,6 +5,8 @@ body {
 #header {
   display: flex;
   align-items: baseline;
+}
+#title {
   cursor: pointer;
 }
 
