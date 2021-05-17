@@ -116,9 +116,7 @@ function updateList() {
   let currentList = search.length > 0 ? filteredList : list;
 
   document.getElementById('list').innerHTML = null;
-
   ul = document.createElement('ul')
-  document.getElementById('list').appendChild(ul)
   currentList.forEach(function (token) {
     let li = document.createElement('li')
     ul.appendChild(li)
@@ -132,6 +130,7 @@ function updateList() {
       setSwapperBase()
     })
   })
+  document.getElementById('list').appendChild(ul)
 }
 
 // set base list selection
@@ -223,7 +222,7 @@ function setSwapperBase() {
 }
 
 
-// useful@
+// useful
 function precise(x) {
   return Number.parseFloat(x).toPrecision(5);
 }
@@ -308,7 +307,7 @@ function updateCharts() {
   var ctx = document.getElementById('myChart').getContext('2d')
   if(myChart) {
     myChart.data.labels = timeData
-    myChart.data.datasets[0].label = selectedToken + '/' + selectedBase
+    myChart.data.datasets[0].label = selectedToken + ' / ' + selectedBase
     myChart.data.datasets[0].data = tokenData
     myChart.options.scales.y.title.text = selectedBase
     myChart.update()
@@ -318,7 +317,7 @@ function updateCharts() {
         data: {
             labels: timeData,
             datasets: [{
-                label: selectedToken + '/' + selectedBase,
+                label: selectedToken + ' / ' + selectedBase,
                 data: tokenData,
                 backgroundColor: '#0000FF88',
                 borderColor: '#0000FF88',
