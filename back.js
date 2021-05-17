@@ -53,10 +53,10 @@ async function get(url) {
 
 // Get Pancake's top
 async function getTopTokens() {
-  return await get("https://api.pancakeswap.info/api/tokens")
+  return await get("https://api.pancakeswap.info/api/v2/tokens")
 }
 async function getTopPairs() {
-  return await get("https://api.pancakeswap.info/api/pairs")
+  return await get("https://api.pancakeswap.info/api/v2/pairs")
 }
 
 
