@@ -75,6 +75,17 @@ const port = process.env.PORT || 3001
 const app = express()
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
+app.get('/token/:token', (req, res) => {
+  if(
+          Object.keys(tokens_list).includes(req.params.token) ||
+          Object.keys(tokens_data).findIndex(symbol => tokens_data[symbol].address === req.params.token) !== -1  
+  ) {
+            res.sendFile(path.join(__dirname, '/index.html'))
+  } else {
+            // TODO return 'unknown token'
+  }
+})
+
 app.get('/list', (req, res) => res.json({tokens: tokens_list}))
 app.get('/top', (req, res) => res.json(top_tokens))
 app.get('/simple', (req, res) => res.json(tokens_data))
