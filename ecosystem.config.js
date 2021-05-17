@@ -1,18 +1,19 @@
 module.exports = {
   apps : [{
-    name: 'DexPairs - Back',
+    name: 'DexPairs_Back',
     script: 'back.js',
     watch: 'back.js',
-    //ignore_watch : ["node_modules", "file"]
+    ignore_watch : ["node_modules"],
     env_production: {
       NODE_ENV: "production",
       PORT: 3000,
     }
   }, {
-    name: 'DexPairs - Front',
+    name: 'DexPairs_Front',
     script: 'front.js',
     watch: 'front.js',
-    //ignore_watch : ["node_modules", "file"],
+    ignore_watch : ["node_modules"],
+    // TODO Test with few instances of Front.js
     //instances: 1,
     //exec_mode: "cluster",
     //increment_var : 'PORT',
@@ -29,7 +30,7 @@ module.exports = {
       ref  : 'origin/main',
       repo : 'git@github.com:dorianbayart/DexPairs.git',
       path : '/home/dexpairs/prod',
-      'pre-deploy-local': 'pwd && ls -al',
+      'pre-deploy-local': '',
       'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js --env production && pm2 save',
       'pre-setup': '',
       env_production: {
