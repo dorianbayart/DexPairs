@@ -37,6 +37,7 @@ header .version {
 
 .flex-column {
   display: flex;
+  flex: auto;
   flex-flow: column;
   max-width: 100%;
 }
