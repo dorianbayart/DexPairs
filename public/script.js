@@ -234,130 +234,130 @@ function precise(x) {
 document.getElementById('swapper_token').addEventListener(
   "change", function(e) {
     document.getElementById('swapper_base').value =
-      precise(document.getElementById('swapper_token').value
-      * simple[selectedToken]['price']
-      / simple[selectedBase]['price'])
-})
-document.getElementById('swapper_base').addEventListener(
-  "change", function(e) {
-    document.getElementById('swapper_token').value =
+    precise(document.getElementById('swapper_token').value
+    * simple[selectedToken]['price']
+    / simple[selectedBase]['price'])
+  })
+  document.getElementById('swapper_base').addEventListener(
+    "change", function(e) {
+      document.getElementById('swapper_token').value =
       precise(document.getElementById('swapper_base').value
       / simple[selectedToken]['price']
       * simple[selectedBase]['price'])
-})
+    })
 
-// OnClick on Edit Base token => Display the selection list
-document.getElementById('base_change').addEventListener(
-  "click", function(e) {
-    document.getElementById('base_symbol').style.display = "none"
-    document.getElementById('base_change').style.display = "none"
-    document.getElementById('base_select').style.display = "flex"
-})
-// OnChange on Base Selection => Update the Base Token + Chart
-document.getElementById('base_select').addEventListener(
-  "change", function(e) {
-    document.getElementById('base_symbol').style.display = "flex"
-    document.getElementById('base_change').style.display = "initial"
-    document.getElementById('base_select').style.display = "none"
-    const selected = e.target.value
-    if(selected === selectedToken) {
-      selectedToken = selectedBase
-      setToken(selectedToken)
-    }
-    selectedBase = selected
+    // OnClick on Edit Base token => Display the selection list
+    document.getElementById('base_change').addEventListener(
+      "click", function(e) {
+        document.getElementById('base_symbol').style.display = "none"
+        document.getElementById('base_change').style.display = "none"
+        document.getElementById('base_select').style.display = "flex"
+      })
+      // OnChange on Base Selection => Update the Base Token + Chart
+      document.getElementById('base_select').addEventListener(
+        "change", function(e) {
+          document.getElementById('base_symbol').style.display = "flex"
+          document.getElementById('base_change').style.display = "initial"
+          document.getElementById('base_select').style.display = "none"
+          const selected = e.target.value
+          if(selected === selectedToken) {
+            selectedToken = selectedBase
+            setToken(selectedToken)
+          }
+          selectedBase = selected
 
-    setBase(selectedBase)
-    getCharts()
-    setSwapperToken()
-    setSwapperBase()
+          setBase(selectedBase)
+          getCharts()
+          setSwapperToken()
+          setSwapperBase()
 
-})
+        })
 
-// Switch between Selected and Base tokens
-document.getElementById('swapper_switch').addEventListener(
-  "click", function(e) {
-    const temp = selectedToken
-    selectedToken = selectedBase
-    selectedBase = temp
-    setToken(selectedToken)
-    setBase(selectedBase)
-    setSwapperToken()
-    getCharts()
-  }
-)
-
-
-// OnClick on Header => Goto root url
-document.getElementById('header').addEventListener(
-  "click", function(e) {
-    location.href = '/'
-  }
-)
+        // Switch between Selected and Base tokens
+        document.getElementById('swapper_switch').addEventListener(
+          "click", function(e) {
+            const temp = selectedToken
+            selectedToken = selectedBase
+            selectedBase = temp
+            setToken(selectedToken)
+            setBase(selectedBase)
+            setSwapperToken()
+            getCharts()
+          }
+        )
 
 
-
-
-/* MAIN */
-getList()
-getSimple()
-setSwapperToken()
-getTop()
+        // OnClick on Header => Goto root url
+        document.getElementById('header').addEventListener(
+          "click", function(e) {
+            location.href = '/'
+          }
+        )
 
 
 
 
+        /* MAIN */
+        getList()
+        getSimple()
+        setSwapperToken()
+        getTop()
 
-function updateCharts() {
-  let timeData = tokenCharts.chart_often.map(coords => new Date(coords.t))
-  let tokenData = tokenCharts.chart_often.map(coords => {
-    const baseCoords = baseCharts.chart_often.find(base => base.t === coords.t)
-    return baseCoords ? coords.price / baseCoords.price : null
-  })
-  //let data =
-  var ctx = document.getElementById('myChart').getContext('2d')
-  if(myChart) {
-    myChart.data.labels = timeData
-    myChart.data.datasets[0].label = selectedToken + ' / ' + selectedBase
-    myChart.data.datasets[0].data = tokenData
-    myChart.options.scales.y.title.text = selectedBase
-    myChart.update()
-  } else {
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: timeData,
-            datasets: [{
-                label: selectedToken + ' / ' + selectedBase,
-                data: tokenData,
-                backgroundColor: '#0000FF88',
-                borderColor: '#0000FF88',
-                radius: 0,
-                tension: 0.3
-            }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          aspectRatio: 0.75,
-          radius: 0,
-          interaction: {
-            intersect: false,
-          },
-          scales: {
-            x: {
-              type: 'time',
-              time: {
-                //unit: 'day'
+
+
+
+
+        function updateCharts() {
+          let timeData = tokenCharts.chart_often.map(coords => new Date(coords.t))
+          let tokenData = tokenCharts.chart_often.map(coords => {
+            const baseCoords = baseCharts.chart_often.find(base => base.t === coords.t)
+            return baseCoords ? coords.price / baseCoords.price : null
+          })
+          //let data =
+          var ctx = document.getElementById('myChart').getContext('2d')
+          if(myChart) {
+            myChart.data.labels = timeData
+            myChart.data.datasets[0].label = selectedToken + ' / ' + selectedBase
+            myChart.data.datasets[0].data = tokenData
+            myChart.options.scales.y.title.text = selectedBase
+            myChart.update()
+          } else {
+            myChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: timeData,
+                datasets: [{
+                  label: selectedToken + ' / ' + selectedBase,
+                  data: tokenData,
+                  backgroundColor: '#0000FF88',
+                  borderColor: '#0000FF88',
+                  radius: 0,
+                  tension: 0.3
+                }]
               },
-            },
-            y: {
-              title: {
-                display: true,
-                text: selectedBase
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                aspectRatio: 0.75,
+                radius: 0,
+                interaction: {
+                  intersect: false,
+                },
+                scales: {
+                  x: {
+                    type: 'time',
+                    time: {
+                      //unit: 'day'
+                    },
+                  },
+                  y: {
+                    title: {
+                      display: true,
+                      text: selectedBase
+                    }
+                  }
+                }
               }
-            }
+            })
           }
         }
-    })
-  }
-}

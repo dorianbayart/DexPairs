@@ -37,20 +37,20 @@ let tokens_charts = {}
 // Program
 function launch() {
   fetch(backend + '/list')
-    .then(res => res.json())
-    .then(json => tokens_list = json.tokens)
+  .then(res => res.json())
+  .then(json => tokens_list = json.tokens)
 
   fetch(backend + '/top')
-    .then(res => res.json())
-    .then(json => top_tokens = json)
+  .then(res => res.json())
+  .then(json => top_tokens = json)
 
   fetch(backend + '/simple')
-    .then(res => res.json())
-    .then(json => tokens_data = json)
+  .then(res => res.json())
+  .then(json => tokens_data = json)
 
   fetch(backend + '/charts')
-    .then(res => res.json())
-    .then(json => tokens_charts = json)
+  .then(res => res.json())
+  .then(json => tokens_charts = json)
 
   // loop
   if(Object.keys(top_tokens).length < 1) {
@@ -74,15 +74,17 @@ launch()
 const port = process.env.PORT || 3001
 const app = express()
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')))
 app.get('/token/:token', (req, res) => {
   if(
-          tokens_list.includes(req.params.token) ||
-          Object.keys(tokens_data).findIndex(symbol => tokens_data[symbol].address === req.params.token) !== -1
+    tokens_list.includes(req.params.token) ||
+    Object.keys(tokens_data).findIndex(symbol => tokens_data[symbol].address === req.params.token) !== -1
   ) {
-            res.sendFile(path.join(__dirname, '/index.html'))
+    res.sendFile(path.join(__dirname, '/public/index.html'))
   } else {
-            // TODO return 'unknown token'
+    // TODO Improve error => redirect to homepage
+    res.writeHead(400, {'Content-Type': 'text/html'})
+    res.end('This token does not exist !')
   }
 })
 

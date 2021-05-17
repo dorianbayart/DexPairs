@@ -43,12 +43,12 @@ let tokens_charts = {}
 
 // Utils
 async function get(url) {
-    return new Promise((resolve, reject) => {
-        fetch(url)
-            .then((response) => response.json())
-            .then(resolve)
-            .catch(reject)
-    });
+  return new Promise((resolve, reject) => {
+    fetch(url)
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject)
+  });
 }
 
 // Get Pancake's top
@@ -67,12 +67,12 @@ async function launch() {
   let tokens_data_file = {}
   let tokens_charts_file = {}
   try {
-   tokens_file = require(path.join(dir_home, 'pancake.json'))
-   tokens_data_file = require(path.join(dir_home, 'pancake-simple.json'))
-   tokens_charts_file = require(path.join(dir_home, 'pancake-charts.json'))
- } catch(error) {
-   console.log(error)
- }
+    tokens_file = require(path.join(dir_home, 'pancake.json'))
+    tokens_data_file = require(path.join(dir_home, 'pancake-simple.json'))
+    tokens_charts_file = require(path.join(dir_home, 'pancake-charts.json'))
+  } catch(error) {
+    console.log(error)
+  }
 
   tokens_list = tokens_file
   tokens_data = tokens_data_file
@@ -138,7 +138,7 @@ async function launch() {
           const t1 = val1.t
           const v2 = val2.price
           const t2 = val2.t
-          const a = (t2 - t1) / (v2 - v1)
+          const a = (v2 - v1) / (t2 - t1)
           const b = v1 - a * t1
           const tx = tokens_charts[symbol].chart_4h[tokens_charts[symbol].chart_4h.length-1]['t'] + 14400000
           const vx = a * tx + b
