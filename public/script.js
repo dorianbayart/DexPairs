@@ -212,6 +212,7 @@ function setBase(symbol) {
   //document.getElementById('base_price_BNB').innerHTML = 'BNB ' + precise(simple[symbol]['price_BNB'])
 }
 
+// Calculator fields
 function setSwapperToken() {
   document.getElementById('swapper_token_symbol').innerHTML = selectedToken
   document.getElementById('swapper_token').value = 1
@@ -229,7 +230,7 @@ function precise(x) {
 
 
 
-
+// OnChange on Calculator [Selected/Base] => Update the other value
 document.getElementById('swapper_token').addEventListener(
   "change", function(e) {
     document.getElementById('swapper_base').value =
@@ -245,13 +246,14 @@ document.getElementById('swapper_base').addEventListener(
       * simple[selectedBase]['price'])
 })
 
-
+// OnClick on Edit Base token => Display the selection list
 document.getElementById('base_change').addEventListener(
   "click", function(e) {
     document.getElementById('base_symbol').style.display = "none"
     document.getElementById('base_change').style.display = "none"
     document.getElementById('base_select').style.display = "flex"
 })
+// OnChange on Base Selection => Update the Base Token + Chart
 document.getElementById('base_select').addEventListener(
   "change", function(e) {
     document.getElementById('base_symbol').style.display = "flex"
@@ -271,6 +273,7 @@ document.getElementById('base_select').addEventListener(
 
 })
 
+// Switch between Selected and Base tokens
 document.getElementById('swapper_switch').addEventListener(
   "click", function(e) {
     const temp = selectedToken
@@ -283,6 +286,13 @@ document.getElementById('swapper_switch').addEventListener(
   }
 )
 
+
+// OnClick on Header => Goto root url
+document.getElementById('header').addEventListener(
+  "click", function(e) {
+    location.href = '/'
+  }
+)
 
 
 
