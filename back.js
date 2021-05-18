@@ -35,7 +35,7 @@ console.log(dir_home)
 /* DexPairs */
 
 
-let tokens_list = []
+let tokens_list = {}
 let top_tokens = {}
 let tokens_data = {}
 let tokens_charts = {}
@@ -63,18 +63,15 @@ async function getTopPairs() {
 
 // Program
 async function launch() {
-  let tokens_file = []
   let tokens_data_file = {}
   let tokens_charts_file = {}
   try {
-    tokens_file = require(path.join(dir_home, 'pancake.json'))
     tokens_data_file = require(path.join(dir_home, 'pancake-simple.json'))
     tokens_charts_file = require(path.join(dir_home, 'pancake-charts.json'))
   } catch(error) {
     console.log(error)
   }
 
-  tokens_list = tokens_file
   tokens_data = tokens_data_file
   tokens_charts = tokens_charts_file
 
@@ -95,65 +92,65 @@ async function launch() {
       const price = tokens[token].price
       //const price_BNB = tokens[token].price_BNB
 
-      // update tokens list
-      if(!tokens_list.includes(symbol)) {
-        tokens_list.push(symbol)
-      }
+      // create tokens list
+      tokens_list[address] = symbol
+
 
       // update tokens simple data
-      tokens_data[symbol] = {
-        address: address,
-        name: name,
-        price: price,
-        //price_BNB: price_BNB
+      tokens_data[address] = {
+        s: symbol,
+        n: name,
+        p: price,
+        //p_BNB: price_BNB
+        t: time
       }
 
       // update tokens charts
       //
-      if(tokens_charts[symbol]) {
-        if(tokens_charts[symbol].chart_often[tokens_charts[symbol].chart_often.length-1]['t'] < time) {
-          tokens_charts[symbol].chart_often.push({
+      if(tokens_charts[address]) {
+        if(tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]['t'] < time) {
+          tokens_charts[address].chart_often.push({
             t: time,
-            price: price,
-            //price_BNB: price_BNB
+            p: price,
+            //p_BNB: price_BNB
           })
-          tokens_charts[symbol].chart_often = tokens_charts[symbol].chart_often.slice(-60)
+          tokens_charts[address].chart_often = tokens_charts[address].chart_often.slice(-60)
         }
       } else {
-        tokens_charts[symbol] = {
-          address: address,
-          name: name,
+        tokens_charts[address] = {
+          s: symbol,
+          n: name,
           chart_often: [{
             t: time,
-            price: price,
-            //price_BNB: price_BNB
+            p: price,
+            //p_BNB: price_BNB
           }]
         }
       }
-      if(tokens_charts[symbol].chart_4h) {
-        if((time - tokens_charts[symbol].chart_4h[tokens_charts[symbol].chart_4h.length-1]['t']) > 14400000) {
-          const val1 = tokens_charts[symbol].chart_often[tokens_charts[symbol].chart_often.length-2]
-          const val2 = tokens_charts[symbol].chart_often[tokens_charts[symbol].chart_often.length-1]
+      if(tokens_charts[address].chart_4h) {
+        if((time - tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t']) > 14400000) {
+          const val1 = tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-2]
+          const val2 = tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]
           const v1 = val1.price
           const t1 = val1.t
           const v2 = val2.price
           const t2 = val2.t
           const a = (v2 - v1) / (t2 - t1)
           const b = v1 - a * t1
-          const tx = tokens_charts[symbol].chart_4h[tokens_charts[symbol].chart_4h.length-1]['t'] + 14400000
+          const tx = tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t'] + 14400000
           const vx = a * tx + b
-          tokens_charts[symbol].chart_4h.push({
+          tokens_charts[address].chart_4h.push({
             t: tx,
-            price: vx,
-            //price_BNB: price_BNB
+            p: vx,
+            //p_BNB: price_BNB
           })
-          tokens_charts[symbol].chart_4h = tokens_charts[symbol].chart_4h.slice(-60)
+          tokens_charts[address].chart_4h = tokens_charts[address].chart_4h.slice(-60)
         }
       } else {
-        tokens_charts[symbol].chart_4h = [{
+        tokens_charts[address].chart_4h = [{
           t: time,
-          price: price,
-          //price_BNB: price_BNB
+          p: price,
+          //p_BNB: price_BNB
         }]
       }
     }
@@ -170,12 +167,12 @@ async function launch() {
     const price = tokens[token].price
     //const price_BNB = tokens[token].price_BNB
 
-    top_tokens[symbol] = {
-      address: address,
-      name: name,
-      price: price,
-      //price_BNB: price_BNB,
-      chart: tokens_charts[symbol].chart_often
+    top_tokens[address] = {
+      s: symbol,
+      n: name,
+      p: price,
+      //p_BNB: price_BNB,
+      chart: tokens_charts[token].chart_often
     }
   }
 
@@ -231,7 +228,7 @@ launch()
 const port = process.env.PORT || 3000
 const app = express()
 
-app.get('/list', (req, res) => res.json({tokens: tokens_list}))
+app.get('/list', (req, res) => res.json(tokens_list))
 app.get('/top', (req, res) => res.json(top_tokens))
 app.get('/simple', (req, res) => res.json(tokens_data))
 app.get('/charts', (req, res) => res.json(tokens_charts))

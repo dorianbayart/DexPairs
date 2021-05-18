@@ -1,12 +1,12 @@
 
-let list = []
+let list = {}
 let search = ''
-let filteredList = []
+let filteredList = {}
 let topTokens = {}
 let simple = {}
 let charts = {}
-let selectedToken = 'WBNB'
-let selectedBase = 'BUSD'
+let selectedToken = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+let selectedBase = '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
 let tokenCharts = {}
 let baseCharts = {}
 let myChart = null
@@ -21,7 +21,7 @@ function getList() {
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText)
-      list = data.tokens
+      list = data
 
       updateList()
       updateBaseList()
@@ -100,9 +100,9 @@ document.getElementById('search_field').addEventListener("keyup", function(e) {
   search = searchValue
 
   filteredList = []
-  list.forEach(function (token) {
-    if(token.toLowerCase().includes(search)) {
-      filteredList.push(token)
+  Object.keys(list).forEach(function (address) {
+    if(simple[address].s.toLowerCase().includes(search)) {
+      filteredList.push(simple[address].s)
     }
   })
 
@@ -117,13 +117,13 @@ function updateList() {
 
   document.getElementById('list').innerHTML = null;
   ul = document.createElement('ul')
-  currentList.forEach(function (token) {
+  Object.keys(currentList).forEach(function (address) {
     let li = document.createElement('li')
     ul.appendChild(li)
 
-    li.innerHTML += token
+    li.innerHTML += currentList[address]
     li.addEventListener("click", function(e) {
-      selectedToken = e.target.innerHTML
+      selectedToken = findAddressFromSymbol(e.target.innerHTML)
       setToken(selectedToken)
       getCharts()
       setSwapperToken()
@@ -139,12 +139,12 @@ function updateBaseList() {
 
   document.getElementById('base_select').innerHTML = null
   let select = document.getElementById('base_select')
-  currentList.forEach(function (token) {
+  Object.keys(currentList).forEach(function (address) {
     let option = document.createElement('option')
     select.appendChild(option)
-    option.innerHTML += token
-    option.value = token
-    option.selected = token === selectedBase
+    option.innerHTML += currentList[address]
+    option.value = currentList[address]
+    option.selected = currentList[address] === selectedBase
   })
 }
 
@@ -154,7 +154,8 @@ function setTop() {
   let top = document.getElementById('top')
   top.innerHTML = null
   for (var i = 0; i < 5; i++) {
-    const symbol = Object.keys(topTokens)[i]
+    const address = Object.keys(topTokens)[i]
+    const symbol = topTokens[address].s
     let div = document.createElement('div')
     div.classList.add('top-token')
     div.id = symbol
@@ -163,14 +164,14 @@ function setTop() {
     div_symbol.innerHTML = symbol
     div_symbol.classList.add('top-symbol')
     let div_price = document.createElement('div')
-    div_price.innerHTML = '$ ' + precise(topTokens[symbol].price)
+    div_price.innerHTML = '$ ' + precise(topTokens[address].p)
     div_price.classList.add('top-price')
 
     div.appendChild(div_symbol)
     div.appendChild(div_price)
 
     div.addEventListener("click", function(e) {
-      selectedToken = e.target.id ? e.target.id : e.target.parentElement.id
+      selectedToken = findAddressFromSymbol(e.target.id ? e.target.id : e.target.parentElement.id)
       setToken(selectedToken)
       getCharts()
       setSwapperToken()
@@ -181,45 +182,45 @@ function setTop() {
 
 
 // set information of the main token
-function setToken(symbol) {
+function setToken(addr) {
+  const symbol = simple[addr].s
   document.getElementById('token_symbol').innerHTML = symbol
-  document.getElementById('token_name').innerHTML = simple[symbol]['name']
-  let address = simple[symbol]['address'].slice(0, 5) + '...' + simple[symbol]['address'].slice(-5)
+  document.getElementById('token_name').innerHTML = simple[addr].n
+  let address = addr.slice(0, 5) + '...' + addr.slice(-5)
   let a = document.createElement('a')
-  a.href = 'https://bscscan.com/token/' + simple[symbol]['address']
+  a.href = 'https://bscscan.com/token/' + addr
   a.target = '_blank'
   a.innerHTML = address
   document.getElementById('token_address').innerHTML = null
   document.getElementById('token_address').appendChild(a)
-  //document.getElementById('token_address').innerHTML = address
-  document.getElementById('token_price').innerHTML = '$ ' + precise(simple[symbol]['price'])
-  //document.getElementById('token_price_BNB').innerHTML = 'BNB ' + precise(simple[symbol]['price_BNB'])
+  document.getElementById('token_price').innerHTML = '$ ' + precise(simple[addr].p)
+
+  setSwapperToken()
 }
 
 // set information of the base token
-function setBase(symbol) {
+function setBase(addr) {
+  const symbol = simple[addr].s
   document.getElementById('base_symbol').innerHTML = symbol
-  document.getElementById('base_name').innerHTML = simple[symbol]['name']
-  let address = simple[symbol]['address'].slice(0, 5) + '...' + simple[symbol]['address'].slice(-5)
+  document.getElementById('base_name').innerHTML = simple[addr].n
+  let address = addr.slice(0, 5) + '...' + addr.slice(-5)
   let a = document.createElement('a')
-  a.href = 'https://bscscan.com/token/' + simple[symbol]['address']
+  a.href = 'https://bscscan.com/token/' + addr
   a.target = '_blank'
   a.innerHTML = address
   document.getElementById('base_address').innerHTML = null
   document.getElementById('base_address').appendChild(a)
-  //document.getElementById('base_address').innerHTML = address
-  document.getElementById('base_price').innerHTML = '$ ' + precise(simple[symbol]['price'])
-  //document.getElementById('base_price_BNB').innerHTML = 'BNB ' + precise(simple[symbol]['price_BNB'])
+  document.getElementById('base_price').innerHTML = '$ ' + precise(simple[addr].p)
 }
 
 // Calculator fields
 function setSwapperToken() {
-  document.getElementById('swapper_token_symbol').innerHTML = selectedToken
+  document.getElementById('swapper_token_symbol').innerHTML = simple[selectedToken].s
   document.getElementById('swapper_token').value = 1
 }
 function setSwapperBase() {
-  document.getElementById('swapper_base_symbol').innerHTML = selectedBase
-  document.getElementById('swapper_base').value = precise(document.getElementById('swapper_token').value * simple[selectedToken]['price'] / simple[selectedBase]['price'])
+  document.getElementById('swapper_base_symbol').innerHTML = simple[selectedBase].s
+  document.getElementById('swapper_base').value = precise(document.getElementById('swapper_token').value * simple[selectedToken].p / simple[selectedBase].p)
 }
 
 
@@ -235,8 +236,8 @@ document.getElementById('swapper_token').addEventListener(
   "change", function(e) {
     document.getElementById('swapper_base').value =
     precise(document.getElementById('swapper_token').value
-    * simple[selectedToken]['price']
-    / simple[selectedBase]['price'])
+    * simple[selectedToken].p
+    / simple[selectedBase].p)
   }
 )
 
@@ -244,8 +245,8 @@ document.getElementById('swapper_base').addEventListener(
   "change", function(e) {
     document.getElementById('swapper_token').value =
     precise(document.getElementById('swapper_base').value
-    / simple[selectedToken]['price']
-    * simple[selectedBase]['price'])
+    / simple[selectedToken].p
+    * simple[selectedBase].p)
   }
 )
 
@@ -305,7 +306,7 @@ document.getElementById('title').addEventListener(
 /* MAIN */
 getList()
 getSimple()
-setSwapperToken()
+//setSwapperToken()
 getTop()
 
 
@@ -316,15 +317,15 @@ function updateCharts() {
   let timeData = tokenCharts.chart_often.map(coords => new Date(coords.t))
   let tokenData = tokenCharts.chart_often.map(coords => {
     const baseCoords = baseCharts.chart_often.find(base => base.t === coords.t)
-    return baseCoords ? coords.price / baseCoords.price : null
+    return baseCoords ? coords.p / baseCoords.p : null
   })
   //let data =
   var ctx = document.getElementById('myChart').getContext('2d')
   if(myChart) {
     myChart.data.labels = timeData
-    myChart.data.datasets[0].label = selectedToken + ' / ' + selectedBase
+    myChart.data.datasets[0].label = simple[selectedToken].s + ' / ' + simple[selectedBase].s
     myChart.data.datasets[0].data = tokenData
-    myChart.options.scales.y.title.text = selectedBase
+    myChart.options.scales.y.title.text = simple[selectedBase].s
     myChart.update()
   } else {
     myChart = new Chart(ctx, {
@@ -332,7 +333,7 @@ function updateCharts() {
       data: {
         labels: timeData,
         datasets: [{
-          label: selectedToken + ' / ' + selectedBase,
+          label: simple[selectedToken].s + ' / ' + simple[selectedBase].s,
           data: tokenData,
           backgroundColor: '#0000FF88',
           borderColor: '#0000FF88',
@@ -358,11 +359,20 @@ function updateCharts() {
           y: {
             title: {
               display: true,
-              text: selectedBase
+              text: simple[selectedBase].s
             }
           }
         }
       }
     })
   }
+}
+
+
+// useful
+// Find Address From Symbol
+function findAddressFromSymbol(symbol) {
+  return Object.keys(simple).find(
+      address => simple[address].s === symbol
+  )
 }

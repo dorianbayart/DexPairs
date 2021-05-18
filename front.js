@@ -25,7 +25,7 @@ const fetch = require('node-fetch')
 const backend = 'http://localhost:3000'
 
 
-let tokens_list = []
+let tokens_list = {}
 let top_tokens = {}
 let tokens_data = {}
 let tokens_charts = {}
@@ -38,7 +38,7 @@ let tokens_charts = {}
 function launch() {
   fetch(backend + '/list')
   .then(res => res.json())
-  .then(json => tokens_list = json.tokens)
+  .then(json => tokens_list = json)
 
   fetch(backend + '/top')
   .then(res => res.json())
@@ -77,7 +77,7 @@ const app = express()
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')))
 app.get('/token/:token', (req, res) => {
   if(
-    tokens_list.includes(req.params.token) ||
+    //tokens_list.includes(req.params.token) ||
     Object.keys(tokens_data).findIndex(symbol => tokens_data[symbol].address === req.params.token) !== -1
   ) {
     res.sendFile(path.join(__dirname, '/public/index.html'))
@@ -88,7 +88,7 @@ app.get('/token/:token', (req, res) => {
   }
 })
 
-app.get('/list', (req, res) => res.json({tokens: tokens_list}))
+app.get('/list', (req, res) => res.json(tokens_list))
 app.get('/top', (req, res) => res.json(top_tokens))
 app.get('/simple', (req, res) => res.json(tokens_data))
 app.get('/charts/:token', (req, res) => {
