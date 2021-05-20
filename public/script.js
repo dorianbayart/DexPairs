@@ -45,7 +45,7 @@ function getList() {
   xmlhttp.open("GET", "/list", true)
   xmlhttp.send()
 
-  setTimeout(function(){ getList() }, 300000);
+  setTimeout(function(){ getList() }, 300000)
 }
 
 
@@ -279,7 +279,7 @@ document.getElementById('base_select').addEventListener(
     document.getElementById('base_symbol').style.display = "flex"
     document.getElementById('base_change').style.display = "initial"
     document.getElementById('base_select').style.display = "none"
-    const selected = e.target.value
+    const selected = findAddressFromSymbol(e.target.value)
     if(selected === selectedToken) {
       selectedToken = selectedBase
       setToken(selectedToken)
