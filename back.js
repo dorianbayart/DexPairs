@@ -143,6 +143,10 @@ async function launch() {
             t: tx,
             p: vx,
             //p_BNB: price_BNB
+            val1: val1,
+            val2: val2,
+            a: a,
+            b: b
           })
           tokens_charts[address].chart_4h = tokens_charts[address].chart_4h.slice(-60)
         }
