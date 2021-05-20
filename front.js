@@ -42,19 +42,19 @@ let uniswap_charts = {}
 
 // Program - Pancake
 function launch() {
-  fetch(backend + '/list')
+  fetch(backend + '/list/pancake')
   .then(res => res.json())
   .then(json => tokens_list = json)
 
-  fetch(backend + '/top')
+  fetch(backend + '/top/pancake')
   .then(res => res.json())
   .then(json => top_tokens = json)
 
-  fetch(backend + '/simple')
+  fetch(backend + '/simple/pancake')
   .then(res => res.json())
   .then(json => tokens_data = json)
 
-  fetch(backend + '/charts')
+  fetch(backend + '/charts/pancake')
   .then(res => res.json())
   .then(json => tokens_charts = json)
 
@@ -72,6 +72,7 @@ function launchUniswap() {
   fetch(backend + '/list/uniswap')
   .then(res => res.json())
   .then(json => uniswap_list = json)
+  .then(list => console.log(list))
 
   fetch(backend + '/top/uniswap')
   .then(res => res.json())
@@ -88,9 +89,9 @@ function launchUniswap() {
   // loop
   if(Object.keys(uniswap_top).length < 1) {
     // only used at startup
-    setTimeout(function(){ launch() }, 1000);
+    setTimeout(function(){ launchUniswap() }, 1000);
   } else {
-    setTimeout(function(){ launch() }, 19000);
+    setTimeout(function(){ launchUniswap() }, 19000);
   }
 }
 

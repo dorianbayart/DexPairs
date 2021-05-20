@@ -50,9 +50,21 @@ let uniswap_charts = {}
 
 
 // Utils
-async function get(url, request = null) {
+async function get(url, query = null) {
+  if(query) {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query })
+      })
+      .then((response) => response.json())
+      .then(resolve)
+      .catch(reject)
+    });
+  }
   return new Promise((resolve, reject) => {
-    fetch(url, { body: request })
+    fetch(url)
     .then((response) => response.json())
     .then(resolve)
     .catch(reject)
@@ -69,28 +81,26 @@ async function getTopPairs() {
 }
 
 // Get Uniswap's top
-const uniswap_request = {
-  tokens(
-    orderBy: tradeVolumeUSD,
-    orderDirection: desc,
-    where: {totalLiquidity_gt: "10"} // filter shit tokens
-  ) {
-    id
-    name
-    symbol
-    derivedETH
-    tradeVolumeUSD
-    txCount
-    totalLiquidity
+const uniswap_request = `
+query
+  {
+    tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
+      id
+      name
+      symbol
+      derivedETH
+    }
+    bundle(id: "1" ) {
+      ethPrice
+    }
   }
-  bundle(id: "1" ) {
-    ethPrice
-  }
-}
+`
+
 // Use TheGraph API - https://thegraph.com/explorer/subgraph/uniswap/uniswap-v2
 async function getUniswapTopTokens() {
-  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2", JSON.stringify(uniswap_request))
+  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2", uniswap_request)
 }
+
 
 
 
@@ -270,7 +280,7 @@ async function launchUniswap() {
 
   const time = Date.now()
   const tokens = top.data.tokens
-  
+
   const eth_price = top.data.bundle.ethPrice
 
   tokens.forEach(token => {
@@ -341,7 +351,7 @@ async function launchUniswap() {
           p: price,
         }]
       }
-  }
+  })
 
 
   // build Top 25 list of Uniswap
@@ -358,7 +368,7 @@ async function launchUniswap() {
       s: symbol,
       n: name,
       p: price,
-      chart: uniswap_charts[token].chart_often
+      chart: uniswap_charts[address].chart_often
     }
   }
 
@@ -399,6 +409,9 @@ async function launchUniswap() {
 /* MAIN */
 launch()
 launchUniswap()
+
+
+
 
 
 

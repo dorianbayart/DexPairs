@@ -5,11 +5,26 @@ let filteredList = {}
 let topTokens = {}
 let simple = {}
 let charts = {}
-let selectedToken = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-let selectedBase = '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
+let selectedToken = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+let selectedBase = '0xdac17f958d2ee523a2206206994597c13d831ec7'
 let tokenCharts = {}
 let baseCharts = {}
 let myChart = null
+let dex = 'UNISWAP'
+let dexList = {
+  UNISWAP: {
+    name: 'Uniswap',
+    url: 'https://uniswap.org/',
+    url_swap: 'https://app.uniswap.org/#/swap',
+    explorer: 'https://etherscan.io/token/',
+  },
+  PANCAKESWAP: {
+    name: 'PancakeSwap',
+    url: 'https://pancakeswap.finance/',
+    url_swap: 'https://exchange.pancakeswap.finance/#/swap',
+    explorer: 'https://bscscan.com/token/',
+  },
+}
 
 
 
@@ -188,7 +203,7 @@ function setToken(addr) {
   document.getElementById('token_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)
   let a = document.createElement('a')
-  a.href = 'https://bscscan.com/token/' + addr
+  a.href = dexList[dex].explorer + addr
   a.target = '_blank'
   a.innerHTML = address
   document.getElementById('token_address').innerHTML = null
@@ -205,7 +220,7 @@ function setBase(addr) {
   document.getElementById('base_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)
   let a = document.createElement('a')
-  a.href = 'https://bscscan.com/token/' + addr
+  a.href = dexList[dex].explorer + addr
   a.target = '_blank'
   a.innerHTML = address
   document.getElementById('base_address').innerHTML = null
