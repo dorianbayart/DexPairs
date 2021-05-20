@@ -32,6 +32,9 @@ const dir_home = os.homedir()
 console.log(dir_home)
 
 
+const HISTORY_SIZE = 200
+
+
 /* DexPairs */
 
 
@@ -157,7 +160,7 @@ async function launch() {
             p: price,
             //p_BNB: price_BNB
           })
-          tokens_charts[address].chart_often = tokens_charts[address].chart_often.slice(-60)
+          tokens_charts[address].chart_often = tokens_charts[address].chart_often.slice(-HISTORY_SIZE)
         }
       } else {
         tokens_charts[address] = {
@@ -191,7 +194,7 @@ async function launch() {
             a: a,
             b: b
           })
-          tokens_charts[address].chart_4h = tokens_charts[address].chart_4h.slice(-60)
+          tokens_charts[address].chart_4h = tokens_charts[address].chart_4h.slice(-HISTORY_SIZE)
         }
       } else {
         tokens_charts[address].chart_4h = [{
@@ -310,7 +313,7 @@ async function launchUniswap() {
             t: time,
             p: price,
           })
-          uniswap_charts[address].chart_often = uniswap_charts[address].chart_often.slice(-60)
+          uniswap_charts[address].chart_often = uniswap_charts[address].chart_often.slice(-HISTORY_SIZE)
         }
       } else {
         uniswap_charts[address] = {
@@ -343,7 +346,7 @@ async function launchUniswap() {
             a: a,
             b: b
           })
-          uniswap_charts[address].chart_4h = uniswap_charts[address].chart_4h.slice(-60)
+          uniswap_charts[address].chart_4h = uniswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
         }
       } else {
         uniswap_charts[address].chart_4h = [{
