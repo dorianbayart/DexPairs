@@ -115,7 +115,7 @@ async function launch() {
     tokens_data_file = require(path.join(dir_home, 'pancake-simple.json'))
     tokens_charts_file = require(path.join(dir_home, 'pancake-charts.json'))
   } catch(error) {
-    console.log(error)
+    // console.log(error)
   }
 
   tokens_data = tokens_data_file
@@ -269,7 +269,7 @@ async function launchUniswap() {
     uniswap_data_file = require(path.join(dir_home, 'uniswap-simple.json'))
     uniswap_charts_file = require(path.join(dir_home, 'uniswap-charts.json'))
   } catch(error) {
-    console.log(error)
+    // console.log(error)
   }
 
   uniswap_data = uniswap_data_file
