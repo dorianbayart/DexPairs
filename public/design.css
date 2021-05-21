@@ -222,7 +222,6 @@ header .version {
 }
 #timeframe {
   display: inline-flex;
-  margin: -1em;
 }
 #timeframe .timeframe-choice {
   cursor: pointer;

@@ -57,6 +57,9 @@ header .version .low {
   margin: 0.5em 1em;
   padding: 12px;
 }
+#timeframe {
+  margin: -1em;
+}
 #chart {
   margin: 0.5em 1em 1em;
   padding: 1em;
@@ -161,6 +164,9 @@ header .version .low {
   #token, #base {
     margin: 0.1em 0.25em;
     padding: 4px;
+  }
+  #timeframe {
+    margin: -0.5em;
   }
   #chart {
     margin: 0.1em 0.25em 1em;
