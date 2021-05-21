@@ -72,7 +72,6 @@ function launchUniswap() {
   fetch(backend + '/list/uniswap')
   .then(res => res.json())
   .then(json => uniswap_list = json)
-  .then(list => console.log(list))
 
   fetch(backend + '/top/uniswap')
   .then(res => res.json())
