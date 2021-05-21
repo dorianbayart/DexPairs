@@ -177,9 +177,9 @@ async function launch() {
         if((time - tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t']) > 14400000) {
           const val1 = tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-2]
           const val2 = tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]
-          const v1 = val1.price
+          const v1 = val1.p
           const t1 = val1.t
-          const v2 = val2.price
+          const v2 = val2.p
           const t2 = val2.t
           const a = (v2 - v1) / (t2 - t1)
           const b = v1 - a * t1
@@ -329,9 +329,9 @@ async function launchUniswap() {
         if((time - uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t']) > 14400000) {
           const val1 = uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-2]
           const val2 = uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-1]
-          const v1 = val1.price
+          const v1 = val1.p
           const t1 = val1.t
-          const v2 = val2.price
+          const v2 = val2.p
           const t2 = val2.t
           const a = (v2 - v1) / (t2 - t1)
           const b = v1 - a * t1
