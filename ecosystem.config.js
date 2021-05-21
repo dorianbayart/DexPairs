@@ -14,8 +14,8 @@ module.exports = {
     //watch: 'front.js',
     //ignore_watch : ["node_modules"],
     // TODO Test with few instances of Front.js
-    //instances: 1,
-    //exec_mode: "cluster",
+    instances: 2,
+    exec_mode: "cluster",
     //increment_var : 'PORT',
     env_production: {
       NODE_ENV: "production",
@@ -32,7 +32,7 @@ module.exports = {
       path : '/home/dexpairs/prod',
       'pre-deploy-local': '',
       'post-deploy': 'npm install && pm2 delete all && pm2 startOrRestart ecosystem.config.js --env production && pm2 save',
-      'pre-setup': '',
+      'pre-setup': 'pm2 install pm2-logrotate',
       env_production: {
         NODE_ENV: "production"
       }
