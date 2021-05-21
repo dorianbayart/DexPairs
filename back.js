@@ -32,7 +32,7 @@ const dir_home = os.homedir()
 console.log(dir_home)
 
 
-const HISTORY_SIZE = 200
+const HISTORY_SIZE = 150
 
 
 /* DexPairs */
@@ -136,7 +136,6 @@ async function launch() {
       const symbol = tokens[token].symbol
       const name = tokens[token].name
       const price = tokens[token].price
-      //const price_BNB = tokens[token].price_BNB
 
       // create tokens list
       tokens_list[address] = symbol
@@ -147,7 +146,6 @@ async function launch() {
         s: symbol,
         n: name,
         p: price,
-        //p_BNB: price_BNB
         t: time
       }
 
@@ -157,8 +155,7 @@ async function launch() {
         if(tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]['t'] < time) {
           tokens_charts[address].chart_often.push({
             t: time,
-            p: price,
-            //p_BNB: price_BNB
+            p: price
           })
           tokens_charts[address].chart_often = tokens_charts[address].chart_often.slice(-HISTORY_SIZE)
         }
@@ -168,8 +165,7 @@ async function launch() {
           n: name,
           chart_often: [{
             t: time,
-            p: price,
-            //p_BNB: price_BNB
+            p: price
           }]
         }
       }
@@ -177,30 +173,20 @@ async function launch() {
         if((time - tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t']) > 14400000) {
           const val1 = tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-2]
           const val2 = tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]
-          const v1 = val1.p
-          const t1 = val1.t
-          const v2 = val2.p
-          const t2 = val2.t
-          const a = (v2 - v1) / (t2 - t1)
-          const b = v1 - a * t1
+          const a = (val2.p - val1.p) / (val2.t - val1.t)
+          const b = val1.p - a * val1.t
           const tx = tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t'] + 14400000
           const vx = a * tx + b
           tokens_charts[address].chart_4h.push({
             t: tx,
-            p: vx,
-            // TODO Remove following - used to debug
-            val1: val1,
-            val2: val2,
-            a: a,
-            b: b
+            p: vx
           })
           tokens_charts[address].chart_4h = tokens_charts[address].chart_4h.slice(-HISTORY_SIZE)
         }
       } else {
         tokens_charts[address].chart_4h = [{
           t: time,
-          p: price,
-          //p_BNB: price_BNB
+          p: price
         }]
       }
     }
@@ -215,13 +201,11 @@ async function launch() {
     const symbol = tokens[token].symbol
     const name = tokens[token].name
     const price = tokens[token].price
-    //const price_BNB = tokens[token].price_BNB
 
     top_tokens[address] = {
       s: symbol,
       n: name,
       p: price,
-      //p_BNB: price_BNB,
       chart: tokens_charts[token].chart_often
     }
   }
@@ -329,22 +313,13 @@ async function launchUniswap() {
         if((time - uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t']) > 14400000) {
           const val1 = uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-2]
           const val2 = uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-1]
-          const v1 = val1.p
-          const t1 = val1.t
-          const v2 = val2.p
-          const t2 = val2.t
-          const a = (v2 - v1) / (t2 - t1)
-          const b = v1 - a * t1
+          const a = (val2.p - val1.p) / (val2.t - val1.t)
+          const b = val1.p - a * val1.t
           const tx = uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t'] + 14400000
           const vx = a * tx + b
           uniswap_charts[address].chart_4h.push({
             t: tx,
-            p: vx,
-            // TODO Remove following - used to debug
-            val1: val1,
-            val2: val2,
-            a: a,
-            b: b
+            p: vx
           })
           uniswap_charts[address].chart_4h = uniswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
         }

@@ -63,7 +63,7 @@ function launch() {
     // only used at startup
     setTimeout(function(){ launch() }, 1000);
   } else {
-    setTimeout(function(){ launch() }, 20000);
+    setTimeout(function(){ launch() }, 19000);
   }
 }
 

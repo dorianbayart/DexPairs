@@ -26,6 +26,9 @@ let dexList = {
   },
 }
 
+const TIMEFRAME_OFTEN = 'often'
+const TIMEFRAME_4H = '4h'
+let timeframe = TIMEFRAME_4H
 
 
 // get tokens list
@@ -290,7 +293,6 @@ document.getElementById('base_select').addEventListener(
     getCharts()
     setSwapperToken()
     setSwapperBase()
-
   }
 )
 
@@ -304,6 +306,20 @@ document.getElementById('swapper_switch').addEventListener(
     setBase(selectedBase)
     setSwapperToken()
     getCharts()
+  }
+)
+
+// Timeframe selection
+document.getElementById('timeframe_often').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_OFTEN
+    updateCharts()
+  }
+)
+document.getElementById('timeframe_4h').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_4H
+    updateCharts()
   }
 )
 
@@ -321,7 +337,6 @@ document.getElementById('title').addEventListener(
 /* MAIN */
 getList()
 getSimple()
-//setSwapperToken()
 getTop()
 
 
@@ -329,17 +344,29 @@ getTop()
 
 
 function updateCharts() {
-  let timeData = tokenCharts.chart_often.map(coords => new Date(coords.t))
-  let tokenData = tokenCharts.chart_often.map(coords => {
-    const baseCoords = baseCharts.chart_often.find(base => base.t === coords.t)
+  let tokenChart = null, baseChart = null, scaleUnit = 'hour'
+  if(timeframe === TIMEFRAME_OFTEN) {
+    tokenChart = tokenCharts.chart_often
+    baseChart = baseCharts.chart_often
+    scaleUnit = 'hour'
+  } else {
+    tokenChart = tokenCharts.chart_4h
+    baseChart = baseCharts.chart_4h
+    scaleUnit = 'day'
+  }
+
+  let timeData = tokenChart.map(coords => new Date(coords.t))
+  let tokenData = tokenChart.map(coords => {
+    const baseCoords = baseChart.find(base => base.t === coords.t)
     return baseCoords ? coords.p / baseCoords.p : null
   })
-  //let data =
+
   var ctx = document.getElementById('myChart').getContext('2d')
   if(myChart) {
     myChart.data.labels = timeData
     myChart.data.datasets[0].label = simple[selectedToken].s + ' / ' + simple[selectedBase].s
     myChart.data.datasets[0].data = tokenData
+    myChart.options.scales.x.time.unit = scaleUnit
     myChart.options.scales.y.title.text = simple[selectedBase].s
     myChart.update()
   } else {
@@ -368,7 +395,7 @@ function updateCharts() {
           x: {
             type: 'time',
             time: {
-              //unit: 'day'
+              unit: 'day'
             },
           },
           y: {
