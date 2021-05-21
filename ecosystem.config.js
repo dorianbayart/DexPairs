@@ -2,8 +2,8 @@ module.exports = {
   apps : [{
     name: 'DexPairs_Back',
     script: 'back.js',
-    watch: 'back.js',
-    ignore_watch : ["node_modules"],
+    //watch: 'back.js',
+    //ignore_watch : ["node_modules"],
     env_production: {
       NODE_ENV: "production",
       PORT: 3000,
@@ -11,8 +11,8 @@ module.exports = {
   }, {
     name: 'DexPairs_Front',
     script: 'front.js',
-    watch: 'front.js',
-    ignore_watch : ["node_modules"],
+    //watch: 'front.js',
+    //ignore_watch : ["node_modules"],
     // TODO Test with few instances of Front.js
     //instances: 1,
     //exec_mode: "cluster",
