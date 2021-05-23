@@ -59,12 +59,7 @@ function launch() {
   .then(json => tokens_charts = json)
 
   // loop
-  if(Object.keys(top_tokens).length < 1) {
-    // only used at startup
-    setTimeout(function(){ launch() }, 1000);
-  } else {
-    setTimeout(function(){ launch() }, 19000);
-  }
+  setTimeout(function(){ launch() }, 19000)
 }
 
 // Program - Uniswap
@@ -86,20 +81,18 @@ function launchUniswap() {
   .then(json => uniswap_charts = json)
 
   // loop
-  if(Object.keys(uniswap_top).length < 1) {
-    // only used at startup
-    setTimeout(function(){ launchUniswap() }, 1000);
-  } else {
-    setTimeout(function(){ launchUniswap() }, 19000);
-  }
+  setTimeout(function(){ launchUniswap() }, 19000)
 }
 
 
 
 
 /* MAIN */
-launch()
-launchUniswap()
+setTimeout(function(){
+  launch()
+  launchUniswap()
+}, 2500)
+
 
 
 

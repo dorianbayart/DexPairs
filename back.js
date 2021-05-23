@@ -195,18 +195,20 @@ async function launch() {
 
   // build Top 25 list
   top_tokens = {}
-  for (var i = 0; i < 25; i++) {
-    const token = Object.keys(tokens)[i]
-    const address = token
-    const symbol = tokens[token].symbol
-    const name = tokens[token].name
-    const price = tokens[token].price
+  if(tokens.length > 0) {
+    for (var i = 0; i < 25; i++) {
+      const token = Object.keys(tokens)[i]
+      const address = token
+      const symbol = tokens[token].symbol
+      const name = tokens[token].name
+      const price = tokens[token].price
 
-    top_tokens[address] = {
-      s: symbol,
-      n: name,
-      p: price,
-      chart: tokens_charts[token].chart_often
+      top_tokens[address] = {
+        s: symbol,
+        n: name,
+        p: price,
+        chart: tokens_charts[token].chart_often
+      }
     }
   }
 
@@ -241,7 +243,7 @@ async function launch() {
   });
 
   // loop
-  setTimeout(function(){ launch() }, 20000);
+  setTimeout(function(){ launch() }, 179000) // every 3 minutes
 }
 
 
@@ -266,9 +268,9 @@ async function launchUniswap() {
 
 
   const time = Date.now()
-  const tokens = top.data.tokens
+  const tokens = top.data ? top.data.tokens : []
 
-  const eth_price = top.data.bundle.ethPrice
+  const eth_price = top.data ? top.data.bundle.ethPrice : 0
 
   tokens.forEach(token => {
       const address = token.id
@@ -334,19 +336,21 @@ async function launchUniswap() {
 
   // build Top 25 list of Uniswap
   uniswap_top = {}
-  for (var i = 0; i < 25; i++) {
-    const token = tokens[i]
-    const address = token.id
-    const symbol = token.symbol
-    const name = token.name
-    const price_ETH = token.derivedETH
-    const price = price_ETH * eth_price
+  if(tokens.length > 0) {
+    for (var i = 0; i < 25; i++) {
+      const token = tokens[i]
+      const address = token.id
+      const symbol = token.symbol
+      const name = token.name
+      const price_ETH = token.derivedETH
+      const price = price_ETH * eth_price
 
-    uniswap_top[address] = {
-      s: symbol,
-      n: name,
-      p: price,
-      chart: uniswap_charts[address].chart_often
+      uniswap_top[address] = {
+        s: symbol,
+        n: name,
+        p: price,
+        chart: uniswap_charts[address].chart_often
+      }
     }
   }
 
@@ -378,15 +382,17 @@ async function launchUniswap() {
   });
 
   // loop
-  setTimeout(function(){ launchUniswap() }, 60000);
+  setTimeout(function(){ launchUniswap() }, 179000) // every 3 minutes
 }
 
 
 
 
 /* MAIN */
-launch()
-launchUniswap()
+setTimeout(function(){
+  launch()
+  launchUniswap()
+}, 2500)
 
 
 
