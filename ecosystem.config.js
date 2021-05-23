@@ -2,6 +2,7 @@ module.exports = {
   apps : [{
     name: 'DexPairs_Back',
     script: 'back.js',
+    exp_backoff_restart_delay: 100,
     //watch: 'back.js',
     //ignore_watch : ["node_modules"],
     env_production: {
@@ -11,6 +12,7 @@ module.exports = {
   }, {
     name: 'DexPairs_Front',
     script: 'front.js',
+    exp_backoff_restart_delay: 100,
     //watch: 'front.js',
     //ignore_watch : ["node_modules"],
     // TODO Test with few instances of Front.js
