@@ -1,0 +1,12 @@
+html {
+  background-image: url('/graph-background-min.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: fixed;
+  min-height: 100%;
+}
+
+#menu .menu-item, .top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart, input {
+  background-color: #FFFE;
+}
