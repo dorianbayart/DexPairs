@@ -32,10 +32,11 @@ header .version {
   margin: 0 5%;
   text-align: center;
   padding: 0.5em;
-  border-bottom: 1px white solid;
+  border-radius: 10px;
+  box-shadow: 0px 0px 12px #AAAE;
 }
 #menu .menu-item:hover {
-  border-bottom: 1px lightgray solid;
+  box-shadow: 0px 0px 12px #888E;
 }
 
 .flex-column {
@@ -187,7 +188,6 @@ header .version {
   padding: 8px;
   margin: 0;
   border: none;
-  background-color: white;
   transition: padding 80ms ease-in-out;
   z-index: 1;
   cursor: pointer;
@@ -196,14 +196,11 @@ header .version {
   padding: 6px;
 }
 #base #base_change:active {
-  background-color: whitesmoke;
 }
 #base #base_change img {
   width: 100%;
-  background: white;
 }
 #base #base_change:active img {
-  background: whitesmoke;
 }
 
 #base #base_symbol {
@@ -256,22 +253,20 @@ header .version {
 }
 
 #swapper_switch {
+  cursor: pointer;
   border-radius: 12px;
   width: 32px;
   height: 32px;
   border: none;
-  background-color: white;
   display: flex;
   align-items: center;
   padding: 4px;
   transition: padding 80ms ease-in-out;
 }
 #swapper_switch:hover {
-  border-color: lightgray;
   padding: 2px;
 }
 #swapper_switch:active {
-  background-color: whitesmoke;
 }
 #swapper_switch img {
   width: 100%;
