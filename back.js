@@ -34,9 +34,9 @@ console.log(dir_home)
 
 const HISTORY_SIZE = 120
 const OFTEN = 900000 // 15 minutes
-const 4_HOURS = 14400000 // 4 hours
-const 3_DAYS = 259200000 // 3 days
-const 1_WEEK = 604800000 // 1 week
+const HOURS = 14400000 // 4 hours
+const DAYS = 259200000 // 3 days
+const WEEK = 604800000 // 1 week
 
 
 /* DexPairs */
@@ -174,7 +174,7 @@ async function launch() {
         }
       }
       if(tokens_charts[address].chart_4h) {
-        if((time - tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t']) > 4_HOURS) {
+        if((time - tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t']) > HOURS) {
           tokens_charts[address].chart_4h.push({
             t: time,
             p: price,
@@ -188,7 +188,7 @@ async function launch() {
         }]
       }
       if(tokens_charts[address].chart_3d) {
-        if((time - tokens_charts[address].chart_3d[tokens_charts[address].chart_3d.length-1]['t']) > 3_DAYS) {
+        if((time - tokens_charts[address].chart_3d[tokens_charts[address].chart_3d.length-1]['t']) > DAYS) {
           tokens_charts[address].chart_3d.push({
             t: time,
             p: price,
@@ -202,7 +202,7 @@ async function launch() {
         }]
       }
       if(tokens_charts[address].chart_1w) {
-        if((time - tokens_charts[address].chart_1w[tokens_charts[address].chart_1w.length-1]['t']) > 1_WEEK) {
+        if((time - tokens_charts[address].chart_1w[tokens_charts[address].chart_1w.length-1]['t']) > WEEK) {
           tokens_charts[address].chart_1w.push({
             t: time,
             p: price,
@@ -338,7 +338,7 @@ async function launchUniswap() {
         }
       }
       if(uniswap_charts[address].chart_4h) {
-        if((time - uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t']) > 4_HOURS) {
+        if((time - uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
           uniswap_charts[address].chart_4h.push({
             t: time,
             p: price,
@@ -352,7 +352,7 @@ async function launchUniswap() {
         }]
       }
       if(uniswap_charts[address].chart_3d) {
-        if((time - uniswap_charts[address].chart_3d[uniswap_charts[address].chart_3d.length-1]['t']) > 3_DAYS) {
+        if((time - uniswap_charts[address].chart_3d[uniswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
           uniswap_charts[address].chart_3d.push({
             t: time,
             p: price,
@@ -366,7 +366,7 @@ async function launchUniswap() {
         }]
       }
       if(uniswap_charts[address].chart_1w) {
-        if((time - uniswap_charts[address].chart_1w[uniswap_charts[address].chart_1w.length-1]['t']) > 1_WEEK) {
+        if((time - uniswap_charts[address].chart_1w[uniswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
           uniswap_charts[address].chart_1w.push({
             t: time,
             p: price,
