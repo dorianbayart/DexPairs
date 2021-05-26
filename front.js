@@ -102,9 +102,12 @@ const port = process.env.PORT || 3001
 const app = express()
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')))
+app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.html')))
 app.get('/script.js', (req, res) => res.sendFile(path.join(__dirname, '/public/script.js')))
 app.get('/design.css', (req, res) => res.sendFile(path.join(__dirname, '/public/design.css')))
 app.get('/responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/responsive.css')))
+app.get('/colors.css', (req, res) => res.sendFile(path.join(__dirname, '/public/colors.css')))
+app.get('/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
 
 // Pancake URLs
 app.get('/pancake/token/:token', (req, res) => {
