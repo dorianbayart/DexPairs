@@ -26,8 +26,10 @@ let dexList = {
   },
 }
 
-const TIMEFRAME_OFTEN = 'often'
+const TIMEFRAME_15M = '15m'
 const TIMEFRAME_4H = '4h'
+const TIMEFRAME_3D = '3d'
+const TIMEFRAME_1W = '1w'
 let timeframe = TIMEFRAME_4H
 
 
@@ -310,15 +312,27 @@ document.getElementById('swapper_switch').addEventListener(
 )
 
 // Timeframe selection
-document.getElementById('timeframe_often').addEventListener(
+document.getElementById('timeframe_15m').addEventListener(
   "click", function(e) {
-    timeframe = TIMEFRAME_OFTEN
+    timeframe = TIMEFRAME_15M
     updateCharts()
   }
 )
 document.getElementById('timeframe_4h').addEventListener(
   "click", function(e) {
     timeframe = TIMEFRAME_4H
+    updateCharts()
+  }
+)
+document.getElementById('timeframe_3d').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_3D
+    updateCharts()
+  }
+)
+document.getElementById('timeframe_1w').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_1W
     updateCharts()
   }
 )
@@ -345,14 +359,28 @@ getTop()
 
 function updateCharts() {
   let tokenChart = null, baseChart = null, scaleUnit = 'hour'
-  if(timeframe === TIMEFRAME_OFTEN) {
-    tokenChart = tokenCharts.chart_often
-    baseChart = baseCharts.chart_often
-    scaleUnit = 'hour'
-  } else {
-    tokenChart = tokenCharts.chart_4h
-    baseChart = baseCharts.chart_4h
-    scaleUnit = 'day'
+  switch (timeframe) {
+    case TIMEFRAME_15M:
+      tokenChart = tokenCharts.chart_often
+      baseChart = baseCharts.chart_often
+      scaleUnit = 'hour'
+      break;
+    case TIMEFRAME_3D:
+      tokenChart = tokenCharts.chart_3d
+      baseChart = baseCharts.chart_3d
+      scaleUnit = 'day'
+      break;
+    case TIMEFRAME_1W:
+      tokenChart = tokenCharts.chart_1w
+      baseChart = baseCharts.chart_1w
+      scaleUnit = 'month'
+      break;
+    case TIMEFRAME_4H:
+    default:
+      tokenChart = tokenCharts.chart_4h
+      baseChart = baseCharts.chart_4h
+      scaleUnit = 'day'
+      break;
   }
 
   let timeData = tokenChart.map(coords => new Date(coords.t))
