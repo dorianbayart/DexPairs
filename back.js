@@ -156,7 +156,7 @@ async function launch() {
       // update tokens charts
       //
       if(tokens_charts[address]) {
-        if(tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]['t'] < time) {
+        if(time - tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]['t'] > OFTEN) {
           tokens_charts[address].chart_often.push({
             t: time,
             p: price
@@ -320,7 +320,7 @@ async function launchUniswap() {
       // update Uniswap charts
       //
       if(uniswap_charts[address]) {
-        if(uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-1]['t'] < time) {
+        if(time - uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
           uniswap_charts[address].chart_often.push({
             t: time,
             p: price,

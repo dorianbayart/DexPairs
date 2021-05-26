@@ -414,7 +414,7 @@ function updateCharts() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        aspectRatio: 0.75,
+        //aspectRatio: 0.75,
         radius: 0,
         interaction: {
           intersect: false,
