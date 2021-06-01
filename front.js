@@ -103,11 +103,16 @@ const app = express()
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')))
 app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.html')))
+app.get('/common.js', (req, res) => res.sendFile(path.join(__dirname, '/public/common.js')))
 app.get('/script.js', (req, res) => res.sendFile(path.join(__dirname, '/public/script.js')))
+app.get('/wallet.js', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.js')))
 app.get('/design.css', (req, res) => res.sendFile(path.join(__dirname, '/public/design.css')))
 app.get('/responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/responsive.css')))
 app.get('/colors.css', (req, res) => res.sendFile(path.join(__dirname, '/public/colors.css')))
 app.get('/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
+
+app.get('/require.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/require.js')))
+app.get('/web3.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/web3.min.js')))
 
 // Pancake URLs
 app.get('/pancake/token/:token', (req, res) => {

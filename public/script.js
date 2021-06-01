@@ -338,14 +338,6 @@ document.getElementById('timeframe_1w').addEventListener(
 )
 
 
-// OnClick on Header => Goto root url
-document.getElementById('title').addEventListener(
-  "click", function(e) {
-    location.href = '/'
-  }
-)
-
-
 
 
 /* MAIN */

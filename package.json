@@ -1,7 +1,7 @@
 {
   "name": "DexPairs",
   "version": "0.0.1",
-  "description": "Fetch stats from Pancake's API and explore them !",
+  "description": "Check the historical price of any pair token you want !",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -10,6 +10,8 @@
     "crypto",
     "bsc",
     "pancake",
+    "uniswap",
+    "dex",
     "prices"
   ],
   "author": "Dorian Bayart",
