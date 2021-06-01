@@ -18,6 +18,12 @@ let dexList = {
     url_swap: 'https://app.uniswap.org/#/swap',
     explorer: 'https://etherscan.io/token/',
   },
+  SUSHISWAP: {
+    name: 'SushiSwap',
+    url: 'https://sushi.com/',
+    url_swap: 'https://app.sushi.com/swap',
+    explorer: 'https://explorer-mainnet.maticvigil.com/',
+  },
   PANCAKESWAP: {
     name: 'PancakeSwap',
     url: 'https://pancakeswap.finance/',
@@ -75,7 +81,7 @@ function getTop() {
 
 
 // get simple data from server
-// + update main/base tokens with default ones (WBNB/BUSD)
+// + update main/base tokens with default ones
 function getSimple() {
   xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
