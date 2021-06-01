@@ -37,6 +37,12 @@ let uniswap_top = {}
 let uniswap_data = {}
 let uniswap_charts = {}
 
+// Sushiswap data
+let sushiswap_list = {}
+let sushiswap_top = {}
+let sushiswap_data = {}
+let sushiswap_charts = {}
+
 
 
 
@@ -84,14 +90,35 @@ function launchUniswap() {
   setTimeout(function(){ launchUniswap() }, 19000)
 }
 
+// Program - Sushiswap
+function launchSushiswap() {
+  fetch(backend + '/list/sushiswap')
+  .then(res => res.json())
+  .then(json => sushiswap_list = json)
+
+  fetch(backend + '/top/sushiswap')
+  .then(res => res.json())
+  .then(json => sushiswap_top = json)
+
+  fetch(backend + '/simple/sushiswap')
+  .then(res => res.json())
+  .then(json => sushiswap_data = json)
+
+  fetch(backend + '/charts/sushiswap')
+  .then(res => res.json())
+  .then(json => sushiswap_charts = json)
+
+  // loop
+  setTimeout(function(){ launchSushiswap() }, 19000)
+}
+
 
 
 
 /* MAIN */
-setTimeout(function(){
-  launch()
-  launchUniswap()
-}, 2500)
+setTimeout(function(){ launch() }, 2000)
+setTimeout(function(){ launchUniswap() }, 3000)
+setTimeout(function(){ launchSushiswap() }, 4000)
 
 
 
@@ -165,6 +192,33 @@ app.get('(/uniswap)?/charts/:token/:base', (req, res) => {
   let pair = {}
   pair[req.params.token] = uniswap_charts[req.params.token]
   pair[req.params.base] = uniswap_charts[req.params.base]
+  res.json(pair)
+})
+
+// Sushiswap URLs - Default
+app.get('(/sushiswap)?/token/:token', (req, res) => {
+  if(
+    Object.keys(sushiswap_data).includes(req.params.token) ||
+    Object.keys(sushiswap_data).findIndex(address => sushiswap_data[address].s === req.params.token) !== -1
+  ) {
+    res.sendFile(path.join(__dirname, '/public/index.html'))
+  } else {
+    // TODO Improve error => redirect to homepage
+    res.writeHead(400, {'Content-Type': 'text/html'})
+    res.end('This token does not exist !')
+  }
+})
+
+app.get('(/sushiswap)?/list', (req, res) => res.json(sushiswap_list))
+app.get('(/sushiswap)?/top', (req, res) => res.json(sushiswap_top))
+app.get('(/sushiswap)?/simple', (req, res) => res.json(sushiswap_data))
+app.get('(/sushiswap)?/charts/:token', (req, res) => {
+  res.json(sushiswap_charts[req.params.token])
+})
+app.get('(/sushiswap)?/charts/:token/:base', (req, res) => {
+  let pair = {}
+  pair[req.params.token] = sushiswap_charts[req.params.token]
+  pair[req.params.base] = sushiswap_charts[req.params.base]
   res.json(pair)
 })
 
