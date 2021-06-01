@@ -5,6 +5,7 @@ body {
 #header {
   display: flex;
   align-items: baseline;
+  margin-bottom: 2em;
 }
 #title {
   cursor: pointer;
@@ -48,6 +49,7 @@ header .version {
 
 #flex-main {
   display: flex;
+  margin-top: 2em;
 }
 
 #flex-pair {
@@ -57,12 +59,28 @@ header .version {
   margin: auto;
 }
 
+#dex-selection {
+  margin: 1em;
+  text-align: end;
+}
+#dex-selector {
+  font-size: larger;
+  border: none;
+  padding: 0.25em;
+  text-align: end;
+  outline: none;
+}
 
+#top-title {
+  font-size: larger;
+  margin: auto;
+  text-align: center;
+  padding-top: 1em;
+}
 #top {
   display: flex;
   flex-wrap: nowrap;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding-bottom: 1em;
 }
 .top-token {
   display: flex;

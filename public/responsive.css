@@ -150,6 +150,7 @@ header .version .low {
   .left-menu {
     width: 100%;
     max-width: none;
+    margin-bottom: 2em;
   }
   #search_field {
     margin: 0.1em 0.25em;

@@ -10,3 +10,7 @@ html {
 #menu .menu-item, .top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart, input {
   background-color: #FFFE;
 }
+
+#top, #top-title {
+  background-color: #0000001F;
+}

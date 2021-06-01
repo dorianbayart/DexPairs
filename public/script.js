@@ -5,8 +5,8 @@ let filteredList = {}
 let topTokens = {}
 let simple = {}
 let charts = {}
-let selectedToken = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
-let selectedBase = '0xdac17f958d2ee523a2206206994597c13d831ec7'
+let selectedToken = ''
+let selectedBase = ''
 let tokenCharts = {}
 let baseCharts = {}
 let myChart = null
@@ -14,21 +14,40 @@ let dex = 'UNISWAP'
 let dexList = {
   UNISWAP: {
     name: 'Uniswap',
+    chain: 'Ethereum',
     url: 'https://uniswap.org/',
     url_swap: 'https://app.uniswap.org/#/swap',
+    url_data: '',
     explorer: 'https://etherscan.io/token/',
+    tokens: {
+      token: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      base: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+    }
   },
   SUSHISWAP: {
     name: 'SushiSwap',
+    chain: 'Polygon/Matic',
     url: 'https://sushi.com/',
     url_swap: 'https://app.sushi.com/swap',
+    url_data: '/sushiswap',
     explorer: 'https://explorer-mainnet.maticvigil.com/',
+    tokens: {
+      token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+      base: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
+    }
   },
   PANCAKESWAP: {
+    disabled: 'true',
     name: 'PancakeSwap',
+    chain: 'Binance Smart Chain',
     url: 'https://pancakeswap.finance/',
     url_swap: 'https://exchange.pancakeswap.finance/#/swap',
+    url_data: '/pancake',
     explorer: 'https://bscscan.com/token/',
+    tokens: {
+      token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+      base: '0x55d398326f99059ff775485246999027b3197955'
+    }
   },
 }
 
@@ -53,7 +72,7 @@ function getList() {
       updateBaseList()
     }
   }
-  xmlhttp.open("GET", "/list", true)
+  xmlhttp.open("GET", dexList[dex].url_data + "/list", true)
   xmlhttp.send()
 
   setTimeout(function(){ getList() }, 300000)
@@ -72,7 +91,7 @@ function getTop() {
       setTop()
     }
   }
-  xmlhttp.open("GET", "/top", true)
+  xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
   xmlhttp.send()
 
   setTimeout(function(){ getTop() }, 60000);
@@ -93,7 +112,7 @@ function getSimple() {
       getCharts()
     }
   }
-  xmlhttp.open("GET", "/simple", true)
+  xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
   xmlhttp.send()
 
   setTimeout(function(){ getSimple() }, 60000);
@@ -114,7 +133,7 @@ function getCharts() {
       setSwapperBase()
     }
   }
-  xmlhttp.open("GET", "/charts/" + selectedToken + "/" + selectedBase, true)
+  xmlhttp.open("GET", dexList[dex].url_data + "/charts/" + selectedToken + "/" + selectedBase, true)
   xmlhttp.send()
 }
 
@@ -250,12 +269,21 @@ function setSwapperBase() {
 }
 
 
-// useful
-function precise(x) {
-  return Number.parseFloat(x).toPrecision(5);
-}
 
 
+// OnChange on Dex Selector
+document.getElementById('dex-selector').addEventListener(
+  "change", function(e) {
+
+    dex = e.target.value
+    selectedToken = dexList[dex].tokens.token
+    selectedBase = dexList[dex].tokens.base
+
+    getList()
+    getSimple()
+    getTop()
+  }
+)
 
 // OnChange on Calculator [Selected/Base] => Update the other value
 document.getElementById('swapper_token').addEventListener(
@@ -347,6 +375,7 @@ document.getElementById('timeframe_1w').addEventListener(
 
 
 /* MAIN */
+initializeHTML()
 getList()
 getSimple()
 getTop()
@@ -354,6 +383,20 @@ getTop()
 
 
 
+function initializeHTML() {
+  selectedToken = dexList[dex].tokens.token
+  selectedBase = dexList[dex].tokens.base
+
+  let dexSelector = document.getElementById('dex-selector')
+  Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item, i) => {
+    let option = document.createElement('option')
+    dexSelector.appendChild(option)
+    option.innerHTML += dexList[item].name + ' - ' + dexList[item].chain
+    option.value = item
+    option.selected = dexList[item] === dex
+  });
+
+}
 
 function updateCharts() {
   let tokenChart = null, baseChart = null, scaleUnit = 'hour'
@@ -443,4 +486,9 @@ function findAddressFromSymbol(symbol) {
   return Object.keys(simple).find(
       address => simple[address].s === symbol
   )
+}
+
+// Round number
+function precise(x) {
+  return Number.parseFloat(x).toPrecision(5);
 }
