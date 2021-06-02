@@ -65,7 +65,7 @@ function launch() {
   .then(json => tokens_charts = json)
 
   // loop
-  setTimeout(function(){ launch() }, 19000)
+  setTimeout(function(){ launch() }, getTimer())
 }
 
 // Program - Uniswap
@@ -87,7 +87,7 @@ function launchUniswap() {
   .then(json => uniswap_charts = json)
 
   // loop
-  setTimeout(function(){ launchUniswap() }, 19000)
+  setTimeout(function(){ launchUniswap() }, getTimer())
 }
 
 // Program - Sushiswap
@@ -109,16 +109,16 @@ function launchSushiswap() {
   .then(json => sushiswap_charts = json)
 
   // loop
-  setTimeout(function(){ launchSushiswap() }, 19000)
+  setTimeout(function(){ launchSushiswap() }, getTimer())
 }
 
 
 
 
 /* MAIN */
-setTimeout(function(){ launch() }, 2000)
-setTimeout(function(){ launchUniswap() }, 3000)
+setTimeout(function(){ launchUniswap() }, 2000)
 setTimeout(function(){ launchSushiswap() }, 4000)
+setTimeout(function(){ launch() }, 6000)
 
 
 
@@ -230,3 +230,9 @@ const server = http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type': 'text/html'})
   res.end('Hello World')
 })
+
+
+// useful Math.random timer
+function getTimer() {
+   return Math.round((15*Math.random() + 10)*1000)
+}
