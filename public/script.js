@@ -1,4 +1,5 @@
 
+let getListTimer, getTopTimer, getSimpleTimer
 let list = {}
 let search = ''
 let filteredList = {}
@@ -75,7 +76,7 @@ function getList() {
   xmlhttp.open("GET", dexList[dex].url_data + "/list", true)
   xmlhttp.send()
 
-  setTimeout(function(){ getList() }, 300000)
+  getListTimer = setTimeout(function(){ getList() }, 300000)
 }
 
 
@@ -94,7 +95,7 @@ function getTop() {
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
   xmlhttp.send()
 
-  setTimeout(function(){ getTop() }, 60000);
+  getTopTimer = setTimeout(function(){ getTop() }, 60000);
 }
 
 
@@ -115,7 +116,7 @@ function getSimple() {
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
   xmlhttp.send()
 
-  setTimeout(function(){ getSimple() }, 60000);
+  getSimpleTimer = setTimeout(function(){ getSimple() }, 60000);
 }
 
 
@@ -278,6 +279,10 @@ document.getElementById('dex-selector').addEventListener(
     dex = e.target.value
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
+    
+    clearTimeout(getListTimer)
+    clearTimeout(getSimpleTimer)
+    clearTimeout(getTopTimer)
 
     getList()
     getSimple()
