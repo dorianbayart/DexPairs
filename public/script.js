@@ -76,7 +76,7 @@ function getList() {
   xmlhttp.open("GET", dexList[dex].url_data + "/list", true)
   xmlhttp.send()
 
-  getListTimer = setTimeout(function(){ getList() }, 300000)
+  getListTimer = setTimeout(function(){ getList() }, Math.round((90*Math.random() + 180)*1000))
 }
 
 
@@ -95,7 +95,7 @@ function getTop() {
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
   xmlhttp.send()
 
-  getTopTimer = setTimeout(function(){ getTop() }, 60000);
+  getTopTimer = setTimeout(function(){ getTop() }, Math.round((20*Math.random() + 20)*1000));
 }
 
 
@@ -116,7 +116,7 @@ function getSimple() {
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
   xmlhttp.send()
 
-  getSimpleTimer = setTimeout(function(){ getSimple() }, 60000);
+  getSimpleTimer = setTimeout(function(){ getSimple() }, Math.round((30*Math.random() + 45)*1000));
 }
 
 
