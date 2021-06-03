@@ -568,7 +568,9 @@ function findAddressFromSymbol(symbol) {
 
 // Round number
 function precise(x) {
-  return Number.parseFloat(x).toPrecision(5);
+  if(x > 9999) { return Math.round(x) }
+  else if(x > 0.0001) { return Number.parseFloat(x).toPrecision(5) }
+  return Number.parseFloat(x).toPrecision(2)
 }
 
 // Calculate percentage change of last 24h
