@@ -227,7 +227,7 @@ function setTop() {
     setTopMiniChart(address)
 
     div.addEventListener("click", function(e) {
-      selectedToken = findAddressFromSymbol(e.target.id ? e.target.id : e.target.parentElement.id)
+      selectedToken = findAddressFromSymbol(e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id)
       setToken(selectedToken)
       getCharts()
       setSwapperToken()
