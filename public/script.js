@@ -52,6 +52,7 @@ let dexList = {
   },
 }
 
+const TIME_24H = 86400000
 const TIMEFRAME_15M = '15m'
 const TIMEFRAME_4H = '4h'
 const TIMEFRAME_3D = '3d'
@@ -218,13 +219,21 @@ function setTop() {
     let canvas_chart = document.createElement('canvas')
     canvas_chart.id = 'chart_' + address
     canvas_chart.classList.add('top-chart')
+    let div_percentage = document.createElement('div')
+    div_percentage.classList.add('top-percentage')
 
+    const miniChart = extract24hChart(topTokens[address].chart)
+    const percentage = getPercentage24h(miniChart)
+    div_percentage.innerHTML = percentage + '%'
+    div_percentage.classList.add(percentage >= 0 ? 'green' : 'red')
+    
     div_column.appendChild(div)
     div.appendChild(div_symbol)
     div.appendChild(div_price)
+    div.appendChild(div_percentage)
     div.appendChild(canvas_chart)
-
-    setTopMiniChart(address)
+    
+    setTopMiniChart(miniChart)
 
     div.addEventListener("click", function(e) {
       selectedToken = findAddressFromSymbol(e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id)
@@ -236,13 +245,11 @@ function setTop() {
   }
 }
 
-function setTopMiniChart(addr) {
-  let token = topTokens[addr]
-  let tokenChart = token.chart
-  let timeData = tokenChart.map(coords => new Date(coords.t))
-  let tokenData = tokenChart.map(coords => coords.p)
+function setTopMiniChart(tokenChart) {
+  const timeData = tokenChart.map(coords => new Date(coords.t))
+  const tokenData = tokenChart.map(coords => coords.p)
 
-  var ctx = document.getElementById('chart_' + addr).getContext('2d')
+  const ctx = document.getElementById('chart_' + addr).getContext('2d')
   new Chart(ctx, {
     type: 'line',
     data: {
@@ -558,4 +565,19 @@ function findAddressFromSymbol(symbol) {
 // Round number
 function precise(x) {
   return Number.parseFloat(x).toPrecision(5);
+}
+
+// Calculate percentage change of last 24h
+function getPercentage24h(chart) {
+  const chart24h = extract24hChart(chart)
+  const first = chart24h[0]
+  const last = chart24h[chart24h.length - 1]
+  // round with 2 digits after commma
+  return Math.round((last.p - first.p) / first.p * 10000) / 100
+}
+
+// Return only last 24h data from a chart
+function extract24hChart(chart) {
+  const last_t = chart[chart.length-1].t
+  return chart.filter(({t}) => last_t-t <= TIME_24H)
 }
