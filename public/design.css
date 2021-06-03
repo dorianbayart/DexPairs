@@ -101,12 +101,12 @@ header .version {
 }
 .top-symbol {
   display: inline-flex;
-  width: 50%;
+  width: 40%;
 }
-.top-price {
+.top-price, .top-percentage {
   display: inline-flex;
-  width: 50%;
-  text-align: end;
+  width: 30%;
+  justify-content: flex-end;
 }
 .top-chart {
   width: 64px;
