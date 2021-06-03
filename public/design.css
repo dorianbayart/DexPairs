@@ -78,14 +78,19 @@ header .version {
   padding-top: 1em;
 }
 #top {
-  display: flex;
-  flex-wrap: nowrap;
   padding-bottom: 1em;
 }
+#top::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.top-column {
+  float: left;
+  width: 20%;
+}
 .top-token {
-  display: flex;
-  flex-wrap: wrap;
-  flex: 25%;
+  margin: 4px;
 
   border: 1px solid #CCC;
   border-radius: 12px;
@@ -95,11 +100,17 @@ header .version {
   box-shadow: 1px 1px 12px #BBB;
 }
 .top-symbol {
-  flex: 60%;
+  display: inline-flex;
+  width: 50%;
 }
 .top-price {
-  flex: 50%;
+  display: inline-flex;
+  width: 50%;
   text-align: end;
+}
+.top-chart {
+  width: 64px;
+  margin-top: 4px;
 }
 
 

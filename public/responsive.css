@@ -36,8 +36,7 @@ header .version .low {
   font-size: 0.85em;
 }
 .top-token {
-  margin: 1em;
-  padding: 0.5em 1em;
+  padding: 1em;
 }
 #search_field {
   margin: 0.5em 1em;
@@ -89,8 +88,8 @@ header .version .low {
     width: 75%;
   }
   .top-token {
-    margin: 0.5em;
     padding: 0.5em;
+    border-radius: 8px;
   }
   #search_field {
     margin: 0.25em 0.5em;
@@ -141,8 +140,8 @@ header .version .low {
     flex-wrap: wrap;
   }
   .top-token {
-    margin: 0.25em;
-    padding: 0.25em 0.75em;
+    padding: 0.25em;
+    border-radius: 6px;
   }
   #flex-main {
     flex-wrap: wrap;

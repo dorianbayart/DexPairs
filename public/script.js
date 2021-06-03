@@ -202,19 +202,29 @@ function setTop() {
   for (var i = 0; i < 5; i++) {
     const address = Object.keys(topTokens)[i]
     const symbol = topTokens[address].s
+    let div_column = document.createElement('div')
+    div_column.classList.add('top-column')
+    top.appendChild(div_column)
+
     let div = document.createElement('div')
     div.classList.add('top-token')
     div.id = symbol
-    top.appendChild(div)
     let div_symbol = document.createElement('div')
     div_symbol.innerHTML = symbol
     div_symbol.classList.add('top-symbol')
     let div_price = document.createElement('div')
-    div_price.innerHTML = '$ ' + precise(topTokens[address].p)
+    div_price.innerHTML = precise(topTokens[address].p)
     div_price.classList.add('top-price')
+    let canvas_chart = document.createElement('canvas')
+    canvas_chart.id = 'chart_' + address
+    canvas_chart.classList.add('top-chart')
 
+    div_column.appendChild(div)
     div.appendChild(div_symbol)
     div.appendChild(div_price)
+    div.appendChild(canvas_chart)
+
+    setTopMiniChart(address)
 
     div.addEventListener("click", function(e) {
       selectedToken = findAddressFromSymbol(e.target.id ? e.target.id : e.target.parentElement.id)
@@ -224,6 +234,58 @@ function setTop() {
       setSwapperBase()
     })
   }
+}
+
+function setTopMiniChart(addr) {
+  let token = topTokens[addr]
+  let tokenChart = token.chart
+  let timeData = tokenChart.map(coords => new Date(coords.t))
+  let tokenData = tokenChart.map(coords => coords.p)
+
+  var ctx = document.getElementById('chart_' + addr).getContext('2d')
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: timeData,
+      datasets: [{
+        data: tokenData,
+        backgroundColor: '#0000FF88',
+        borderColor: '#0000FF88',
+        radius: 0,
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: false
+        },
+        legend: {
+          display: false
+        },
+        tooltip: {
+          enabled: false
+        }
+      },
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 3,
+      scaleShowLabels: false,
+      tooltipEvents: [],
+      pointDot: false,
+      scaleShowGridLines: true,
+      scales: {
+        x: {
+          type: 'time',
+          display: false
+        },
+        y: {
+          display: false
+        }
+      }
+    }
+  })
 }
 
 
@@ -279,7 +341,7 @@ document.getElementById('dex-selector').addEventListener(
     dex = e.target.value
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
-    
+
     clearTimeout(getListTimer)
     clearTimeout(getSimpleTimer)
     clearTimeout(getTopTimer)
