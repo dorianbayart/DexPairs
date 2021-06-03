@@ -14,3 +14,10 @@ html {
 #top, #top-title {
   background-color: #0000001F;
 }
+
+.green {
+  color: mediumseagreen;
+}
+.red {
+  color: tomato;
+}
