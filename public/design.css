@@ -71,14 +71,11 @@ header .version {
   outline: none;
 }
 
-#top-title {
-  font-size: larger;
-  margin: auto;
-  text-align: center;
-  padding-top: 1em;
-}
 #top {
-  padding-bottom: 1em;
+  margin: auto;
+  max-width: 1024px;
+  border-radius: 12px;
+  padding: 4px;
 }
 #top::after {
   content: "";
@@ -87,7 +84,7 @@ header .version {
 }
 .top-column {
   float: left;
-  width: 20%;
+  width: 33%;
 }
 .top-token {
   margin: 4px;
@@ -95,6 +92,9 @@ header .version {
   border: 1px solid #CCC;
   border-radius: 12px;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
 }
 .top-token:hover {
   box-shadow: 1px 1px 12px #BBB;
@@ -105,12 +105,11 @@ header .version {
 }
 .top-price, .top-percentage {
   display: inline-flex;
-  width: 30%;
-  justify-content: flex-end;
+  width: 25%;
 }
 .top-chart {
-  width: 64px;
-  margin-top: 4px;
+  width: 48px;
+  height: 32px;
 }
 
 

@@ -200,7 +200,7 @@ function updateBaseList() {
 function setTop() {
   let top = document.getElementById('top')
   top.innerHTML = null
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 6; i++) {
     const address = Object.keys(topTokens)[i]
     const symbol = topTokens[address].s
     let div_column = document.createElement('div')
@@ -216,9 +216,11 @@ function setTop() {
     let div_price = document.createElement('div')
     div_price.innerHTML = precise(topTokens[address].p)
     div_price.classList.add('top-price')
+    let container_chart = document.createElement('div')
+    container_chart.classList.add('top-chart')
     let canvas_chart = document.createElement('canvas')
     canvas_chart.id = 'chart_' + address
-    canvas_chart.classList.add('top-chart')
+
     let div_percentage = document.createElement('div')
     div_percentage.classList.add('top-percentage')
 
@@ -226,14 +228,15 @@ function setTop() {
     const percentage = getPercentage24h(miniChart)
     div_percentage.innerHTML = percentage + '%'
     div_percentage.classList.add(percentage >= 0 ? 'green' : 'red')
-    
+
     div_column.appendChild(div)
     div.appendChild(div_symbol)
     div.appendChild(div_price)
     div.appendChild(div_percentage)
-    div.appendChild(canvas_chart)
-    
-    setTopMiniChart(miniChart)
+    div.appendChild(container_chart)
+    container_chart.appendChild(canvas_chart)
+
+    setTopMiniChart(address, miniChart)
 
     div.addEventListener("click", function(e) {
       selectedToken = findAddressFromSymbol(e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id)
@@ -245,7 +248,7 @@ function setTop() {
   }
 }
 
-function setTopMiniChart(tokenChart) {
+function setTopMiniChart(addr, tokenChart) {
   const timeData = tokenChart.map(coords => new Date(coords.t))
   const tokenData = tokenChart.map(coords => coords.p)
 
@@ -259,7 +262,8 @@ function setTopMiniChart(tokenChart) {
         backgroundColor: '#0000FF88',
         borderColor: '#0000FF88',
         radius: 0,
-        tension: 0.3
+        tension: 0.3,
+        borderWidth: 1,
       }]
     },
     options: {
@@ -276,8 +280,8 @@ function setTopMiniChart(tokenChart) {
       },
       animation: false,
       responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 3,
+      maintainAspectRatio: false,
+      //aspectRatio: 3,
       scaleShowLabels: false,
       tooltipEvents: [],
       pointDot: false,
