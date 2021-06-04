@@ -72,6 +72,8 @@ function getList() {
 
       updateList()
       updateBaseList()
+
+      sessionStorage.setItem('list', JSON.stringify(list))
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/list", true)
@@ -91,6 +93,8 @@ function getTop() {
       var data = JSON.parse(this.responseText)
       topTokens = data
       setTop()
+
+      sessionStorage.setItem('topTokens', JSON.stringify(topTokens))
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
@@ -112,6 +116,8 @@ function getSimple() {
       setToken(selectedToken)
       setBase(selectedBase)
       getCharts()
+
+      sessionStorage.setItem('simple', JSON.stringify(simple))
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
@@ -133,6 +139,9 @@ function getCharts() {
       baseCharts = data[selectedBase]
       updateCharts()
       setSwapperBase()
+
+      sessionStorage.setItem('tokenCharts', JSON.stringify(tokenCharts))
+      sessionStorage.setItem('baseCharts', JSON.stringify(baseCharts))
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/charts/" + selectedToken + "/" + selectedBase, true)
@@ -463,11 +472,23 @@ getTop()
 
 
 function initializeHTML() {
-  if(sessionStorage.getItem('dex')) {
+  if(sessionStorage.getItem('list')) {
     dex = sessionStorage.getItem('dex')
     selectedToken = sessionStorage.getItem('selectedToken')
     selectedBase = sessionStorage.getItem('selectedBase')
     timeframe = sessionStorage.getItem('timeframe')
+    list = JSON.parse(sessionStorage.getItem('list'))
+    updateList()
+    topTokens = JSON.parse(sessionStorage.getItem('topTokens'))
+    setTop()
+    simple = JSON.parse(sessionStorage.getItem('simple'))
+    setToken(selectedToken)
+    setBase(selectedBase)
+    tokenCharts = JSON.parse(sessionStorage.getItem('tokenCharts'))
+    baseCharts = JSON.parse(sessionStorage.getItem('baseCharts'))
+    updateCharts()
+    setSwapperToken()
+    setSwapperBase()
   } else {
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
