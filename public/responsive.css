@@ -62,7 +62,7 @@ header .version .low {
 #chart {
   margin: 0.5em 1em 1em;
   padding: 0.25em;
-  max-height: 40vh;
+  max-height: 45vh;
 }
 #source {
   margin-top: 2em;
@@ -93,6 +93,14 @@ header .version .low {
   .top-token {
     border-radius: 8px;
   }
+  #flex-main {
+    flex-wrap: wrap;
+  }
+  .left-menu {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 2em;
+  }
   #search_field {
     margin: 0.25em 0.5em;
     padding: 0.5em 1em;
@@ -100,8 +108,10 @@ header .version .low {
   #list {
     margin: 0.25em 0.5em;
     padding: 0.5em;
+    max-height: 12vh;
   }
   #list li {
+    display: inline-flex;
     padding: 8px;
   }
   #token, #base {
@@ -146,14 +156,6 @@ header .version .low {
   }
   .top-token {
   }
-  #flex-main {
-    flex-wrap: wrap;
-  }
-  .left-menu {
-    width: 100%;
-    max-width: none;
-    margin-bottom: 2em;
-  }
   #search_field {
     margin: 0.1em 0.25em;
     padding: 0.25em 1em;
@@ -164,7 +166,6 @@ header .version .low {
     max-height: 14vh;
   }
   #list li {
-    display: inline-flex;
     padding: 10px;
   }
   #token, #base {
