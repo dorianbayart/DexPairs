@@ -464,7 +464,6 @@ getTop()
 
 function initializeHTML() {
   if(sessionStorage.getItem('dex')) {
-    console.log(sessionStorage)
     dex = sessionStorage.getItem('dex')
     selectedToken = sessionStorage.getItem('selectedToken')
     selectedBase = sessionStorage.getItem('selectedBase')
