@@ -464,6 +464,7 @@ getTop()
 
 function initializeHTML() {
   if(sessionStorage.getItem('dex')) {
+    console.log(sessionStorage)
     dex = sessionStorage.getItem('dex')
     selectedToken = sessionStorage.getItem('selectedToken')
     selectedBase = sessionStorage.getItem('selectedBase')
@@ -472,28 +473,28 @@ function initializeHTML() {
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
   }
-  
+
   let dexSelector = document.getElementById('dex-selector')
   Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item, i) => {
     let option = document.createElement('option')
     dexSelector.appendChild(option)
     option.innerHTML += dexList[item].name + ' - ' + dexList[item].chain
     option.value = item
-    option.selected = dexList[item] === dex
+    option.selected = dexList[item].name.toUpperCase() === dex
   });
 }
 
 function saveSessionVariables() {
   sessionStorage.setItem('dex', dex)
   sessionStorage.setItem('selectedToken', selectedToken)
-  sessionStorage.setItem('selectedBase', dselectedBaseex)
+  sessionStorage.setItem('selectedBase', selectedBase)
   sessionStorage.setItem('timeframe', timeframe)
 }
-    
+
 
 function updateCharts() {
   saveSessionVariables()
-  
+
   let tokenChart = null, baseChart = null, scaleUnit = 'hour'
   switch (timeframe) {
     case TIMEFRAME_15M:
