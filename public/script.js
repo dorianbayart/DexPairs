@@ -31,7 +31,7 @@ let dexList = {
     url: 'https://sushi.com/',
     url_swap: 'https://app.sushi.com/swap',
     url_data: '/sushiswap',
-    explorer: 'https://explorer-mainnet.maticvigil.com/',
+    explorer: 'https://explorer-mainnet.maticvigil.com/tokens/',
     tokens: {
       token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
       base: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
