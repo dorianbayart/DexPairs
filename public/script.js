@@ -172,7 +172,7 @@ function updateList() {
   if(Object.keys(list).length < 1) {
     return
   }
-  
+
   let currentList = search.length > 0 ? filteredList : list;
 
   document.getElementById('list').innerHTML = null;
@@ -198,7 +198,7 @@ function updateBaseList() {
   if(Object.keys(list).length < 1) {
     return
   }
-  
+
   let currentList = list
 
   document.getElementById('base_select').innerHTML = null
@@ -495,17 +495,21 @@ function initializeHTML() {
     selectedBase = sessionStorage.getItem('selectedBase')
     timeframe = sessionStorage.getItem('timeframe')
     list = JSON.parse(sessionStorage.getItem('list'))
-    updateList()
+    if(list && Object.keys(list).length > 0) { updateList() }
     topTokens = JSON.parse(sessionStorage.getItem('topTokens'))
-    setTop()
+    if(topTokens && Object.keys(topTokens).length > 0) { setTop() }
     simple = JSON.parse(sessionStorage.getItem('simple'))
-    setToken(selectedToken)
-    setBase(selectedBase)
+    if(simple && Object.keys(simple).length > 0) {
+      setToken(selectedToken)
+      setBase(selectedBase)
+    }
     tokenCharts = JSON.parse(sessionStorage.getItem('tokenCharts'))
     baseCharts = JSON.parse(sessionStorage.getItem('baseCharts'))
-    updateCharts()
-    setSwapperToken()
-    setSwapperBase()
+    if(tokenCharts && baseCharts && Object.keys(tokenCharts).length > 0 && Object.keys(baseCharts).length > 0) {
+      updateCharts()
+      setSwapperToken()
+      setSwapperBase()
+    }
   } else {
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
