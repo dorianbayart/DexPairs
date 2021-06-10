@@ -137,6 +137,7 @@ function getCharts() {
       var data = JSON.parse(this.responseText)
       tokenCharts = data[selectedToken]
       baseCharts = data[selectedBase]
+      console.log(tokenCharts, baseCharts)
       updateCharts()
       setSwapperBase()
 
@@ -502,15 +503,17 @@ function initializeHTML() {
     if(simple && Object.keys(simple).length > 0) {
       setToken(selectedToken)
       setBase(selectedBase)
-    }
-    tokenCharts = JSON.parse(sessionStorage.getItem('tokenCharts'))
-    baseCharts = JSON.parse(sessionStorage.getItem('baseCharts'))
-    if(tokenCharts && baseCharts && Object.keys(tokenCharts).length > 0 && Object.keys(baseCharts).length > 0) {
-      updateCharts()
-      setSwapperToken()
-      setSwapperBase()
+
+      tokenCharts = JSON.parse(sessionStorage.getItem('tokenCharts'))
+      baseCharts = JSON.parse(sessionStorage.getItem('baseCharts'))
+      if(tokenCharts && baseCharts && Object.keys(tokenCharts).length > 0 && Object.keys(baseCharts).length > 0) {
+        updateCharts()
+        setSwapperToken()
+        setSwapperBase()
+      }
     }
   } else {
+    // default selection
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
   }
