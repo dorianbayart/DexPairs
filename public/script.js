@@ -69,11 +69,11 @@ function getList() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText)
       list = data
-
-      updateList()
-      updateBaseList()
-
-      sessionStorage.setItem('list', JSON.stringify(list))
+      if(list && Object.keys(list).length > 0) {
+        updateList()
+        updateBaseList()
+        sessionStorage.setItem('list', JSON.stringify(list))
+      }
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/list", true)
@@ -92,9 +92,10 @@ function getTop() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText)
       topTokens = data
-      setTop()
-
-      sessionStorage.setItem('topTokens', JSON.stringify(topTokens))
+      if(topTokens && Object.keys(topTokens).length > 0) {
+        setTop()
+        sessionStorage.setItem('topTokens', JSON.stringify(topTokens))
+      }
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
@@ -113,11 +114,12 @@ function getSimple() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText)
       simple = data
-      setToken(selectedToken)
-      setBase(selectedBase)
-      getCharts()
-
-      sessionStorage.setItem('simple', JSON.stringify(simple))
+      if(simple && Object.keys(simple).length > 0) {
+        setToken(selectedToken)
+        setBase(selectedBase)
+        getCharts()
+        sessionStorage.setItem('simple', JSON.stringify(simple))
+      }
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
@@ -137,12 +139,12 @@ function getCharts() {
       var data = JSON.parse(this.responseText)
       tokenCharts = data[selectedToken]
       baseCharts = data[selectedBase]
-      console.log(tokenCharts, baseCharts)
-      updateCharts()
-      setSwapperBase()
-
-      sessionStorage.setItem('tokenCharts', JSON.stringify(tokenCharts))
-      sessionStorage.setItem('baseCharts', JSON.stringify(baseCharts))
+      if(tokenCharts && Object.keys(tokenCharts).length > 0) {
+        updateCharts()
+        setSwapperBase()
+        sessionStorage.setItem('tokenCharts', JSON.stringify(tokenCharts))
+        sessionStorage.setItem('baseCharts', JSON.stringify(baseCharts))
+      }
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/charts/" + selectedToken + "/" + selectedBase, true)
