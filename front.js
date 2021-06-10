@@ -232,7 +232,7 @@ const server = http.createServer((req, res) => {
 })
 
 
-// useful Math.random timer
+// useful Math.random timer - between 15 and 30 seconds
 function getTimer() {
-   return Math.round((15*Math.random() + 10)*1000)
+   return Math.round((15*Math.random() + 15)*1000)
 }
