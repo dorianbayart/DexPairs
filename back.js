@@ -140,6 +140,9 @@ async function getSushiswapTopTokens() {
 
 // Program - Pancake
 async function launch() {
+  // loop
+  setTimeout(function(){ launch() }, OFTEN) // every 15 minutes
+  
   let tokens_data_file = {}
   let tokens_charts_file = {}
   try {
@@ -295,13 +298,14 @@ async function launch() {
     if (err) throw err;
   });
 
-  // loop
-  setTimeout(function(){ launch() }, OFTEN) // every 15 minutes
 }
 
 
 // Program - Uniswap
 async function launchUniswap() {
+  // loop
+  setTimeout(function(){ launchUniswap() }, OFTEN) // every 15 minutes
+  
   let uniswap_data_file = {}
   let uniswap_charts_file = {}
   try {
@@ -456,13 +460,14 @@ async function launchUniswap() {
     if (err) throw err;
   });
 
-  // loop
-  setTimeout(function(){ launchUniswap() }, OFTEN) // every 15 minutes
 }
 
 
 // Program - Sushiswap
 async function launchSushiswap() {
+  // loop
+  setTimeout(function(){ launchSushiswap() }, OFTEN) // every 15 minutes
+  
   let sushiswap_data_file = {}
   let sushiswap_charts_file = {}
   try {
@@ -617,8 +622,6 @@ async function launchSushiswap() {
     if (err) throw err;
   });
 
-  // loop
-  setTimeout(function(){ launchSushiswap() }, OFTEN) // every 15 minutes
 }
 
 
