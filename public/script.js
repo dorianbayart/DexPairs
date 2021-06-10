@@ -169,6 +169,10 @@ document.getElementById('search_field').addEventListener("keyup", function(e) {
 
 // set list from the list
 function updateList() {
+  if(Object.keys(list).length < 1) {
+    return
+  }
+  
   let currentList = search.length > 0 ? filteredList : list;
 
   document.getElementById('list').innerHTML = null;
@@ -191,6 +195,10 @@ function updateList() {
 
 // set base list selection
 function updateBaseList() {
+  if(Object.keys(list).length < 1) {
+    return
+  }
+  
   let currentList = list
 
   document.getElementById('base_select').innerHTML = null
@@ -207,6 +215,9 @@ function updateBaseList() {
 
 // set top tokens
 function setTop() {
+  if(Object.keys(topTokens).length < 1) {
+    return
+  }
   let top = document.getElementById('top')
   top.innerHTML = null
   for (var i = 0; i < 6; i++) {
@@ -311,6 +322,9 @@ function setTopMiniChart(addr, tokenChart) {
 
 // set information of the main token
 function setToken(addr) {
+  if(Object.keys(simple).length < 1) {
+    return
+  }
   const symbol = simple[addr].s
   document.getElementById('token_symbol').innerHTML = symbol
   document.getElementById('token_name').innerHTML = simple[addr].n
@@ -328,6 +342,9 @@ function setToken(addr) {
 
 // set information of the base token
 function setBase(addr) {
+  if(Object.keys(simple).length < 1) {
+    return
+  }
   const symbol = simple[addr].s
   document.getElementById('base_symbol').innerHTML = symbol
   document.getElementById('base_name').innerHTML = simple[addr].n
