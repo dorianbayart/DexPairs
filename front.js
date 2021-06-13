@@ -136,6 +136,8 @@ app.get('/wallet.js', (req, res) => res.sendFile(path.join(__dirname, '/public/w
 app.get('/design.css', (req, res) => res.sendFile(path.join(__dirname, '/public/design.css')))
 app.get('/responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/responsive.css')))
 app.get('/colors.css', (req, res) => res.sendFile(path.join(__dirname, '/public/colors.css')))
+app.get('/wallet.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.css')))
+app.get('/wallet-responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet-responsive.css')))
 app.get('/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
 
 app.get('/require.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/require.js')))

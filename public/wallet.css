@@ -1,0 +1,46 @@
+
+
+
+#input-wallet-container {
+  text-align: center;
+  margin-top: 0;
+  width: 100%;
+  transition: all 1250ms ease-in-out;
+}
+#input-wallet-container.margin-top {
+  margin-top: 20vh;
+
+}
+
+#input-wallet {
+  border: 1px solid #CCC;
+  border-radius: 12px;
+
+  margin: 0.5em 1em;
+  padding: 1em;
+
+  width: 50%;
+  transition: all 400ms ease-in-out;
+}
+#input-wallet-container.margin-top #input-wallet {
+  font-size: initial;
+}
+
+
+
+/* Progress Bar */
+.progress-container {
+  height: 4px;
+  width: 45%;
+  margin: auto;
+  border-radius: 4px;
+  background: #000;
+}
+
+.progress-container .progress {
+  height: 100%;
+  width: 0;
+  border-radius: 0.4rem;
+  background: #ff4754;
+  transition: width 0.4s ease-in-out;
+}
