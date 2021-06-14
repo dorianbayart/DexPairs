@@ -70,7 +70,7 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
     
     if(JSON.parse(sessionStorage.getItem('walletAddress')) === walletValue) {
       wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
-      // displayWallet()
+      displayWallet()
     }
     
     Object.keys(wallet).forEach(address => {
@@ -181,17 +181,16 @@ function searchTokens(network) {
       tokenSymbol: item.tokenSymbol,
       tokenName: item.tokenName,
       tokenDecimal: item.tokenDecimal,
-      balance: 0,
-      value: 0
+      value: '0'
     }
   })
   Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
     switch (network) {
       case NETWORK.ETHEREUM:
-        setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 250)
+        setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 450)
         break;
       case NETWORK.POLYGON:
-        setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 400)
+        setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 350)
         break;
       default:
         setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 5250)
@@ -246,7 +245,7 @@ const changeProgress = () => {
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
   const filtered = Object.keys(wallet)
-    .filter(address => wallet[address].upToDate && wallet[address].value !== '0')
+    .filter(address => wallet[address].value !== '0')
     .map(
       address => ({ address: address, ...wallet[address] })
     )
