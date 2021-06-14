@@ -199,17 +199,17 @@ function displayWallet() {
   filteredWallet().forEach(function (token) {
     let li = document.createElement('li')
     
-    let spanNetwork = document.createElement('li')
+    let spanNetwork = document.createElement('span')
     spanNetwork.innerHTML = wallet[token.address].network
     spanNetwork.classList.add('network')
     li.appendChild(spanNetwork)
     
-    let spanSymbol = document.createElement('li')
+    let spanSymbol = document.createElement('span')
     spanSymbol.innerHTML = wallet[token.address].tokenSymbol
     spanSymbol.classList.add('symbol')
     li.appendChild(spanSymbol)
     
-    let spanBalance = document.createElement('li')
+    let spanBalance = document.createElement('span')
     spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
     spanBalance.classList.add('balance')
     li.appendChild(spanBalance)
