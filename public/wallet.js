@@ -198,9 +198,24 @@ function displayWallet() {
   ul = document.createElement('ul')
   filteredWallet().forEach(function (token) {
     let li = document.createElement('li')
+    
+    let spanNetwork = document.createElement('li')
+    spanNetwork.innerHTML = wallet[token.address].network
+    spanNetwork.classList.add('network')
+    li.appendChild(spanNetwork)
+    
+    let spanSymbol = document.createElement('li')
+    spanSymbol.innerHTML = wallet[token.address].tokenSymbol
+    spanSymbol.classList.add('symbol')
+    li.appendChild(spanSymbol)
+    
+    let spanBalance = document.createElement('li')
+    spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
+    spanBalance.classList.add('balance')
+    li.appendChild(spanBalance)
+    
     ul.appendChild(li)
-
-    li.innerHTML += wallet[token.address].network + ' ' + wallet[token.address].tokenSymbol + ' ' + displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
+    
     li.addEventListener("click", function(e) {
 
     })
@@ -213,26 +228,30 @@ function displayWallet() {
 /* Utils - Progress Bar */
 const changeProgress = () => {
   const progressbar = document.getElementById('progress-bar');
-  const increment = 100 / Object.keys(wallet).length
-  if(progressbar.style.width && progressbar.style.width.length > 0) {
-    progressbar.style.width = `calc(${progressbar.style.width} + ${increment}%)`
-  } else {
-    progressbar.style.width = `${increment}%`
-  }
+  const width = filteredWallet().length / Object.keys(wallet).length * 100
+  progressbar.style.width = `${width}%`
 
   displayWallet()
 };
 
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
-  const filtered = Object.keys(wallet).filter(address => wallet[address].upToDate && wallet[address].value !== '0').map(
-    address =>
-    ({ address: address, ...wallet[address] })
-  )
+  const filtered = Object.keys(wallet)
+    .filter(address => wallet[address].upToDate && wallet[address].value !== '0')
+    .map(
+      address => ({ address: address, ...wallet[address] })
+    )
   return filtered
 }
 
 /* Utils - Display balance from value */
 const displayBalance = (value, decimal) => {
-  return value * Math.pow(10, -decimal)
+  return precise(value * Math.pow(10, -decimal))
+}
+
+// Round number
+const precise = (x) => {
+  if(x > 9999) { return Math.round(x) }
+  else if(x > 0.0001) { return Number.parseFloat(x).toPrecision(5) }
+  return Number.parseFloat(x).toPrecision(2)
 }
