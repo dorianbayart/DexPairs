@@ -64,21 +64,21 @@ const Web3 = require(['./web3.min.js'], function(Web3) {
 document.getElementById('input-wallet').addEventListener("keyup", function(e) {
   const inputContainer = document.getElementById('input-wallet-container')
   let walletValue = e.target.value
-  
+
   if(walletValue === walletAddress) { return }
 
   if(web3.utils.isAddress(walletValue)) {
     inputContainer.classList.remove('margin-top')
-    
+
     if(JSON.parse(sessionStorage.getItem('walletAddress')) === walletValue) {
       wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
       displayWallet()
     }
-    
+
     Object.keys(wallet).forEach(address => {
       wallet[address].upToDate = false
     })
-    
+
     walletAddress = walletValue
     //if(walletAddress !== JSON.parse(sessionStorage.getItem('walletAddress'))) {
       getTokenTx(NETWORK.ETHEREUM)
@@ -143,7 +143,7 @@ function getTokenBalance(contractAddress, network) {
           displayBalance(wallet[contractAddress].value, wallet[contractAddress].tokenDecimal)
         )
       }
-      
+
       sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
       changeProgress()
@@ -206,26 +206,34 @@ function displayWallet() {
 
   document.getElementById('wallet').innerHTML = null;
   ul = document.createElement('ul')
-  filteredWallet().forEach(function (token) {
+  filteredWallet()
+    .sort(function(a, b) {
+      if(a.network === NETWORK.ETHEREUM && b.network !== NETWORK.ETHEREUM
+        || a.network === NETWORK.POLYGON && b.network === NETWORK.BSC) return -1
+      if(a.network === NETWORK.POLYGON && b.network === NETWORK.ETHEREUM
+        || a.network === NETWORK.BSC && b.network === NETWORK.POLYGON) return 1
+      return 0
+    })
+    .forEach(function (token) {
     let li = document.createElement('li')
-    
+
     let spanNetwork = document.createElement('span')
     spanNetwork.innerHTML = wallet[token.address].network
     spanNetwork.classList.add('network')
     li.appendChild(spanNetwork)
-    
+
     let spanSymbol = document.createElement('span')
     spanSymbol.innerHTML = wallet[token.address].tokenSymbol
     spanSymbol.classList.add('symbol')
     li.appendChild(spanSymbol)
-    
+
     let spanBalance = document.createElement('span')
     spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
     spanBalance.classList.add('balance')
     li.appendChild(spanBalance)
-    
+
     ul.appendChild(li)
-    
+
     li.addEventListener("click", function(e) {
 
     })
