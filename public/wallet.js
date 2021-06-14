@@ -64,6 +64,8 @@ const Web3 = require(['./web3.min.js'], function(Web3) {
 document.getElementById('input-wallet').addEventListener("keyup", function(e) {
   const inputContainer = document.getElementById('input-wallet-container')
   let walletValue = e.target.value
+  
+  if(walletValue === walletAddress) { return }
 
   if(web3.utils.isAddress(walletValue)) {
     inputContainer.classList.remove('margin-top')
