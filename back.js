@@ -142,7 +142,7 @@ async function getSushiswapTopTokens() {
 async function launch() {
   // loop
   setTimeout(function(){ launch() }, OFTEN) // every 15 minutes
-  
+
   let tokens_data_file = {}
   let tokens_charts_file = {}
   try {
@@ -305,7 +305,7 @@ async function launch() {
 async function launchUniswap() {
   // loop
   setTimeout(function(){ launchUniswap() }, OFTEN) // every 15 minutes
-  
+
   let uniswap_data_file = {}
   let uniswap_charts_file = {}
   try {
@@ -467,7 +467,7 @@ async function launchUniswap() {
 async function launchSushiswap() {
   // loop
   setTimeout(function(){ launchSushiswap() }, OFTEN) // every 15 minutes
-  
+
   let sushiswap_data_file = {}
   let sushiswap_charts_file = {}
   try {
@@ -628,9 +628,9 @@ async function launchSushiswap() {
 
 
 /* MAIN */
-setTimeout(function(){ launch() }, 1500)
-setTimeout(function(){ launchUniswap() }, 2500)
-setTimeout(function(){ launchSushiswap() }, 3500)
+setTimeout(function(){ launchUniswap() }, 2000)
+setTimeout(function(){ launchSushiswap() }, 4000)
+setTimeout(function(){ launch() }, 6000)
 
 
 
