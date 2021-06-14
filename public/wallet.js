@@ -69,7 +69,7 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
     inputContainer.classList.remove('margin-top')
     
     if(JSON.parse(sessionStorage.getItem('walletAddress')) === walletValue) {
-      wallet = JSON.parse(sessionStorage.getItem('wallet'))
+      wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
       // displayWallet()
     }
     
