@@ -46,6 +46,17 @@
   border-radius: 8px;
 }
 
+#wallet ul li span {
+  display: inline-block;
+  width: 33%;
+}
+#wallet ul li span.symbol {
+    text-align: center;
+}
+#wallet ul li span.balance {
+    text-align: end;
+}
+
 
 
 /* Progress Bar */
