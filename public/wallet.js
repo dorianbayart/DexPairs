@@ -69,19 +69,17 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
     inputContainer.classList.remove('margin-top')
     
     if(JSON.parse(sessionStorage.getItem('walletAddress')) === walletValue) {
+      wallet = JSON.parse(sessionStorage.getItem('wallet'))
       // displayWallet()
     }
     
     walletAddress = walletValue
-    if(walletAddress !== JSON.parse(sessionStorage.getItem('walletAddress'))) {
+    //if(walletAddress !== JSON.parse(sessionStorage.getItem('walletAddress'))) {
       getTokenTx(NETWORK.ETHEREUM)
       getTokenTx(NETWORK.POLYGON)
       getTokenTx(NETWORK.BSC)
       sessionStorage.setItem('walletAddress', JSON.stringify(walletAddress))
-    } else {
-      wallet = JSON.parse(sessionStorage.getItem('wallet'))
-      // displayWallet()
-    }
+    //}
     e.target.blur()
   } else if (!inputContainer.classList.contains('margin-top')) {
     inputContainer.classList.add('margin-top')
