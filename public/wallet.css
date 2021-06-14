@@ -27,6 +27,26 @@
 }
 
 
+#wallet {
+  width: 45%;
+  margin: auto;
+}
+
+#wallet ul {
+  list-style: none;
+  padding: 3px;
+  background-color: #0000001F;
+  border-radius: 12px;
+}
+
+#wallet ul li {
+  padding: 0.25em 0.5em;
+  background-color: #FFFE;
+  margin: 0.25em;
+  border-radius: 8px;
+}
+
+
 
 /* Progress Bar */
 .progress-container {
