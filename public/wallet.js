@@ -41,7 +41,6 @@ const minABI = [
 let web3 = null
 let walletAddress = ''
 let wallet = {}
-let upToDate = false
 
 
 const Web3 = require(['./web3.min.js'], function(Web3) {
@@ -68,12 +67,20 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
 
   if(web3.utils.isAddress(walletValue)) {
     inputContainer.classList.remove('margin-top')
+    
+    if(JSON.parse(sessionStorage.getItem('walletAddress')) === walletValue) {
+      // displayWallet()
+    }
+    
     walletAddress = walletValue
-    sessionStorage.setItem('walletAddress', JSON.stringify(walletAddress))
-    if(!upToDate || walletAddress !== JSON.parse(sessionStorage.getItem('walletAddress'))) {
+    if(walletAddress !== JSON.parse(sessionStorage.getItem('walletAddress'))) {
       getTokenTx(NETWORK.ETHEREUM)
       getTokenTx(NETWORK.POLYGON)
       getTokenTx(NETWORK.BSC)
+      sessionStorage.setItem('walletAddress', JSON.stringify(walletAddress))
+    } else {
+      wallet = JSON.parse(sessionStorage.getItem('wallet'))
+      // displayWallet()
     }
     e.target.blur()
   } else if (!inputContainer.classList.contains('margin-top')) {
@@ -99,8 +106,6 @@ function getTokenTx(network) {
       sessionStorage.setItem('tokentx-' + network, JSON.stringify(tokentx))
 
       searchTokens(network)
-
-      upToDate = true
     }
   }
   xmlhttp.open("GET", REQUESTS[network].tokentx.replace('WALLET_ADDRESS', walletAddress), true)
@@ -134,6 +139,8 @@ function getTokenBalance(contractAddress, network) {
           displayBalance(wallet[contractAddress].value, wallet[contractAddress].tokenDecimal)
         )
       }
+      
+      sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
       changeProgress()
     }
