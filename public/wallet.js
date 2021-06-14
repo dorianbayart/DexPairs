@@ -73,6 +73,10 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
       // displayWallet()
     }
     
+    Object.keys(wallet).forEach(address => {
+      wallet[address].upToDate = false
+    })
+    
     walletAddress = walletValue
     //if(walletAddress !== JSON.parse(sessionStorage.getItem('walletAddress'))) {
       getTokenTx(NETWORK.ETHEREUM)
@@ -233,7 +237,7 @@ function displayWallet() {
 /* Utils - Progress Bar */
 const changeProgress = () => {
   const progressbar = document.getElementById('progress-bar');
-  const width = filteredWallet().length / Object.keys(wallet).length * 100
+  const width = Object.keys(wallet).filter(address => wallet[address].upToDate).length / Object.keys(wallet).length * 100
   progressbar.style.width = `${width}%`
 
   displayWallet()
