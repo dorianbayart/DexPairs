@@ -152,7 +152,7 @@ app.get('/pancake/token/:token', (req, res) => {
     Object.keys(tokens_data).includes(req.params.token) ||
     Object.keys(tokens_data).findIndex(address => tokens_data[address].s === req.params.token) !== -1
   ) {
-    res.sendFile(path.join(__dirname, '/public/index.html'))
+    res.sendFile(path.join(__dirname, '/index.html'))
   } else {
     // TODO Improve error => redirect to homepage
     res.writeHead(400, {'Content-Type': 'text/html'})
@@ -179,7 +179,7 @@ app.get('(/uniswap)?/token/:token', (req, res) => {
     Object.keys(uniswap_data).includes(req.params.token) ||
     Object.keys(uniswap_data).findIndex(address => uniswap_data[address].s === req.params.token) !== -1
   ) {
-    res.sendFile(path.join(__dirname, '/public/index.html'))
+    res.sendFile(path.join(__dirname, '/index.html'))
   } else {
     // TODO Improve error => redirect to homepage
     res.writeHead(400, {'Content-Type': 'text/html'})
@@ -206,7 +206,7 @@ app.get('(/sushiswap)?/token/:token', (req, res) => {
     Object.keys(sushiswap_data).includes(req.params.token) ||
     Object.keys(sushiswap_data).findIndex(address => sushiswap_data[address].s === req.params.token) !== -1
   ) {
-    res.sendFile(path.join(__dirname, '/public/index.html'))
+    res.sendFile(path.join(__dirname, '/index.html'))
   } else {
     // TODO Improve error => redirect to homepage
     res.writeHead(400, {'Content-Type': 'text/html'})
