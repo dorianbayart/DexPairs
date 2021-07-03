@@ -22,7 +22,8 @@ const fetch = require('node-fetch')
 * Expose some public URLs
 */
 
-const backend = 'http://localhost:3000'
+const DOMAIN_NAME = 'dexpairs.xyz'
+const BACKEND_URL = 'http://localhost:3000'
 
 
 // Pancake data
@@ -48,19 +49,19 @@ let sushiswap_charts = {}
 
 // Program - Pancake
 function launch() {
-  fetch(backend + '/list/pancake')
+  fetch(BACKEND_URL + '/list/pancake')
   .then(res => res.json())
   .then(json => tokens_list = json)
 
-  fetch(backend + '/top/pancake')
+  fetch(BACKEND_URL + '/top/pancake')
   .then(res => res.json())
   .then(json => top_tokens = json)
 
-  fetch(backend + '/simple/pancake')
+  fetch(BACKEND_URL + '/simple/pancake')
   .then(res => res.json())
   .then(json => tokens_data = json)
 
-  fetch(backend + '/charts/pancake')
+  fetch(BACKEND_URL + '/charts/pancake')
   .then(res => res.json())
   .then(json => tokens_charts = json)
 
@@ -70,19 +71,19 @@ function launch() {
 
 // Program - Uniswap
 function launchUniswap() {
-  fetch(backend + '/list/uniswap')
+  fetch(BACKEND_URL + '/list/uniswap')
   .then(res => res.json())
   .then(json => uniswap_list = json)
 
-  fetch(backend + '/top/uniswap')
+  fetch(BACKEND_URL + '/top/uniswap')
   .then(res => res.json())
   .then(json => uniswap_top = json)
 
-  fetch(backend + '/simple/uniswap')
+  fetch(BACKEND_URL + '/simple/uniswap')
   .then(res => res.json())
   .then(json => uniswap_data = json)
 
-  fetch(backend + '/charts/uniswap')
+  fetch(BACKEND_URL + '/charts/uniswap')
   .then(res => res.json())
   .then(json => uniswap_charts = json)
 
@@ -92,19 +93,19 @@ function launchUniswap() {
 
 // Program - Sushiswap
 function launchSushiswap() {
-  fetch(backend + '/list/sushiswap')
+  fetch(BACKEND_URL + '/list/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_list = json)
 
-  fetch(backend + '/top/sushiswap')
+  fetch(BACKEND_URL + '/top/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_top = json)
 
-  fetch(backend + '/simple/sushiswap')
+  fetch(BACKEND_URL + '/simple/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_data = json)
 
-  fetch(backend + '/charts/sushiswap')
+  fetch(BACKEND_URL + '/charts/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_charts = json)
 
@@ -128,20 +129,20 @@ setTimeout(function(){ launch() }, 6000)
 const port = process.env.PORT || 3001
 const app = express()
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')))
-app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.html')))
-app.get('/common.js', (req, res) => res.sendFile(path.join(__dirname, '/public/common.js')))
-app.get('/script.js', (req, res) => res.sendFile(path.join(__dirname, '/public/script.js')))
-app.get('/wallet.js', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.js')))
-app.get('/design.css', (req, res) => res.sendFile(path.join(__dirname, '/public/design.css')))
-app.get('/responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/responsive.css')))
-app.get('/colors.css', (req, res) => res.sendFile(path.join(__dirname, '/public/colors.css')))
-app.get('/wallet.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.css')))
-app.get('/wallet-responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet-responsive.css')))
-app.get('/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
+app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/wallet.html')))
+app.get('/public/common.js', (req, res) => res.sendFile(path.join(__dirname, '/public/common.js')))
+app.get('/public/script.js', (req, res) => res.sendFile(path.join(__dirname, '/public/script.js')))
+app.get('/public/wallet.js', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.js')))
+app.get('/public/design.css', (req, res) => res.sendFile(path.join(__dirname, '/public/design.css')))
+app.get('/public/responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/responsive.css')))
+app.get('/public/colors.css', (req, res) => res.sendFile(path.join(__dirname, '/public/colors.css')))
+app.get('/public/wallet.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.css')))
+app.get('/public/wallet-responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet-responsive.css')))
+app.get('/public/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
 
-app.get('/require.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/require.js')))
-app.get('/web3.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/web3.min.js')))
+app.get('/lib/require.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/require.js')))
+app.get('/lib/web3.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/web3.min.js')))
 
 // Pancake URLs
 app.get('/pancake/token/:token', (req, res) => {
@@ -225,6 +226,11 @@ app.get('(/sushiswap)?/charts/:token/:base', (req, res) => {
 })
 
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", DOMAIN_NAME);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.listen(port, () => console.log(`Frontend start at ${port}`))
 
