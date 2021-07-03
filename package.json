@@ -1,21 +1,27 @@
 {
   "name": "DexPairs",
   "version": "0.0.1",
+  "url": "https://dexpairs.xyz"
   "description": "Check the historical price of any pair token you want !",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "keywords": [
+    "web3js",
     "crypto",
+    "cryptocurrencies",
     "bsc",
-    "pancake",
+    "ethereum",
+    "polygon",
+    "pancakeswap",
     "uniswap",
+    "sushiswap",
     "dex",
     "prices"
   ],
   "author": "Dorian Bayart",
-  "license": "ISC",
+  "license": "CC BY-NC 4.0",
   "dependencies": {
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"

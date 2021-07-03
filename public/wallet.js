@@ -43,7 +43,7 @@ let walletAddress = ''
 let wallet = {}
 
 
-const Web3 = require(['./web3.min.js'], function(Web3) {
+const Web3 = require(['./lib/web3.min.js'], function(Web3) {
   web3 = new Web3("https://cloudflare-eth.com")
   /*
   web3.eth.getBalance(walletAddress).then(balance => {
