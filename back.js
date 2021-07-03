@@ -155,7 +155,8 @@ async function launch() {
   tokens_data = tokens_data_file
   tokens_charts = tokens_charts_file
 
-
+  tokens_list = {}
+  
   // get data from PancakeSwap
   const top = await getTopTokens()
 
@@ -318,6 +319,7 @@ async function launchUniswap() {
   uniswap_data = uniswap_data_file
   uniswap_charts = uniswap_charts_file
 
+  uniswap_list = {}
 
   // get data from Uniswap
   const top = await getUniswapTopTokens()
@@ -479,6 +481,8 @@ async function launchSushiswap() {
 
   sushiswap_data = sushiswap_data_file
   sushiswap_charts = sushiswap_charts_file
+
+  sushiswap_list = {}
 
 
   // get data from Sushiswap
