@@ -1,7 +1,7 @@
 {
   "name": "DexPairs",
   "version": "0.0.1",
-  "url": "https://dexpairs.xyz"
+  "url": "https://dexpairs.xyz",
   "description": "Check the historical price of any pair token you want !",
   "main": "index.js",
   "scripts": {
