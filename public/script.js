@@ -1,3 +1,4 @@
+const server = 'http://185.212.226.82' // Empty for localhost
 
 let getListTimer, getTopTimer, getSimpleTimer
 let list = {}
@@ -18,7 +19,7 @@ let dexList = {
     chain: 'Ethereum',
     url: 'https://uniswap.org/',
     url_swap: 'https://app.uniswap.org/#/swap',
-    url_data: 'http://185.212.226.82',
+    url_data: server,
     explorer: 'https://etherscan.io/token/',
     tokens: {
       token: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -30,7 +31,7 @@ let dexList = {
     chain: 'Polygon/Matic',
     url: 'https://sushi.com/',
     url_swap: 'https://app.sushi.com/swap',
-    url_data: 'http://185.212.226.82/sushiswap',
+    url_data: server + '/sushiswap',
     explorer: 'https://polygonscan.com/token/',
     tokens: {
       token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
@@ -43,7 +44,7 @@ let dexList = {
     chain: 'Binance Smart Chain',
     url: 'https://pancakeswap.finance/',
     url_swap: 'https://exchange.pancakeswap.finance/#/swap',
-    url_data: 'http://185.212.226.82/pancake',
+    url_data: server + '/pancake',
     explorer: 'https://bscscan.com/token/',
     tokens: {
       token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',

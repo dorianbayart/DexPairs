@@ -1,6 +1,7 @@
 const http = require('http')
 const path = require('path')
 const express = require('express')
+const compression = require('compression')
 const fetch = require('node-fetch')
 
 
@@ -128,6 +129,7 @@ setTimeout(function(){ launch() }, 6000)
 /* server */
 const port = process.env.PORT || 3001
 const app = express()
+app.use(compression())
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
 app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/wallet.html')))
