@@ -104,6 +104,3 @@ dist
 .tern-port
 .DS_Store
 package-lock.json
-
-#pm2
-ecosystem.config.js
