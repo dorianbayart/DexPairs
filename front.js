@@ -225,13 +225,6 @@ app.get('(/sushiswap)?/charts/:token/:base', (req, res) => {
   res.json(pair)
 })
 
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", DOMAIN_NAME);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
 app.listen(port, () => console.log(`Frontend start at ${port}`))
 
 const server = http.createServer((req, res) => {
