@@ -226,6 +226,7 @@ header .version {
 #base #base_change:active {
 }
 #base #base_change img {
+  height: auto;
   width: 100%;
 }
 #base #base_change:active img {
@@ -300,5 +301,6 @@ header .version {
 #swapper_switch:active {
 }
 #swapper_switch img {
+  height: auto;
   width: 100%;
 }
