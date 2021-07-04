@@ -52,7 +52,7 @@ header .version {
   margin-top: 2em;
 }
 
-#flex-pair {
+.flex-pair {
   display: flex;
   flex-flow: row;
   align-items: center;
