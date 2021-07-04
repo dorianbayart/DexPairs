@@ -16,6 +16,11 @@
   <script defer src="/public/common.js"></script>
 
   <link rel="icon" type="image/png" href="/public/graph-background-min.png" />
+
+  <meta property="og:title" content="DexPairs.xyz" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="http://www.dexpairs.xyz" />
+  <meta property="og:image" content="/public/graph-background-min.png" />
 </head>
 
 <body>
@@ -41,14 +46,14 @@
   </div>
 
   <div id='dex-selection'>
-    <select name='dex-selector' id='dex-selector'></select>
+    <select name='dex-selector' id='dex-selector' title='Select the DEX/Protocol'></select>
   </div>
 
   <div id='top' class='flex-row'>
   </div>
   <div id='flex-main'>
     <div class="flex-column left-menu">
-      <input type='text' id='search_field' placeholder='Search'>
+      <input type='text' id='search_field' placeholder='Search' title='Search for a token symbol'>
       <div id='order-list'>
 
       </div>
@@ -73,7 +78,7 @@
                  alt="Edit icon" width="28px" height="28px">
           </button>
           <div id='base_symbol'></div>
-          <select id='base_select'></select>
+          <select id='base_select' title='Select the reference token'></select>
           <div id='base_price'></div>
           <div id='base_name'></div>
           <div id='base_address'></div>
@@ -92,9 +97,9 @@
       </div>
       <div class='flex-pair'>
         <div id='swapper_token_symbol'></div>
-        <input type='number' id='swapper_token' min='0' step='0.0000000000000001'>
+        <input type='number' id='swapper_token' min='0' step='0.0000000000000001' title='Calculator'>
 
-        <input type='number' id='swapper_base' min='0' step='0.0000000000000001'>
+        <input type='number' id='swapper_base' min='0' step='0.0000000000000001' title='Calculator'>
         <div id='swapper_base_symbol'></div>
       </div>
     </div>
