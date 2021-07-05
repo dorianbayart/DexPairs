@@ -162,7 +162,7 @@ app.get('/pancake/token/:token', (req, res) => {
 
 app.get('/pancake/list', (req, res) => res.json(listFilter(tokens_list, tokens_data)))
 app.get('/pancake/top', (req, res) => res.json(top_tokens))
-app.get('/pancake/simple', (req, res) => res.json(listFilter(tokens_data)))
+app.get('/pancake/simple', (req, res) => res.json(listFilter(tokens_data, tokens_data)))
 app.get('/pancake/charts/:token', (req, res) => {
   res.json(tokens_charts[req.params.token])
 })
@@ -189,7 +189,7 @@ app.get('(/uniswap)?/token/:token', (req, res) => {
 
 app.get('(/uniswap)?/list', (req, res) => res.json(listFilter(uniswap_list, uniswap_data)))
 app.get('(/uniswap)?/top', (req, res) => res.json(uniswap_top))
-app.get('(/uniswap)?/simple', (req, res) => res.json(listFilter(uniswap_data)))
+app.get('(/uniswap)?/simple', (req, res) => res.json(listFilter(uniswap_data, uniswap_data)))
 app.get('(/uniswap)?/charts/:token', (req, res) => {
   res.json(uniswap_charts[req.params.token])
 })
@@ -216,7 +216,7 @@ app.get('(/sushiswap)?/token/:token', (req, res) => {
 
 app.get('(/sushiswap)?/list', (req, res) => res.json(listFilter(sushiswap_list, sushiswap_data)))
 app.get('(/sushiswap)?/top', (req, res) => res.json(sushiswap_top))
-app.get('(/sushiswap)?/simple', (req, res) => res.json(listFilter(sushiswap_data)))
+app.get('(/sushiswap)?/simple', (req, res) => res.json(listFilter(sushiswap_data, sushiswap_data)))
 app.get('(/sushiswap)?/charts/:token', (req, res) => {
   res.json(sushiswap_charts[req.params.token])
 })
@@ -239,7 +239,7 @@ const server = http.createServer((req, res) => {
 function listFilter(list, listWithPrices) {
   let filtered_list = {}
   Object.keys(list).forEach(function (address) {
-    if((list[address].p && list[address].p !== 0) || (listWithPrices[address] && listWithPrices[address].p !== 0)) {
+    if(listWithPrices[address] && listWithPrices[address].p !== 0) {
       filtered_list[address] = list[address]
     }
   })
