@@ -6,12 +6,12 @@ html {
   min-height: 100%;
 }
 
-#menu .menu-item, .top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart, input {
+#menu .menu-item, .top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart, input, select {
   background-color: #FFFE;
 }
 
 #top, #top-title {
-  background-color: #0000001F;
+  background-color: #0002;
 }
 
 .green {
@@ -19,4 +19,8 @@ html {
 }
 .red {
   color: tomato;
+}
+
+.color-transition {
+  transition: color 750ms ease-in-out, background-colo 750ms ease-in-out;
 }
