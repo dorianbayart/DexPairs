@@ -247,6 +247,7 @@ function setTop() {
 
     let div_percentage = document.createElement('div')
     div_percentage.classList.add('top-percentage')
+    div_percentage.classList.add('color-transition')
 
     const miniChart = extract24hChart(topTokens[address].chart)
     const percentage = getPercentage24h(miniChart)
