@@ -214,9 +214,9 @@ app.get('(/sushiswap)?/token/:token', (req, res) => {
   }
 })
 
-app.get('(/sushiswap)?/list', (req, res) => res.json(sushiswap_list))
+app.get('(/sushiswap)?/list', (req, res) => res.json(listFilter(sushiswap_list, sushiswap_data)))
 app.get('(/sushiswap)?/top', (req, res) => res.json(sushiswap_top))
-app.get('(/sushiswap)?/simple', (req, res) => res.json(sushiswap_data))
+app.get('(/sushiswap)?/simple', (req, res) => res.json(listFilter(sushiswap_data)))
 app.get('(/sushiswap)?/charts/:token', (req, res) => {
   res.json(sushiswap_charts[req.params.token])
 })
@@ -234,6 +234,17 @@ const server = http.createServer((req, res) => {
   res.end('Hello World')
 })
 
+
+// useful filtering - filter all tokens with price = 0
+function listFilter(list, listWithPrices) {
+  let filtered_list = {}
+  Object.keys(list).forEach(function (address) {
+    if((list[address].p && list[address].p !== 0) || (listWithPrices[address] && listWithPrices[address].p !== 0)) {
+      filtered_list[address] = list[address]
+    }
+  })
+  return filtered_list
+}
 
 // useful Math.random timer - between 15 and 30 seconds
 function getTimer() {
