@@ -143,6 +143,9 @@ app.get('/public/wallet.css', (req, res) => res.sendFile(path.join(__dirname, '/
 app.get('/public/wallet-responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet-responsive.css')))
 app.get('/public/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
 
+app.get('/lib/chart.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/chart.min.js')))
+app.get('/lib/chartjs-adapter-moment.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/chartjs-adapter-moment.js')))
+app.get('/lib/moment.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/moment.min.js')))
 app.get('/lib/require.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/require.js')))
 app.get('/lib/web3.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/web3.min.js')))
 
