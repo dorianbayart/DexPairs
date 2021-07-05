@@ -133,8 +133,23 @@ header .version {
 #list li {
   cursor: pointer;
   border-radius: 12px;
+  margin: 2px;
 }
 #list li:hover {
+  background-color: #EFEFEF;
+}
+
+#list button.load-more {
+  border: 3px solid #EFEFEF;
+  border-radius: 12px;
+  padding: 6px 12px;
+  width: 100%;
+  max-width: 140px;
+  cursor: pointer;
+  background-color: white;
+  margin-bottom: 1em;
+}
+#list button.load-more:hover {
   background-color: #EFEFEF;
 }
 

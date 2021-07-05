@@ -53,6 +53,7 @@ let dexList = {
   },
 }
 
+const LIST_INITIAL_SIZE = 100
 const TIME_24H = 86400000
 const TIMEFRAME_15M = '15m'
 const TIMEFRAME_4H = '4h'
@@ -180,7 +181,11 @@ function updateList() {
 
   document.getElementById('list').innerHTML = null;
   ul = document.createElement('ul')
-  Object.keys(currentList).forEach(function (address) {
+
+  const fullList = sessionStorage.getItem('full-list')
+  const length = Object.keys(currentList).length > LIST_INITIAL_SIZE && !fullList ? LIST_INITIAL_SIZE : Object.keys(currentList).length
+  for (var i = 0; i < length; i++) {
+    let address = Object.keys(currentList)[i]
     let li = document.createElement('li')
     ul.appendChild(li)
 
@@ -192,8 +197,21 @@ function updateList() {
       setSwapperToken()
       setSwapperBase()
     })
-  })
+  }
   document.getElementById('list').appendChild(ul)
+
+  if(!fullList && Object.keys(currentList).length > LIST_INITIAL_SIZE) {
+    let button = document.createElement('button')
+    button.innerHTML = "Load more"
+    button.title = "Display the full list"
+    button.classList.add('load-more')
+    document.getElementById('list').appendChild(button)
+    button.addEventListener("click", function(e) {
+      sessionStorage.setItem('full-list', true)
+      updateList()
+    })
+  }
+
 }
 
 // set base list selection
