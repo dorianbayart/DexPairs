@@ -187,9 +187,9 @@ app.get('(/uniswap)?/token/:token', (req, res) => {
   }
 })
 
-app.get('(/uniswap)?/list', (req, res) => res.json(uniswap_list))
+app.get('(/uniswap)?/list', (req, res) => res.json(listFilter(uniswap_list, uniswap_data)))
 app.get('(/uniswap)?/top', (req, res) => res.json(uniswap_top))
-app.get('(/uniswap)?/simple', (req, res) => res.json(uniswap_data))
+app.get('(/uniswap)?/simple', (req, res) => res.json(listFilter(uniswap_data)))
 app.get('(/uniswap)?/charts/:token', (req, res) => {
   res.json(uniswap_charts[req.params.token])
 })
