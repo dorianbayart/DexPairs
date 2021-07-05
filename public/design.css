@@ -119,7 +119,7 @@ header .version {
 }
 
 #list {
-  max-height: 50vh;
+  height: 45vh;
   overflow-y: scroll;
   overflow-x: hidden;
   border: 1px solid #CCC;
