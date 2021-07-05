@@ -160,9 +160,9 @@ app.get('/pancake/token/:token', (req, res) => {
   }
 })
 
-app.get('/pancake/list', (req, res) => res.json(tokens_list))
+app.get('/pancake/list', (req, res) => res.json(listFilter(tokens_list, tokens_data)))
 app.get('/pancake/top', (req, res) => res.json(top_tokens))
-app.get('/pancake/simple', (req, res) => res.json(tokens_data))
+app.get('/pancake/simple', (req, res) => res.json(listFilter(tokens_data)))
 app.get('/pancake/charts/:token', (req, res) => {
   res.json(tokens_charts[req.params.token])
 })
