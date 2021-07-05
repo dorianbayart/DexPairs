@@ -22,5 +22,5 @@ html {
 }
 
 .color-transition {
-  transition: color 750ms ease-in-out, background-colo 750ms ease-in-out;
+  transition: color 750ms ease-in-out, background-color 750ms ease-in-out;
 }
