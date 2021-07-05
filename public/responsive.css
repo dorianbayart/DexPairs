@@ -106,7 +106,7 @@ header .version .low {
   #list {
     margin: 0.25em 0.5em;
     padding: 0.5em;
-    max-height: 12vh;
+    height: 12vh;
   }
   #list li {
     display: inline-flex;
@@ -161,7 +161,7 @@ header .version .low {
   #list {
     margin: 0.1em 0.25em;
     padding: 0.25em;
-    max-height: 14vh;
+    height: 14vh;
   }
   #list li {
     padding: 10px;
