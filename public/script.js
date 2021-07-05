@@ -72,7 +72,6 @@ function getList() {
       list = data
       if(list && Object.keys(list).length > 0) {
         updateList()
-        updateBaseList()
         sessionStorage.setItem('list', JSON.stringify(list))
       }
     }
@@ -416,6 +415,7 @@ document.getElementById('swapper_base').addEventListener(
 // OnClick on Edit Base token => Display the selection list
 document.getElementById('base_change').addEventListener(
   "click", function(e) {
+    updateBaseList()
     document.getElementById('base_symbol').style.display = "none"
     document.getElementById('base_change').style.display = "none"
     document.getElementById('base_select').style.display = "flex"
