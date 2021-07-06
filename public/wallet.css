@@ -1,6 +1,4 @@
 
-
-
 #input-wallet-container {
   text-align: center;
   margin-top: 0;
@@ -9,23 +7,20 @@
 }
 #input-wallet-container.margin-top {
   margin-top: 20vh;
-
 }
 
 #input-wallet {
   border: 1px solid #CCC;
   border-radius: 12px;
-
   margin: 0.5em 1em;
   padding: 1em;
-
   width: 50%;
   transition: all 400ms ease-in-out;
+  text-align: center;
 }
 #input-wallet-container.margin-top #input-wallet {
   font-size: initial;
 }
-
 
 #wallet {
   margin: auto;
@@ -56,7 +51,6 @@
 #wallet ul li span.balance {
     text-align: end;
 }
-
 
 
 /* Progress Bar */
