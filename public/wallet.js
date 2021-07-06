@@ -306,7 +306,7 @@ const changeProgress = () => {
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
   const filtered = Object.keys(wallet)
-    .filter(address => wallet[address].value !== '0')
+    .filter(address => wallet[address].value && wallet[address].value !== '0')
     .map(
       address => ({ address: address, ...wallet[address] })
     )
