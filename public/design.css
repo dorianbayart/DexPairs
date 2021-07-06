@@ -11,6 +11,7 @@ h1, h2, h3 {
 a, a:hover, a:visited, a:active {
   text-decoration: none;
   color: #000;
+  transition: all 150ms ease-in-out;
 }
 
 #header {
@@ -22,6 +23,12 @@ a, a:hover, a:visited, a:active {
   cursor: pointer;
 }
 
+header {
+  transition: all 250ms ease-in-out;
+}
+header:hover {
+  opacity: 0.6;
+}
 header h1 a {
   display: inline-flex;
   align-items: baseline;
@@ -46,6 +53,7 @@ header .version {
   padding: 0.5em;
   border-radius: 10px;
   box-shadow: 0px 0px 12px #AAAE;
+  transition: all 150ms ease-in-out;
 }
 #menu .menu-item:hover {
   box-shadow: 0px 0px 12px #888E;

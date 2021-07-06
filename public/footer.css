@@ -1,4 +1,18 @@
 .footer {
-  margin: 3em auto;
+  margin: 1em auto;
   display: table;
+}
+
+.footer a:hover {
+  opacity: 0.75;
+}
+
+#github_link {
+  display: flex;
+  align-items: end;
+}
+
+#github_link img {
+  margin-right: 8px;
+  height: 20px;
 }
