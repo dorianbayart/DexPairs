@@ -6,16 +6,22 @@ const NETWORK = {
 }
 const REQUESTS = {
   ETHEREUM: {
+    name: 'Ethereum',
+    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/ethereum-icon.svg',
     rpc: 'https://cloudflare-eth.com',
     tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   POLYGON: {
+    name: 'Polygon/Matic',
+    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/polygon-icon.svg',
     rpc: 'https://rpc-mainnet.maticvigil.com',
     tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   BSC : {
+    name: 'Binance Smart Chain',
+    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/bsc-icon.svg',
     rpc: 'https://bsc-dataseed.binance.org',
     tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
@@ -200,8 +206,8 @@ function displayWallet() {
     li.title = wallet[token.address].tokenName
 
     let spanNetwork = document.createElement('span')
-    spanNetwork.innerHTML = wallet[token.address].network
     spanNetwork.classList.add('network')
+    spanNetwork.appendChild(createNetworkImg(wallet[token.address].network))
     li.appendChild(spanNetwork)
 
     let spanSymbol = document.createElement('span')
@@ -274,6 +280,15 @@ const getContract = (contractAddress, network) => {
 }
 
 
+/* Utils - Create a document network img tag */
+const createNetworkImg = (network) => {
+  let img = document.createElement('img')
+  img.src = REQUESTS[network].img
+  img.alt = REQUESTS[network].name
+  img.title = img.alt
+  img.classList.add('network')
+  return img
+}
 
 /* Utils - Progress Bar */
 const changeProgress = () => {
