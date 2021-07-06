@@ -167,7 +167,7 @@ function getTokenBalance(contractAddress, network) {
 
 function getTokenBalanceWeb3(contractAddress, network) {
   // Get ERC20 Token contract instance
-  let contract = new getWeb3(network).eth.Contract(minABI, contractAddress)
+  let contract = new (getWeb3(network) as Web3).eth.Contract(minABI, contractAddress)
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
