@@ -43,6 +43,7 @@
   background-color: #FFFE;
   margin: 0.25em;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 #wallet ul li span {
