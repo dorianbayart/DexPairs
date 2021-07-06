@@ -55,7 +55,6 @@
   height: 100%;
 }
 #wallet ul li span.symbol {
-  text-align: center;
   width: 60%;
 }
 #wallet ul li span.balance {
