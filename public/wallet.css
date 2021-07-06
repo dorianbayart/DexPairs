@@ -34,22 +34,33 @@
 }
 
 #wallet ul li {
-  padding: 0.25em 0.5em;
+  padding: 0.5em 1em 0.5em 0.5em;
   background-color: #FFFE;
   margin: 0.25em;
   border-radius: 8px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 1.2em;
 }
 
 #wallet ul li span {
   display: inline-block;
-  width: 33%;
+}
+#wallet ul li span.network {
+  width: 10%;
+  height: 100%;
+}
+#wallet ul li span.network img.network {
+  height: 100%;
 }
 #wallet ul li span.symbol {
-    text-align: center;
+  text-align: center;
+  width: 60%;
 }
 #wallet ul li span.balance {
-    text-align: end;
+  text-align: end;
+  width: 30%;
 }
 
 
