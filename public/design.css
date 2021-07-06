@@ -1,5 +1,16 @@
 body {
+  display: block !important;
   font-family: Sans-Serif;
+}
+
+h1, h2, h3 {
+  font-size: inherit;
+  font-weight: normal;
+  margin: 0;
+}
+a, a:hover, a:visited, a:active {
+  text-decoration: none;
+  color: #000;
 }
 
 #header {
@@ -11,7 +22,7 @@ body {
   cursor: pointer;
 }
 
-header {
+header h1 a {
   display: inline-flex;
   align-items: baseline;
 }
