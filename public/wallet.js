@@ -313,7 +313,11 @@ const filteredWallet = () => {
 
 /* Utils - Display balance from value */
 const displayBalance = (value, decimal) => {
-  return precise(value * Math.pow(10, -decimal))
+  if(value && value > 0) {
+    return precise(value * Math.pow(10, -decimal))
+  } else {
+    return 0
+  }
 }
 
 // Round number
