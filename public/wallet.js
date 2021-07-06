@@ -6,6 +6,7 @@ const NETWORK = {
 }
 const REQUESTS = {
   ETHEREUM: {
+    rpc: 'https://cloudflare-eth.com',
     tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
@@ -14,6 +15,7 @@ const REQUESTS = {
     tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   BSC : {
+    rpc: 'https://bsc-dataseed.binance.org',
     tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   }
@@ -38,20 +40,24 @@ const minABI = [
        }
      ]
 
-let web3 = null
+let web3_ethereum = null
+let web3_polygon = null
+let web3_bsc = null
 let walletAddress = ''
 let wallet = {}
 
 
 const Web3 = require(['./lib/web3.min.js'], function(Web3) {
-  web3 = new Web3("https://cloudflare-eth.com")
+  web3_ethereum = new Web3(REQUESTS.ETHEREUM.RPC)
+  //web3_polygon = new Web3(REQUESTS.POLYGON.RPC)
+  web3_bsc = new Web3(REQUESTS.BSC.RPC)
   /*
-  web3.eth.getBalance(walletAddress).then(balance => {
+  web3_ethereum.eth.getBalance(walletAddress).then(balance => {
     console.log('ETH: ' + web3.utils.fromWei(balance, 'ether'))
   })
   */
-  web3.eth.getGasPrice().then(gas => {
-    console.log('Gas Price: ' + web3.utils.fromWei(gas, 'gwei'))
+  web3_ethereum.eth.getGasPrice().then(gas => {
+    console.log('Gas Price on Ethereum: ' + web3_ethereum.utils.fromWei(gas, 'gwei'))
   })
 
 })
@@ -155,7 +161,9 @@ function getTokenBalance(contractAddress, network) {
 
 function getTokenBalanceWeb3(contractAddress, network) {
   // Get ERC20 Token contract instance
-  let contract = new web3.eth.Contract(minABI, contractAddress)
+  let contract = null;
+  
+  new getWeb3(network).eth.Contract(minABI, contractAddress)
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
@@ -189,10 +197,13 @@ function searchTokens(network) {
   Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
     switch (network) {
       case NETWORK.ETHEREUM:
-        setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 450)
+        setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 400)
         break;
       case NETWORK.POLYGON:
-        setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 350)
+        setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 400)
+        break;
+      case NETWORK.BSC:
+        setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 400)
         break;
       default:
         setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 5250)
@@ -239,6 +250,21 @@ function displayWallet() {
     })
   })
   document.getElementById('wallet').appendChild(ul)
+}
+
+
+/* Utils - Return the web3 to use depending on the network */
+const getWeb3 = (network) => {
+  switch (network) {
+      case NETWORK.ETHEREUM:
+        return web3_ethereum
+      case NETWORK.POLYGON:
+        return web3_polygon
+      case NETWORK.BSC:
+        return web3_bsc
+      default:
+        return
+    }
 }
 
 
