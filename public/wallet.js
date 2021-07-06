@@ -238,9 +238,9 @@ initializeHTML()
 
 function initializeHTML() {
   if(sessionStorage.getItem('walletAddress')) {
-    walletAddress = sessionStorage.getItem('walletAddress')
-    document.getElementById('input-wallet').value = walletAddress
-    configureWallet(walletAddress)
+    const address = sessionStorage.getItem('walletAddress')
+    document.getElementById('input-wallet').value = address
+    configureWallet(address)
   }
 }
 
