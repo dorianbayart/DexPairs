@@ -48,9 +48,9 @@ let wallet = {}
 
 
 const Web3 = require(['./lib/web3.min.js'], function(Web3) {
-  web3_ethereum = new Web3(REQUESTS.ETHEREUM.RPC)
-  //web3_polygon = new Web3(REQUESTS.POLYGON.RPC)
-  web3_bsc = new Web3(REQUESTS.BSC.RPC)
+  web3_ethereum = new Web3(REQUESTS.ETHEREUM.rpc)
+  //web3_polygon = new Web3(REQUESTS.POLYGON.rpc)
+  web3_bsc = new Web3(REQUESTS.BSC.rpc)
   /*
   web3_ethereum.eth.getBalance(walletAddress).then(balance => {
     console.log('ETH: ' + web3.utils.fromWei(balance, 'ether'))
@@ -58,6 +58,12 @@ const Web3 = require(['./lib/web3.min.js'], function(Web3) {
   */
   web3_ethereum.eth.getGasPrice().then(gas => {
     console.log('Gas Price on Ethereum: ' + web3_ethereum.utils.fromWei(gas, 'gwei'))
+  })
+  /*web3_polygon.eth.getGasPrice().then(gas => {
+    console.log('Gas Price on Polygon: ' + web3_polygon.utils.fromWei(gas, 'gwei'))
+  })*/
+  web3_bsc.eth.getGasPrice().then(gas => {
+    console.log('Gas Price on BSC: ' + web3_bsc.utils.fromWei(gas, 'gwei'))
   })
 
 })
