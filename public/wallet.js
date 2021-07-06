@@ -213,7 +213,7 @@ function displayWallet() {
     li.appendChild(spanNetwork)
 
     let spanSymbol = document.createElement('span')
-    spanSymbol.innerHTML = wallet[token.address].tokenSymbol
+    spanSymbol.innerHTML = wallet[token.address].tokenName
     spanSymbol.classList.add('symbol')
     li.appendChild(spanSymbol)
 
@@ -286,8 +286,8 @@ const getContract = (contractAddress, network) => {
 const createNetworkImg = (network) => {
   let img = document.createElement('img')
   img.src = REQUESTS[network].img
-  img.alt = REQUESTS[network].name
-  img.title = img.alt
+  img.alt = REQUESTS[network].name + ' logo'
+  img.title = REQUESTS[network].name
   img.classList.add('network')
   return img
 }
