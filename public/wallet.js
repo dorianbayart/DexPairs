@@ -91,7 +91,7 @@ function configureWallet(inputAddress) {
   }
 
   if(web3_ethereum.utils.isAddress(inputAddress)) {
-    if(JSON.parse(sessionStorage.getItem('walletAddress')) === inputAddress) {
+    if(sessionStorage.getItem('walletAddress') === inputAddress) {
       wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
       displayWallet()
     }
