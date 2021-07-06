@@ -79,7 +79,7 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
 
   if(walletValue === walletAddress) { return }
 
-  if(web3.utils.isAddress(walletValue)) {
+  if(web3_ethereum.utils.isAddress(walletValue)) {
     inputContainer.classList.remove('margin-top')
 
     if(JSON.parse(sessionStorage.getItem('walletAddress')) === walletValue) {
