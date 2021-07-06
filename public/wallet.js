@@ -167,7 +167,7 @@ function getTokenBalance(contractAddress, network) {
 
 function getTokenBalanceWeb3(contractAddress, network) {
   // Get ERC20 Token contract instance
-  let contract = new (getWeb3(network) as Web3).eth.Contract(minABI, contractAddress)
+  let contract = getContract(contractAddress, network)
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
@@ -198,7 +198,7 @@ function searchTokens(network) {
       value: '0'
     }
   })
-  console.log(getWeb3(network))
+  
   Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
     switch (network) {
       case NETWORK.ETHEREUM:
@@ -267,6 +267,20 @@ const getWeb3 = (network) => {
         return web3_polygon
       case NETWORK.BSC:
         return web3_bsc
+      default:
+        return
+    }
+}
+
+/* Utils - Return the Contract depending on the network */
+const getContract = (contractAddress, network) => {
+  switch (network) {
+      case NETWORK.ETHEREUM:
+        return new web3_ethereum.eth.Contract(minABI, contractAddress)
+      case NETWORK.POLYGON:
+        return new web3_polygon.eth.Contract(minABI, contractAddress)
+      case NETWORK.BSC:
+        return new web3_bsc.eth.Contract(minABI, contractAddress)
       default:
         return
     }
