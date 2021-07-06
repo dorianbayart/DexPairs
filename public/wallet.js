@@ -167,6 +167,8 @@ function getTokenBalanceWeb3(contractAddress, network) {
   contract.methods.balanceOf(walletAddress).call((error, value) => {
     wallet[contractAddress].value = value
     wallet[contractAddress].upToDate = true
+    
+    sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
     changeProgress()
   })
