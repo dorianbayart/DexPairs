@@ -84,7 +84,10 @@ function configureWallet(inputAddress) {
   inputContainer.classList.remove('margin-top')
   if(inputAddress === walletAddress) { return }
   
-  if(!web3_ethereum) { setTimeout(configureWallet(inputAddress), 500) }
+  if(!web3_ethereum) {
+    setTimeout(function(){ configureWallet(inputAddress) }, 500)
+    return
+  }
 
   if(web3_ethereum.utils.isAddress(inputAddress)) {
     if(JSON.parse(sessionStorage.getItem('walletAddress')) === inputAddress) {
