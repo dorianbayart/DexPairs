@@ -62,10 +62,7 @@ const Web3 = require(['./lib/web3.min.js'], function(Web3) {
   web3_bsc.eth.getGasPrice().then(gas => {
     console.log('Gas Price on BSC: ' + web3_bsc.utils.fromWei(gas, 'gwei'))
   })
-
 })
-
-
 
 
 
@@ -98,7 +95,7 @@ function configureWallet(inputAddress) {
     getTokenTx(NETWORK.ETHEREUM)
     getTokenTx(NETWORK.POLYGON)
     getTokenTx(NETWORK.BSC)
-    sessionStorage.setItem('walletAddress', JSON.stringify(walletAddress))
+    sessionStorage.setItem('walletAddress', walletAddress)
 
     e.target.blur()
   } else if (!inputContainer.classList.contains('margin-top')) {
