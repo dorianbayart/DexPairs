@@ -71,15 +71,20 @@ const Web3 = require(['./lib/web3.min.js'], function(Web3) {
 
 // defines event on search field
 document.getElementById('input-wallet').addEventListener("keyup", function(e) {
+  let inputAddress = e.target.value
+  configureWallet(inputAddress)
+})
+
+// search transactions / tokens for the specified wallet address
+function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
-  let walletValue = e.target.value
+  inputContainer.classList.remove('margin-top')
+  if(inputAddress === walletAddress) { return }
+  
+  if(!web3_ethereum) { setTimeout(configureWallet(inputAddress), 500) }
 
-  if(walletValue === walletAddress) { return }
-
-  if(web3_ethereum.utils.isAddress(walletValue)) {
-    inputContainer.classList.remove('margin-top')
-
-    if(JSON.parse(sessionStorage.getItem('walletAddress')) === walletValue) {
+  if(web3_ethereum.utils.isAddress(inputAddress)) {
+    if(JSON.parse(sessionStorage.getItem('walletAddress')) === inputAddress) {
       wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
       displayWallet()
     }
@@ -88,7 +93,7 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
       wallet[address].upToDate = false
     })
 
-    walletAddress = walletValue
+    walletAddress = inputAddress
 
     getTokenTx(NETWORK.ETHEREUM)
     getTokenTx(NETWORK.POLYGON)
@@ -99,9 +104,7 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
   } else if (!inputContainer.classList.contains('margin-top')) {
     inputContainer.classList.add('margin-top')
   }
-
-})
-
+}
 
 
 
@@ -185,7 +188,6 @@ function searchTokens(network) {
 
 // Display Wallet
 function displayWallet() {
-
   document.getElementById('wallet').innerHTML = null;
   ul = document.createElement('ul')
   filteredWallet()
@@ -227,6 +229,22 @@ function displayWallet() {
     })
   })
   document.getElementById('wallet').appendChild(ul)
+}
+
+
+
+/* MAIN */
+initializeHTML()
+
+
+
+
+function initializeHTML() {
+  if(sessionStorage.getItem('walletAddress')) {
+    walletAddress = sessionStorage.getItem('walletAddress')
+    document.getElementById('input-wallet').value = walletAddress
+    configureWallet(walletAddress)
+  }
 }
 
 
