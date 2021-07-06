@@ -213,7 +213,7 @@ function displayWallet() {
     li.appendChild(spanNetwork)
 
     let spanSymbol = document.createElement('span')
-    spanSymbol.innerHTML = wallet[token.address].tokenName
+    spanSymbol.innerHTML = (wallet[token.address].tokenName && wallet[token.address].tokenName !== '') ? wallet[token.address].tokenName : wallet[token.address].tokenSymbol
     spanSymbol.classList.add('symbol')
     li.appendChild(spanSymbol)
 
