@@ -11,6 +11,7 @@ const REQUESTS = {
     tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   POLYGON: {
+    rpc: 'https://rpc-mainnet.maticvigil.com',
     tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
@@ -49,19 +50,15 @@ let wallet = {}
 
 const Web3 = require(['./lib/web3.min.js'], function(Web3) {
   web3_ethereum = new Web3(REQUESTS.ETHEREUM.rpc)
-  //web3_polygon = new Web3(REQUESTS.POLYGON.rpc)
+  web3_polygon = new Web3(REQUESTS.POLYGON.rpc)
   web3_bsc = new Web3(REQUESTS.BSC.rpc)
-  /*
-  web3_ethereum.eth.getBalance(walletAddress).then(balance => {
-    console.log('ETH: ' + web3.utils.fromWei(balance, 'ether'))
-  })
-  */
+  
   web3_ethereum.eth.getGasPrice().then(gas => {
     console.log('Gas Price on Ethereum: ' + web3_ethereum.utils.fromWei(gas, 'gwei'))
   })
-  /*web3_polygon.eth.getGasPrice().then(gas => {
+  web3_polygon.eth.getGasPrice().then(gas => {
     console.log('Gas Price on Polygon: ' + web3_polygon.utils.fromWei(gas, 'gwei'))
-  })*/
+  })
   web3_bsc.eth.getGasPrice().then(gas => {
     console.log('Gas Price on BSC: ' + web3_bsc.utils.fromWei(gas, 'gwei'))
   })
@@ -92,12 +89,12 @@ document.getElementById('input-wallet').addEventListener("keyup", function(e) {
     })
 
     walletAddress = walletValue
-    //if(walletAddress !== JSON.parse(sessionStorage.getItem('walletAddress'))) {
-      getTokenTx(NETWORK.ETHEREUM)
-      getTokenTx(NETWORK.POLYGON)
-      getTokenTx(NETWORK.BSC)
-      sessionStorage.setItem('walletAddress', JSON.stringify(walletAddress))
-    //}
+
+    getTokenTx(NETWORK.ETHEREUM)
+    getTokenTx(NETWORK.POLYGON)
+    getTokenTx(NETWORK.BSC)
+    sessionStorage.setItem('walletAddress', JSON.stringify(walletAddress))
+
     e.target.blur()
   } else if (!inputContainer.classList.contains('margin-top')) {
     inputContainer.classList.add('margin-top')
@@ -114,10 +111,6 @@ function getTokenTx(network) {
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText)
-      if(data.status !== '1') {
-        setTimeout(function(){ getTokenTx(network) }, 5250)
-        return
-      }
       const tokentx = data.result
       sessionStorage.setItem('tokentx-' + network, JSON.stringify(tokentx))
 
@@ -129,7 +122,7 @@ function getTokenTx(network) {
 }
 
 
-// get token balance
+// get token balance - Not used
 function getTokenBalance(contractAddress, network) {
   if(wallet[contractAddress].upToDate) {
     return
@@ -148,14 +141,6 @@ function getTokenBalance(contractAddress, network) {
       wallet[contractAddress].value = tokenValue
       wallet[contractAddress].upToDate = true
 
-      if(wallet[contractAddress].value !== '0') {
-        console.log(
-          wallet[contractAddress].network,
-          wallet[contractAddress].tokenSymbol,
-          displayBalance(wallet[contractAddress].value, wallet[contractAddress].tokenDecimal)
-        )
-      }
-
       sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
       changeProgress()
@@ -165,6 +150,7 @@ function getTokenBalance(contractAddress, network) {
   xmlhttp.send()
 }
 
+// Get token balance
 function getTokenBalanceWeb3(contractAddress, network) {
   // Get ERC20 Token contract instance
   let contract = getContract(contractAddress, network)
@@ -173,14 +159,6 @@ function getTokenBalanceWeb3(contractAddress, network) {
   contract.methods.balanceOf(walletAddress).call((error, value) => {
     wallet[contractAddress].value = value
     wallet[contractAddress].upToDate = true
-
-    if(wallet[contractAddress].value !== '0') {
-      console.log(
-        wallet[contractAddress].network,
-        wallet[contractAddress].tokenSymbol,
-        displayBalance(wallet[contractAddress].value, wallet[contractAddress].tokenDecimal)
-      )
-    }
 
     changeProgress()
   })
@@ -200,19 +178,7 @@ function searchTokens(network) {
   })
   
   Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
-    switch (network) {
-      case NETWORK.ETHEREUM:
-        setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 400)
-        break;
-      case NETWORK.POLYGON:
-        setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 400)
-        break;
-      case NETWORK.BSC:
-        setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 400)
-        break;
-      default:
-        setTimeout(function(){ getTokenBalance(contractAddress, network) }, (i+1) * 5250)
-    }
+    setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 300)
   })
 }
 
@@ -232,6 +198,7 @@ function displayWallet() {
     })
     .forEach(function (token) {
     let li = document.createElement('li')
+    li.title = wallet[token.address].tokenName
 
     let spanNetwork = document.createElement('span')
     spanNetwork.innerHTML = wallet[token.address].network
@@ -246,6 +213,11 @@ function displayWallet() {
     let spanBalance = document.createElement('span')
     spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
     spanBalance.classList.add('balance')
+    li.appendChild(spanBalance)
+    
+    let spanValue = document.createElement('span')
+    spanValue.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
+    spanValue.classList.add('value')
     li.appendChild(spanBalance)
 
     ul.appendChild(li)
