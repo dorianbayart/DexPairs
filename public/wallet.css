@@ -1,6 +1,4 @@
 
-
-
 #input-wallet-container {
   text-align: center;
   margin-top: 0;
@@ -9,23 +7,20 @@
 }
 #input-wallet-container.margin-top {
   margin-top: 20vh;
-
 }
 
 #input-wallet {
   border: 1px solid #CCC;
   border-radius: 12px;
-
   margin: 0.5em 1em;
   padding: 1em;
-
   width: 50%;
   transition: all 400ms ease-in-out;
+  text-align: center;
 }
 #input-wallet-container.margin-top #input-wallet {
   font-size: initial;
 }
-
 
 #wallet {
   margin: auto;
@@ -39,23 +34,33 @@
 }
 
 #wallet ul li {
-  padding: 0.25em 0.5em;
+  padding: 0.5em 1em 0.5em 0.5em;
   background-color: #FFFE;
   margin: 0.25em;
   border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 1.2em;
 }
 
 #wallet ul li span {
   display: inline-block;
-  width: 33%;
+}
+#wallet ul li span.network {
+  width: 10%;
+  height: 100%;
+}
+#wallet ul li span.network img.network {
+  height: 100%;
 }
 #wallet ul li span.symbol {
-    text-align: center;
+  width: 60%;
 }
 #wallet ul li span.balance {
-    text-align: end;
+  text-align: end;
+  width: 30%;
 }
-
 
 
 /* Progress Bar */
