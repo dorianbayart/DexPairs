@@ -205,7 +205,7 @@ function displayWallet() {
     })
     .forEach(function (token) {
     let li = document.createElement('li')
-    li.title = wallet[token.address].tokenName
+    li.title = (wallet[token.address].tokenName && wallet[token.address].tokenName !== '') ? wallet[token.address].tokenName : wallet[token.address].tokenSymbol
 
     let spanNetwork = document.createElement('span')
     spanNetwork.classList.add('network')
