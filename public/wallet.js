@@ -181,7 +181,7 @@ function searchTokens(network) {
       tokenSymbol: item.tokenSymbol,
       tokenName: item.tokenName,
       tokenDecimal: item.tokenDecimal,
-      value: '0'
+      value: (wallet[item.contractAddress] && wallet[item.contractAddress].value) ? wallet[item.contractAddress].value : '0'
     }
   })
   
