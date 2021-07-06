@@ -76,6 +76,7 @@ const Web3 = require(['./lib/web3.min.js'], function(Web3) {
 document.getElementById('input-wallet').addEventListener("keyup", function(e) {
   let inputAddress = e.target.value
   configureWallet(inputAddress)
+  e.target.blur()
 })
 
 // search transactions / tokens for the specified wallet address
@@ -105,8 +106,6 @@ function configureWallet(inputAddress) {
     getTokenTx(NETWORK.POLYGON)
     getTokenTx(NETWORK.BSC)
     sessionStorage.setItem('walletAddress', walletAddress)
-
-    e.target.blur()
   } else if (!inputContainer.classList.contains('margin-top')) {
     inputContainer.classList.add('margin-top')
   }
