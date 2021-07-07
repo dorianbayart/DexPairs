@@ -33,6 +33,7 @@ console.log(dir_home)
 
 
 const HISTORY_SIZE = 120
+const VOLUME_SIZE = 10
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAYS = 259200000 // 3 days
@@ -47,30 +48,35 @@ let uniswap_list = {}
 let uniswap_top = {}
 let uniswap_data = {}
 let uniswap_charts = {}
+let uniswap_volume = {}
 
 // Pancake data - BinanceSmartChain
 let tokens_list = {}
 let top_tokens = {}
 let tokens_data = {}
 let tokens_charts = {}
+let tokens_volume = {}
 
 // Sushiswap data - Polygon/Matic
 let sushiswap_list = {}
 let sushiswap_top = {}
 let sushiswap_data = {}
 let sushiswap_charts = {}
+let sushiswap_volume = {}
 
 // Spiritswap data - Fantom/Opera
 let spiritswap_list = {}
 let spiritswap_top = {}
 let spiritswap_data = {}
 let spiritswap_charts = {}
+let spiritswap_volume = {}
 
 // Honeyswap data - xDai
 let honeyswap_list = {}
 let honeyswap_top = {}
 let honeyswap_data = {}
 let honeyswap_charts = {}
+let honeyswap_volume = {}
 
 
 
@@ -113,7 +119,8 @@ query
       id
       name
       symbol
-      derivedETH
+      derivedETH,
+      tradeVolumeUSD
     }
     bundle(id: "1" ) {
       ethPrice
@@ -134,7 +141,8 @@ query
       id
       name
       symbol
-      derivedETH
+      derivedETH,
+      volumeUSD
     }
     bundle(id: "1" ) {
       ethPrice
@@ -155,7 +163,8 @@ query
       id
       name
       symbol
-      derivedFTM
+      derivedFTM,
+      tradeVolumeUSD
     }
     bundle(id: "1" ) {
       ftmPrice
@@ -176,7 +185,8 @@ query
       id
       name
       symbol
-      derivedETH
+      derivedETH,
+      tradeVolumeUSD
     }
     bundle(id: "1" ) {
       ethPrice
@@ -363,15 +373,23 @@ async function launchUniswap() {
 
   let uniswap_data_file = {}
   let uniswap_charts_file = {}
+  let uniswap_volume_file = {}
   try {
     uniswap_data_file = require(path.join(dir_home, 'uniswap-simple.json'))
     uniswap_charts_file = require(path.join(dir_home, 'uniswap-charts.json'))
+    uniswap_volume_file = require(path.join(dir_home, 'uniswap-volume.json'))
+            
+    uniswap_data = uniswap_data_file
+    uniswap_charts = uniswap_charts_file
+    uniswap_volume = uniswap_volume_file
   } catch(error) {
     // console.log(error)
+    uniswap_data = {}
+    uniswap_charts = {}
+    uniswap_volume = {}
   }
 
-  uniswap_data = uniswap_data_file
-  uniswap_charts = uniswap_charts_file
+  
 
   uniswap_list = {}
 
@@ -391,6 +409,7 @@ async function launchUniswap() {
       const name = token.name
       const price_ETH = token.derivedETH
       const price = price_ETH * eth_price
+      const volumeUSD = token.tradeVolumeUSD
 
       // create Uniswap list
       uniswap_list[address] = symbol
@@ -422,6 +441,18 @@ async function launchUniswap() {
             t: time,
             p: price,
           }]
+        }
+      }
+      if(uniswap_volume[address]) {
+        uniswap_volume[address].push({
+          t: time,
+          v: volumeUSD,
+        })
+        uniswap_volume[address] = uniswap_volume[address].slice(-VOLUME_SIZE)
+      } else {
+        uniswap_volume[address] = {
+          t: time,
+          v: volumeUSD,
         }
       }
       if(uniswap_charts[address].chart_4h) {
@@ -467,7 +498,8 @@ async function launchUniswap() {
         }]
       }
   })
-
+  
+  // TODO Sort tokens depending on volume
 
   // build Top 25 list of Uniswap
   uniswap_top = {}
@@ -513,6 +545,12 @@ async function launchUniswap() {
   // Update the Uniswap charts
   pathFile = path.join(dir_home, 'uniswap-charts.json')
   writeFile( pathFile, JSON.stringify( uniswap_charts ), "utf8", (err) => {
+    if (err) throw err;
+  });
+  
+  // Update the Uniswap volumeUSD
+  pathFile = path.join(dir_home, 'uniswap-volume.json')
+  writeFile( pathFile, JSON.stringify( uniswap_volume ), "utf8", (err) => {
     if (err) throw err;
   });
 
