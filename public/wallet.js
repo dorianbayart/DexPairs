@@ -78,7 +78,7 @@ const Web3 = require(['./lib/web3.min.js'], function(Web3) {
   web3_fantom = new Web3(REQUESTS.FANTOM.rpc)
   web3_xdai = new Web3(REQUESTS.XDAI.rpc)
   web3_bsc = new Web3(REQUESTS.BSC.rpc)
-  
+
   web3_ethereum.eth.getGasPrice().then(gas => {
     console.log('Gas Price on Ethereum: ' + web3_ethereum.utils.fromWei(gas, 'gwei'))
   })
@@ -110,7 +110,7 @@ function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
   inputContainer.classList.remove('margin-top')
   if(inputAddress === walletAddress) { return }
-  
+
   if(!web3_ethereum) {
     setTimeout(function(){ configureWallet(inputAddress) }, 500)
     return
@@ -120,6 +120,8 @@ function configureWallet(inputAddress) {
     if(sessionStorage.getItem('walletAddress') === inputAddress) {
       wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
       displayWallet()
+    } else {
+      wallet = {}
     }
 
     Object.keys(wallet).forEach(address => {
@@ -195,7 +197,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
   contract.methods.balanceOf(walletAddress).call((error, value) => {
     wallet[contractAddress].value = value
     wallet[contractAddress].upToDate = true
-    
+
     sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
     changeProgress()
@@ -214,7 +216,7 @@ function searchTokens(network) {
       value: (wallet[item.contractAddress] && wallet[item.contractAddress].value) ? wallet[item.contractAddress].value : '0'
     }
   })
-  
+
   Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
     setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 300)
   })
@@ -251,7 +253,7 @@ function displayWallet() {
     spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
     spanBalance.classList.add('balance')
     li.appendChild(spanBalance)
-    
+
     let spanValue = document.createElement('span')
     spanValue.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
     spanValue.classList.add('value')

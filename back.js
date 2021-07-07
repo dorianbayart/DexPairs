@@ -155,16 +155,16 @@ query
       id
       name
       symbol
-      derivedETH
+      derivedFTM
     }
     bundle(id: "1" ) {
-      ethPrice
+      ftmPrice
     }
   }
 `
 
 // Use TheGraph API - https://thegraph.com/explorer/subgraph/layer3org/spiritswap-analytics
-async function getSpiritTopTokens() {
+async function getSpiritswapTopTokens() {
   return await get("https://api.thegraph.com/subgraphs/name/layer3org/spiritswap-analytics", spiritswap_request)
 }
 
@@ -210,7 +210,7 @@ async function launch() {
   tokens_charts = tokens_charts_file
 
   tokens_list = {}
-  
+
   // get data from PancakeSwap
   const top = await getTopTokens()
 
@@ -683,6 +683,169 @@ async function launchSushiswap() {
 }
 
 
+// Program - Spiritswap
+async function launchSpiritswap() {
+  // loop
+  setTimeout(function(){ launchSpiritswap() }, OFTEN) // every 15 minutes
+
+  let spiritswap_data_file = {}
+  let spiritswap_charts_file = {}
+  try {
+    spiritswap_data_file = require(path.join(dir_home, 'spiritswap-simple.json'))
+    spiritswap_charts_file = require(path.join(dir_home, 'spiritswap-charts.json'))
+    spiritswap_data = spiritswap_data_file
+    spiritswap_charts = spiritswap_charts_file
+  } catch(error) {
+    // console.log(error)
+  }
+
+
+  spiritswap_list = {}
+
+  // get data from Spiritswap
+  const top = await getSpiritswapTopTokens()
+
+
+
+  const time = Date.now()
+  const tokens = top.data ? top.data.tokens : []
+
+  const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
+
+  tokens.forEach(token => {
+      const address = token.id
+      const symbol = token.symbol
+      const name = token.name
+      const price_FTM = token.derivedFTM
+      const price = price_FTM * ftm_price
+
+      // create Spiritswap list
+      spiritswap_list[address] = symbol
+
+
+      // update Spiritswap simple data
+      spiritswap_data[address] = {
+        s: symbol,
+        n: name,
+        p: price,
+        t: time
+      }
+
+      // update Spiritswap charts
+      //
+      if(spiritswap_charts[address]) {
+        if(time - spiritswap_charts[address].chart_often[spiritswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
+          spiritswap_charts[address].chart_often.push({
+            t: time,
+            p: price,
+          })
+          spiritswap_charts[address].chart_often = spiritswap_charts[address].chart_often.slice(-HISTORY_SIZE)
+        }
+      } else {
+        spiritswap_charts[address] = {
+          s: symbol,
+          n: name,
+          chart_often: [{
+            t: time,
+            p: price,
+          }]
+        }
+      }
+      if(spiritswap_charts[address].chart_4h) {
+        if((time - spiritswap_charts[address].chart_4h[spiritswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
+          spiritswap_charts[address].chart_4h.push({
+            t: time,
+            p: price,
+          })
+          spiritswap_charts[address].chart_4h = spiritswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
+        }
+      } else {
+        spiritswap_charts[address].chart_4h = [{
+          t: time,
+          p: price,
+        }]
+      }
+      if(spiritswap_charts[address].chart_3d) {
+        if((time - spiritswap_charts[address].chart_3d[spiritswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
+          spiritswap_charts[address].chart_3d.push({
+            t: time,
+            p: price,
+          })
+          spiritswap_charts[address].chart_3d = spiritswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
+        }
+      } else {
+        spiritswap_charts[address].chart_3d = [{
+          t: time,
+          p: price,
+        }]
+      }
+      if(spiritswap_charts[address].chart_1w) {
+        if((time - spiritswap_charts[address].chart_1w[spiritswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
+          spiritswap_charts[address].chart_1w.push({
+            t: time,
+            p: price,
+          })
+          spiritswap_charts[address].chart_1w = spiritswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
+        }
+      } else {
+        spiritswap_charts[address].chart_1w = [{
+          t: time,
+          p: price,
+        }]
+      }
+  })
+
+
+  // build Top 25 list of Spiritswap
+  spiritswap_top = {}
+  if(tokens.length > 0) {
+    for (var i = 0; i < 25; i++) {
+      const token = tokens[i]
+      const address = token.id
+      const symbol = token.symbol
+      const name = token.name
+      const price_FTM = token.derivedFTM
+      const price = price_FTM * ftm_price
+
+      spiritswap_top[address] = {
+        s: symbol,
+        n: name,
+        p: price,
+        chart: spiritswap_charts[address].chart_often
+      }
+    }
+  }
+
+
+  /* Store files */
+
+  // Update the Spiritswap list
+  let pathFile = path.join(dir_home, 'spiritswap.json')
+  writeFile( pathFile, JSON.stringify( spiritswap_list ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
+  // Update the Spiritswap top 25
+  pathFile = path.join(dir_home, 'spiritswap-top.json')
+  writeFile( pathFile, JSON.stringify( spiritswap_top ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
+  // Update the Spiritswap simple data
+  pathFile = path.join(dir_home, 'spiritswap-simple.json')
+  writeFile( pathFile, JSON.stringify( spiritswap_data ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
+  // Update the Spiritswap charts
+  pathFile = path.join(dir_home, 'spiritswap-charts.json')
+  writeFile( pathFile, JSON.stringify( spiritswap_charts ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
+}
+
+
 
 // Program - Honeyswap
 async function launchHoneyswap() {
@@ -700,10 +863,8 @@ async function launchHoneyswap() {
     // console.log(error)
   }
 
-  
 
   honeyswap_list = {}
-
 
   // get data from Honeyswap
   const top = await getHoneyswapTopTokens()
@@ -854,8 +1015,9 @@ async function launchHoneyswap() {
 /* MAIN */
 setTimeout(function(){ launchUniswap() }, 2000)
 setTimeout(function(){ launchSushiswap() }, 4000)
-setTimeout(function(){ launchHoneyswap() }, 6000)
-setTimeout(function(){ launch() }, 8000)
+setTimeout(function(){ launchSpiritswap() }, 6000)
+setTimeout(function(){ launchHoneyswap() }, 8000)
+setTimeout(function(){ launch() }, 10000)
 
 
 
@@ -883,6 +1045,11 @@ app.get('/list/sushiswap', (req, res) => res.json(sushiswap_list))
 app.get('/top/sushiswap', (req, res) => res.json(sushiswap_top))
 app.get('/simple/sushiswap', (req, res) => res.json(sushiswap_data))
 app.get('/charts/sushiswap', (req, res) => res.json(sushiswap_charts))
+// Spiritswap URLs
+app.get('/list/spiritswap', (req, res) => res.json(spiritswap_list))
+app.get('/top/spiritswap', (req, res) => res.json(spiritswap_top))
+app.get('/simple/spiritswap', (req, res) => res.json(spiritswap_data))
+app.get('/charts/spiritswap', (req, res) => res.json(spiritswap_charts))
 // Honeyswap URLs
 app.get('/list/honeyswap', (req, res) => res.json(honeyswap_list))
 app.get('/top/honeyswap', (req, res) => res.json(honeyswap_top))

@@ -38,6 +38,30 @@ let dexList = {
       base: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
     }
   },
+  SPIRITSWAP: {
+    name: 'SpiritSwap',
+    chain: 'Fantom/Opera',
+    url: 'https://www.spiritswap.finance/',
+    url_swap: 'https://swap.spiritswap.finance/#/swap',
+    url_data: server + '/spiritswap',
+    explorer: 'https://ftmscan.com/token/',
+    tokens: {
+      token: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+      base: '0x04068da6c83afcfa0e13ba15a6696662335d5b75'
+    }
+  },
+  HONEYSWAP: {
+    name: 'HoneySwap',
+    chain: 'xDai',
+    url: 'https://honeyswap.org/',
+    url_swap: 'https://app.honeyswap.org/#/swap',
+    url_data: server + '/honeyswap',
+    explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
+    tokens: {
+      token: '0x71850b7e9ee3f13ab46d67167341e4bdc905eef9',
+      base: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
+    }
+  },
   PANCAKESWAP: {
     disabled: 'true',
     name: 'PancakeSwap',
