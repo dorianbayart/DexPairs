@@ -384,9 +384,6 @@ async function launchUniswap() {
     uniswap_volume = uniswap_volume_file
   } catch(error) {
     // console.log(error)
-    uniswap_data = {}
-    uniswap_charts = {}
-    uniswap_volume = {}
   }
 
 
@@ -576,9 +573,6 @@ async function launchSushiswap() {
     sushiswap_volume = sushiswap_volume_file
   } catch(error) {
     // console.log(error)
-    sushiswap_data = {}
-    sushiswap_charts = {}
-    sushiswap_volume = {}
   }
 
 
@@ -770,9 +764,6 @@ async function launchSpiritswap() {
     spiritswap_volume = spiritswap_volume_file
   } catch(error) {
     // console.log(error)
-    spiritswap_data = {}
-    spiritswap_charts = {}
-    spiritswap_volume = {}
   }
 
 
@@ -963,9 +954,6 @@ async function launchHoneyswap() {
     honeyswap_volume = honeyswap_volume_file
   } catch(error) {
     // console.log(error)
-    honeyswap_data = {}
-    honeyswap_charts = {}
-    honeyswap_volume = {}
   }
 
 
