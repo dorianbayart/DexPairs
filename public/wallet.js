@@ -2,6 +2,8 @@
 const NETWORK = {
   ETHEREUM: 'ETHEREUM',
   POLYGON: 'POLYGON',
+  FANTOM: 'FANTOM',
+  XDAI: 'XDAI',
   BSC: 'BSC'
 }
 const REQUESTS = {
@@ -18,6 +20,20 @@ const REQUESTS = {
     rpc: 'https://rpc-mainnet.maticvigil.com',
     tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
+  },
+  FANTOM: {
+    name: 'Fantom/Opera',
+    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/fantom-icon.svg',
+    rpc: 'https://rpcapi.fantom.network',
+    tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
+  },
+  XDAI: {
+    name: 'xDai',
+    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/xdai-icon.svg',
+    rpc: 'https://rpc.xdaichain.com/',
+    tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   BSC : {
     name: 'Binance Smart Chain',
@@ -49,6 +65,8 @@ const minABI = [
 
 let web3_ethereum = null
 let web3_polygon = null
+let web3_fantom = null
+let web3_xdai = null
 let web3_bsc = null
 let walletAddress = ''
 let wallet = {}
@@ -57,13 +75,21 @@ let wallet = {}
 const Web3 = require(['./lib/web3.min.js'], function(Web3) {
   web3_ethereum = new Web3(REQUESTS.ETHEREUM.rpc)
   web3_polygon = new Web3(REQUESTS.POLYGON.rpc)
+  web3_fantom = new Web3(REQUESTS.FANTOM.rpc)
+  web3_xdai = new Web3(REQUESTS.XDAI.rpc)
   web3_bsc = new Web3(REQUESTS.BSC.rpc)
-  
+
   web3_ethereum.eth.getGasPrice().then(gas => {
     console.log('Gas Price on Ethereum: ' + web3_ethereum.utils.fromWei(gas, 'gwei'))
   })
   web3_polygon.eth.getGasPrice().then(gas => {
     console.log('Gas Price on Polygon: ' + web3_polygon.utils.fromWei(gas, 'gwei'))
+  })
+  web3_fantom.eth.getGasPrice().then(gas => {
+    console.log('Gas Price on Fantom: ' + web3_fantom.utils.fromWei(gas, 'gwei'))
+  })
+  web3_xdai.eth.getGasPrice().then(gas => {
+    console.log('Gas Price on xDai: ' + web3_xdai.utils.fromWei(gas, 'gwei'))
   })
   web3_bsc.eth.getGasPrice().then(gas => {
     console.log('Gas Price on BSC: ' + web3_bsc.utils.fromWei(gas, 'gwei'))
@@ -84,7 +110,7 @@ function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
   inputContainer.classList.remove('margin-top')
   if(inputAddress === walletAddress) { return }
-  
+
   if(!web3_ethereum) {
     setTimeout(function(){ configureWallet(inputAddress) }, 500)
     return
@@ -94,6 +120,8 @@ function configureWallet(inputAddress) {
     if(sessionStorage.getItem('walletAddress') === inputAddress) {
       wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
       displayWallet()
+    } else {
+      wallet = {}
     }
 
     Object.keys(wallet).forEach(address => {
@@ -104,6 +132,8 @@ function configureWallet(inputAddress) {
 
     getTokenTx(NETWORK.ETHEREUM)
     getTokenTx(NETWORK.POLYGON)
+    getTokenTx(NETWORK.FANTOM)
+    getTokenTx(NETWORK.XDAI)
     getTokenTx(NETWORK.BSC)
     sessionStorage.setItem('walletAddress', walletAddress)
   } else if (!inputContainer.classList.contains('margin-top')) {
@@ -167,7 +197,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
   contract.methods.balanceOf(walletAddress).call((error, value) => {
     wallet[contractAddress].value = value
     wallet[contractAddress].upToDate = true
-    
+
     sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
     changeProgress()
@@ -186,7 +216,7 @@ function searchTokens(network) {
       value: (wallet[item.contractAddress] && wallet[item.contractAddress].value) ? wallet[item.contractAddress].value : '0'
     }
   })
-  
+
   Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
     setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 300)
   })
@@ -223,7 +253,7 @@ function displayWallet() {
     spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
     spanBalance.classList.add('balance')
     li.appendChild(spanBalance)
-    
+
     let spanValue = document.createElement('span')
     spanValue.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
     spanValue.classList.add('value')
@@ -262,6 +292,10 @@ const getWeb3 = (network) => {
         return web3_ethereum
       case NETWORK.POLYGON:
         return web3_polygon
+      case NETWORK.FANTOM:
+        return web3_fantom
+      case NETWORK.XDAI:
+        return web3_xdai
       case NETWORK.BSC:
         return web3_bsc
       default:
@@ -276,6 +310,10 @@ const getContract = (contractAddress, network) => {
         return new web3_ethereum.eth.Contract(minABI, contractAddress)
       case NETWORK.POLYGON:
         return new web3_polygon.eth.Contract(minABI, contractAddress)
+      case NETWORK.FANTOM:
+        return new web3_fantom.eth.Contract(minABI, contractAddress)
+      case NETWORK.XDAI:
+        return new web3_xdai.eth.Contract(minABI, contractAddress)
       case NETWORK.BSC:
         return new web3_bsc.eth.Contract(minABI, contractAddress)
       default:

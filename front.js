@@ -27,23 +27,35 @@ const DOMAIN_NAME = 'dexpairs.xyz'
 const BACKEND_URL = 'http://localhost:3000'
 
 
-// Pancake data
+// Pancake data - BSC
 let tokens_list = {}
 let top_tokens = {}
 let tokens_data = {}
 let tokens_charts = {}
 
-// Uniswap data
+// Uniswap data - Ethereum
 let uniswap_list = {}
 let uniswap_top = {}
 let uniswap_data = {}
 let uniswap_charts = {}
 
-// Sushiswap data
+// Sushiswap data - Polygon/Matic
 let sushiswap_list = {}
 let sushiswap_top = {}
 let sushiswap_data = {}
 let sushiswap_charts = {}
+
+// Spiritswap data - Fantom/Opera
+let spiritswap_list = {}
+let spiritswap_top = {}
+let spiritswap_data = {}
+let spiritswap_charts = {}
+
+// Honeyswap data - xDai
+let honeyswap_list = {}
+let honeyswap_top = {}
+let honeyswap_data = {}
+let honeyswap_charts = {}
 
 
 
@@ -114,13 +126,59 @@ function launchSushiswap() {
   setTimeout(function(){ launchSushiswap() }, getTimer())
 }
 
+// Program - Spiritswap
+function launchSpiritswap() {
+  fetch(BACKEND_URL + '/list/spiritswap')
+  .then(res => res.json())
+  .then(json => spiritswap_list = json)
+
+  fetch(BACKEND_URL + '/top/spiritswap')
+  .then(res => res.json())
+  .then(json => spiritswap_top = json)
+
+  fetch(BACKEND_URL + '/simple/spiritswap')
+  .then(res => res.json())
+  .then(json => spiritswap_data = json)
+
+  fetch(BACKEND_URL + '/charts/spiritswap')
+  .then(res => res.json())
+  .then(json => spiritswap_charts = json)
+
+  // loop
+  setTimeout(function(){ launchSpiritswap() }, getTimer())
+}
+
+// Program - Honeyswap
+function launchHoneyswap() {
+  fetch(BACKEND_URL + '/list/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_list = json)
+
+  fetch(BACKEND_URL + '/top/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_top = json)
+
+  fetch(BACKEND_URL + '/simple/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_data = json)
+
+  fetch(BACKEND_URL + '/charts/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_charts = json)
+
+  // loop
+  setTimeout(function(){ launchHoneyswap() }, getTimer())
+}
+
 
 
 
 /* MAIN */
-setTimeout(function(){ launchUniswap() }, 2000)
-setTimeout(function(){ launchSushiswap() }, 4000)
-setTimeout(function(){ launch() }, 6000)
+setTimeout(function(){ launchUniswap() }, 1000)
+setTimeout(function(){ launchSushiswap() }, 2000)
+setTimeout(function(){ launchSpiritswap() }, 3000)
+setTimeout(function(){ launchHoneyswap() }, 4000)
+setTimeout(function(){ launch() }, 50000)
 
 
 
@@ -204,8 +262,8 @@ app.get('(/uniswap)?/charts/:token/:base', (req, res) => {
   res.json(pair)
 })
 
-// Sushiswap URLs - Default
-app.get('(/sushiswap)?/token/:token', (req, res) => {
+// Sushiswap URLs
+app.get('/sushiswap/token/:token', (req, res) => {
   if(
     Object.keys(sushiswap_data).includes(req.params.token) ||
     Object.keys(sushiswap_data).findIndex(address => sushiswap_data[address].s === req.params.token) !== -1
@@ -218,16 +276,70 @@ app.get('(/sushiswap)?/token/:token', (req, res) => {
   }
 })
 
-app.get('(/sushiswap)?/list', (req, res) => res.json(listFilter(sushiswap_list, sushiswap_data)))
-app.get('(/sushiswap)?/top', (req, res) => res.json(sushiswap_top))
-app.get('(/sushiswap)?/simple', (req, res) => res.json(listFilter(sushiswap_data, sushiswap_data)))
-app.get('(/sushiswap)?/charts/:token', (req, res) => {
+app.get('/sushiswap/list', (req, res) => res.json(listFilter(sushiswap_list, sushiswap_data)))
+app.get('/sushiswap/top', (req, res) => res.json(sushiswap_top))
+app.get('/sushiswap/simple', (req, res) => res.json(listFilter(sushiswap_data, sushiswap_data)))
+app.get('/sushiswap/charts/:token', (req, res) => {
   res.json(sushiswap_charts[req.params.token])
 })
-app.get('(/sushiswap)?/charts/:token/:base', (req, res) => {
+app.get('/sushiswap/charts/:token/:base', (req, res) => {
   let pair = {}
   pair[req.params.token] = sushiswap_charts[req.params.token]
   pair[req.params.base] = sushiswap_charts[req.params.base]
+  res.json(pair)
+})
+
+// Spiritswap URLs
+app.get('/spiritswap/token/:token', (req, res) => {
+  if(
+    Object.keys(spiritswap_data).includes(req.params.token) ||
+    Object.keys(spiritswap_data).findIndex(address => spiritswap_data[address].s === req.params.token) !== -1
+  ) {
+    res.sendFile(path.join(__dirname, '/index.html'))
+  } else {
+    // TODO Improve error => redirect to homepage
+    res.writeHead(400, {'Content-Type': 'text/html'})
+    res.end('This token does not exist !')
+  }
+})
+
+app.get('/spiritswap/list', (req, res) => res.json(listFilter(spiritswap_list, spiritswap_data)))
+app.get('/spiritswap/top', (req, res) => res.json(spiritswap_top))
+app.get('/spiritswap/simple', (req, res) => res.json(listFilter(spiritswap_data, spiritswap_data)))
+app.get('/spiritswap/charts/:token', (req, res) => {
+  res.json(spiritswap_charts[req.params.token])
+})
+app.get('/spiritswap/charts/:token/:base', (req, res) => {
+  let pair = {}
+  pair[req.params.token] = spiritswap_charts[req.params.token]
+  pair[req.params.base] = spiritswap_charts[req.params.base]
+  res.json(pair)
+})
+
+// Honeyswap URLs
+app.get('/honeyswap/token/:token', (req, res) => {
+  if(
+    Object.keys(honeyswap_data).includes(req.params.token) ||
+    Object.keys(honeyswap_data).findIndex(address => honeyswap_data[address].s === req.params.token) !== -1
+  ) {
+    res.sendFile(path.join(__dirname, '/index.html'))
+  } else {
+    // TODO Improve error => redirect to homepage
+    res.writeHead(400, {'Content-Type': 'text/html'})
+    res.end('This token does not exist !')
+  }
+})
+
+app.get('/honeyswap/list', (req, res) => res.json(listFilter(honeyswap_list, honeyswap_data)))
+app.get('/honeyswap/top', (req, res) => res.json(honeyswap_top))
+app.get('/honeyswap/simple', (req, res) => res.json(listFilter(honeyswap_data, honeyswap_data)))
+app.get('/honeyswap/charts/:token', (req, res) => {
+  res.json(honeyswap_charts[req.params.token])
+})
+app.get('/honeyswap/charts/:token/:base', (req, res) => {
+  let pair = {}
+  pair[req.params.token] = honeyswap_charts[req.params.token]
+  pair[req.params.base] = honeyswap_charts[req.params.base]
   res.json(pair)
 })
 
