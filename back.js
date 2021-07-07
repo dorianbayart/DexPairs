@@ -378,7 +378,7 @@ async function launchUniswap() {
     uniswap_data_file = require(path.join(dir_home, 'uniswap-simple.json'))
     uniswap_charts_file = require(path.join(dir_home, 'uniswap-charts.json'))
     uniswap_volume_file = require(path.join(dir_home, 'uniswap-volume.json'))
-            
+
     uniswap_data = uniswap_data_file
     uniswap_charts = uniswap_charts_file
     uniswap_volume = uniswap_volume_file
@@ -389,7 +389,6 @@ async function launchUniswap() {
     uniswap_volume = {}
   }
 
-  
 
   uniswap_list = {}
 
@@ -444,16 +443,18 @@ async function launchUniswap() {
         }
       }
       if(uniswap_volume[address]) {
-        uniswap_volume[address].push({
-          t: time,
-          v: volumeUSD,
-        })
-        uniswap_volume[address] = uniswap_volume[address].slice(-VOLUME_SIZE)
-      } else {
-        uniswap_volume[address] = {
-          t: time,
-          v: volumeUSD,
+        if(time - uniswap_volume[address][uniswap_volume[address].length-1]['t'] > OFTEN) {
+          uniswap_volume[address].push({
+            t: time,
+            v: volumeUSD,
+          })
+          uniswap_volume[address] = uniswap_volume[address].slice(-VOLUME_SIZE)
         }
+      } else {
+        uniswap_volume[address] = [{
+          t: time,
+          v: volumeUSD,
+        }]
       }
       if(uniswap_charts[address].chart_4h) {
         if((time - uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
@@ -498,7 +499,7 @@ async function launchUniswap() {
         }]
       }
   })
-  
+
   // TODO Sort tokens depending on volume
 
   // build Top 25 list of Uniswap
@@ -547,7 +548,7 @@ async function launchUniswap() {
   writeFile( pathFile, JSON.stringify( uniswap_charts ), "utf8", (err) => {
     if (err) throw err;
   });
-  
+
   // Update the Uniswap volumeUSD
   pathFile = path.join(dir_home, 'uniswap-volume.json')
   writeFile( pathFile, JSON.stringify( uniswap_volume ), "utf8", (err) => {
@@ -564,15 +565,23 @@ async function launchSushiswap() {
 
   let sushiswap_data_file = {}
   let sushiswap_charts_file = {}
+  let sushiswap_volume_file = {}
   try {
     sushiswap_data_file = require(path.join(dir_home, 'sushiswap-simple.json'))
     sushiswap_charts_file = require(path.join(dir_home, 'sushiswap-charts.json'))
+    sushiswap_volume_file = require(path.join(dir_home, 'sushiswap-volume.json'))
+
+    sushiswap_data = sushiswap_data_file
+    sushiswap_charts = sushiswap_charts_file
+    sushiswap_volume = sushiswap_volume_file
   } catch(error) {
     // console.log(error)
+    sushiswap_data = {}
+    sushiswap_charts = {}
+    sushiswap_volume = {}
   }
 
-  sushiswap_data = sushiswap_data_file
-  sushiswap_charts = sushiswap_charts_file
+
 
   sushiswap_list = {}
 
@@ -593,6 +602,7 @@ async function launchSushiswap() {
       const name = token.name
       const price_ETH = token.derivedETH
       const price = price_ETH * eth_price
+      const volumeUSD = token.volumeUSD
 
       // create Sushiswap list
       sushiswap_list[address] = symbol
@@ -625,6 +635,20 @@ async function launchSushiswap() {
             p: price,
           }]
         }
+      }
+      if(sushiswap_volume[address]) {
+        if(time - sushiswap_volume[address][sushiswap_volume[address].length-1]['t'] > OFTEN) {
+          sushiswap_volume[address].push({
+            t: time,
+            v: volumeUSD,
+          })
+          sushiswap_volume[address] = sushiswap_volume[address].slice(-VOLUME_SIZE)
+        }
+      } else {
+        sushiswap_volume[address] = [{
+          t: time,
+          v: volumeUSD,
+        }]
       }
       if(sushiswap_charts[address].chart_4h) {
         if((time - sushiswap_charts[address].chart_4h[sushiswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
@@ -670,6 +694,7 @@ async function launchSushiswap() {
       }
   })
 
+  // TODO Sort tokens depending on volume
 
   // build Top 25 list of Sushiswap
   sushiswap_top = {}
@@ -718,6 +743,12 @@ async function launchSushiswap() {
     if (err) throw err;
   });
 
+  // Update the Sushiswap volumeUSD
+  pathFile = path.join(dir_home, 'sushiswap-volume.json')
+  writeFile( pathFile, JSON.stringify( sushiswap_volume ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
 }
 
 
@@ -728,13 +759,20 @@ async function launchSpiritswap() {
 
   let spiritswap_data_file = {}
   let spiritswap_charts_file = {}
+  let spiritswap_volume_file = {}
   try {
     spiritswap_data_file = require(path.join(dir_home, 'spiritswap-simple.json'))
     spiritswap_charts_file = require(path.join(dir_home, 'spiritswap-charts.json'))
+    spiritswap_volume_file = require(path.join(dir_home, 'spiritswap-volume.json'))
+
     spiritswap_data = spiritswap_data_file
     spiritswap_charts = spiritswap_charts_file
+    spiritswap_volume = spiritswap_volume_file
   } catch(error) {
     // console.log(error)
+    spiritswap_data = {}
+    spiritswap_charts = {}
+    spiritswap_volume = {}
   }
 
 
@@ -756,6 +794,7 @@ async function launchSpiritswap() {
       const name = token.name
       const price_FTM = token.derivedFTM
       const price = price_FTM * ftm_price
+      const volumeUSD = token.tradeVolumeUSD
 
       // create Spiritswap list
       spiritswap_list[address] = symbol
@@ -788,6 +827,20 @@ async function launchSpiritswap() {
             p: price,
           }]
         }
+      }
+      if(spiritswap_volume[address]) {
+        if(time - spiritswap_volume[address][spiritswap_volume[address].length-1]['t'] > OFTEN) {
+          spiritswap_volume[address].push({
+            t: time,
+            v: volumeUSD,
+          })
+          spiritswap_volume[address] = spiritswap_volume[address].slice(-VOLUME_SIZE)
+        }
+      } else {
+        spiritswap_volume[address] = [{
+          t: time,
+          v: volumeUSD,
+        }]
       }
       if(spiritswap_charts[address].chart_4h) {
         if((time - spiritswap_charts[address].chart_4h[spiritswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
@@ -833,6 +886,7 @@ async function launchSpiritswap() {
       }
   })
 
+  // TODO Sort tokens depending on volume
 
   // build Top 25 list of Spiritswap
   spiritswap_top = {}
@@ -881,6 +935,12 @@ async function launchSpiritswap() {
     if (err) throw err;
   });
 
+  // Update the Spiritswap volumeUSD
+  pathFile = path.join(dir_home, 'spiritswap-volume.json')
+  writeFile( pathFile, JSON.stringify( spiritswap_volume ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
 }
 
 
@@ -892,13 +952,20 @@ async function launchHoneyswap() {
 
   let honeyswap_data_file = {}
   let honeyswap_charts_file = {}
+  let honeyswap_volume_file = {}
   try {
     honeyswap_data_file = require(path.join(dir_home, 'honeyswap-simple.json'))
     honeyswap_charts_file = require(path.join(dir_home, 'honeyswap-charts.json'))
+    honeyswap_volume_file = require(path.join(dir_home, 'honeyswap-volume.json'))
+
     honeyswap_data = honeyswap_data_file
     honeyswap_charts = honeyswap_charts_file
+    honeyswap_volume = honeyswap_volume_file
   } catch(error) {
     // console.log(error)
+    honeyswap_data = {}
+    honeyswap_charts = {}
+    honeyswap_volume = {}
   }
 
 
@@ -920,6 +987,7 @@ async function launchHoneyswap() {
       const name = token.name
       const price_ETH = token.derivedETH
       const price = price_ETH * eth_price
+      const volumeUSD = token.tradeVolumeUSD
 
       // create Honeyswap list
       honeyswap_list[address] = symbol
@@ -952,6 +1020,20 @@ async function launchHoneyswap() {
             p: price,
           }]
         }
+      }
+      if(honeyswap_volume[address]) {
+        if(time - honeyswap_volume[address][honeyswap_volume[address].length-1]['t'] > OFTEN) {
+          honeyswap_volume[address].push({
+            t: time,
+            v: volumeUSD,
+          })
+          honeyswap_volume[address] = honeyswap_volume[address].slice(-VOLUME_SIZE)
+        }
+      } else {
+        honeyswap_volume[address] = [{
+          t: time,
+          v: volumeUSD,
+        }]
       }
       if(honeyswap_charts[address].chart_4h) {
         if((time - honeyswap_charts[address].chart_4h[honeyswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
@@ -997,6 +1079,7 @@ async function launchHoneyswap() {
       }
   })
 
+  // TODO Sort tokens depending on volume
 
   // build Top 25 list of Honeyswap
   honeyswap_top = {}
@@ -1045,6 +1128,12 @@ async function launchHoneyswap() {
     if (err) throw err;
   });
 
+  // Update the Honeyswap volumeUSD
+  pathFile = path.join(dir_home, 'honeyswap-volume.json')
+  writeFile( pathFile, JSON.stringify( honeyswap_volume ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
 }
 
 
@@ -1061,6 +1150,10 @@ setTimeout(function(){ launch() }, 10000)
 
 
 
+/* Useful - Sort a List depending on Volume */
+const sortTokensByVolume = (listToSort, listVolume) => {
+
+}
 
 
 
