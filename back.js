@@ -60,6 +60,12 @@ let sushiswap_top = {}
 let sushiswap_data = {}
 let sushiswap_charts = {}
 
+// Spiritswap data - Fantom/Opera
+let spiritswap_list = {}
+let spiritswap_top = {}
+let spiritswap_data = {}
+let spiritswap_charts = {}
+
 // Honeyswap data - xDai
 let honeyswap_list = {}
 let honeyswap_top = {}
@@ -141,11 +147,32 @@ async function getSushiswapTopTokens() {
   return await get("https://api.thegraph.com/subgraphs/name/sushiswap/matic-exchange", sushiswap_request)
 }
 
+// Get Spiritswap's top
+const spiritswap_request = `
+query
+  {
+    tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
+      id
+      name
+      symbol
+      derivedETH
+    }
+    bundle(id: "1" ) {
+      ethPrice
+    }
+  }
+`
+
+// Use TheGraph API - https://thegraph.com/explorer/subgraph/layer3org/spiritswap-analytics
+async function getSpiritTopTokens() {
+  return await get("https://api.thegraph.com/subgraphs/name/layer3org/spiritswap-analytics", spiritswap_request)
+}
+
 // Get Honeywap's top
 const honeyswap_request = `
 query
   {
-    tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { liquidity_gt: "10" } ) {
+    tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
       id
       name
       symbol
