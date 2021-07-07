@@ -497,23 +497,24 @@ async function launchUniswap() {
       }
   })
 
-  // TODO Sort tokens depending on volume
+  // Sort tokens depending on volume
+  uniswap_list = sortTokensByVolume(uniswap_list, uniswap_volume)
 
   // build Top 25 list of Uniswap
   uniswap_top = {}
   if(tokens.length > 0) {
     for (var i = 0; i < 25; i++) {
-      const token = tokens[i]
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_ETH = token.derivedETH
-      const price = price_ETH * eth_price
+      const address = Object.keys(uniswap_list)[i]
+      const symbol = uniswap_list[address]
+      const name = uniswap_data[address].n
+      const price = uniswap_data[address].p
+      const volume = uniswap_volume[address][uniswap_volume[address].length-1].v - uniswap_volume[address][0].v
 
       uniswap_top[address] = {
         s: symbol,
         n: name,
         p: price,
+        v: volume,
         chart: uniswap_charts[address].chart_often
       }
     }
@@ -688,23 +689,24 @@ async function launchSushiswap() {
       }
   })
 
-  // TODO Sort tokens depending on volume
+  // Sort tokens depending on volume
+  sushiswap_list = sortTokensByVolume(sushiswap_list, sushiswap_volume)
 
   // build Top 25 list of Sushiswap
   sushiswap_top = {}
   if(tokens.length > 0) {
     for (var i = 0; i < 25; i++) {
-      const token = tokens[i]
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_ETH = token.derivedETH
-      const price = price_ETH * eth_price
+      const address = Object.keys(sushiswap_list)[i]
+      const symbol = sushiswap_list[address]
+      const name = sushiswap_data[address].n
+      const price = sushiswap_data[address].p
+      const volume = sushiswap_volume[address][sushiswap_volume[address].length-1].v - sushiswap_volume[address][0].v
 
       sushiswap_top[address] = {
         s: symbol,
         n: name,
         p: price,
+        v: volume,
         chart: sushiswap_charts[address].chart_often
       }
     }
@@ -877,23 +879,24 @@ async function launchSpiritswap() {
       }
   })
 
-  // TODO Sort tokens depending on volume
+  // Sort tokens depending on volume
+  spiritswap_list = sortTokensByVolume(spiritswap_list, spiritswap_volume)
 
   // build Top 25 list of Spiritswap
   spiritswap_top = {}
   if(tokens.length > 0) {
     for (var i = 0; i < 25; i++) {
-      const token = tokens[i]
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_FTM = token.derivedFTM
-      const price = price_FTM * ftm_price
+      const address = Object.keys(spiritswap_list)[i]
+      const symbol = spiritswap_list[address]
+      const name = spiritswap_data[address].n
+      const price = spiritswap_data[address].p
+      const volume = spiritswap_volume[address][spiritswap_volume[address].length-1].v - spiritswap_volume[address][0].v
 
       spiritswap_top[address] = {
         s: symbol,
         n: name,
         p: price,
+        v: volume,
         chart: spiritswap_charts[address].chart_often
       }
     }
@@ -1067,23 +1070,24 @@ async function launchHoneyswap() {
       }
   })
 
-  // TODO Sort tokens depending on volume
+  // Sort tokens depending on volume
+  honeyswap_list = sortTokensByVolume(honeyswap_list, honeyswap_volume)
 
   // build Top 25 list of Honeyswap
   honeyswap_top = {}
   if(tokens.length > 0) {
     for (var i = 0; i < 25; i++) {
-      const token = tokens[i]
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_ETH = token.derivedETH
-      const price = price_ETH * eth_price
+      const address = Object.keys(honeyswap_list)[i]
+      const symbol = honeyswap_list[address]
+      const name = honeyswap_data[address].n
+      const price = honeyswap_data[address].p
+      const volume = honeyswap_volume[address][honeyswap_volume[address].length-1].v - honeyswap_volume[address][0].v
 
       honeyswap_top[address] = {
         s: symbol,
         n: name,
         p: price,
+        v: volume,
         chart: honeyswap_charts[address].chart_often
       }
     }
@@ -1140,7 +1144,17 @@ setTimeout(function(){ launch() }, 10000)
 
 /* Useful - Sort a List depending on Volume */
 const sortTokensByVolume = (listToSort, listVolume) => {
-
+  return Object.fromEntries(
+    Object.entries(listToSort).sort(
+      (a, b) => {
+        const addrA = a[0]
+        const addrB = b[0]
+        const volA = listVolume[addrA][listVolume[addrA].length-1].v - listVolume[addrA][0].v
+        const volB = listVolume[addrB][listVolume[addrB].length-1].v - listVolume[addrB][0].v
+        return volB - volA
+      }
+    )
+  )
 }
 
 
