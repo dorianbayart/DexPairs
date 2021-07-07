@@ -45,6 +45,12 @@ let sushiswap_top = {}
 let sushiswap_data = {}
 let sushiswap_charts = {}
 
+// Honeyswap data - xDai
+let honeyswap_list = {}
+let honeyswap_top = {}
+let honeyswap_data = {}
+let honeyswap_charts = {}
+
 
 
 
@@ -114,13 +120,36 @@ function launchSushiswap() {
   setTimeout(function(){ launchSushiswap() }, getTimer())
 }
 
+// Program - Honeyswap
+function launchHoneyswap() {
+  fetch(BACKEND_URL + '/list/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_list = json)
+
+  fetch(BACKEND_URL + '/top/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_top = json)
+
+  fetch(BACKEND_URL + '/simple/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_data = json)
+
+  fetch(BACKEND_URL + '/charts/honeyswap')
+  .then(res => res.json())
+  .then(json => honeyswap_charts = json)
+
+  // loop
+  setTimeout(function(){ launchHoneyswap() }, getTimer())
+}
+
 
 
 
 /* MAIN */
 setTimeout(function(){ launchUniswap() }, 2000)
 setTimeout(function(){ launchSushiswap() }, 4000)
-setTimeout(function(){ launch() }, 6000)
+setTimeout(function(){ launchHoneyswap() }, 6000)
+setTimeout(function(){ launch() }, 8000)
 
 
 
@@ -228,6 +257,33 @@ app.get('(/sushiswap)?/charts/:token/:base', (req, res) => {
   let pair = {}
   pair[req.params.token] = sushiswap_charts[req.params.token]
   pair[req.params.base] = sushiswap_charts[req.params.base]
+  res.json(pair)
+})
+
+// Honeyswap URLs - Default
+app.get('(/honeyswap)?/token/:token', (req, res) => {
+  if(
+    Object.keys(honeyswap_data).includes(req.params.token) ||
+    Object.keys(honeyswap_data).findIndex(address => honeyswap_data[address].s === req.params.token) !== -1
+  ) {
+    res.sendFile(path.join(__dirname, '/index.html'))
+  } else {
+    // TODO Improve error => redirect to homepage
+    res.writeHead(400, {'Content-Type': 'text/html'})
+    res.end('This token does not exist !')
+  }
+})
+
+app.get('(/honeyswap)?/list', (req, res) => res.json(listFilter(honeyswap_list, honeyswap_data)))
+app.get('(/honeyswap)?/top', (req, res) => res.json(honeyswap_top))
+app.get('(/honeyswap)?/simple', (req, res) => res.json(listFilter(honeyswap_data, honeyswap_data)))
+app.get('(/honeyswap)?/charts/:token', (req, res) => {
+  res.json(honeyswap_charts[req.params.token])
+})
+app.get('(/honeyswap)?/charts/:token/:base', (req, res) => {
+  let pair = {}
+  pair[req.params.token] = honeyswap_charts[req.params.token]
+  pair[req.params.base] = honeyswap_charts[req.params.base]
   res.json(pair)
 })
 
