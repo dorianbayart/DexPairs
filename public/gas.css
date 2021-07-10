@@ -41,7 +41,9 @@ ul.gas-list {
   text-align: right;
 }
 .gas-list li span.gas-value {
-  padding: 2px 3px 0;
+  padding: 1px 3px;
+  display: inline-flex;
+  align-items: baseline;
 }
 .gas-list li img {
   height: 100%;
