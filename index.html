@@ -13,6 +13,7 @@
   <script defer src="/lib/moment.min.js"></script>
   <script defer src="/lib/chart.min.js"></script>
   <script defer src="/lib/chartjs-adapter-moment.js"></script>
+  <script defer src="/lib/require.js"></script>
   <script defer src="/public/common.js"></script>
   <script defer src="/public/script.js"></script>
 
@@ -57,6 +58,19 @@
         </h2>
       </div>
     </div>
+  </div>
+
+  <div class='gas-container'>
+    <span class='gas-icon'>
+      <img src='https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/gas-station-icon.svg' alt="Gas Station Icon" title="Network current gas">
+    </span>
+    <ul class='gas-list'>
+      <li id='gas-ETHEREUM'>
+      <li id='gas-POLYGON'>
+      <li id='gas-FANTOM'>
+      <li id='gas-XDAI'>
+      <li id='gas-BSC'>
+    </ul>
   </div>
 
   <div id='dex-selection'>
@@ -131,8 +145,7 @@
   </footer>
 
 
-
-
+  <link rel="stylesheet" href="/public/gas.css">
   <link rel="stylesheet" href="/public/design.css">
   <link rel="stylesheet" href="/public/responsive.css">
   <link rel="stylesheet" href="/public/colors.css">

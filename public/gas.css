@@ -1,0 +1,48 @@
+.gas-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  margin-left: 24px;
+  margin-bottom: 1em;
+  background-color: #EEEE;
+  border-radius: 10px;
+  padding: 1px 1px 1px 6px;
+}
+.gas-container .gas-icon {
+  height: 1em;
+  margin-left: 3px;
+  margin-right: 6px;
+}
+.gas-container .gas-icon img {
+  height: 100%;
+}
+ul.gas-list {
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  list-style: none;
+}
+.gas-list li {
+  background-color: #FFFE;
+  border-radius: 8px;
+  padding: 3px;
+  margin: 3px;
+  height: 1em;
+  display: flex;
+  align-items: center;
+  min-width: 32px;
+}
+.gas-list li span {
+  height: 100%;
+}
+.gas-list li span.gas-network {
+  padding: 0 3px;
+  text-align: right;
+}
+.gas-list li span.gas-value {
+  padding: 2px 3px 0;
+}
+.gas-list li img {
+  height: 100%;
+}
