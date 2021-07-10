@@ -43,7 +43,7 @@ ul.gas-list {
   text-align: right;
 }
 .gas-list li span.gas-value {
-  padding: 0 3px;
+  padding: 2px 3px 0;
 }
 .gas-list li img {
   height: 100%;
