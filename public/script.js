@@ -674,13 +674,6 @@ function findAddressFromSymbol(symbol) {
   )
 }
 
-// Round number
-function precise(x) {
-  if(x > 9999) { return Math.round(x) }
-  else if(x > 0.0001) { return Number.parseFloat(x).toPrecision(5) }
-  return Number.parseFloat(x).toPrecision(2)
-}
-
 // Calculate percentage change of last 24h
 function getPercentage24h(chart) {
   const chart24h = extract24hChart(chart)

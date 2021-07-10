@@ -1,13 +1,7 @@
 
 const NETWORK = {
-  ETHEREUM: 'ETHEREUM',
-  POLYGON: 'POLYGON',
-  FANTOM: 'FANTOM',
-  XDAI: 'XDAI',
-  BSC: 'BSC'
-}
-const REQUESTS = {
   ETHEREUM: {
+    enum: 'ETHEREUM',
     name: 'Ethereum',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/ethereum-icon.svg',
     rpc: 'https://cloudflare-eth.com',
@@ -15,6 +9,7 @@ const REQUESTS = {
     tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   POLYGON: {
+    enum: 'POLYGON',
     name: 'Polygon/Matic',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/polygon-icon.svg',
     rpc: 'https://rpc-mainnet.maticvigil.com',
@@ -22,6 +17,7 @@ const REQUESTS = {
     tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   FANTOM: {
+    enum: 'FANTOM',
     name: 'Fantom/Opera',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/fantom-icon.svg',
     rpc: 'https://rpcapi.fantom.network',
@@ -29,6 +25,7 @@ const REQUESTS = {
     tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   XDAI: {
+    enum: 'XDAI',
     name: 'xDai',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/xdai-icon.svg',
     rpc: 'https://rpc.xdaichain.com/',
@@ -36,6 +33,7 @@ const REQUESTS = {
     tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
   },
   BSC : {
+    enum: 'BSC',
     name: 'Binance Smart Chain',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/bsc-icon.svg',
     rpc: 'https://bsc-dataseed.binance.org',
@@ -73,29 +71,38 @@ let wallet = {}
 
 
 const Web3 = require(['./lib/web3.min.js'], function(Web3) {
-  web3_ethereum = new Web3(REQUESTS.ETHEREUM.rpc)
-  web3_polygon = new Web3(REQUESTS.POLYGON.rpc)
-  web3_fantom = new Web3(REQUESTS.FANTOM.rpc)
-  web3_xdai = new Web3(REQUESTS.XDAI.rpc)
-  web3_bsc = new Web3(REQUESTS.BSC.rpc)
+  web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
+  web3_polygon = new Web3(NETWORK.POLYGON.rpc)
+  web3_fantom = new Web3(NETWORK.FANTOM.rpc)
+  web3_xdai = new Web3(NETWORK.XDAI.rpc)
+  web3_bsc = new Web3(NETWORK.BSC.rpc)
 
-  web3_ethereum.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on Ethereum: ' + web3_ethereum.utils.fromWei(gas, 'gwei'))
-  })
-  web3_polygon.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on Polygon: ' + web3_polygon.utils.fromWei(gas, 'gwei'))
-  })
-  web3_fantom.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on Fantom: ' + web3_fantom.utils.fromWei(gas, 'gwei'))
-  })
-  web3_xdai.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on xDai: ' + web3_xdai.utils.fromWei(gas, 'gwei'))
-  })
-  web3_bsc.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on BSC: ' + web3_bsc.utils.fromWei(gas, 'gwei'))
-  })
+  setTimeout(updateGas, 250)
 })
 
+
+const updateGas = () => {
+  setTimeout(updateGas, 15000)
+  Object.keys(NETWORK).forEach((network, i) => {
+    let web3 = getWeb3(NETWORK[network].enum)
+    if(web3) {
+      web3.eth.getGasPrice().then(gas => {
+        sessionStorage.setItem('gas-' + NETWORK[network].enum, gasRound(web3.utils.fromWei(gas, 'gwei')))
+        const li = document.getElementById('gas-' + NETWORK[network].enum)
+        li.innerHTML = ''
+        let span = document.createElement('span')
+        span.classList.add('gas-network')
+        span.appendChild(createNetworkImg(NETWORK[network].enum))
+        li.appendChild(span)
+        span = document.createElement('span')
+        span.classList.add('gas-value')
+        span.innerHTML = gasRound(web3.utils.fromWei(gas, 'gwei'))
+        li.appendChild(span)
+        li.title = gasRound(web3.utils.fromWei(gas, 'gwei')) + ' gwei on ' + NETWORK[network].name
+      })
+    }
+  });
+}
 
 
 // defines event on search field
@@ -130,11 +137,10 @@ function configureWallet(inputAddress) {
 
     walletAddress = inputAddress
 
-    getTokenTx(NETWORK.ETHEREUM)
-    getTokenTx(NETWORK.POLYGON)
-    getTokenTx(NETWORK.FANTOM)
-    getTokenTx(NETWORK.XDAI)
-    getTokenTx(NETWORK.BSC)
+    Object.keys(NETWORK).forEach((network, i) => {
+      getTokenTx(NETWORK[network].enum)
+    });
+
     sessionStorage.setItem('walletAddress', walletAddress)
   } else if (!inputContainer.classList.contains('margin-top')) {
     inputContainer.classList.add('margin-top')
@@ -155,7 +161,7 @@ function getTokenTx(network) {
       searchTokens(network)
     }
   }
-  xmlhttp.open("GET", REQUESTS[network].tokentx.replace('WALLET_ADDRESS', walletAddress), true)
+  xmlhttp.open("GET", NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress), true)
   xmlhttp.send()
 }
 
@@ -184,7 +190,7 @@ function getTokenBalance(contractAddress, network) {
       changeProgress()
     }
   }
-  xmlhttp.open("GET", REQUESTS[network].tokenbalance.replace('WALLET_ADDRESS', walletAddress).replace('CONTRACT_ADDRESS', contractAddress), true)
+  xmlhttp.open("GET", NETWORK[network].tokenbalance.replace('WALLET_ADDRESS', walletAddress).replace('CONTRACT_ADDRESS', contractAddress), true)
   xmlhttp.send()
 }
 
@@ -288,15 +294,15 @@ function initializeHTML() {
 /* Utils - Return the web3 to use depending on the network */
 const getWeb3 = (network) => {
   switch (network) {
-      case NETWORK.ETHEREUM:
+      case NETWORK.ETHEREUM.enum:
         return web3_ethereum
-      case NETWORK.POLYGON:
+      case NETWORK.POLYGON.enum:
         return web3_polygon
-      case NETWORK.FANTOM:
+      case NETWORK.FANTOM.enum:
         return web3_fantom
-      case NETWORK.XDAI:
+      case NETWORK.XDAI.enum:
         return web3_xdai
-      case NETWORK.BSC:
+      case NETWORK.BSC.enum:
         return web3_bsc
       default:
         return
@@ -306,15 +312,15 @@ const getWeb3 = (network) => {
 /* Utils - Return the Contract depending on the network */
 const getContract = (contractAddress, network) => {
   switch (network) {
-      case NETWORK.ETHEREUM:
+      case NETWORK.ETHEREUM.enum:
         return new web3_ethereum.eth.Contract(minABI, contractAddress)
-      case NETWORK.POLYGON:
+      case NETWORK.POLYGON.enum:
         return new web3_polygon.eth.Contract(minABI, contractAddress)
-      case NETWORK.FANTOM:
+      case NETWORK.FANTOM.enum:
         return new web3_fantom.eth.Contract(minABI, contractAddress)
-      case NETWORK.XDAI:
+      case NETWORK.XDAI.enum:
         return new web3_xdai.eth.Contract(minABI, contractAddress)
-      case NETWORK.BSC:
+      case NETWORK.BSC.enum:
         return new web3_bsc.eth.Contract(minABI, contractAddress)
       default:
         return
@@ -325,9 +331,9 @@ const getContract = (contractAddress, network) => {
 /* Utils - Create a document network img tag */
 const createNetworkImg = (network) => {
   let img = document.createElement('img')
-  img.src = REQUESTS[network].img
-  img.alt = REQUESTS[network].name + ' logo'
-  img.title = REQUESTS[network].name
+  img.src = NETWORK[network].img
+  img.alt = NETWORK[network].name + ' logo'
+  img.title = NETWORK[network].name
   img.classList.add('network')
   return img
 }
@@ -358,11 +364,4 @@ const displayBalance = (value, decimal) => {
   } else {
     return 0
   }
-}
-
-// Round number
-const precise = (x) => {
-  if(x > 9999) { return Math.round(x) }
-  else if(x > 0.0001) { return Number.parseFloat(x).toPrecision(5) }
-  return Number.parseFloat(x).toPrecision(2)
 }

@@ -40,3 +40,15 @@ document.getElementById('menu-wallet').addEventListener(
     location.href = '/wallet'
   }
 )
+
+
+// Round number
+const precise = (x) => {
+  if(x > 9999) { return Math.round(x) }
+  else if(x > 0.001) { return Math.round(10000*Number.parseFloat(x).toPrecision(4))/10000 }
+  return Number.parseFloat(x).toPrecision(2)
+}
+const gasRound = (x) => {
+  if(x > 9) { return Math.round(x) }
+  return Math.round(10 * x) / 10
+}

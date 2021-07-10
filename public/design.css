@@ -17,7 +17,7 @@ a, a:hover, a:visited, a:active {
 #header {
   display: flex;
   align-items: baseline;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 #title {
   cursor: pointer;

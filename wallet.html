@@ -14,8 +14,8 @@
   <script defer src="/lib/chart.min.js"></script>
   <script defer src="/lib/chartjs-adapter-moment.js"></script>
   <script defer src="/lib/require.js"></script>
-  <script defer src="/public/wallet.js"></script>
   <script defer src="/public/common.js"></script>
+  <script defer src="/public/wallet.js"></script>
 
   <link rel="shortcut icon" type="image/png" href="/public/graph-background-min.png">
 
@@ -60,6 +60,18 @@
     </div>
   </div>
 
+  <div class='gas-container'>
+    <span class='gas-icon'>
+      <img src='https://uxwing.com/wp-content/themes/uxwing/download/14-transportation/gas-station.svg' alt="Gas Station Icon" title="Network current gas">
+    </span>
+    <ul class='gas-list'>
+      <li id='gas-ETHEREUM'>
+      <li id='gas-POLYGON'>
+      <li id='gas-FANTOM'>
+      <li id='gas-XDAI'>
+      <li id='gas-BSC'>
+    </ul>
+  </div>
 
   <div id="input-wallet-container" class="margin-top">
     <input type='text' id='input-wallet' placeholder='Address'>
