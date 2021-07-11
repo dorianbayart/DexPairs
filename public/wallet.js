@@ -143,7 +143,7 @@ function getNetworkBalance(network) {
       tokenName: NETWORK[network].tokenName,
       tokenDecimal: NETWORK[network].tokenDecimal,
       value: balance,
-      price: getPriceByAddressNetwork(address, network)
+      price: getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
     }
   })
 }
