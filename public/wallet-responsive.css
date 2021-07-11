@@ -13,13 +13,13 @@
     margin: 0.25em 0.5em;
     padding: 0.5em 1em;
   }
-  
+
   #wallet {
     width: 75%;
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 460px) {
   #input-wallet-container.margin-top #input-wallet {
 
   }
@@ -28,7 +28,7 @@
     margin: 0.1em 0.25em;
     padding: 0.25em 1em;
   }
-  
+
   #wallet {
     width: 95%;
   }

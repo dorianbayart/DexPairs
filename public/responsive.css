@@ -134,7 +134,7 @@ header .version .low {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 460px) {
   html {
     font-size: 0.8em;
   }
