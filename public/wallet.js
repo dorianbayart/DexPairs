@@ -153,18 +153,7 @@ function getNetworkBalance(network) {
 function displayWallet() {
   document.getElementById('wallet').innerHTML = null;
   ul = document.createElement('ul')
-  const tokens = filteredWallet()
-    .sort(function(id_a, id_b) {
-      let a = wallet[id_a]
-      let b = wallet[id_b]
-      if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
-      if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
-      if(NETWORK[a.network].tokenContract === a.contract) return -1
-      if(NETWORK[b.network].tokenContract === b.contract) return 1
-      if(a.value * a.price > b.value * b.price) return -1
-      if(a.value * a.price < b.value * b.price) return 1
-      return 0
-    })
+  const tokens = filteredWallet().sort(sortWallet)
 
   tokens.forEach(function (id) {
     let li = document.createElement('li')
@@ -220,9 +209,9 @@ function initializeHTML() {
 
 function simpleDataTimers() {
   Object.keys(NETWORK).forEach((network, i) => {
-    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, Math.round((3*Math.random())*1000))
+    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 500)
   })
-  setTimeout(function(){ simpleDataTimers() }, Math.round((30*Math.random() + 45)*1000))
+  setTimeout(function(){ simpleDataTimers() }, 60000)
 }
 
 
@@ -244,7 +233,22 @@ const getContract = (contractAddress, network) => {
     }
 }
 
-
+/* Utils - sort the wallet */
+const sortWallet = (id_a, id_b) => {
+  let a = wallet[id_a]
+  let b = wallet[id_b]
+  // sort by network
+  if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
+  if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+  // then sort by token network (eg: Ethereum, Matic, etc are first)
+  if(NETWORK[a.network].tokenContract === a.contract) return -1
+  if(NETWORK[b.network].tokenContract === b.contract) return 1
+  // then sort by price value
+  if(a.value * a.price > b.value * b.price) return -1
+  if(a.value * a.price < b.value * b.price) return 1
+  // then sort by name
+  return a.tokenName.localeCompare(b.tokenName)
+}
 
 /* Utils - getId from Address and Network */
 const getId = (address, network) => {
