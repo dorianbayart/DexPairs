@@ -234,7 +234,7 @@ async function launch() {
       const address = token
       const symbol = tokens[token].symbol
       const name = tokens[token].name
-      const price = tokens[token].price
+      const price = Number.parseFloat(tokens[token].price)
 
       // create tokens list
       tokens_list[address] = symbol
@@ -316,7 +316,7 @@ async function launch() {
 
   // build Top 25 list
   top_tokens = {}
-  if(tokens.length > 0) {
+  if(Object.keys(tokens).length > 0) {
     for (var i = 0; i < 25; i++) {
       const token = Object.keys(tokens)[i]
       const address = token
