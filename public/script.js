@@ -1,4 +1,3 @@
-const server = 'http://185.212.226.82' // Empty for localhost
 
 let getListTimer, getTopTimer, getSimpleTimer
 let list = {}
@@ -126,7 +125,7 @@ function getTop() {
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
   xmlhttp.send()
 
-  getTopTimer = setTimeout(function(){ getTop() }, Math.round((20*Math.random() + 20)*1000));
+  getTopTimer = setTimeout(function(){ getTop() }, Math.round((20*Math.random() + 20)*1000))
 }
 
 
@@ -150,7 +149,7 @@ function getSimple() {
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
   xmlhttp.send()
 
-  getSimpleTimer = setTimeout(function(){ getSimple() }, Math.round((30*Math.random() + 45)*1000));
+  getSimpleTimer = setTimeout(function(){ getSimple() }, Math.round((30*Math.random() + 45)*1000))
 }
 
 
@@ -201,7 +200,7 @@ function updateList() {
     return
   }
 
-  let currentList = search.length > 0 ? filteredList : list;
+  let currentList = search.length > 0 ? filteredList : list
 
   document.getElementById('list').innerHTML = null;
   ul = document.createElement('ul')

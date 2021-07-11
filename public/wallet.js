@@ -27,13 +27,14 @@ function configureWallet(inputAddress) {
       wallet = {}
     }
 
-    Object.keys(wallet).forEach(address => {
-      wallet[address].upToDate = false
+    Object.keys(wallet).forEach(id => {
+      wallet[id].upToDate = false
     })
 
     walletAddress = inputAddress
 
     Object.keys(NETWORK).forEach((network, i) => {
+      getNetworkBalance(NETWORK[network].enum)
       getTokenTx(NETWORK[network].enum)
     });
 
@@ -64,7 +65,8 @@ function getTokenTx(network) {
 
 // get token balance - Not used
 function getTokenBalance(contractAddress, network) {
-  if(wallet[contractAddress].upToDate) {
+  const id = getId(contractAddress, network)
+  if(wallet[id].upToDate) {
     return
   }
 
@@ -78,12 +80,12 @@ function getTokenBalance(contractAddress, network) {
       }
       const tokenValue = data.result
 
-      wallet[contractAddress].value = tokenValue
-      wallet[contractAddress].upToDate = true
+      wallet[id].value = tokenValue
+      wallet[id].upToDate = true
 
       sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
-      changeProgress()
+      displayWallet()
     }
   }
   xmlhttp.open("GET", NETWORK[network].tokenbalance.replace('WALLET_ADDRESS', walletAddress).replace('CONTRACT_ADDRESS', contractAddress), true)
@@ -92,17 +94,21 @@ function getTokenBalance(contractAddress, network) {
 
 // Get token balance
 function getTokenBalanceWeb3(contractAddress, network) {
+  if(contractAddress === '0x0') return
+
+  const id = getId(contractAddress, network)
   // Get ERC20 Token contract instance
   let contract = getContract(contractAddress, network)
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
-    wallet[contractAddress].value = value
-    wallet[contractAddress].upToDate = true
+    wallet[id].value = value
+    wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
+    wallet[id].upToDate = true
 
     sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
-    changeProgress()
+    displayWallet()
   })
 }
 
@@ -110,17 +116,35 @@ function getTokenBalanceWeb3(contractAddress, network) {
 function searchTokens(network) {
   const tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
   tokentx.forEach((item, i) => {
-    wallet[item.contractAddress] = {
+    const id = getId(item.contractAddress, network)
+    wallet[id] = {
       network: network,
+      contract: item.contractAddress,
       tokenSymbol: item.tokenSymbol,
       tokenName: item.tokenName,
       tokenDecimal: item.tokenDecimal,
-      value: (wallet[item.contractAddress] && wallet[item.contractAddress].value) ? wallet[item.contractAddress].value : '0'
+      value: (wallet[id] && wallet[id].value) ? wallet[id].value : '0',
+      price: wallet[id] ? wallet[id].price : null
     }
   })
 
-  Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
-    setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 300)
+  Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
+    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 300)
+  })
+}
+
+function getNetworkBalance(network) {
+  getWeb3(network).eth.getBalance(walletAddress).then(balance => {
+    const address = NETWORK[network].tokenContract
+    wallet[getId(address, network)] = {
+      network: network,
+      contract: address,
+      tokenSymbol: NETWORK[network].tokenSymbol,
+      tokenName: NETWORK[network].tokenName,
+      tokenDecimal: NETWORK[network].tokenDecimal,
+      value: balance,
+      price: getPriceByAddressNetwork(address, network)
+    }
   })
 }
 
@@ -129,37 +153,43 @@ function searchTokens(network) {
 function displayWallet() {
   document.getElementById('wallet').innerHTML = null;
   ul = document.createElement('ul')
-  filteredWallet()
-    .sort(function(a, b) {
-      if(a.network === NETWORK.ETHEREUM && b.network !== NETWORK.ETHEREUM
-        || a.network === NETWORK.POLYGON && b.network === NETWORK.BSC) return -1
-      if(a.network === NETWORK.POLYGON && b.network === NETWORK.ETHEREUM
-        || a.network === NETWORK.BSC && b.network === NETWORK.POLYGON) return 1
+  const tokens = filteredWallet()
+    .sort(function(id_a, id_b) {
+      let a = wallet[id_a]
+      let b = wallet[id_b]
+      if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
+      if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+      if(NETWORK[a.network].tokenContract === a.contract) return -1
+      if(NETWORK[b.network].tokenContract === b.contract) return 1
+      if(a.value * a.price > b.value * b.price) return -1
+      if(a.value * a.price < b.value * b.price) return 1
       return 0
     })
-    .forEach(function (token) {
+
+  tokens.forEach(function (id) {
     let li = document.createElement('li')
-    li.title = (wallet[token.address].tokenName && wallet[token.address].tokenName !== '') ? wallet[token.address].tokenName : wallet[token.address].tokenSymbol
+    li.title = (wallet[id].tokenName && wallet[id].tokenName !== '') ? wallet[id].tokenName : wallet[id].tokenSymbol
 
     let spanNetwork = document.createElement('span')
     spanNetwork.classList.add('network')
-    spanNetwork.appendChild(createNetworkImg(wallet[token.address].network))
+    spanNetwork.appendChild(createNetworkImg(wallet[id].network))
     li.appendChild(spanNetwork)
 
     let spanSymbol = document.createElement('span')
-    spanSymbol.innerHTML = (wallet[token.address].tokenName && wallet[token.address].tokenName !== '') ? wallet[token.address].tokenName : wallet[token.address].tokenSymbol
+    spanSymbol.innerHTML = (wallet[id].tokenName && wallet[id].tokenName !== '') ? wallet[id].tokenName : wallet[id].tokenSymbol
     spanSymbol.classList.add('symbol')
     li.appendChild(spanSymbol)
 
     let spanBalance = document.createElement('span')
-    spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
+    spanBalance.innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
     spanBalance.classList.add('balance')
     li.appendChild(spanBalance)
 
     let spanValue = document.createElement('span')
-    spanValue.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
+    let price = wallet[id].price
+    spanValue.innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
     spanValue.classList.add('value')
-    li.appendChild(spanBalance)
+    li.appendChild(spanValue)
 
     ul.appendChild(li)
 
@@ -167,13 +197,15 @@ function displayWallet() {
 
     })
   })
-  document.getElementById('wallet').appendChild(ul)
+
+  if(tokens.length > 0) document.getElementById('wallet').appendChild(ul)
 }
 
 
 
 /* MAIN */
 initializeHTML()
+simpleDataTimers()
 
 
 
@@ -184,6 +216,13 @@ function initializeHTML() {
     document.getElementById('input-wallet').value = address
     configureWallet(address)
   }
+}
+
+function simpleDataTimers() {
+  Object.keys(NETWORK).forEach((network, i) => {
+    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, Math.round((3*Math.random())*1000))
+  })
+  setTimeout(function(){ simpleDataTimers() }, Math.round((30*Math.random() + 45)*1000))
 }
 
 
@@ -207,23 +246,15 @@ const getContract = (contractAddress, network) => {
 
 
 
-
-/* Utils - Progress Bar */
-const changeProgress = () => {
-  const progressbar = document.getElementById('progress-bar');
-  const width = Object.keys(wallet).filter(address => wallet[address].upToDate).length / Object.keys(wallet).length * 100
-  progressbar.style.width = `${width}%`
-
-  displayWallet()
-};
+/* Utils - getId from Address and Network */
+const getId = (address, network) => {
+  return network + '-' + address
+}
 
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
   const filtered = Object.keys(wallet)
-    .filter(address => wallet[address].value && wallet[address].value !== '0')
-    .map(
-      address => ({ address: address, ...wallet[address] })
-    )
+    .filter(id => wallet[id].value && wallet[id].value !== '0')
   return filtered
 }
 

@@ -20,46 +20,78 @@ const COLOR_THEMES = {
   }
 }
 
+const server = 'http://185.212.226.82' // Empty for localhost
+
 const NETWORK = {
   ETHEREUM: {
+    order: 1,
     enum: 'ETHEREUM',
     name: 'Ethereum',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/ethereum-icon.svg',
     rpc: 'https://cloudflare-eth.com',
     tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
+    tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+    url_data: server,
+    tokenContract: '0x0',
+    tokenSymbol: 'ETH',
+    tokenName: 'Ethereum',
+    tokenDecimal: 18,
   },
   POLYGON: {
+    order: 2,
     enum: 'POLYGON',
     name: 'Polygon/Matic',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/polygon-icon.svg',
     rpc: 'https://rpc-mainnet.maticvigil.com',
     tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
+    tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+    url_data: server + '/sushiswap',
+    tokenContract: '0x0',
+    tokenSymbol: 'MATIC',
+    tokenName: 'Matic',
+    tokenDecimal: 18,
   },
   FANTOM: {
+    order: 3,
     enum: 'FANTOM',
     name: 'Fantom/Opera',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/fantom-icon.svg',
     rpc: 'https://rpcapi.fantom.network',
     tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
+    tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+    url_data: server + '/spiritswap',
+    tokenContract: '0x0',
+    tokenSymbol: 'FTM',
+    tokenName: 'Fantom',
+    tokenDecimal: 18,
   },
   XDAI: {
+    order: 4,
     enum: 'XDAI',
     name: 'xDai',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/xdai-icon.svg',
     rpc: 'https://rpc.xdaichain.com/',
     tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
+    tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+    url_data: server + '/honeyswap',
+    tokenContract: '0x0',
+    tokenSymbol: 'XDAI',
+    tokenName: 'xDai',
+    tokenDecimal: 18,
   },
   BSC : {
+    order: 5,
     enum: 'BSC',
     name: 'Binance Smart Chain',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/bsc-icon.svg',
     rpc: 'https://bsc-dataseed.binance.org',
     tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
+    tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+    url_data: server + '/pancake',
+    tokenContract: '0x0',
+    tokenSymbol: 'BNB',
+    tokenName: 'BNB',
+    tokenDecimal: 18,
   }
 }
 
@@ -91,7 +123,7 @@ let walletAddress = ''
 let wallet = {}
 
 
-const Web3 = require(['./lib/web3.min.js'], function(Web3) {
+const Web3 = require(['http://www.dexpairs.xyz/lib/web3.min.js'], function(Web3) {
   web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
   web3_polygon = new Web3(NETWORK.POLYGON.rpc)
   web3_fantom = new Web3(NETWORK.FANTOM.rpc)
@@ -103,7 +135,7 @@ const Web3 = require(['./lib/web3.min.js'], function(Web3) {
 
 
 const updateGas = () => {
-  setTimeout(updateGas, 15000)
+  setTimeout(updateGas, 20000)
   Object.keys(NETWORK).forEach((network, i) => {
     let web3 = getWeb3(NETWORK[network].enum)
     if(web3) {
@@ -128,6 +160,28 @@ const updateGas = () => {
 
 
 
+
+// get simple data prices
+// param: network
+function getSimpleData(network, callback) {
+  xmlhttp = new XMLHttpRequest()
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      const simple = JSON.parse(this.responseText)
+      if(simple && Object.keys(simple).length > 0) {
+        sessionStorage.setItem('simple-' + network, JSON.stringify(simple))
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
+    }
+  }
+  xmlhttp.open("GET", NETWORK[network].url_data + "/simple", true)
+  xmlhttp.send()
+}
+
+
 // OnClick on Header => Goto root url
 document.getElementById('title').addEventListener(
   "click", function(e) {
@@ -146,6 +200,7 @@ document.getElementById('menu-wallet').addEventListener(
     location.href = '/wallet'
   }
 )
+
 
 
 
@@ -175,6 +230,15 @@ const createNetworkImg = (network) => {
   img.title = NETWORK[network].name
   img.classList.add('network')
   return img
+}
+
+
+/* Utils - Get Price of Address on Network */
+const getPriceByAddressNetwork = (address, network) => {
+  let prices = JSON.parse(sessionStorage.getItem('simple-' + network))
+  if(Object.keys(prices).length > 0) {
+    return prices[address] ? prices[address].p : null
+  }
 }
 
 

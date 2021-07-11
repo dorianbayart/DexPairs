@@ -63,7 +63,12 @@
 }
 #wallet ul li span.balance {
   text-align: end;
-  width: 30%;
+  width: 20%;
+}
+#wallet ul li span.value {
+  text-align: end;
+  width: 20%;
+  font-size: smaller;
 }
 
 
