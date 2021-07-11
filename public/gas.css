@@ -44,7 +44,22 @@ ul.gas-list {
   padding: 1px 3px;
   display: inline-flex;
   align-items: baseline;
+  line-height: 1.2em;
 }
 .gas-list li img {
   height: 100%;
+}
+
+@media (max-width: 800px) {
+  .gas-list li span.gas-value {
+    font-size: 0.9em;
+    line-height: 1.25em;
+  }
+}
+
+@media (max-width: 400px) {
+  .gas-list li span.gas-value {
+    font-size: 0.8em;
+    line-height: 1.3em;
+  }
 }
