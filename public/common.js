@@ -53,8 +53,23 @@ const NETWORK = {
     tokenDecimal: 18,
     tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   },
-  FANTOM: {
+  BSC : {
     order: 3,
+    enum: 'BSC',
+    name: 'Binance Smart Chain',
+    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/bsc-icon.svg',
+    rpc: 'https://bsc-dataseed.binance.org',
+    tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+    url_data: server + '/pancake',
+    tokenContract: '0x0',
+    tokenSymbol: 'BNB',
+    tokenName: 'BNB',
+    tokenDecimal: 18,
+    tokenPriceContract: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+  },
+  FANTOM: {
+    order: 4,
     enum: 'FANTOM',
     name: 'Fantom/Opera',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/fantom-icon.svg',
@@ -69,7 +84,7 @@ const NETWORK = {
     tokenPriceContract: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'
   },
   XDAI: {
-    order: 4,
+    order: 5,
     enum: 'XDAI',
     name: 'xDai',
     img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/xdai-icon.svg',
@@ -83,21 +98,6 @@ const NETWORK = {
     tokenDecimal: 18,
     tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
   },
-  BSC : {
-    order: 5,
-    enum: 'BSC',
-    name: 'Binance Smart Chain',
-    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/bsc-icon.svg',
-    rpc: 'https://bsc-dataseed.binance.org',
-    tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-    url_data: server + '/pancake',
-    tokenContract: '0x0',
-    tokenSymbol: 'BNB',
-    tokenName: 'BNB',
-    tokenDecimal: 18,
-    tokenPriceContract: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-  }
 }
 
 const minABI = [
@@ -187,24 +187,6 @@ function getSimpleData(network, callback) {
 }
 
 
-// OnClick on Header => Goto root url
-document.getElementById('title').addEventListener(
-  "click", function(e) {
-    location.href = '/'
-  }
-)
-
-document.getElementById('menu-charts').addEventListener(
-  "click", function(e) {
-    location.href = '/'
-  }
-)
-
-document.getElementById('menu-wallet').addEventListener(
-  "click", function(e) {
-    location.href = '/wallet'
-  }
-)
 
 
 

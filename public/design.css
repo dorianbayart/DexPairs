@@ -29,7 +29,7 @@ header {
 header:hover {
   opacity: 0.6;
 }
-header h1 a {
+header h1 {
   display: inline-flex;
   align-items: baseline;
 }

@@ -37,6 +37,18 @@ let dexList = {
       base: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
     }
   },
+  PANCAKESWAP: {
+    name: 'PancakeSwap',
+    chain: 'Binance Smart Chain',
+    url: 'https://pancakeswap.finance/',
+    url_swap: 'https://exchange.pancakeswap.finance/#/swap',
+    url_data: server + '/pancake',
+    explorer: 'https://bscscan.com/token/',
+    tokens: {
+      token: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      base: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
+    }
+  },
   SPIRITSWAP: {
     name: 'SpiritSwap',
     chain: 'Fantom/Opera',
@@ -59,19 +71,6 @@ let dexList = {
     tokens: {
       token: '0x71850b7e9ee3f13ab46d67167341e4bdc905eef9',
       base: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
-    }
-  },
-  PANCAKESWAP: {
-    disabled: 'true',
-    name: 'PancakeSwap',
-    chain: 'Binance Smart Chain',
-    url: 'https://pancakeswap.finance/',
-    url_swap: 'https://exchange.pancakeswap.finance/#/swap',
-    url_data: server + '/pancake',
-    explorer: 'https://bscscan.com/token/',
-    tokens: {
-      token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-      base: '0x55d398326f99059ff775485246999027b3197955'
     }
   },
 }
