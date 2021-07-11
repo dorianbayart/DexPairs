@@ -322,7 +322,7 @@ async function launch() {
       const address = token
       const symbol = tokens[token].symbol
       const name = tokens[token].name
-      const price = tokens[token].price
+      const price = Number.parseFloat(tokens[token].price)
 
       top_tokens[address] = {
         s: symbol,
