@@ -44,6 +44,7 @@ header .version .low {
   font-size: initial;
 }
 #list {
+  height: 420px;
   margin: 0.5em 1em;
   padding: 1em;
 }
@@ -106,7 +107,7 @@ header .version .low {
   #list {
     margin: 0.25em 0.5em;
     padding: 0.5em;
-    height: 12vh;
+    height: 96px;
   }
   #list li {
     display: inline-flex;
@@ -161,10 +162,10 @@ header .version .low {
   #list {
     margin: 0.1em 0.25em;
     padding: 0.25em;
-    height: 14vh;
+    height: 80px;
   }
   #list li {
-    padding: 10px;
+    padding: 8px;
   }
   #token, #base {
     margin: 0.1em 0.25em;
