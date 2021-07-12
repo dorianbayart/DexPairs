@@ -234,9 +234,6 @@ const createNetworkImg = (network) => {
 
 /* Utils - Get Price of Address on Network */
 const getPriceByAddressNetwork = (address, network) => {
-  if(network === 'BSC') {
-    address = web3_bsc.utils.toChecksumAddress(address)
-  }
   let prices = JSON.parse(sessionStorage.getItem('simple-' + network))
   if(Object.keys(prices).length > 0) {
     return prices[address] ? prices[address].p : null
