@@ -21,14 +21,12 @@ a, a:hover, a:visited, a:active {
 }
 #title {
   cursor: pointer;
-}
-
-header {
   transition: all 250ms ease-in-out;
 }
-header:hover {
+#title:hover {
   opacity: 0.6;
 }
+
 header h1 {
   display: inline-flex;
   align-items: baseline;
