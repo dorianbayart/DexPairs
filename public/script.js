@@ -45,8 +45,8 @@ let dexList = {
     url_data: server + '/pancake',
     explorer: 'https://bscscan.com/token/',
     tokens: {
-      token: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-      base: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'
+      token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+      base: '0xe9e7cea3dedca5984780bafc599bd69add087d56'
     }
   },
   SPIRITSWAP: {
