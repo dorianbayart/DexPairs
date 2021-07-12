@@ -178,7 +178,7 @@ setTimeout(function(){ launchUniswap() }, 1000)
 setTimeout(function(){ launchSushiswap() }, 2000)
 setTimeout(function(){ launchSpiritswap() }, 3000)
 setTimeout(function(){ launchHoneyswap() }, 4000)
-setTimeout(function(){ launch() }, 50000)
+setTimeout(function(){ launch() }, 5000)
 
 
 
@@ -363,7 +363,7 @@ function listFilter(list, listWithPrices) {
   return filtered_list
 }
 
-// useful Math.random timer - between 15 and 30 seconds
+// useful Math.random timer - between 5 and 15 seconds
 function getTimer() {
-   return Math.round((15*Math.random() + 15)*1000)
+   return Math.round((10*Math.random() + 5)*1000)
 }
