@@ -61,7 +61,6 @@ header .version .low {
 #chart {
   margin: 0.5em 1em 1em;
   padding: 0.25em;
-  max-height: 45vh;
 }
 #source {
   margin-top: 2em;
@@ -123,7 +122,6 @@ header .version .low {
   #chart {
     margin: 0.25em 0.5em 1em;
     padding: 0.5em;
-    max-height: 45vh;
   }
   #source {
     margin-top: 1.25em;
@@ -176,7 +174,6 @@ header .version .low {
   }
   #chart {
     margin: 0.1em 0.25em 1em;
-    max-height: 50vh;
   }
   #source {
     margin-top: 0.5em;
