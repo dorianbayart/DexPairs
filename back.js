@@ -234,7 +234,8 @@ async function launch() {
     tokens_charts = tokens_charts_file
     pancakeswap_volume = pancakeswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
@@ -429,7 +430,8 @@ async function launchUniswap() {
     uniswap_charts = uniswap_charts_file
     uniswap_volume = uniswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
@@ -619,7 +621,8 @@ async function launchSushiswap() {
     sushiswap_charts = sushiswap_charts_file
     sushiswap_volume = sushiswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
@@ -811,7 +814,8 @@ async function launchSpiritswap() {
     spiritswap_charts = spiritswap_charts_file
     spiritswap_volume = spiritswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
@@ -1002,7 +1006,8 @@ async function launchHoneyswap() {
     honeyswap_charts = honeyswap_charts_file
     honeyswap_volume = honeyswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
