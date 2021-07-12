@@ -34,6 +34,7 @@ header .version .low {
 }
 #top {
   font-size: 0.85em;
+  min-height: 96px;
 }
 .top-token {
   padding: 0.25em 1em;
@@ -84,6 +85,9 @@ header .version .low {
   #menu {
     padding: 6px 12px;
     width: 75%;
+  }
+  #top {
+    min-height: 145px;
   }
   .top-column {
     width: 50%;
@@ -147,11 +151,10 @@ header .version .low {
   }
   #top {
     flex-wrap: wrap;
+    min-height: 280px;
   }
   .top-column {
     width: 100%;
-  }
-  .top-token {
   }
   #search_field {
     margin: 0.1em 0.25em;
