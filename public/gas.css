@@ -47,11 +47,10 @@ ul.gas-list {
   line-height: 1.2em;
 }
 .gas-list li img {
-  height: 100%;
-  max-width: 1.5em;
+  max-width: 2em;
   max-height: 100%;
   width: auto;
-  height: auto;
+  height: 100%;
 }
 
 @media (max-width: 800px) {
