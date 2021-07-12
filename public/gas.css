@@ -15,10 +15,7 @@
   margin-right: 6px;
 }
 .gas-container .gas-icon img {
-  max-width: 1.5em;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  height: 100%;
 }
 ul.gas-list {
   margin: 0;
@@ -51,6 +48,10 @@ ul.gas-list {
 }
 .gas-list li img {
   height: 100%;
+  max-width: 1.5em;
+  max-height: 100%;
+  width: auto;
+  height: auto;
 }
 
 @media (max-width: 800px) {
