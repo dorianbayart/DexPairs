@@ -136,31 +136,40 @@ const Web3 = require(['http://www.dexpairs.xyz/lib/web3.min.js'], function(Web3)
   web3_xdai = new Web3(NETWORK.XDAI.rpc)
   web3_bsc = new Web3(NETWORK.BSC.rpc)
 
-  setTimeout(updateGas, 250)
+  setTimeout(setGas(NETWORK.ETHEREUM.enum), 200)
+  setTimeout(setGas(NETWORK.POLYGON.enum), 400)
+  setTimeout(setGas(NETWORK.BSC.enum), 600)
+  setTimeout(setGas(NETWORK.FANTOM.enum), 800)
+  setTimeout(setGas(NETWORK.XDAI.enum), 1000)
+  setTimeout(updateGas, 2500)
 })
 
 
 const updateGas = () => {
-  setTimeout(updateGas, 20000)
-  Object.keys(NETWORK).forEach((network, i) => {
-    let web3 = getWeb3(NETWORK[network].enum)
-    if(web3) {
-      web3.eth.getGasPrice().then(gas => {
-        sessionStorage.setItem('gas-' + NETWORK[network].enum, gasRound(web3.utils.fromWei(gas, 'gwei')))
-        const li = document.getElementById('gas-' + NETWORK[network].enum)
-        li.innerHTML = ''
-        let span = document.createElement('span')
-        span.classList.add('gas-network')
-        span.appendChild(createNetworkImg(NETWORK[network].enum))
-        li.appendChild(span)
-        span = document.createElement('span')
-        span.classList.add('gas-value')
-        span.innerHTML = gasRound(web3.utils.fromWei(gas, 'gwei'))
-        li.appendChild(span)
-        li.title = gasRound(web3.utils.fromWei(gas, 'gwei')) + ' gwei on ' + NETWORK[network].name
-      })
-    }
-  });
+  setTimeout(updateGas, 2500)
+  // randomly select a network to update gas
+  let network = Object.keys(NETWORK)[Math.round((90*Math.random() + 180)*1000)]
+  setGas(network)
+}
+
+const setGas = (network) => {
+  let web3 = getWeb3(NETWORK[network].enum)
+  if(web3) {
+    web3.eth.getGasPrice().then(gas => {
+      sessionStorage.setItem('gas-' + NETWORK[network].enum, gasRound(web3.utils.fromWei(gas, 'gwei')))
+      const li = document.getElementById('gas-' + NETWORK[network].enum)
+      li.innerHTML = ''
+      let span = document.createElement('span')
+      span.classList.add('gas-network')
+      span.appendChild(createNetworkImg(NETWORK[network].enum))
+      li.appendChild(span)
+      span = document.createElement('span')
+      span.classList.add('gas-value')
+      span.innerHTML = gasRound(web3.utils.fromWei(gas, 'gwei'))
+      li.appendChild(span)
+      li.title = gasRound(web3.utils.fromWei(gas, 'gwei')) + ' gwei on ' + NETWORK[network].name
+    })
+  }
 }
 
 
