@@ -15,7 +15,7 @@ function configureWallet(inputAddress) {
   if(inputAddress === walletAddress) { return }
 
   if(!web3_ethereum) {
-    setTimeout(function(){ configureWallet(inputAddress) }, 500)
+    setTimeout(function(){ configureWallet(inputAddress) }, 400)
     return
   }
 
@@ -129,7 +129,7 @@ function searchTokens(network) {
   })
 
   Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
-    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 300)
+    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 100)
   })
 }
 
