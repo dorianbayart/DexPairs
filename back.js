@@ -358,8 +358,8 @@ async function launch() {
     for (var i = 0; i < 25; i++) {
       const address = Object.keys(tokens_list)[i]
       const symbol = tokens_list[address]
-      const name = tokens_list[address].n
-      const price = tokens_list[address].p
+      const name = tokens_data[address].n
+      const price = tokens_data[address].p
       const volume = pancakeswap_volume[address][pancakeswap_volume[address].length-1].v - pancakeswap_volume[address][0].v
 
       top_tokens[address] = {
