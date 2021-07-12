@@ -148,7 +148,7 @@ const Web3 = require(['http://www.dexpairs.xyz/lib/web3.min.js'], function(Web3)
 const updateGas = () => {
   setTimeout(updateGas, 2500)
   // randomly select a network to update gas
-  let network = Object.keys(NETWORK)[Math.round((90*Math.random() + 180)*1000)]
+  let network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
   setGas(network)
 }
 
