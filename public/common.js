@@ -213,8 +213,8 @@ const getWeb3 = (network) => {
 const createNetworkImg = (network) => {
   let img = document.createElement('img')
   img.src = NETWORK[network].img
-  img.width = "1.2em"
-  img.height = "1em"
+  img.width = "32px"
+  img.height = "100%"
   img.alt = NETWORK[network].name + ' logo'
   img.title = NETWORK[network].name
   img.classList.add('network')
