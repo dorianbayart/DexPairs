@@ -95,6 +95,7 @@ header .version {
   max-width: 1024px;
   border-radius: 12px;
   padding: 4px;
+  transition: all 500ms ease-in-out;
 }
 #top::after {
   content: "";
@@ -142,6 +143,7 @@ header .version {
   overflow-x: hidden;
   border: 1px solid #CCC;
   border-radius: 12px;
+  transition: all 500ms ease-in-out;
 }
 #list ul {
   list-style: none;
