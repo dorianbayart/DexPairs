@@ -66,7 +66,7 @@ const NETWORK = {
     tokenSymbol: 'BNB',
     tokenName: 'BNB',
     tokenDecimal: 18,
-    tokenPriceContract: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+    tokenPriceContract: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
   },
   FANTOM: {
     order: 4,
