@@ -128,6 +128,7 @@ let walletAddress = ''
 let wallet = {}
 
 
+require.config({ waitSeconds: 0 })
 const Web3 = require(['http://www.dexpairs.xyz/lib/web3.min.js'], function(Web3) {
   web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
   web3_polygon = new Web3(NETWORK.POLYGON.rpc)
