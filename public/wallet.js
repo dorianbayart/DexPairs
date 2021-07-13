@@ -265,7 +265,7 @@ const filteredWallet = () => {
 /* Utils - Display balance from value */
 const displayBalance = (value, decimal) => {
   if(value && value > 0) {
-    return Number.parseFloat(precise(value * Math.pow(10, -decimal)))
+    return precise(value * Math.pow(10, -decimal))
   } else {
     return 0
   }
