@@ -244,11 +244,9 @@ const getPriceByAddressNetwork = (address, network) => {
 // Round number
 const precise = (x) => {
   if(x > 999) { return Math.round(x) }
-  else if(x > 19) { return Math.round(10*x)/10 }
-  else if(x > 0.9) { return Math.round(100*x)/100 }
-  else if(x > 0.09) { return Math.round(1000*x)/1000 }
-  else if(x > 0.009) { return Math.round(10000*x)/10000 }
-  else if(x > 0.0009) { return Math.round(100000*x)/100000 }
+  else if(x > 99) { return Math.round(10*x)/10 }
+  else if(x > 1.09) { return Math.round(100*x)/100 }
+  else if(x > 0.001) { return Math.round(10000*x)/10000 }
   return Number.parseFloat(x).toPrecision(2)
 }
 const gasRound = (x) => {
