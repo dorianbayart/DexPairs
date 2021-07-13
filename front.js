@@ -363,7 +363,7 @@ function listFilter(list, listWithPrices) {
   return filtered_list
 }
 
-// useful Math.random timer - between 5 and 15 seconds
+// useful Math.random timer - between 8 and 20 seconds
 function getTimer() {
-   return Math.round((10*Math.random() + 5)*1000)
+   return Math.round((12*Math.random() + 8)*1000)
 }
