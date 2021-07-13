@@ -32,13 +32,15 @@ const dir_home = os.homedir()
 console.log(dir_home)
 
 
-const HISTORY_SIZE = 120
 const VOLUME_SIZE = 10
 const REALTIME = 20000 // 20 seconds
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAYS = 259200000 // 3 days
 const WEEK = 604800000 // 1 week
+const HISTORY_SIZE = 120
+const HISTORY_SIZE_24H = 96 // 24h / 15min
+const TOP_SIZE = 10
 
 
 /* DexPairs */
@@ -360,10 +362,10 @@ async function launch() {
   // Sort tokens depending on volume
   tokens_list = sortTokensByVolume(tokens_list, pancakeswap_volume)
 
-  // build Top 25 list
+  // build Top 10 list
   top_tokens = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(tokens_list)[i]
       const symbol = tokens_list[address]
       const name = tokens_data[address].n
@@ -375,7 +377,7 @@ async function launch() {
         n: name,
         p: price,
         v: volume,
-        chart: tokens_charts[address].chart_often
+        chart: tokens_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -392,7 +394,7 @@ async function launch() {
     if (err) throw err;
   });
 
-  // Update the top 25 tokens list
+  // Update the Top 10 tokens list
   pathFile = path.join(dir_home, 'pancake-top.json')
   writeFile( pathFile, JSON.stringify( top_tokens ), "utf8", (err) => {
     if (err) throw err;
@@ -554,10 +556,10 @@ async function launchUniswap() {
   // Sort tokens depending on volume
   uniswap_list = sortTokensByVolume(uniswap_list, uniswap_volume)
 
-  // build Top 25 list of Uniswap
+  // build Top 10 list of Uniswap
   uniswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(uniswap_list)[i]
       const symbol = uniswap_list[address]
       const name = uniswap_data[address].n
@@ -569,7 +571,7 @@ async function launchUniswap() {
         n: name,
         p: price,
         v: volume,
-        chart: uniswap_charts[address].chart_often
+        chart: uniswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -583,7 +585,7 @@ async function launchUniswap() {
     if (err) throw err;
   });
 
-  // Update the Uniswap top 25
+  // Update the Uniswap Top 10
   pathFile = path.join(dir_home, 'uniswap-top.json')
   writeFile( pathFile, JSON.stringify( uniswap_top ), "utf8", (err) => {
     if (err) throw err;
@@ -747,10 +749,10 @@ async function launchSushiswap() {
   // Sort tokens depending on volume
   sushiswap_list = sortTokensByVolume(sushiswap_list, sushiswap_volume)
 
-  // build Top 25 list of Sushiswap
+  // build Top 10 list of Sushiswap
   sushiswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(sushiswap_list)[i]
       const symbol = sushiswap_list[address]
       const name = sushiswap_data[address].n
@@ -762,7 +764,7 @@ async function launchSushiswap() {
         n: name,
         p: price,
         v: volume,
-        chart: sushiswap_charts[address].chart_often
+        chart: sushiswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -776,7 +778,7 @@ async function launchSushiswap() {
     if (err) throw err;
   });
 
-  // Update the Sushiswap top 25
+  // Update the Sushiswap Top 10
   pathFile = path.join(dir_home, 'sushiswap-top.json')
   writeFile( pathFile, JSON.stringify( sushiswap_top ), "utf8", (err) => {
     if (err) throw err;
@@ -943,10 +945,10 @@ async function launchSpiritswap() {
   // Sort tokens depending on volume
   spiritswap_list = sortTokensByVolume(spiritswap_list, spiritswap_volume)
 
-  // build Top 25 list of Spiritswap
+  // build Top 10 list of Spiritswap
   spiritswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(spiritswap_list)[i]
       const symbol = spiritswap_list[address]
       const name = spiritswap_data[address].n
@@ -958,7 +960,7 @@ async function launchSpiritswap() {
         n: name,
         p: price,
         v: volume,
-        chart: spiritswap_charts[address].chart_often
+        chart: spiritswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -972,7 +974,7 @@ async function launchSpiritswap() {
     if (err) throw err;
   });
 
-  // Update the Spiritswap top 25
+  // Update the Spiritswap Top 10
   pathFile = path.join(dir_home, 'spiritswap-top.json')
   writeFile( pathFile, JSON.stringify( spiritswap_top ), "utf8", (err) => {
     if (err) throw err;
@@ -1140,10 +1142,10 @@ async function launchHoneyswap() {
   // Sort tokens depending on volume
   honeyswap_list = sortTokensByVolume(honeyswap_list, honeyswap_volume)
 
-  // build Top 25 list of Honeyswap
+  // build Top 10 list of Honeyswap
   honeyswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(honeyswap_list)[i]
       const symbol = honeyswap_list[address]
       const name = honeyswap_data[address].n
@@ -1155,7 +1157,7 @@ async function launchHoneyswap() {
         n: name,
         p: price,
         v: volume,
-        chart: honeyswap_charts[address].chart_often
+        chart: honeyswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -1169,7 +1171,7 @@ async function launchHoneyswap() {
     if (err) throw err;
   });
 
-  // Update the Honeyswap top 25
+  // Update the Honeyswap Top 10
   pathFile = path.join(dir_home, 'honeyswap-top.json')
   writeFile( pathFile, JSON.stringify( honeyswap_top ), "utf8", (err) => {
     if (err) throw err;
