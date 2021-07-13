@@ -25,6 +25,7 @@ body {
   width: 50%;
   transition: all 400ms ease-in-out;
   text-align: center;
+  font-size: smaller;
 }
 #input-wallet-container.margin-top #input-wallet {
   font-size: initial;
@@ -52,6 +53,7 @@ canvas#wallet-chart {
 #global #wallet-value {
   text-align: center;
   flex: auto;
+  font-size: 1.8em;
 }
 #global #global-select-networks {
   flex: auto;
