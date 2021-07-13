@@ -129,7 +129,7 @@ let wallet = {}
 
 
 require.config({ waitSeconds: 0 })
-const Web3 = require(['https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js'], function(Web3) {
+const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
   web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
   web3_polygon = new Web3(NETWORK.POLYGON.rpc)
   web3_fantom = new Web3(NETWORK.FANTOM.rpc)
