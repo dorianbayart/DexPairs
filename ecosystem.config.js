@@ -11,7 +11,7 @@ module.exports = {
     name: 'DexPairs_Front',
     script: 'front.js',
     exp_backoff_restart_delay: 100,
-    instances: 2,
+    instances: 1,
     exec_mode: "cluster",
     env_production: {
       NODE_ENV: "production",
