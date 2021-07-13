@@ -243,7 +243,13 @@ async function launch() {
   tokens_list = {}
 
   // get data from PancakeSwap
-  const top = await getPancakeswapTopTokens()
+  const top = {}
+  try {
+    top = await getPancakeswapTopTokens()
+  } catch(error) {
+    console.log(error)
+    return
+  }
 
 
   const time = Date.now()
