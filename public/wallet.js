@@ -33,6 +33,11 @@ function configureWallet(inputAddress) {
 
     walletAddress = inputAddress
 
+    const urlParams = new URLSearchParams(window.location.search)
+    if(!urlParams.has('address') && window.history.replaceState) {
+      window.history.replaceState(null, walletAddress, window.location + '?address=' + walletAddress);
+    }
+
     Object.keys(NETWORK).forEach((network, i) => {
       getNetworkBalance(NETWORK[network].enum)
       getTokenTx(NETWORK[network].enum)
@@ -214,8 +219,16 @@ simpleDataTimers()
 
 
 function initializeHTML() {
-  if(sessionStorage.getItem('walletAddress')) {
-    const address = sessionStorage.getItem('walletAddress')
+  const urlParams = new URLSearchParams(window.location.search)
+  let address = null
+  if(urlParams.has('address')) {
+    address = urlParams.get('address')
+  }
+  else if(sessionStorage.getItem('walletAddress')) {
+    address = sessionStorage.getItem('walletAddress')
+  }
+
+  if(address) {
     document.getElementById('input-wallet').value = address
     configureWallet(address)
   }
