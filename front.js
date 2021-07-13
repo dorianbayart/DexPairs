@@ -201,7 +201,7 @@ app.get('/public/responsive.css', (req, res) => res.sendFile(path.join(__dirname
 app.get('/public/colors.css', (req, res) => res.sendFile(path.join(__dirname, '/public/colors.css')))
 app.get('/public/wallet.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.css')))
 app.get('/public/wallet-responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet-responsive.css')))
-app.get('/public/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
+app.get('/img/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/img/graph-background-min.png')))
 
 app.get('/lib/chart.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/chart.min.js')))
 app.get('/lib/chartjs-adapter-moment.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/chartjs-adapter-moment.js')))
