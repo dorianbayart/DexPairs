@@ -228,7 +228,7 @@ async function launch() {
   try {
     tokens_data_file = require(path.join(dir_home, 'pancake-simple.json'))
     tokens_charts_file = require(path.join(dir_home, 'pancake-charts.json'))
-    pancakeswap_volume_file = require(path.join(dir_home, 'pancakeswap-volume.json'))
+    pancakeswap_volume_file = require(path.join(dir_home, 'pancake-volume.json'))
 
     tokens_data = tokens_data_file
     tokens_charts = tokens_charts_file
@@ -405,7 +405,7 @@ async function launch() {
   });
 
   // Update the Pancakeswap volumeUSD
-  pathFile = path.join(dir_home, 'pancakeswap-volume.json')
+  pathFile = path.join(dir_home, 'pancake-volume.json')
   writeFile( pathFile, JSON.stringify( pancakeswap_volume ), "utf8", (err) => {
     if (err) throw err;
   });
