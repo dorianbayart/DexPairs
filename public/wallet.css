@@ -1,5 +1,9 @@
 
-
+body {
+  display: flex !important;
+  flex-flow: column;
+  min-height: 90vh;
+}
 
 
 
@@ -26,8 +30,39 @@
   font-size: initial;
 }
 
+
+
+#global.wallet-information {
+  display: flex;
+  max-width: 800px;
+  margin: auto;
+  align-items: center;
+  transition: all 1s ease-in-out;
+  max-height: none;
+}
+#global.wallet-information.none {
+  max-height: 0;
+}
+#global .wallet-chart {
+  flex: auto;
+}
+canvas#wallet-chart {
+  width: 100%;
+}
+#global #wallet-value {
+  text-align: center;
+  flex: auto;
+}
+#global #global-select-networks {
+  flex: auto;
+}
+
+
+
+
 #wallet {
   margin: auto;
+  flex: auto;
 }
 
 #wallet ul {

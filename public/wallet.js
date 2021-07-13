@@ -2,51 +2,70 @@
 
 
 // defines event on search field
-document.getElementById('input-wallet').addEventListener("keyup", function(e) {
+document.getElementById('input-wallet').addEventListener("change", function(e) {
   let inputAddress = e.target.value
   configureWallet(inputAddress)
-  e.target.blur()
 })
 
 // search transactions / tokens for the specified wallet address
 function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
-  inputContainer.classList.remove('margin-top')
-  if(inputAddress === walletAddress) { return }
+  const globalInforationContainer = document.getElementById('global')
+
+  if(inputAddress.length > 0 && inputAddress === walletAddress) { return }
 
   if(!web3_ethereum) {
     setTimeout(function(){ configureWallet(inputAddress) }, 400)
     return
   }
 
-  if(web3_ethereum.utils.isAddress(inputAddress)) {
-    if(sessionStorage.getItem('walletAddress') === inputAddress) {
-      wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
-      displayWallet()
-    } else {
-      wallet = {}
+  if(!web3_ethereum.utils.isAddress(inputAddress)) {
+    if (!inputContainer.classList.contains('margin-top')) {
+      inputContainer.classList.add('margin-top')
     }
-
-    Object.keys(wallet).forEach(id => {
-      wallet[id].upToDate = false
-    })
-
-    walletAddress = inputAddress
-
+    if (!globalInforationContainer.classList.contains('none')) {
+      globalInforationContainer.classList.add('none')
+    }
     const urlParams = new URLSearchParams(window.location.search)
-    if(!urlParams.has('address') && window.history.replaceState) {
-      window.history.replaceState(null, walletAddress, window.location + '?address=' + walletAddress);
+    if(urlParams.has('address') && window.history.replaceState) {
+      window.history.replaceState(null, document.title, window.location.href.split("?")[0]);
     }
 
-    Object.keys(NETWORK).forEach((network, i) => {
-      getNetworkBalance(NETWORK[network].enum)
-      getTokenTx(NETWORK[network].enum)
-    });
+    walletAddress = null
+    sessionStorage.removeItem('walletAddress', walletAddress)
+    wallet = {}
+    displayWallet()
 
-    sessionStorage.setItem('walletAddress', walletAddress)
-  } else if (!inputContainer.classList.contains('margin-top')) {
-    inputContainer.classList.add('margin-top')
+    return
   }
+
+  inputContainer.classList.remove('margin-top')
+  globalInforationContainer.classList.remove('none')
+
+  if(sessionStorage.getItem('walletAddress') === inputAddress) {
+    wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
+    displayWallet()
+  } else {
+    wallet = {}
+  }
+
+  Object.keys(wallet).forEach(id => {
+    wallet[id].upToDate = false
+  })
+
+  walletAddress = inputAddress
+
+  const urlParams = new URLSearchParams(window.location.search)
+  if(!urlParams.has('address') && window.history.replaceState) {
+    window.history.replaceState(null, walletAddress, window.location + '?address=' + walletAddress);
+  }
+
+  Object.keys(NETWORK).forEach((network, i) => {
+    getNetworkBalance(NETWORK[network].enum)
+    getTokenTx(NETWORK[network].enum)
+  });
+
+  sessionStorage.setItem('walletAddress', walletAddress)
 }
 
 
@@ -67,35 +86,6 @@ function getTokenTx(network) {
   xmlhttp.send()
 }
 
-
-// get token balance - Not used
-function getTokenBalance(contractAddress, network) {
-  const id = getId(contractAddress, network)
-  if(wallet[id].upToDate) {
-    return
-  }
-
-  var xmlhttp = new XMLHttpRequest()
-  xmlhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status == 200 && this.responseText) {
-
-      var data = JSON.parse(this.responseText)
-      if(data.status !== '1') {
-        return
-      }
-      const tokenValue = data.result
-
-      wallet[id].value = tokenValue
-      wallet[id].upToDate = true
-
-      sessionStorage.setItem('wallet', JSON.stringify(wallet))
-
-      displayWallet()
-    }
-  }
-  xmlhttp.open("GET", NETWORK[network].tokenbalance.replace('WALLET_ADDRESS', walletAddress).replace('CONTRACT_ADDRESS', contractAddress), true)
-  xmlhttp.send()
-}
 
 // Get token balance
 function getTokenBalanceWeb3(contractAddress, network) {
@@ -192,9 +182,12 @@ function displayWallet() {
     })
   })
 
-  if(tokens.length > 0) document.getElementById('wallet').appendChild(ul)
+  if(tokens.length > 0) {
+    document.getElementById('wallet').appendChild(ul)
+  }
 
   updateGlobalPrice()
+
 }
 
 // Update & Display the total wallet value
@@ -206,7 +199,9 @@ function updateGlobalPrice() {
       walletValue += Number.parseFloat(displayBalance(wallet[id].value * price, wallet[id].tokenDecimal))
     }
   })
-  console.log(Math.round(walletValue))
+
+  document.getElementById('wallet-value').innerHTML = walletValue > 0 ? '$' + Math.round(walletValue) : null
+
 }
 
 

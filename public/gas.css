@@ -2,7 +2,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: auto;
+  width: max-content;
   margin-left: 24px;
   margin-bottom: 1em;
   background-color: #EEEE;
