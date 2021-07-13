@@ -34,7 +34,7 @@ console.log(dir_home)
 
 const HISTORY_SIZE = 120
 const VOLUME_SIZE = 10
-const REALTIME = 15000 // 15 seconds
+const REALTIME = 20000 // 20 seconds
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAYS = 259200000 // 3 days
@@ -828,8 +828,13 @@ async function launchSpiritswap() {
   spiritswap_list = {}
 
   // get data from Spiritswap
-  const top = await getSpiritswapTopTokens()
-
+  const top = {}
+  try {
+    top = await getSpiritswapTopTokens()
+  } catch(error) {
+    console.log(error)
+    return
+  }
 
 
   const time = Date.now()
@@ -1020,8 +1025,13 @@ async function launchHoneyswap() {
   honeyswap_list = {}
 
   // get data from Honeyswap
-  const top = await getHoneyswapTopTokens()
-
+  const top = {}
+  try {
+    top = await getHoneyswapTopTokens()
+  } catch(error) {
+    console.log(error)
+    return
+  }
 
 
   const time = Date.now()
@@ -1189,11 +1199,11 @@ async function launchHoneyswap() {
 
 
 /* MAIN */
-setTimeout(function(){ launchUniswap() }, 2000)
-setTimeout(function(){ launchSushiswap() }, 4000)
-setTimeout(function(){ launchSpiritswap() }, 6000)
-setTimeout(function(){ launchHoneyswap() }, 8000)
-setTimeout(function(){ launch() }, 10000)
+setTimeout(function(){ launchUniswap() }, 2500)
+setTimeout(function(){ launchSushiswap() }, 5000)
+setTimeout(function(){ launchSpiritswap() }, 7500)
+setTimeout(function(){ launchHoneyswap() }, 1000)
+setTimeout(function(){ launch() }, 12500)
 
 
 
