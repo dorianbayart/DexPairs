@@ -34,7 +34,7 @@ console.log(dir_home)
 
 const HISTORY_SIZE = 120
 const VOLUME_SIZE = 10
-const REALTIME = 10000 // 10 seconds
+const REALTIME = 15000 // 15 seconds
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAYS = 259200000 // 3 days
