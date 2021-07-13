@@ -235,7 +235,7 @@ const createNetworkImg = (network) => {
 /* Utils - Get Price of Address on Network */
 const getPriceByAddressNetwork = (address, network) => {
   let prices = JSON.parse(sessionStorage.getItem('simple-' + network))
-  if(Object.keys(prices).length > 0) {
+  if(prices && Object.keys(prices).length > 0) {
     return prices[address] ? prices[address].p : null
   }
 }
@@ -243,9 +243,10 @@ const getPriceByAddressNetwork = (address, network) => {
 
 // Round number
 const precise = (x) => {
-  if(x > 9999) { return Math.round(x) }
+  if(x > 99) { return Math.round(x) }
+  else if(x > 0.1) { return Math.round(100*x)/100 }
   else if(x > 0.001) { return Math.round(10000*x)/10000 }
-  return Number.parseFloat(Number.parseFloat(x).toPrecision(2))
+  return Number.parseFloat(x).toPrecision(2)
 }
 const gasRound = (x) => {
   if(x > 9) { return Math.round(x) }

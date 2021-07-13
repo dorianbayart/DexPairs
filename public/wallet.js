@@ -188,6 +188,20 @@ function displayWallet() {
   })
 
   if(tokens.length > 0) document.getElementById('wallet').appendChild(ul)
+
+  updateGlobalPrice()
+}
+
+// Update & Display the total wallet value
+function updateGlobalPrice() {
+  let walletValue = 0
+  filteredWallet().forEach(function (id) {
+    let price = wallet[id].price
+    if(price) {
+      walletValue += Number.parseFloat(displayBalance(wallet[id].value * price, wallet[id].tokenDecimal))
+    }
+  })
+  console.log(Math.round(walletValue))
 }
 
 
