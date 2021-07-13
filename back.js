@@ -243,7 +243,7 @@ async function launch() {
   tokens_list = {}
 
   // get data from PancakeSwap
-  const top = {}
+  let top = {}
   try {
     top = await getPancakeswapTopTokens()
   } catch(error) {
@@ -828,7 +828,7 @@ async function launchSpiritswap() {
   spiritswap_list = {}
 
   // get data from Spiritswap
-  const top = {}
+  let top = {}
   try {
     top = await getSpiritswapTopTokens()
   } catch(error) {
@@ -1025,7 +1025,7 @@ async function launchHoneyswap() {
   honeyswap_list = {}
 
   // get data from Honeyswap
-  const top = {}
+  let top = {}
   try {
     top = await getHoneyswapTopTokens()
   } catch(error) {
