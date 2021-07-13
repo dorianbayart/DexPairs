@@ -1,6 +1,6 @@
 # DexPairs
 
-[hwww.dexpairs.xyz](http://www.dexpairs.xyz)
+[www.dexpairs.xyz](http://www.dexpairs.xyz)
 
 * Get and store subgraph data on different protocols
 * Display the price charts of any token against any other token
