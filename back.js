@@ -32,15 +32,15 @@ const dir_home = os.homedir()
 console.log(dir_home)
 
 
-const VOLUME_SIZE = 10
+const VOLUME_SIZE = 12
 const REALTIME = 20000 // 20 seconds
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAYS = 259200000 // 3 days
 const WEEK = 604800000 // 1 week
-const HISTORY_SIZE = 120
+const HISTORY_SIZE = 192
 const HISTORY_SIZE_24H = 96 // 24h / 15min
-const TOP_SIZE = 10
+const TOP_SIZE = 6
 
 
 /* DexPairs */
