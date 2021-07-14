@@ -132,22 +132,22 @@ async function getPancakeswapTopTokens() {
 const uniswap_request = `
 query
 {
-  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
+  tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { volumeUSD_gt: "100" } ) {
     id
     name
     symbol
     derivedETH,
-    tradeVolumeUSD
+    volumeUSD
   }
   bundle(id: "1" ) {
-    ethPrice
+    ethPriceUSD
   }
 }
 `
 
-// Use TheGraph API - https://thegraph.com/explorer/subgraph/uniswap/uniswap-v2
+// Use TheGraph API - https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3
 async function getUniswapTopTokens() {
-  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2", uniswap_request)
+  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3", uniswap_request)
 }
 
 // Get Sushiswap's top
@@ -453,7 +453,7 @@ async function launchUniswap() {
   const time = Date.now()
   const tokens = top.data ? top.data.tokens : []
 
-  const eth_price = top.data ? top.data.bundle.ethPrice : 0
+  const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
 
   tokens.forEach(token => {
     const address = token.id
@@ -461,7 +461,7 @@ async function launchUniswap() {
     const name = token.name
     const price_ETH = token.derivedETH
     const price = price_ETH * eth_price
-    const volumeUSD = token.tradeVolumeUSD
+    const volumeUSD = token.volumeUSD
 
     // create Uniswap list
     uniswap_list[address] = symbol
