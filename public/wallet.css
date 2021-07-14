@@ -36,7 +36,7 @@ body {
 #global.wallet-information {
   display: flex;
   max-width: 800px;
-  margin: auto;
+  margin: 1em auto 0;
   align-items: center;
   transition: all 1s ease-in-out;
   max-height: none;
@@ -48,11 +48,18 @@ body {
   flex: auto;
 }
 canvas#wallet-chart {
-  width: 100%;
+
 }
-#global #wallet-value {
+#global .wallet-values {
   text-align: center;
   flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+#global #wallet-value-tooltip {
+  font-size: 1.2em;
+}
+#global #wallet-value {
   font-size: 1.8em;
 }
 #global #global-select-networks {

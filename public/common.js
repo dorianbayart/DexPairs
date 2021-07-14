@@ -22,6 +22,13 @@ const COLOR_THEMES = {
 
 const server = 'http://185.212.226.82' // Empty for localhost
 
+const TIME_24H = 86400000
+const TIMEFRAME_15M = '15m'
+const TIMEFRAME_4H = '4h'
+const TIMEFRAME_3D = '3d'
+const TIMEFRAME_1W = '1w'
+
+
 const NETWORK = {
   ETHEREUM: {
     order: 1,
@@ -168,6 +175,8 @@ const setGas = (network) => {
       span.innerHTML = gasRound(web3.utils.fromWei(gas, 'gwei'))
       li.appendChild(span)
       li.title = gasRound(web3.utils.fromWei(gas, 'gwei')) + ' gwei on ' + NETWORK[network].name
+    }, error => {
+      // console.log(error)
     })
   }
 }
@@ -177,7 +186,7 @@ const setGas = (network) => {
 
 
 // get simple data prices
-// param: network
+// param: network, callback function
 function getSimpleData(network, callback) {
   xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
@@ -196,6 +205,26 @@ function getSimpleData(network, callback) {
   xmlhttp.send()
 }
 
+
+// get charts by address and network
+// params: address, network, callback function
+function getChartsByAddress(address, network, callback) {
+  xmlhttp = new XMLHttpRequest()
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      const charts = JSON.parse(this.responseText)
+      if(charts && Object.keys(charts).length > 0) {
+        sessionStorage.setItem(network + '-' + address, JSON.stringify(charts))
+
+        if (callback && typeof callback === 'function') {
+          callback();
+        }
+      }
+    }
+  }
+  xmlhttp.open("GET", NETWORK[network].url_data + "/charts/" + address, true)
+  xmlhttp.send()
+}
 
 
 
@@ -239,6 +268,24 @@ const getPriceByAddressNetwork = (address, network) => {
     return prices[address] ? prices[address].p : null
   }
 }
+
+
+
+/* Calculate percentage change of last 24h */
+function getPercentage24h(chart) {
+  const chart24h = extract24hChart(chart)
+  const first = chart24h[0]
+  const last = chart24h[chart24h.length - 1]
+  // round with 2 digits after commma
+  return Math.round((last.p - first.p) / first.p * 10000) / 100
+}
+
+/* Return only last 24h data from a chart */
+function extract24hChart(chart) {
+  const last_t = chart[chart.length-1].t
+  return chart.filter(({t}) => last_t-t <= TIME_24H)
+}
+
 
 
 // Round number

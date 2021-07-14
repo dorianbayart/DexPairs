@@ -1,4 +1,7 @@
 
+let globalChart = null
+let walletValue = 0
+
 
 
 // defines event on search field
@@ -187,12 +190,13 @@ function displayWallet() {
   }
 
   updateGlobalPrice()
+  updateGlobalChart()
 
 }
 
 // Update & Display the total wallet value
 function updateGlobalPrice() {
-  let walletValue = 0
+  walletValue = 0
   filteredWallet().forEach(function (id) {
     let price = wallet[id].price
     if(price) {
@@ -202,6 +206,15 @@ function updateGlobalPrice() {
 
   document.getElementById('wallet-value').innerHTML = walletValue > 0 ? '$' + Math.round(walletValue) : null
 
+}
+
+function displayChartTooltip(e) {
+  const value = e.tooltip.dataPoints[0].raw
+  if(e.tooltip.opacity > 0) { // display tooltip
+    document.getElementById('wallet-value-tooltip').innerHTML = value > 0 ? '$' + Math.round(value) : null
+  } else { // hide tooltip
+    document.getElementById('wallet-value-tooltip').innerHTML = null
+  }
 }
 
 
@@ -234,6 +247,91 @@ function simpleDataTimers() {
     setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 500)
   })
   setTimeout(function(){ simpleDataTimers() }, 60000)
+}
+
+
+function updateGlobalChart() {
+  if(!walletAddress || walletValue === 0) {
+    if(globalChart) {
+      globalChart.destroy()
+      globalChart = null
+    }
+    return
+  }
+  const network = NETWORK.ETHEREUM.enum
+  const address = NETWORK.ETHEREUM.tokenPriceContract
+  let chart = JSON.parse(sessionStorage.getItem(network + '-' + address))
+
+  if(!chart || (chart && !chart.chart_often) || (chart && chart.chart_often && chart.chart_often.length < 1)) {
+    getChartsByAddress(NETWORK.ETHEREUM.tokenPriceContract, NETWORK.ETHEREUM.enum, updateGlobalChart)
+    return
+  }
+
+  chart = extract24hChart(chart.chart_often)
+
+  const last_price = chart[chart.length - 1].p
+
+  const timeData = chart.map(coords => new Date(coords.t))
+  const tokenData = chart.map(coords => coords.p * walletValue / last_price)
+
+  const ctx = document.getElementById('wallet-chart').getContext('2d')
+  if(globalChart) {
+    globalChart.data.labels = timeData
+    globalChart.data.datasets[0].data = tokenData
+    globalChart.update()
+  } else {
+    globalChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: timeData,
+        datasets: [{
+          data: tokenData,
+          backgroundColor: '#0000FF88',
+          borderColor: '#0000FF88',
+          //fill: '#0000FF44',
+          radius: 0,
+          tension: 0.3,
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: false
+          },
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: false,
+            intersect: false,
+            external: displayChartTooltip
+          }
+        },
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        //aspectRatio: 3,
+        scaleShowLabels: false,
+        tooltipEvents: [],
+        pointDot: false,
+        scaleShowGridLines: true,
+        scales: {
+          x: {
+            type: 'time',
+            display: false
+          },
+          y: {
+            display: false
+          }
+        }
+      }
+    })
+  }
 }
 
 

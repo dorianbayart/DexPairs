@@ -76,11 +76,6 @@ let dexList = {
 }
 
 const LIST_INITIAL_SIZE = 100
-const TIME_24H = 86400000
-const TIMEFRAME_15M = '15m'
-const TIMEFRAME_4H = '4h'
-const TIMEFRAME_3D = '3d'
-const TIMEFRAME_1W = '1w'
 let timeframe = TIMEFRAME_4H
 
 
@@ -670,19 +665,4 @@ function findAddressFromSymbol(symbol) {
   return Object.keys(simple).find(
       address => simple[address].s === symbol
   )
-}
-
-// Calculate percentage change of last 24h
-function getPercentage24h(chart) {
-  const chart24h = extract24hChart(chart)
-  const first = chart24h[0]
-  const last = chart24h[chart24h.length - 1]
-  // round with 2 digits after commma
-  return Math.round((last.p - first.p) / first.p * 10000) / 100
-}
-
-// Return only last 24h data from a chart
-function extract24hChart(chart) {
-  const last_t = chart[chart.length-1].t
-  return chart.filter(({t}) => last_t-t <= TIME_24H)
 }

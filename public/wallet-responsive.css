@@ -1,3 +1,18 @@
+
+#input-wallet-container.margin-top #input-wallet {
+  width: 50%;
+}
+#input-wallet {
+  width: 33%;
+}
+
+#global .wallet-chart {
+  height: 128px;
+  width: 480px;
+  margin-right: 3em;
+}
+
+
 #wallet {
   width: 45%;
 }
@@ -5,13 +20,19 @@
 
 @media (max-width: 800px) {
   #input-wallet-container.margin-top #input-wallet {
-
+    width: 60%;
   }
   #input-wallet {
     font-size: 0.9em;
     width: 80%;
     margin: 0.25em 0.5em;
     padding: 0.5em 1em;
+  }
+
+  #global .wallet-chart {
+    height: 96px;
+    width: 360px;
+    margin-right: 2em;
   }
 
   #wallet {
@@ -21,12 +42,19 @@
 
 @media (max-width: 460px) {
   #input-wallet-container.margin-top #input-wallet {
-
+    width: 85%;
   }
   #input-wallet {
     font-size: 0.75em;
+    width: 75%;
     margin: 0.1em 0.25em;
     padding: 0.25em 1em;
+  }
+
+  #global .wallet-chart {
+    height: 64px;
+    width: 240px;
+    margin-right: 1em;
   }
 
   #wallet {
