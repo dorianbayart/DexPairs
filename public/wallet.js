@@ -210,10 +210,13 @@ function updateGlobalPrice() {
 
 function displayChartTooltip(e) {
   const value = e.tooltip.dataPoints[0].raw
+  const date = new Date(parseInt(e.tooltip.dataPoints[0].parsed.x)).toLocaleString()
   if(e.tooltip.opacity > 0) { // display tooltip
     document.getElementById('wallet-value-tooltip').innerHTML = value > 0 ? '$' + Math.round(value) : null
+    document.getElementById('wallet-date-tooltip').innerHTML = date
   } else { // hide tooltip
     document.getElementById('wallet-value-tooltip').innerHTML = null
+    document.getElementById('wallet-date-tooltip').innerHTML = null
   }
 }
 

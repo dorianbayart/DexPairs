@@ -14,6 +14,10 @@
   width: 480px;
   margin-right: 3em;
 }
+#global #wallet-date-tooltip {
+  font-size: 0.9em;
+  line-height: 2em;
+}
 #global #wallet-value-tooltip {
   font-size: 1.2em;
 }
@@ -45,6 +49,10 @@
     width: 360px;
     margin-right: 2em;
   }
+  #global #wallet-date-tooltip {
+    font-size: 0.75em;
+    line-height: 1em;
+  }
   #global #wallet-value-tooltip {
     font-size: 1.1em;
   }
@@ -75,6 +83,10 @@
     height: 64px;
     width: 240px;
     margin-right: 1em;
+  }
+  #global #wallet-date-tooltip {
+    font-size: 0.6em;
+    line-height: 0.6em;
   }
   #global #wallet-value-tooltip {
     font-size: 1em;
