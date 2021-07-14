@@ -64,6 +64,7 @@ function configureWallet(inputAddress) {
   }
 
   Object.keys(NETWORK).forEach((network, i) => {
+    sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
     getTokenTx(NETWORK[network].enum)
   });
@@ -83,6 +84,10 @@ function getTokenTx(network) {
       sessionStorage.setItem('tokentx-' + network, JSON.stringify(tokentx))
 
       searchTokens(network)
+
+      setTimeout(function(){
+        getTokenTx(network)
+      }, (Math.round(Math.random() * 15) + 45) * 1000)
     }
   }
   xmlhttp.open("GET", NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress), true)
@@ -112,7 +117,15 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
 
 function searchTokens(network) {
-  const tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
+  let tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
+  const latestBlock = sessionStorage.getItem('latest-block-' + network)
+
+  console.log('searching on '+network+' ...')
+
+  if(latestBlock) {
+    tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
+  }
+
   tokentx.forEach((item, i) => {
     const id = getId(item.contractAddress, network)
     wallet[id] = {
@@ -129,6 +142,10 @@ function searchTokens(network) {
   Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
     setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 100)
   })
+
+  if(tokentx.length > 0) {
+    sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
+  }
 }
 
 function getNetworkBalance(network) {
@@ -143,7 +160,21 @@ function getNetworkBalance(network) {
       value: balance,
       price: getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
     }
+    displayWallet()
+
+    setTimeout(function(){
+      getNetworkBalance(network)
+    }, (Math.round(Math.random() * 15) + 15) * 1000)
+
+  }, error => {
+
+    setTimeout(function(){
+      getNetworkBalance(network)
+    }, 3000)
+
   })
+
+
 }
 
 
