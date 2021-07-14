@@ -40,27 +40,23 @@ body {
   align-items: center;
   transition: all 1s ease-in-out;
   max-height: none;
+  border-radius: 12px;
+  border: 1px solid #0002;
 }
 #global.wallet-information.none {
   max-height: 0;
+  border-color: #FFF;
 }
 #global .wallet-chart {
   flex: auto;
 }
 canvas#wallet-chart {
-
 }
 #global .wallet-values {
   text-align: center;
   flex: auto;
   display: flex;
   flex-direction: column;
-}
-#global #wallet-value-tooltip {
-  font-size: 1.2em;
-}
-#global #wallet-value {
-  font-size: 1.8em;
 }
 #global #global-select-networks {
   flex: auto;

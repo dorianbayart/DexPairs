@@ -6,12 +6,20 @@
   width: 33%;
 }
 
+#global.wallet-information {
+  padding: 1.5em;
+}
 #global .wallet-chart {
   height: 128px;
   width: 480px;
   margin-right: 3em;
 }
-
+#global #wallet-value-tooltip {
+  font-size: 1.2em;
+}
+#global #wallet-value {
+  font-size: 1.8em;
+}
 
 #wallet {
   width: 45%;
@@ -29,10 +37,19 @@
     padding: 0.5em 1em;
   }
 
+  #global.wallet-information {
+    padding: 1em;
+  }
   #global .wallet-chart {
     height: 96px;
     width: 360px;
     margin-right: 2em;
+  }
+  #global #wallet-value-tooltip {
+    font-size: 1.1em;
+  }
+  #global #wallet-value {
+    font-size: 1.5em;
   }
 
   #wallet {
@@ -51,10 +68,19 @@
     padding: 0.25em 1em;
   }
 
+  #global.wallet-information {
+    padding: 0.5em;
+  }
   #global .wallet-chart {
     height: 64px;
     width: 240px;
     margin-right: 1em;
+  }
+  #global #wallet-value-tooltip {
+    font-size: 1em;
+  }
+  #global #wallet-value {
+    font-size: 1.2em;
   }
 
   #wallet {
