@@ -176,10 +176,10 @@ document.getElementById('search_field').addEventListener("keyup", function(e) {
   let searchValue = e.target.value.toLowerCase()
   search = searchValue
 
-  filteredList = []
+  filteredList = {}
   Object.keys(list).forEach(function (address) {
-    if(simple[address].s.toLowerCase().includes(search)) {
-      filteredList.push(simple[address].s)
+    if(address.toLowerCase().includes(search) || simple[address].s.toLowerCase().includes(search) || simple[address].n.toLowerCase().includes(search)) {
+      filteredList[address] = simple[address].s
     }
   })
 
@@ -205,10 +205,10 @@ function updateList() {
     let address = Object.keys(currentList)[i]
     let li = document.createElement('li')
     ul.appendChild(li)
-
+    li.id = address
     li.innerHTML += currentList[address]
     li.addEventListener("click", function(e) {
-      selectedToken = findAddressFromSymbol(e.target.innerHTML)
+      selectedToken = e.target.id
       setToken(selectedToken)
       getCharts()
       setSwapperToken()
