@@ -222,6 +222,7 @@ function displayWallet() {
 
   if(tokens.length > 0) {
     document.getElementById('wallet').appendChild(ul)
+    document.getElementById('global').classList.remove('none')
   }
 
   updateGlobalPrice()
