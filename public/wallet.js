@@ -120,12 +120,8 @@ function getTokenBalanceWeb3(contractAddress, network) {
 function searchTokens(network) {
   let tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
   const latestBlock = sessionStorage.getItem('latest-block-' + network)
-
-  console.log('searching on '+network+' ...')
   
   if(tokentx.length === 0) {
-    console.log('No transation found ...')
-    document.getElementById('state').innerHTML = 'No transaction found with this adress'
     return
   }
 
@@ -226,6 +222,8 @@ function displayWallet() {
     document.getElementById('wallet').appendChild(ul)
     document.getElementById('global').classList.remove('none')
     document.getElementById('state').innerHTML = null
+  } else {
+    document.getElementById('state').innerHTML = 'No token can be found for ' + walletAddress
   }
 
   updateGlobalPrice()
