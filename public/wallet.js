@@ -28,12 +28,8 @@ function configureWallet(inputAddress) {
   }
 
   if(!web3_ethereum.utils.isAddress(inputAddress)) {
-    if (!inputContainer.classList.contains('margin-top')) {
-      inputContainer.classList.add('margin-top')
-    }
-    if (!globalInforationContainer.classList.contains('none')) {
-      globalInforationContainer.classList.add('none')
-    }
+    inputContainer.classList.toggle('margin-top', true)
+    globalInforationContainer.classList.toggle('none', true)
     
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
@@ -53,7 +49,6 @@ function configureWallet(inputAddress) {
     return
   }
 
-  inputContainer.classList.remove('margin-top')
   stateContainer.innerHTML = 'Searching for transactions and tokens ...'
   stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
 
@@ -237,7 +232,9 @@ function displayWallet() {
     document.getElementById('wallet').appendChild(ul)
     document.getElementById('global').classList.remove('none')
     document.getElementById('state').innerHTML = null
+    document.getElementById('input-wallet-container').classList.remove('margin-top')
   } else {
+    document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
       stateContainer.innerHTML = 'No token can be found on this address'
