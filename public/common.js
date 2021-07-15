@@ -20,7 +20,7 @@ const COLOR_THEMES = {
   }
 }
 
-const server = 'http://185.212.226.82' // Empty for localhost
+const server = 'https://api.dexpairs.xyz' // Empty for localhost
 
 const TIME_24H = 86400000
 const TIMEFRAME_15M = '15m'
