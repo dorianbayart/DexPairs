@@ -127,7 +127,7 @@ function searchTokens(network) {
   let tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
   const latestBlock = sessionStorage.getItem('latest-block-' + network)
   
-  if(!tokentx || tokentx.length === 0) {
+  if(!tokentx || typeof tokentx === 'string' || tokentx.length === 0) {
     return
   }
 
