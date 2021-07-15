@@ -152,8 +152,9 @@ function searchTokens(network) {
     setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 40)
   })
   
-  sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
-
+  if(tokentx.length > 0) {
+    sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
+  }
 }
 
 function getNetworkBalance(network) {
