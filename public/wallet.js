@@ -43,7 +43,6 @@ function configureWallet(inputAddress) {
   }
 
   inputContainer.classList.remove('margin-top')
-  globalInforationContainer.classList.remove('none')
 
   if(sessionStorage.getItem('walletAddress') === inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
