@@ -23,6 +23,7 @@ html {
 
 .border-bottom {
   border-bottom: 1px solid lightgrey;
+  padding-bottom: 1em;
 }
 .border-info {
   border-color: mediumslateblue;
