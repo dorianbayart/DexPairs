@@ -233,7 +233,7 @@ function displayWallet() {
     document.getElementById('global').classList.remove('none')
     document.getElementById('state').innerHTML = null
   } else {
-    document.getElementById('state').innerHTML = walletAddress.length > 0 ? 'No token can be found for ' + walletAddress : null
+    document.getElementById('state').innerHTML = (walletAddress && walletAddress.length > 0) ? 'No token can be found for ' + walletAddress : null
   }
 
   updateGlobalPrice()
