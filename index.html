@@ -65,90 +65,90 @@
       <img src='/img/gas-station-icon.svg' alt="Gas Station Icon" title="Network current gas" width="14px" height="16px">
     </span>
     <ul class='gas-list'>
-      <li id='gas-ETHEREUM'>
-        <li id='gas-POLYGON'>
-          <li id='gas-BSC'>
-            <li id='gas-FANTOM'>
-              <li id='gas-XDAI'>
-              </ul>
-            </div>
+      <li id='gas-ETHEREUM'></li>
+      <li id='gas-POLYGON'></li>
+      <li id='gas-BSC'></li>
+      <li id='gas-FANTOM'></li>
+      <li id='gas-XDAI'></li>
+    </ul>
+  </div>
 
-            <div id='dex-selection'>
-              <select name='dex-selector' id='dex-selector' title='Select the DEX/Protocol'></select>
-            </div>
+  <div id='dex-selection'>
+    <select name='dex-selector' id='dex-selector' title='Select the DEX/Protocol'></select>
+  </div>
 
-            <div id='top' class='flex-row'>
-            </div>
-            <div id='flex-main'>
-              <div class="flex-column left-menu">
-                <input type='text' id='search_field' placeholder='Search' title='Search for a token symbol'>
-                <div id='order-list'>
+  <div id='top' class='flex-row'>
+  </div>
+  <div id='flex-main'>
+    <div class="flex-column left-menu">
+      <input type='text' id='search_field' placeholder='Search' title='Search for a token symbol'>
+      <div id='order-list'>
 
-                </div>
-                <div id='list'></div>
-              </div>
-              <div class='flex-column'>
-                <div class='flex-pair'>
-                  <div id='token'>
-                    <div id='token_symbol'></div>
-                    <div id='token_price'></div>
-                    <div id='token_name'></div>
-                    <div id='token_address'></div>
-                    <div id='token_price_BNB'></div>
-                  </div>
-                  <button id='swapper_switch' title='Switch'>
-                    <img src="https://cdn0.iconfinder.com/data/icons/google-material-design-3-0/48/ic_swap_horiz_48px-256.png"
-                    alt="Swap icon" width="32px" height="32px">
-                  </button>
-                  <div id='base'>
-                    <button id='base_change' title='Edit'>
-                      <img src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/edit-change-pencil-512.png"
-                      alt="Edit icon" width="28px" height="28px">
-                    </button>
-                    <div id='base_symbol'></div>
-                    <select id='base_select' title='Select the reference token'></select>
-                    <div id='base_price'></div>
-                    <div id='base_name'></div>
-                    <div id='base_address'></div>
-                    <div id='base_price_BNB'></div>
-                  </div>
-                </div>
-                <div id='chart'>
-                  <div id='timeframe'>
-                    <div id='timeframe_15m' class='timeframe-choice'>15m</div>
-                    <div id='timeframe_4h' class='timeframe-choice'>4h</div>
-                    <div id='timeframe_3d' class='timeframe-choice'>3d</div>
-                    <div id='timeframe_1w' class='timeframe-choice'>1w</div>
-                  </div>
-                  <canvas id="myChart"></canvas>
-                  <div id='source'></div>
-                </div>
-                <div class='flex-pair'>
-                  <div id='swapper_token_symbol'></div>
-                  <input type='number' id='swapper_token' min='0' step='0.0000000000000001' title='Calculator'>
+      </div>
+      <div id='list'></div>
+    </div>
+    <div class='flex-column'>
+      <div class='flex-pair'>
+        <div id='token'>
+          <div id='token_symbol'></div>
+          <div id='token_price'></div>
+          <div id='token_name'></div>
+          <div id='token_address'></div>
+          <div id='token_price_BNB'></div>
+        </div>
+        <button id='swapper_switch' title='Switch'>
+          <img src="https://cdn0.iconfinder.com/data/icons/google-material-design-3-0/48/ic_swap_horiz_48px-256.png"
+          alt="Swap icon" width="32px" height="32px">
+        </button>
+        <div id='base'>
+          <button id='base_change' title='Edit'>
+            <img src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/edit-change-pencil-512.png"
+            alt="Edit icon" width="28px" height="28px">
+          </button>
+          <div id='base_symbol'></div>
+          <select id='base_select' title='Select the reference token'></select>
+          <div id='base_price'></div>
+          <div id='base_name'></div>
+          <div id='base_address'></div>
+          <div id='base_price_BNB'></div>
+        </div>
+      </div>
+      <div id='chart'>
+        <div id='timeframe'>
+          <div id='timeframe_15m' class='timeframe-choice'>15m</div>
+          <div id='timeframe_4h' class='timeframe-choice'>4h</div>
+          <div id='timeframe_3d' class='timeframe-choice'>3d</div>
+          <div id='timeframe_1w' class='timeframe-choice'>1w</div>
+        </div>
+        <canvas id="myChart"></canvas>
+        <div id='source'></div>
+      </div>
+      <div class='flex-pair'>
+        <div id='swapper_token_symbol'></div>
+        <input type='number' id='swapper_token' min='0' step='0.0000000000000001' title='Calculator'>
 
-                  <input type='number' id='swapper_base' min='0' step='0.0000000000000001' title='Calculator'>
-                  <div id='swapper_base_symbol'></div>
-                </div>
-              </div>
-            </div>
+        <input type='number' id='swapper_base' min='0' step='0.0000000000000001' title='Calculator'>
+        <div id='swapper_base_symbol'></div>
+      </div>
+    </div>
+  </div>
 
-            <footer class="footer">
-              <a id="roadmap_link" href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank">
-                <img src="/img/roadmap-icon.svg" title="Roadmap Picture" alt="Roadmap Picture" width="20px" height="20px" />
-                <span>Roadmap</span>
-              </a>
-              <a id="github_link" href="https://github.com/dorianbayart/DexPairs" target="_blank">
-                <img src="/img/GitHub-Mark-32px.png" title="Github Logo" alt="Github Logo" width="20px" height="20px" />
-                <span>GitHub</span>
-              </a>
-            </footer>
+  <footer class="footer">
+    <a id="roadmap_link" href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank">
+      <img src="/img/roadmap-icon.svg" title="Roadmap Picture" alt="Roadmap Picture" width="20px" height="20px" />
+      <span>Roadmap</span>
+    </a>
+    <a id="github_link" href="https://github.com/dorianbayart/DexPairs" target="_blank">
+      <img src="/img/GitHub-Mark-32px.png" title="Github Logo" alt="Github Logo" width="20px" height="20px" />
+      <span>GitHub</span>
+    </a>
+  </footer>
 
 
-            <link rel="stylesheet" href="/public/gas.css">
-            <link rel="stylesheet" href="/public/design.css">
-            <link rel="stylesheet" href="/public/responsive.css">
-            <link rel="stylesheet" href="/public/colors.css">
-            <link rel="stylesheet" href="/public/footer.css">
-          </body>
-          </html>
+  <link rel="stylesheet" href="/public/gas.css">
+  <link rel="stylesheet" href="/public/design.css">
+  <link rel="stylesheet" href="/public/responsive.css">
+  <link rel="stylesheet" href="/public/colors.css">
+  <link rel="stylesheet" href="/public/footer.css">
+</body>
+</html>
