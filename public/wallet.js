@@ -48,6 +48,7 @@ function configureWallet(inputAddress) {
     stateContainer.innerHTML = inputAddress + ' is not a valid address'
     stateContainer.classList.toggle('border-bottom', true)
     stateContainer.classList.toggle('border-error', true)
+    stateContainer.classList.remove('border-info')
 
     return
   }
@@ -241,6 +242,7 @@ function displayWallet() {
       stateContainer.innerHTML = 'No token can be found for ' + walletAddress
       stateContainer.classList.toggle('border-bottom', true)
       stateContainer.classList.toggle('border-info', true)
+      stateContainer.classList.remove('border-error')
     } else {
       stateContainer.innerHTML = null
       stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
