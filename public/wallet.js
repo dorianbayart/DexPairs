@@ -134,25 +134,25 @@ function searchTokens(network) {
   if(latestBlock) {
     tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
   }
-
-  tokentx.forEach((item, i) => {
-    const id = getId(item.contractAddress, network)
-    wallet[id] = {
-      network: network,
-      contract: item.contractAddress,
-      tokenSymbol: item.tokenSymbol,
-      tokenName: item.tokenName,
-      tokenDecimal: item.tokenDecimal,
-      value: (wallet[id] && wallet[id].value) ? wallet[id].value : '0',
-      price: wallet[id] ? wallet[id].price : null
-    }
-  })
-
-  Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
-    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 75)
-  })
   
   if(tokentx.length > 0) {
+    tokentx.forEach((item, i) => {
+      const id = getId(item.contractAddress, network)
+      wallet[id] = {
+        network: network,
+        contract: item.contractAddress,
+        tokenSymbol: item.tokenSymbol,
+        tokenName: item.tokenName,
+        tokenDecimal: item.tokenDecimal,
+        value: (wallet[id] && wallet[id].value) ? wallet[id].value : '0',
+        price: wallet[id] ? wallet[id].price : null
+      }
+    })
+
+    Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
+      setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 75)
+    })
+    
     sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
   }
 }
