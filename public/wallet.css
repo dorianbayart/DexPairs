@@ -68,7 +68,7 @@ canvas#wallet-chart {
 #state {
   text-align: center;
   font-size: 0.75em;
-  flex: 0.25;
+  flex: 0.05;
   display: flex;
   align-items: center;
   margin: auto;
