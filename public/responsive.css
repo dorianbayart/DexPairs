@@ -4,6 +4,10 @@ body {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+#body-background {
+    background-size: 30%;
+    translate: 35% 25%;
+}
 header {
   font-size: 3rem;
   padding: 12px 24px;
@@ -24,6 +28,12 @@ header .version .low {
 }
 #menu .menu-item .low {
   font-size: 0.6em;
+}
+#dex-selector {
+  font-size: 1.2em;
+}
+.dex-selection-img-container {
+  height: 36px;
 }
 .left-menu {
   width: 25%;
@@ -78,6 +88,10 @@ header .version .low {
   html {
     font-size: 0.9em;
   }
+  #body-background {
+      background-size: 40%;
+      translate: 30% 30%;
+  }
   header {
     font-size: 2rem;
     padding: 8px 16px;
@@ -86,8 +100,15 @@ header .version .low {
     padding: 6px 12px;
     width: 75%;
   }
+  #dex-selector {
+    font-size: 1.1em;
+  }
+  .dex-selection-img-container {
+    height: 30px;
+  }
   #top {
     min-height: 145px;
+    margin: auto 0.5em;
   }
   .top-column {
     width: 50%;
@@ -141,6 +162,10 @@ header .version .low {
   html {
     font-size: 0.8em;
   }
+  #body-background {
+      background-size: 50%;
+      translate: 25% 28%;
+  }
   header {
     font-size: 1.5rem;
     padding: 6px 12px;
@@ -148,6 +173,12 @@ header .version .low {
   #menu {
     padding: 3px 6px;
     width: 95%;
+  }
+  #dex-selector {
+    font-size: 1em;
+  }
+  .dex-selection-img-container {
+    height: 20px;
   }
   #top {
     flex-wrap: wrap;

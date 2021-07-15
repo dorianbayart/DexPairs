@@ -54,6 +54,9 @@ ul.gas-list {
 }
 
 @media (max-width: 800px) {
+  .gas-container {
+    margin-left: 16px;
+  }
   .gas-list li span.gas-value {
     font-size: 0.9em;
     line-height: 1.25em;
@@ -61,6 +64,9 @@ ul.gas-list {
 }
 
 @media (max-width: 460px) {
+  .gas-container {
+    margin-left: 12px;
+  }
   .gas-list li span.gas-value {
     font-size: 0.8em;
     line-height: 1.3em;

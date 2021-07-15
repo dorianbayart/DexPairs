@@ -3,6 +3,19 @@ body {
   font-family: Sans-Serif;
 }
 
+#body-background {
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: 40%;
+    translate: 30% 28vh;
+    z-index: -1;
+}
+
 h1, h2, h3 {
   font-size: inherit;
   font-weight: normal;
@@ -79,14 +92,23 @@ header .version {
 }
 
 #dex-selection {
-  margin: 1em;
-  text-align: end;
+  margin: 12px;
+  display: flex;
+  align-items: center;
+}
+.dex-selection-img-container {
+  display: inline-flex;
+  flex: auto;
+  align-items: center;
+  justify-content: end;
+  padding-right: 1em;
+}
+.dex-selection-img-container img {
+  height: 100%;
 }
 #dex-selector {
-  font-size: larger;
   border: none;
   padding: 0.25em;
-  text-align: end;
   outline: none;
 }
 

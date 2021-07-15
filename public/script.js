@@ -16,6 +16,7 @@ let dexList = {
   UNISWAP: {
     name: 'Uniswap',
     chain: 'Ethereum',
+    chain_enum: 'ETHEREUM',
     url: 'https://uniswap.org/',
     url_swap: 'https://app.uniswap.org/#/swap',
     url_data: server,
@@ -28,6 +29,7 @@ let dexList = {
   SUSHISWAP: {
     name: 'SushiSwap',
     chain: 'Polygon/Matic',
+    chain_enum: 'POLYGON',
     url: 'https://sushi.com/',
     url_swap: 'https://app.sushi.com/swap',
     url_data: server + '/sushiswap',
@@ -40,6 +42,7 @@ let dexList = {
   PANCAKESWAP: {
     name: 'PancakeSwap',
     chain: 'Binance Smart Chain',
+    chain_enum: 'BSC',
     url: 'https://pancakeswap.finance/',
     url_swap: 'https://exchange.pancakeswap.finance/#/swap',
     url_data: server + '/pancake',
@@ -52,6 +55,7 @@ let dexList = {
   SPIRITSWAP: {
     name: 'SpiritSwap',
     chain: 'Fantom/Opera',
+    chain_enum: 'FANTOM',
     url: 'https://www.spiritswap.finance/',
     url_swap: 'https://swap.spiritswap.finance/#/swap',
     url_data: server + '/spiritswap',
@@ -64,6 +68,7 @@ let dexList = {
   HONEYSWAP: {
     name: 'HoneySwap',
     chain: 'xDai',
+    chain_enum: 'XDAI',
     url: 'https://honeyswap.org/',
     url_swap: 'https://app.honeyswap.org/#/swap',
     url_data: server + '/honeyswap',
@@ -418,6 +423,13 @@ document.getElementById('dex-selector').addEventListener(
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
 
+    const img = document.getElementById('dex-selection-img')
+    img.src = NETWORK[dexList[dex].chain_enum].img
+    img.alt = dexList[dex].chain + ' Logo'
+
+    const bodyBackground = document.getElementById('body-background')
+    bodyBackground.style.backgroundImage = "url(" + NETWORK[dexList[dex].chain_enum].img + ")"
+
     clearTimeout(getListTimer)
     clearTimeout(getSimpleTimer)
     clearTimeout(getTopTimer)
@@ -561,10 +573,17 @@ function initializeHTML() {
   Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item, i) => {
     let option = document.createElement('option')
     dexSelector.appendChild(option)
-    option.innerHTML += dexList[item].name + ' - ' + dexList[item].chain
+    option.innerHTML += dexList[item].chain + ' - ' + dexList[item].name
     option.value = item
     option.selected = dexList[item].name.toUpperCase() === dex
   });
+
+  const img = document.getElementById('dex-selection-img')
+  img.src = NETWORK[dexList[dex].chain_enum].img
+  img.alt = dexList[dex].chain + ' Logo'
+
+  const bodyBackground = document.getElementById('body-background')
+  bodyBackground.style.backgroundImage = "url(" + NETWORK[dexList[dex].chain_enum].img + ")"
 }
 
 function saveSessionVariables() {
