@@ -17,6 +17,7 @@ function configureWallet(inputAddress) {
   const stateContainer = document.getElementById('state')
 
   if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
+    stateContainer.innerHTML = null
     return
   }
 
@@ -32,7 +33,7 @@ function configureWallet(inputAddress) {
     if (!globalInforationContainer.classList.contains('none')) {
       globalInforationContainer.classList.add('none')
     }
-    stateContainer.innerHTML = inputAddress + ' is not a valid address'
+    
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
       window.history.replaceState(null, document.title, window.location.href.split("?")[0]);
@@ -42,6 +43,8 @@ function configureWallet(inputAddress) {
     sessionStorage.removeItem('walletAddress', walletAddress)
     wallet = {}
     displayWallet()
+    
+    stateContainer.innerHTML = inputAddress + ' is not a valid address'
 
     return
   }
@@ -230,7 +233,7 @@ function displayWallet() {
     document.getElementById('global').classList.remove('none')
     document.getElementById('state').innerHTML = null
   } else {
-    document.getElementById('state').innerHTML = 'No token can be found for ' + walletAddress
+    document.getElementById('state').innerHTML = walletAddress.length > 0 ? 'No token can be found for ' + walletAddress : null
   }
 
   updateGlobalPrice()
