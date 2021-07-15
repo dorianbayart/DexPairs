@@ -149,7 +149,7 @@ function searchTokens(network) {
   })
 
   Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
-    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 40)
+    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 75)
   })
   
   if(tokentx.length > 0) {
