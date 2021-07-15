@@ -16,7 +16,9 @@ function configureWallet(inputAddress) {
   const globalInforationContainer = document.getElementById('global')
   const stateContainer = document.getElementById('state')
 
-  if(inputAddress.length > 0 && inputAddress === walletAddress) { return }
+  if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
+    return
+  }
 
   if(!web3_ethereum) {
     setTimeout(function(){ configureWallet(inputAddress) }, 400)
@@ -30,6 +32,7 @@ function configureWallet(inputAddress) {
     if (!globalInforationContainer.classList.contains('none')) {
       globalInforationContainer.classList.add('none')
     }
+    stateContainer.innerHTML = inputAddress + ' is not a valid address'
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
       window.history.replaceState(null, document.title, window.location.href.split("?")[0]);
@@ -151,7 +154,11 @@ function searchTokens(network) {
 }
 
 function getNetworkBalance(network) {
-  getWeb3(network).eth.getBalance(walletAddress).then(balance => {
+  const web3 = getWeb3(network)
+  if(!web3 || !web3.utils.isAddress(walletAddress)) {
+    return
+  }
+  web3.eth.getBalance(walletAddress).then(balance => {
     const address = NETWORK[network].tokenContract
     wallet[getId(address, network)] = {
       network: network,
