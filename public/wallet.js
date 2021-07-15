@@ -240,7 +240,7 @@ function displayWallet() {
   } else {
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
-      stateContainer.innerHTML = 'No token can be found'
+      stateContainer.innerHTML = 'No token can be found on this address'
       stateContainer.classList.toggle('border-bottom', true)
       stateContainer.classList.toggle('border-info', true)
       stateContainer.classList.remove('border-error')
