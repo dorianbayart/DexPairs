@@ -121,6 +121,11 @@ function searchTokens(network) {
   const latestBlock = sessionStorage.getItem('latest-block-' + network)
 
   console.log('searching on '+network+' ...')
+  
+  if(tokentx.length === 0) {
+    console.log('No transation found ...')
+    return
+  }
 
   if(latestBlock) {
     tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
@@ -142,10 +147,9 @@ function searchTokens(network) {
   Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
     setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 100)
   })
+  
+  sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
 
-  if(tokentx.length > 0) {
-    sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
-  }
 }
 
 function getNetworkBalance(network) {
