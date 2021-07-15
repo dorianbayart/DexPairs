@@ -55,6 +55,7 @@ function configureWallet(inputAddress) {
 
   inputContainer.classList.remove('margin-top')
   stateContainer.innerHTML = 'Searching for transactions and tokens ...'
+  stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
 
   if(sessionStorage.getItem('walletAddress') === inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
