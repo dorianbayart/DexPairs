@@ -14,6 +14,7 @@ document.getElementById('input-wallet').addEventListener("change", function(e) {
 function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
   const globalInforationContainer = document.getElementById('global')
+  const stateContainer = document.getElementById('state')
 
   if(inputAddress.length > 0 && inputAddress === walletAddress) { return }
 
@@ -43,6 +44,7 @@ function configureWallet(inputAddress) {
   }
 
   inputContainer.classList.remove('margin-top')
+  stateContainer.innerHTML = 'Searching for transactions and tokens ...'
 
   if(sessionStorage.getItem('walletAddress') === inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
@@ -123,6 +125,7 @@ function searchTokens(network) {
   
   if(tokentx.length === 0) {
     console.log('No transation found ...')
+    document.getElementById('state').innerHTML = 'No transaction found with this adress'
     return
   }
 
@@ -222,6 +225,7 @@ function displayWallet() {
   if(tokens.length > 0) {
     document.getElementById('wallet').appendChild(ul)
     document.getElementById('global').classList.remove('none')
+    document.getElementById('state').innerHTML = null
   }
 
   updateGlobalPrice()
