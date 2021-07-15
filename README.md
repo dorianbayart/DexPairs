@@ -1,10 +1,10 @@
 # DexPairs
 
-[www.dexpairs.xyz](http://www.dexpairs.xyz)
+[dexpairs.xyz](https://dexpairs.xyz)
 
 * Get and store subgraph data on different protocols
 * Display the price charts of any token against any other token
-* [Wallet](http://www.dexpairs.xyz/wallet)
+* [Wallet](https://dexpairs.xyz/wallet)
   * Search tokens in transactions on different protocols
   * Display prices/values
   * Estimate wallet history with a global chart
