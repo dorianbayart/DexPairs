@@ -149,7 +149,7 @@ function searchTokens(network) {
   })
 
   Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
-    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 100)
+    setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 40)
   })
   
   sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
