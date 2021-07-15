@@ -72,6 +72,8 @@ canvas#wallet-chart {
   display: flex;
   align-items: center;
   margin: auto;
+  padding: 4em 0 1em;
+  transition: all 1s ease-in-out;
 }
   
 
