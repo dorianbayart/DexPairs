@@ -606,7 +606,10 @@ function updateCharts() {
   let timeData = tokenChart.map(coords => new Date(coords.t))
   let tokenData = tokenChart.map(coords => {
     const baseCoords = baseChart.find(base => base.t === coords.t)
-    return baseCoords ? coords.p / baseCoords.p : null
+    if(baseCoords) {
+      return coords.p / baseCoords.p
+    }
+    return coords.p / estimatePriceInterpolation(baseChart, coords.t)
   })
 
   var ctx = document.getElementById('myChart').getContext('2d')
@@ -657,6 +660,17 @@ function updateCharts() {
     })
   }
 }
+
+
+// useful
+// Estimate a Price at a time T - find 2 points and calculate a linear interpolation
+estimatePriceInterpolation(chart, t) {
+  const index = chart.findIndex(coords => coords.t > t)
+  // y3 = (x3-x1)*(y2-y1)/(x2-x1) + y1
+  return (t-chart[index - 1].t)*(chart[index].p-chart[index - 1].p)/(chart[index].t-chart[index - 1].t) + chart[index - 1].p
+}
+
+
 
 
 // useful
