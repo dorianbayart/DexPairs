@@ -73,8 +73,8 @@ function configureWallet(inputAddress) {
   walletAddress = inputAddress
 
   const urlParams = new URLSearchParams(window.location.search)
-  if(!urlParams.has('address') && window.history.replaceState) {
-    window.history.replaceState(null, walletAddress, window.location + '?address=' + walletAddress);
+  if(window.history.replaceState && (!urlParams.has('address') || urlParams.has('address') && urlParams.get('address') !== walletAddress)) {
+    window.history.replaceState(null, walletAddress, window.location.href.split("?")[0] + '?address=' + walletAddress);
   }
 
   Object.keys(NETWORK).forEach((network, i) => {
