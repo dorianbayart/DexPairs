@@ -11,7 +11,7 @@ html {
   background-color: #FFFE;
 }
 /* Wallet */
-#global.wallet-information, #wallet ul li {
+#global.wallet-information, #wallet ul li, #state {
   background-color: #FFFE;
 }
 
