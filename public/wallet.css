@@ -4,7 +4,9 @@ body {
   flex-flow: column;
   min-height: 90vh;
 }
-
+#body-background {
+  background-image: url(/img/background-multichain.svg);
+}
 
 
 #input-wallet-container {
