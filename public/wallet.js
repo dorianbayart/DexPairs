@@ -1,6 +1,8 @@
 
 let globalChart = null
 let walletValue = 0
+let timerGetTokenTx = {}
+let timerGetNetworkBalance = {}
 
 
 
@@ -15,10 +17,17 @@ function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
   const globalInforationContainer = document.getElementById('global')
   const stateContainer = document.getElementById('state')
+  
+  Object.keys(timerGetTokenTx).forEach(network => {
+    clearTimeout(timerGetTokenTx[network])
+  })
+  Object.keys(timerGetNetworkBalance).forEach(network => {
+    clearTimeout(timerGetNetworkBalance[network])
+  })
 
   if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
     stateContainer.innerHTML = null
-    stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+    stateContainer.classList.remove('shadow-white')
     return
   }
 
@@ -42,15 +51,13 @@ function configureWallet(inputAddress) {
     displayWallet()
     
     stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
-    stateContainer.classList.toggle('border-bottom', true)
-    stateContainer.classList.toggle('border-error', true)
-    stateContainer.classList.remove('border-info')
+    stateContainer.classList.toggle('shadow-white', true)
 
     return
   }
 
   stateContainer.innerHTML = 'Searching for transactions and tokens ...'
-  stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+  stateContainer.classList.toggle('shadow-white', true)
 
   if(sessionStorage.getItem('walletAddress') === inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
@@ -66,8 +73,8 @@ function configureWallet(inputAddress) {
   walletAddress = inputAddress
 
   const urlParams = new URLSearchParams(window.location.search)
-  if(!urlParams.has('address') && window.history.replaceState) {
-    window.history.replaceState(null, walletAddress, window.location + '?address=' + walletAddress);
+  if(window.history.replaceState && (!urlParams.has('address') || urlParams.has('address') && urlParams.get('address') !== walletAddress)) {
+    window.history.replaceState(null, walletAddress, window.location.href.split("?")[0] + '?address=' + walletAddress);
   }
 
   Object.keys(NETWORK).forEach((network, i) => {
@@ -83,6 +90,9 @@ function configureWallet(inputAddress) {
 
 // get token transactions list
 function getTokenTx(network) {
+  if(!walletAddress) {
+    return
+  }
   var xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -92,7 +102,7 @@ function getTokenTx(network) {
 
       searchTokens(network)
 
-      setTimeout(function(){
+      timerGetTokenTx[network] = setTimeout(function(){
         getTokenTx(network)
       }, (Math.round(Math.random() * 15) + 45) * 1000)
     }
@@ -175,13 +185,13 @@ function getNetworkBalance(network) {
     }
     displayWallet()
 
-    setTimeout(function(){
+    timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
     }, (Math.round(Math.random() * 15) + 15) * 1000)
 
   }, error => {
 
-    setTimeout(function(){
+    timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
     }, 3000)
 
@@ -239,12 +249,10 @@ function displayWallet() {
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
       stateContainer.innerHTML = 'No token can be found on this address'
-      stateContainer.classList.toggle('border-bottom', true)
-      stateContainer.classList.toggle('border-info', true)
-      stateContainer.classList.remove('border-error')
+      stateContainer.classList.toggle('shadow-white', true)
     } else {
       stateContainer.innerHTML = null
-      stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+      stateContainer.classList.remove('shadow-white')
     }
   }
 
@@ -306,7 +314,7 @@ function initializeHTML() {
 
 function simpleDataTimers() {
   Object.keys(NETWORK).forEach((network, i) => {
-    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 500)
+    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 400)
   })
   setTimeout(function(){ simpleDataTimers() }, 60000)
 }
@@ -323,13 +331,16 @@ function updateGlobalChart() {
   const network = NETWORK.ETHEREUM.enum
   const address = NETWORK.ETHEREUM.tokenPriceContract
   let chart = JSON.parse(sessionStorage.getItem(network + '-' + address))
-
-  if(!chart || (chart && !chart.chart_often) || (chart && chart.chart_often && chart.chart_often.length < 1)) {
-    getChartsByAddress(NETWORK.ETHEREUM.tokenPriceContract, NETWORK.ETHEREUM.enum, updateGlobalChart)
+  const lastFetch = sessionStorage.getItem(network + '-' + address + '-lastFetch')
+  const now = new Date().getTime()
+  if(!chart || (chart && !chart.chart_often) || (chart && chart.chart_often && chart.chart_often.length < 1) || (now - lastFetch > 3*60*1000)) {
+    if(loadingChartsByAddress === false) {
+      getChartsByAddress(NETWORK.ETHEREUM.tokenPriceContract, NETWORK.ETHEREUM.enum, updateGlobalChart)
+    }
     return
   }
 
-  chart = extract24hChart(chart.chart_often)
+  chart = extractChartByDuration(chart.chart_often, 2 * TIME_24H)
 
   const last_price = chart[chart.length - 1].p
 

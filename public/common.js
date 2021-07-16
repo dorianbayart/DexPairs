@@ -134,6 +134,8 @@ let web3_bsc = null
 let walletAddress = ''
 let wallet = {}
 
+let loadingChartsByAddress = false
+
 
 require.config({ waitSeconds: 0 })
 const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
@@ -148,12 +150,12 @@ const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'
   setTimeout(setGas(NETWORK.BSC.enum), 600)
   setTimeout(setGas(NETWORK.FANTOM.enum), 800)
   setTimeout(setGas(NETWORK.XDAI.enum), 1000)
-  setTimeout(updateGas, 2500)
+  setTimeout(updateGas, 5000)
 })
 
 
 const updateGas = () => {
-  setTimeout(updateGas, 2500)
+  setTimeout(updateGas, 4000)
   // randomly select a network to update gas
   let network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
   setGas(network)
@@ -214,7 +216,9 @@ function getChartsByAddress(address, network, callback) {
     if (this.readyState == 4 && this.status == 200) {
       const charts = JSON.parse(this.responseText)
       if(charts && Object.keys(charts).length > 0) {
+        loadingChartsByAddress = false
         sessionStorage.setItem(network + '-' + address, JSON.stringify(charts))
+        sessionStorage.setItem(network + '-' + address + '-lastFetch', new Date().getTime())
 
         if (callback && typeof callback === 'function') {
           callback();
@@ -224,6 +228,7 @@ function getChartsByAddress(address, network, callback) {
   }
   xmlhttp.open("GET", NETWORK[network].url_data + "/charts/" + address, true)
   xmlhttp.send()
+  loadingChartsByAddress = true
 }
 
 
@@ -282,8 +287,14 @@ function getPercentage24h(chart) {
 
 /* Return only last 24h data from a chart */
 function extract24hChart(chart) {
+  return extractChartByDuration(chart, TIME_24H)
+}
+
+/* Return only last data from a chart */
+/* Params: chart, duration */
+function extractChartByDuration(chart, duration) {
   const last_t = chart[chart.length-1].t
-  return chart.filter(({t}) => last_t-t <= TIME_24H)
+  return chart.filter(({t}) => last_t-t <= duration)
 }
 
 
