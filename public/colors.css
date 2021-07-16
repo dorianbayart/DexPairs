@@ -11,7 +11,7 @@ html {
   background-color: #FFFE;
 }
 /* Wallet */
-#global.wallet-information, #wallet ul li, #state {
+#global.wallet-information, #wallet ul li {
   background-color: #FFFE;
 }
 
@@ -39,6 +39,7 @@ html {
 
 .shadow-white {
   box-shadow: 0 0 20px 20px white;
+  background-color: #FFFE;
 }
 
 .color-transition {
