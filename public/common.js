@@ -218,6 +218,7 @@ function getChartsByAddress(address, network, callback) {
       if(charts && Object.keys(charts).length > 0) {
         loadingChartsByAddress = false
         sessionStorage.setItem(network + '-' + address, JSON.stringify(charts))
+        sessionStorage.setItem(network + '-' + address + '-lastFetch', new Date().getTime())
 
         if (callback && typeof callback === 'function') {
           callback();
