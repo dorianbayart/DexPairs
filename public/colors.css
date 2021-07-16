@@ -1,16 +1,21 @@
 html {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-attachment: fixed;
   min-height: 100%;
 }
 
-#menu .menu-item, .top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart, input, select {
+// Common
+#menu .menu-item, input, select {
+  background-color: #FFFE;
+}
+// Charts
+.top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart {
+  background-color: #FFFE;
+}
+// Wallet
+#global.wallet-information, #wallet ul li {
   background-color: #FFFE;
 }
 
-#top, #top-title {
+#top, #top-title, #wallet ul {
   background-color: #0002;
 }
 
