@@ -1,6 +1,8 @@
 
 let globalChart = null
 let walletValue = 0
+let timerGetTokenTx = {}
+let timerGetNetworkBalance = {}
 
 
 
@@ -15,6 +17,13 @@ function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
   const globalInforationContainer = document.getElementById('global')
   const stateContainer = document.getElementById('state')
+  
+  Object.keys(timerGetTokenTx).forEach(network => {
+    clearTimeout(timerGetTokenTx[network])
+  })
+  Object.keys(timerGetNetworkBalance).forEach(network => {
+    clearTimeout(timerGetNetworkBalance[network])
+  })
 
   if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
     stateContainer.innerHTML = null
@@ -93,7 +102,7 @@ function getTokenTx(network) {
 
       searchTokens(network)
 
-      setTimeout(function(){
+      timerGetTokenTx[network] = setTimeout(function(){
         getTokenTx(network)
       }, (Math.round(Math.random() * 15) + 45) * 1000)
     }
@@ -176,13 +185,13 @@ function getNetworkBalance(network) {
     }
     displayWallet()
 
-    setTimeout(function(){
+    timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
     }, (Math.round(Math.random() * 15) + 15) * 1000)
 
   }, error => {
 
-    setTimeout(function(){
+    timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
     }, 3000)
 
@@ -305,7 +314,7 @@ function initializeHTML() {
 
 function simpleDataTimers() {
   Object.keys(NETWORK).forEach((network, i) => {
-    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 500)
+    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 400)
   })
   setTimeout(function(){ simpleDataTimers() }, 60000)
 }
