@@ -282,8 +282,14 @@ function getPercentage24h(chart) {
 
 /* Return only last 24h data from a chart */
 function extract24hChart(chart) {
+  return extractChartByDuration(chart, TIME_24H)
+}
+
+/* Return only last data from a chart */
+/* Params: chart, duration */
+function extractChartByDuration(chart, duration) {
   const last_t = chart[chart.length-1].t
-  return chart.filter(({t}) => last_t-t <= TIME_24H)
+  return chart.filter(({t}) => last_t-t <= duration)
 }
 
 
