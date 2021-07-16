@@ -20,7 +20,7 @@ body {
 }
 
 #input-wallet {
-  border: 1px solid #CCC;
+  border: 1px solid #FFF;
   border-radius: 12px;
   margin: 0.5em 1em;
   padding: 1em;
@@ -28,6 +28,9 @@ body {
   transition: all 400ms ease-in-out;
   text-align: center;
   font-size: smaller;
+}
+#input-wallet:hover, #input-wallet:focus {
+  border: 1px solid #CCC;
 }
 #input-wallet-container.margin-top #input-wallet {
   font-size: initial;
