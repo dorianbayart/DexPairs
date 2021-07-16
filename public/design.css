@@ -99,7 +99,7 @@ header .version {
   display: inline-flex;
   flex: auto;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   padding-right: 1em;
 }
 .dex-selection-img-container img {
