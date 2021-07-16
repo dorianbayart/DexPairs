@@ -18,7 +18,7 @@ function configureWallet(inputAddress) {
 
   if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
     stateContainer.innerHTML = null
-    stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+    stateContainer.classList.remove('shadow-white')
     return
   }
 
@@ -42,15 +42,13 @@ function configureWallet(inputAddress) {
     displayWallet()
     
     stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
-    stateContainer.classList.toggle('border-bottom', true)
-    stateContainer.classList.toggle('border-error', true)
-    stateContainer.classList.remove('border-info')
+    stateContainer.classList.toggle('shadow-white', true)
 
     return
   }
 
   stateContainer.innerHTML = 'Searching for transactions and tokens ...'
-  stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+  stateContainer.classList.toggle('shadow-white', true)
 
   if(sessionStorage.getItem('walletAddress') === inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
@@ -239,12 +237,10 @@ function displayWallet() {
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
       stateContainer.innerHTML = 'No token can be found on this address'
-      stateContainer.classList.toggle('border-bottom', true)
-      stateContainer.classList.toggle('border-info', true)
-      stateContainer.classList.remove('border-error')
+      stateContainer.classList.toggle('shadow-white', true)
     } else {
       stateContainer.innerHTML = null
-      stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+      stateContainer.classList.remove('shadow-white')
     }
   }
 
