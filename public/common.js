@@ -150,12 +150,12 @@ const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'
   setTimeout(setGas(NETWORK.BSC.enum), 600)
   setTimeout(setGas(NETWORK.FANTOM.enum), 800)
   setTimeout(setGas(NETWORK.XDAI.enum), 1000)
-  setTimeout(updateGas, 2500)
+  setTimeout(updateGas, 5000)
 })
 
 
 const updateGas = () => {
-  setTimeout(updateGas, 2500)
+  setTimeout(updateGas, 4000)
   // randomly select a network to update gas
   let network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
   setGas(network)
