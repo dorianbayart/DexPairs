@@ -134,6 +134,8 @@ let web3_bsc = null
 let walletAddress = ''
 let wallet = {}
 
+let loadingChartsByAddress = false
+
 
 require.config({ waitSeconds: 0 })
 const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
@@ -214,6 +216,7 @@ function getChartsByAddress(address, network, callback) {
     if (this.readyState == 4 && this.status == 200) {
       const charts = JSON.parse(this.responseText)
       if(charts && Object.keys(charts).length > 0) {
+        loadingChartsByAddress = false
         sessionStorage.setItem(network + '-' + address, JSON.stringify(charts))
 
         if (callback && typeof callback === 'function') {
@@ -224,6 +227,7 @@ function getChartsByAddress(address, network, callback) {
   }
   xmlhttp.open("GET", NETWORK[network].url_data + "/charts/" + address, true)
   xmlhttp.send()
+  loadingChartsByAddress = true
 }
 
 
