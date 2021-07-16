@@ -6,7 +6,6 @@ body {
 }
 #body-background {
     background-size: 30%;
-    translate: 35% 25%;
 }
 header {
   font-size: 3rem;
@@ -90,7 +89,6 @@ header .version .low {
   }
   #body-background {
       background-size: 40%;
-      translate: 30% 30%;
   }
   header {
     font-size: 2rem;
@@ -164,7 +162,6 @@ header .version .low {
   }
   #body-background {
       background-size: 50%;
-      translate: 25% 28%;
   }
   header {
     font-size: 1.5rem;
