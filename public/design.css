@@ -314,8 +314,7 @@ header .version {
   box-shadow: 1px 1px 8px #BBB;
 }
 #myChart {
-  width: 100%;
-  max-width: 95%;
+  width: 95% !important;
   max-height: 85%;
   margin: auto;
 }
