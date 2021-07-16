@@ -319,8 +319,9 @@ function updateGlobalChart() {
   const network = NETWORK.ETHEREUM.enum
   const address = NETWORK.ETHEREUM.tokenPriceContract
   let chart = JSON.parse(sessionStorage.getItem(network + '-' + address))
-
-  if(!chart || (chart && !chart.chart_often) || (chart && chart.chart_often && chart.chart_often.length < 1)) {
+  const last_update = chart && chart.chart_often[chart.chart_often.length-1] ? chart.chart_often[chart.chart_often.length-1].t : 0
+  const now = new Date().getTime()
+  if(!chart || (chart && !chart.chart_often) || (chart && chart.chart_often && chart.chart_often.length < 1) || (now - last_update > 3*60*1000)) {
     getChartsByAddress(NETWORK.ETHEREUM.tokenPriceContract, NETWORK.ETHEREUM.enum, updateGlobalChart)
     return
   }
