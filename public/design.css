@@ -4,7 +4,7 @@ body {
 }
 
 #body-background {
-    opacity: 0.25;
+    opacity: 0.4;
     position: fixed;
     top: 0;
     bottom: 0;
@@ -12,7 +12,7 @@ body {
     left: 0;
     background-repeat: no-repeat;
     background-size: 40%;
-    translate: 30% 28vh;
+    background-position: center;
     z-index: -1;
 }
 
