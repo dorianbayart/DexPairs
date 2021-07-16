@@ -325,7 +325,7 @@ function updateGlobalChart() {
     return
   }
 
-  chart = extract24hChart(chart.chart_often)
+  chart = extractChartByDuration(chart.chart_often, 2 * TIME_24H)
 
   const last_price = chart[chart.length - 1].p
 
