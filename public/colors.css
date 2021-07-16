@@ -37,6 +37,10 @@ html {
   border-color: palevioletred;
 }
 
+.shadow-white {
+  box-shadow: 0 0 20px 20px white;
+}
+
 .color-transition {
   transition: color 750ms ease-in-out, background-color 750ms ease-in-out, border-color 750ms ease-in-out;
 }
