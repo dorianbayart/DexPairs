@@ -1,4 +1,3 @@
-const server = 'http://185.212.226.82' // Empty for localhost
 
 let getListTimer, getTopTimer, getSimpleTimer
 let list = {}
@@ -17,6 +16,7 @@ let dexList = {
   UNISWAP: {
     name: 'Uniswap',
     chain: 'Ethereum',
+    chain_enum: 'ETHEREUM',
     url: 'https://uniswap.org/',
     url_swap: 'https://app.uniswap.org/#/swap',
     url_data: server,
@@ -29,6 +29,7 @@ let dexList = {
   SUSHISWAP: {
     name: 'SushiSwap',
     chain: 'Polygon/Matic',
+    chain_enum: 'POLYGON',
     url: 'https://sushi.com/',
     url_swap: 'https://app.sushi.com/swap',
     url_data: server + '/sushiswap',
@@ -38,9 +39,23 @@ let dexList = {
       base: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
     }
   },
+  PANCAKESWAP: {
+    name: 'PancakeSwap',
+    chain: 'Binance Smart Chain',
+    chain_enum: 'BSC',
+    url: 'https://pancakeswap.finance/',
+    url_swap: 'https://exchange.pancakeswap.finance/#/swap',
+    url_data: server + '/pancake',
+    explorer: 'https://bscscan.com/token/',
+    tokens: {
+      token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+      base: '0xe9e7cea3dedca5984780bafc599bd69add087d56'
+    }
+  },
   SPIRITSWAP: {
     name: 'SpiritSwap',
     chain: 'Fantom/Opera',
+    chain_enum: 'FANTOM',
     url: 'https://www.spiritswap.finance/',
     url_swap: 'https://swap.spiritswap.finance/#/swap',
     url_data: server + '/spiritswap',
@@ -53,6 +68,7 @@ let dexList = {
   HONEYSWAP: {
     name: 'HoneySwap',
     chain: 'xDai',
+    chain_enum: 'XDAI',
     url: 'https://honeyswap.org/',
     url_swap: 'https://app.honeyswap.org/#/swap',
     url_data: server + '/honeyswap',
@@ -62,27 +78,9 @@ let dexList = {
       base: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
     }
   },
-  PANCAKESWAP: {
-    disabled: 'true',
-    name: 'PancakeSwap',
-    chain: 'Binance Smart Chain',
-    url: 'https://pancakeswap.finance/',
-    url_swap: 'https://exchange.pancakeswap.finance/#/swap',
-    url_data: server + '/pancake',
-    explorer: 'https://bscscan.com/token/',
-    tokens: {
-      token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-      base: '0x55d398326f99059ff775485246999027b3197955'
-    }
-  },
 }
 
 const LIST_INITIAL_SIZE = 100
-const TIME_24H = 86400000
-const TIMEFRAME_15M = '15m'
-const TIMEFRAME_4H = '4h'
-const TIMEFRAME_3D = '3d'
-const TIMEFRAME_1W = '1w'
 let timeframe = TIMEFRAME_4H
 
 
@@ -126,7 +124,7 @@ function getTop() {
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
   xmlhttp.send()
 
-  getTopTimer = setTimeout(function(){ getTop() }, Math.round((20*Math.random() + 20)*1000));
+  getTopTimer = setTimeout(function(){ getTop() }, Math.round((5*Math.random() + 15)*1000))
 }
 
 
@@ -150,7 +148,7 @@ function getSimple() {
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
   xmlhttp.send()
 
-  getSimpleTimer = setTimeout(function(){ getSimple() }, Math.round((30*Math.random() + 45)*1000));
+  getSimpleTimer = setTimeout(function(){ getSimple() }, Math.round((30*Math.random() + 30)*1000))
 }
 
 
@@ -183,10 +181,10 @@ document.getElementById('search_field').addEventListener("keyup", function(e) {
   let searchValue = e.target.value.toLowerCase()
   search = searchValue
 
-  filteredList = []
+  filteredList = {}
   Object.keys(list).forEach(function (address) {
-    if(simple[address].s.toLowerCase().includes(search)) {
-      filteredList.push(simple[address].s)
+    if(address.toLowerCase().includes(search) || simple[address].s.toLowerCase().includes(search) || simple[address].n.toLowerCase().includes(search)) {
+      filteredList[address] = simple[address].s
     }
   })
 
@@ -201,7 +199,7 @@ function updateList() {
     return
   }
 
-  let currentList = search.length > 0 ? filteredList : list;
+  let currentList = search.length > 0 ? filteredList : list
 
   document.getElementById('list').innerHTML = null;
   ul = document.createElement('ul')
@@ -212,10 +210,10 @@ function updateList() {
     let address = Object.keys(currentList)[i]
     let li = document.createElement('li')
     ul.appendChild(li)
-
+    li.id = address
     li.innerHTML += currentList[address]
     li.addEventListener("click", function(e) {
-      selectedToken = findAddressFromSymbol(e.target.innerHTML)
+      selectedToken = e.target.id
       setToken(selectedToken)
       getCharts()
       setSwapperToken()
@@ -425,6 +423,13 @@ document.getElementById('dex-selector').addEventListener(
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
 
+    const img = document.getElementById('dex-selection-img')
+    img.src = NETWORK[dexList[dex].chain_enum].img
+    img.alt = dexList[dex].chain + ' Logo'
+
+    const bodyBackground = document.getElementById('body-background')
+    bodyBackground.style.backgroundImage = "url(" + NETWORK[dexList[dex].chain_enum].img + ")"
+
     clearTimeout(getListTimer)
     clearTimeout(getSimpleTimer)
     clearTimeout(getTopTimer)
@@ -568,10 +573,17 @@ function initializeHTML() {
   Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item, i) => {
     let option = document.createElement('option')
     dexSelector.appendChild(option)
-    option.innerHTML += dexList[item].name + ' - ' + dexList[item].chain
+    option.innerHTML += dexList[item].chain + ' - ' + dexList[item].name
     option.value = item
     option.selected = dexList[item].name.toUpperCase() === dex
   });
+
+  const img = document.getElementById('dex-selection-img')
+  img.src = NETWORK[dexList[dex].chain_enum].img
+  img.alt = dexList[dex].chain + ' Logo'
+
+  const bodyBackground = document.getElementById('body-background')
+  bodyBackground.style.backgroundImage = "url(" + NETWORK[dexList[dex].chain_enum].img + ")"
 }
 
 function saveSessionVariables() {
@@ -613,7 +625,11 @@ function updateCharts() {
   let timeData = tokenChart.map(coords => new Date(coords.t))
   let tokenData = tokenChart.map(coords => {
     const baseCoords = baseChart.find(base => base.t === coords.t)
-    return baseCoords ? coords.p / baseCoords.p : null
+    if(baseCoords) {
+      return coords.p / baseCoords.p
+    }
+    const price = estimatePriceInterpolation(baseChart, coords.t)
+    return price ? coords.p / price : null
   })
 
   var ctx = document.getElementById('myChart').getContext('2d')
@@ -667,31 +683,21 @@ function updateCharts() {
 
 
 // useful
+// Estimate a Price at a time T - find 2 points and calculate a linear interpolation
+function estimatePriceInterpolation(chart, t) {
+  let index = chart.findIndex(coords => coords.t > t)
+  if(index < 1) { return }
+  // y3 = (x3-x1)*(y2-y1)/(x2-x1) + y1
+  return (t-chart[index - 1].t)*(chart[index].p-chart[index - 1].p)/(chart[index].t-chart[index - 1].t) + chart[index - 1].p
+}
+
+
+
+
+// useful
 // Find Address From Symbol
 function findAddressFromSymbol(symbol) {
   return Object.keys(simple).find(
       address => simple[address].s === symbol
   )
-}
-
-// Round number
-function precise(x) {
-  if(x > 9999) { return Math.round(x) }
-  else if(x > 0.0001) { return Number.parseFloat(x).toPrecision(5) }
-  return Number.parseFloat(x).toPrecision(2)
-}
-
-// Calculate percentage change of last 24h
-function getPercentage24h(chart) {
-  const chart24h = extract24hChart(chart)
-  const first = chart24h[0]
-  const last = chart24h[chart24h.length - 1]
-  // round with 2 digits after commma
-  return Math.round((last.p - first.p) / first.p * 10000) / 100
-}
-
-// Return only last 24h data from a chart
-function extract24hChart(chart) {
-  const last_t = chart[chart.length-1].t
-  return chart.filter(({t}) => last_t-t <= TIME_24H)
 }

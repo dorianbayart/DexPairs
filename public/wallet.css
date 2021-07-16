@@ -1,4 +1,12 @@
 
+body {
+  display: flex !important;
+  flex-flow: column;
+  min-height: 90vh;
+}
+
+
+
 #input-wallet-container {
   text-align: center;
   margin-top: 0;
@@ -17,13 +25,61 @@
   width: 50%;
   transition: all 400ms ease-in-out;
   text-align: center;
+  font-size: smaller;
 }
 #input-wallet-container.margin-top #input-wallet {
   font-size: initial;
 }
 
+
+
+#global.wallet-information {
+  display: flex;
+  max-width: 800px;
+  margin: 1em auto 0;
+  align-items: center;
+  transition: all 1s ease-in-out;
+  max-height: none;
+  border-radius: 12px;
+  border: 1px solid #0002;
+}
+#global.wallet-information.none {
+  max-height: 0;
+  padding: 0;
+  border-color: #FFF;
+  z-index: -1;
+}
+#global .wallet-chart {
+  flex: auto;
+}
+canvas#wallet-chart {
+}
+#global .wallet-values {
+  text-align: center;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+#global #global-select-networks {
+  flex: auto;
+}
+
+
+#state {
+  text-align: center;
+  font-size: 0.75em;
+  flex: 0.05;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  transition: all 1s ease-in-out;
+}
+  
+
+
 #wallet {
   margin: auto;
+  flex: auto;
 }
 
 #wallet ul {
@@ -59,7 +115,12 @@
 }
 #wallet ul li span.balance {
   text-align: end;
-  width: 30%;
+  width: 20%;
+}
+#wallet ul li span.value {
+  text-align: end;
+  width: 20%;
+  font-size: smaller;
 }
 
 

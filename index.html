@@ -6,30 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <title>DexPairs | Charts</title>
-  <meta name="description" content="Track your wallet value on multiple chains and watch for historical prices of any pair token you want ! Supports Ethereum, Polygon, Fantom and xDai chains.">
+  <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Supports Ethereum, Polygon, BSC, Fantom and xDai chains.">
   <meta name="author" content="Dorian Bayart">
-  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, matic, polygon, ethereum, fantom, xdai, wallet, defi, dex, uniswap, sushiswap, spiritswap, honeyswap">
+  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, bsc, fantom, xdai, wallet, defi, dex, uniswap, sushiswap, pancakeswap, spiritswap, honeyswap">
 
-  <script defer src="/lib/moment.min.js"></script>
-  <script defer src="/lib/chart.min.js"></script>
-  <script defer src="/lib/chartjs-adapter-moment.js"></script>
-  <script defer src="/public/script.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
   <script defer src="/public/common.js"></script>
+  <script defer src="/public/script.js"></script>
 
-  <link rel="shortcut icon" type="image/png" href="/public/graph-background-min.png">
+  <link rel="shortcut icon" type="image/png" href="/img/graph-background-min.png">
 
   <meta property="og:title" content="DexPairs.xyz" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="http://www.dexpairs.xyz" />
-  <meta property="og:image" content="/public/graph-background-min.png" />
+  <meta property="og:url" content="https://dexpairs.xyz" />
+  <meta property="og:image" content="/img/graph-background-min.png" />
   <meta property="og:site_name" content="DexPairs">
 </head>
 
 <body style="display: none">
   <div id='header'>
-    <header id='title'>
-      <h1>
-        <a href="/" aria-label="Homepage">
+    <header>
+      <a id='title' href="/" aria-label="Homepage">
+        <h1>
           DexPairs
           <span class='version'>
             <span class='low'>
@@ -37,29 +38,45 @@
             </span>
             ALPHA
           </span>
-        </a>
-      </h1>
+        </h1>
+      </a>
     </header>
 
     <div id='menu'>
       <div id='menu-charts' class='menu-item'>
-        <h2>
-          <a href="/" aria-label="Charts">
+        <a href="/" aria-label="Charts">
+          <h2>
             Charts
-          </a>
-        </h2>
+          </h2>
+        </a>
       </div>
       <div id='menu-wallet' class='menu-item'>
-        <h2>
-          <a href="/wallet" aria-label="Wallet">
+        <a href="/wallet" aria-label="Wallet">
+          <h2>
             Wallet
-          </a>
-        </h2>
+          </h2>
+        </a>
       </div>
     </div>
   </div>
 
+  <div class='gas-container'>
+    <span class='gas-icon'>
+      <img src='/img/gas-station-icon.svg' alt="Gas Station Icon" title="Network current gas" width="14px" height="16px">
+    </span>
+    <ul class='gas-list'>
+      <li id='gas-ETHEREUM'></li>
+      <li id='gas-POLYGON'></li>
+      <li id='gas-BSC'></li>
+      <li id='gas-FANTOM'></li>
+      <li id='gas-XDAI'></li>
+    </ul>
+  </div>
+
   <div id='dex-selection'>
+    <div class="dex-selection-img-container">
+      <img id="dex-selection-img" src="/img/ethereum-icon.svg" alt="Ethereum Logo">
+    </div>
     <select name='dex-selector' id='dex-selector' title='Select the DEX/Protocol'></select>
   </div>
 
@@ -84,12 +101,12 @@
         </div>
         <button id='swapper_switch' title='Switch'>
           <img src="https://cdn0.iconfinder.com/data/icons/google-material-design-3-0/48/ic_swap_horiz_48px-256.png"
-               alt="Swap icon" width="32px" height="32px">
+          alt="Swap icon" width="32px" height="32px">
         </button>
         <div id='base'>
           <button id='base_change' title='Edit'>
             <img src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/edit-change-pencil-512.png"
-                 alt="Edit icon" width="28px" height="28px">
+            alt="Edit icon" width="28px" height="28px">
           </button>
           <div id='base_symbol'></div>
           <select id='base_select' title='Select the reference token'></select>
@@ -121,18 +138,19 @@
 
   <footer class="footer">
     <a id="roadmap_link" href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank">
-      <img src="https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/roadmap-icon.svg" title="Roadmap Picture" />
+      <img src="/img/roadmap-icon.svg" title="Roadmap Picture" alt="Roadmap Picture" width="20px" height="20px" />
       <span>Roadmap</span>
     </a>
     <a id="github_link" href="https://github.com/dorianbayart/DexPairs" target="_blank">
-      <img src="https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/GitHub-Mark-32px.png" title="Github Logo" />
+      <img src="/img/GitHub-Mark-32px.png" title="Github Logo" alt="Github Logo" width="20px" height="20px" />
       <span>GitHub</span>
     </a>
   </footer>
 
 
-
-
+  <div id="body-background"></div>
+  
+  <link rel="stylesheet" href="/public/gas.css">
   <link rel="stylesheet" href="/public/design.css">
   <link rel="stylesheet" href="/public/responsive.css">
   <link rel="stylesheet" href="/public/colors.css">

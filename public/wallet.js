@@ -1,144 +1,82 @@
 
-const NETWORK = {
-  ETHEREUM: 'ETHEREUM',
-  POLYGON: 'POLYGON',
-  FANTOM: 'FANTOM',
-  XDAI: 'XDAI',
-  BSC: 'BSC'
-}
-const REQUESTS = {
-  ETHEREUM: {
-    name: 'Ethereum',
-    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/ethereum-icon.svg',
-    rpc: 'https://cloudflare-eth.com',
-    tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
-  },
-  POLYGON: {
-    name: 'Polygon/Matic',
-    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/polygon-icon.svg',
-    rpc: 'https://rpc-mainnet.maticvigil.com',
-    tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
-  },
-  FANTOM: {
-    name: 'Fantom/Opera',
-    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/fantom-icon.svg',
-    rpc: 'https://rpcapi.fantom.network',
-    tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
-  },
-  XDAI: {
-    name: 'xDai',
-    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/xdai-icon.svg',
-    rpc: 'https://rpc.xdaichain.com/',
-    tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
-  },
-  BSC : {
-    name: 'Binance Smart Chain',
-    img: 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/img/bsc-icon.svg',
-    rpc: 'https://bsc-dataseed.binance.org',
-    tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
-    tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest'
-  }
-}
-
-const minABI = [
-       // balanceOf
-       {
-         "constant":true,
-         "inputs":[{"name":"_owner","type":"address"}],
-         "name":"balanceOf",
-         "outputs":[{"name":"balance","type":"uint256"}],
-         "type":"function"
-       },
-       // decimals
-       {
-         "constant":true,
-         "inputs":[],
-         "name":"decimals",
-         "outputs":[{"name":"","type":"uint8"}],
-         "type":"function"
-       }
-     ]
-
-let web3_ethereum = null
-let web3_polygon = null
-let web3_fantom = null
-let web3_xdai = null
-let web3_bsc = null
-let walletAddress = ''
-let wallet = {}
-
-
-const Web3 = require(['./lib/web3.min.js'], function(Web3) {
-  web3_ethereum = new Web3(REQUESTS.ETHEREUM.rpc)
-  web3_polygon = new Web3(REQUESTS.POLYGON.rpc)
-  web3_fantom = new Web3(REQUESTS.FANTOM.rpc)
-  web3_xdai = new Web3(REQUESTS.XDAI.rpc)
-  web3_bsc = new Web3(REQUESTS.BSC.rpc)
-
-  web3_ethereum.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on Ethereum: ' + web3_ethereum.utils.fromWei(gas, 'gwei'))
-  })
-  web3_polygon.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on Polygon: ' + web3_polygon.utils.fromWei(gas, 'gwei'))
-  })
-  web3_fantom.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on Fantom: ' + web3_fantom.utils.fromWei(gas, 'gwei'))
-  })
-  web3_xdai.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on xDai: ' + web3_xdai.utils.fromWei(gas, 'gwei'))
-  })
-  web3_bsc.eth.getGasPrice().then(gas => {
-    console.log('Gas Price on BSC: ' + web3_bsc.utils.fromWei(gas, 'gwei'))
-  })
-})
+let globalChart = null
+let walletValue = 0
 
 
 
 // defines event on search field
-document.getElementById('input-wallet').addEventListener("keyup", function(e) {
+document.getElementById('input-wallet').addEventListener("change", function(e) {
   let inputAddress = e.target.value
   configureWallet(inputAddress)
-  e.target.blur()
 })
 
 // search transactions / tokens for the specified wallet address
 function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
-  inputContainer.classList.remove('margin-top')
-  if(inputAddress === walletAddress) { return }
+  const globalInforationContainer = document.getElementById('global')
+  const stateContainer = document.getElementById('state')
 
-  if(!web3_ethereum) {
-    setTimeout(function(){ configureWallet(inputAddress) }, 500)
+  if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
+    stateContainer.innerHTML = null
+    stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
     return
   }
 
-  if(web3_ethereum.utils.isAddress(inputAddress)) {
-    if(sessionStorage.getItem('walletAddress') === inputAddress) {
-      wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
-      displayWallet()
-    } else {
-      wallet = {}
+  if(!web3_ethereum) {
+    setTimeout(function(){ configureWallet(inputAddress) }, 400)
+    return
+  }
+
+  if(!web3_ethereum.utils.isAddress(inputAddress)) {
+    inputContainer.classList.toggle('margin-top', true)
+    globalInforationContainer.classList.toggle('none', true)
+    
+    const urlParams = new URLSearchParams(window.location.search)
+    if(urlParams.has('address') && window.history.replaceState) {
+      window.history.replaceState(null, document.title, window.location.href.split("?")[0]);
     }
 
-    Object.keys(wallet).forEach(address => {
-      wallet[address].upToDate = false
-    })
+    walletAddress = null
+    sessionStorage.removeItem('walletAddress', walletAddress)
+    wallet = {}
+    displayWallet()
+    
+    stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
+    stateContainer.classList.toggle('border-bottom', true)
+    stateContainer.classList.toggle('border-error', true)
+    stateContainer.classList.remove('border-info')
 
-    walletAddress = inputAddress
-
-    getTokenTx(NETWORK.ETHEREUM)
-    getTokenTx(NETWORK.POLYGON)
-    getTokenTx(NETWORK.FANTOM)
-    getTokenTx(NETWORK.XDAI)
-    getTokenTx(NETWORK.BSC)
-    sessionStorage.setItem('walletAddress', walletAddress)
-  } else if (!inputContainer.classList.contains('margin-top')) {
-    inputContainer.classList.add('margin-top')
+    return
   }
+
+  stateContainer.innerHTML = 'Searching for transactions and tokens ...'
+  stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+
+  if(sessionStorage.getItem('walletAddress') === inputAddress) {
+    wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
+    displayWallet()
+  } else {
+    wallet = {}
+  }
+
+  Object.keys(wallet).forEach(id => {
+    wallet[id].upToDate = false
+  })
+
+  walletAddress = inputAddress
+
+  const urlParams = new URLSearchParams(window.location.search)
+  if(!urlParams.has('address') && window.history.replaceState) {
+    window.history.replaceState(null, walletAddress, window.location + '?address=' + walletAddress);
+  }
+
+  Object.keys(NETWORK).forEach((network, i) => {
+    sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
+    getNetworkBalance(NETWORK[network].enum)
+    getTokenTx(NETWORK[network].enum)
+  });
+
+  sessionStorage.setItem('walletAddress', walletAddress)
 }
 
 
@@ -153,73 +91,103 @@ function getTokenTx(network) {
       sessionStorage.setItem('tokentx-' + network, JSON.stringify(tokentx))
 
       searchTokens(network)
+
+      setTimeout(function(){
+        getTokenTx(network)
+      }, (Math.round(Math.random() * 15) + 45) * 1000)
     }
   }
-  xmlhttp.open("GET", REQUESTS[network].tokentx.replace('WALLET_ADDRESS', walletAddress), true)
+  xmlhttp.open("GET", NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress), true)
   xmlhttp.send()
 }
 
-
-// get token balance - Not used
-function getTokenBalance(contractAddress, network) {
-  if(wallet[contractAddress].upToDate) {
-    return
-  }
-
-  var xmlhttp = new XMLHttpRequest()
-  xmlhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status == 200 && this.responseText) {
-
-      var data = JSON.parse(this.responseText)
-      if(data.status !== '1') {
-        return
-      }
-      const tokenValue = data.result
-
-      wallet[contractAddress].value = tokenValue
-      wallet[contractAddress].upToDate = true
-
-      sessionStorage.setItem('wallet', JSON.stringify(wallet))
-
-      changeProgress()
-    }
-  }
-  xmlhttp.open("GET", REQUESTS[network].tokenbalance.replace('WALLET_ADDRESS', walletAddress).replace('CONTRACT_ADDRESS', contractAddress), true)
-  xmlhttp.send()
-}
 
 // Get token balance
 function getTokenBalanceWeb3(contractAddress, network) {
+  if(contractAddress === '0x0') return
+
+  const id = getId(contractAddress, network)
   // Get ERC20 Token contract instance
   let contract = getContract(contractAddress, network)
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
-    wallet[contractAddress].value = value
-    wallet[contractAddress].upToDate = true
+    wallet[id].value = value
+    wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
+    wallet[id].upToDate = true
 
     sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
-    changeProgress()
+    displayWallet()
   })
 }
 
 
 function searchTokens(network) {
-  const tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
-  tokentx.forEach((item, i) => {
-    wallet[item.contractAddress] = {
+  let tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
+  const latestBlock = sessionStorage.getItem('latest-block-' + network)
+  
+  if(!tokentx || typeof tokentx === 'string' || tokentx.length === 0) {
+    return
+  }
+
+  if(latestBlock) {
+    tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
+  }
+  
+  if(tokentx.length > 0) {
+    tokentx.forEach((item, i) => {
+      const id = getId(item.contractAddress, network)
+      wallet[id] = {
+        network: network,
+        contract: item.contractAddress,
+        tokenSymbol: item.tokenSymbol,
+        tokenName: item.tokenName,
+        tokenDecimal: item.tokenDecimal,
+        value: (wallet[id] && wallet[id].value) ? wallet[id].value : '0',
+        price: wallet[id] ? wallet[id].price : null
+      }
+    })
+
+    Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
+      setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 75)
+    })
+    
+    sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
+  }
+}
+
+function getNetworkBalance(network) {
+  const web3 = getWeb3(network)
+  if(!web3 || !web3.utils.isAddress(walletAddress)) {
+    return
+  }
+  web3.eth.getBalance(walletAddress).then(balance => {
+    const address = NETWORK[network].tokenContract
+    wallet[getId(address, network)] = {
       network: network,
-      tokenSymbol: item.tokenSymbol,
-      tokenName: item.tokenName,
-      tokenDecimal: item.tokenDecimal,
-      value: (wallet[item.contractAddress] && wallet[item.contractAddress].value) ? wallet[item.contractAddress].value : '0'
+      contract: address,
+      tokenSymbol: NETWORK[network].tokenSymbol,
+      tokenName: NETWORK[network].tokenName,
+      tokenDecimal: NETWORK[network].tokenDecimal,
+      value: balance,
+      price: getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
     }
+    displayWallet()
+
+    setTimeout(function(){
+      getNetworkBalance(network)
+    }, (Math.round(Math.random() * 15) + 15) * 1000)
+
+  }, error => {
+
+    setTimeout(function(){
+      getNetworkBalance(network)
+    }, 3000)
+
   })
 
-  Object.keys(wallet).filter(contractAddress => wallet[contractAddress].network === network).forEach((contractAddress, i) => {
-    setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, (i+1) * 300)
-  })
+
 }
 
 
@@ -227,37 +195,32 @@ function searchTokens(network) {
 function displayWallet() {
   document.getElementById('wallet').innerHTML = null;
   ul = document.createElement('ul')
-  filteredWallet()
-    .sort(function(a, b) {
-      if(a.network === NETWORK.ETHEREUM && b.network !== NETWORK.ETHEREUM
-        || a.network === NETWORK.POLYGON && b.network === NETWORK.BSC) return -1
-      if(a.network === NETWORK.POLYGON && b.network === NETWORK.ETHEREUM
-        || a.network === NETWORK.BSC && b.network === NETWORK.POLYGON) return 1
-      return 0
-    })
-    .forEach(function (token) {
+  const tokens = filteredWallet().sort(sortWallet)
+
+  tokens.forEach(function (id) {
     let li = document.createElement('li')
-    li.title = (wallet[token.address].tokenName && wallet[token.address].tokenName !== '') ? wallet[token.address].tokenName : wallet[token.address].tokenSymbol
+    li.title = (wallet[id].tokenName && wallet[id].tokenName !== '') ? wallet[id].tokenName : wallet[id].tokenSymbol
 
     let spanNetwork = document.createElement('span')
     spanNetwork.classList.add('network')
-    spanNetwork.appendChild(createNetworkImg(wallet[token.address].network))
+    spanNetwork.appendChild(createNetworkImg(wallet[id].network))
     li.appendChild(spanNetwork)
 
     let spanSymbol = document.createElement('span')
-    spanSymbol.innerHTML = (wallet[token.address].tokenName && wallet[token.address].tokenName !== '') ? wallet[token.address].tokenName : wallet[token.address].tokenSymbol
+    spanSymbol.innerHTML = (wallet[id].tokenName && wallet[id].tokenName !== '') ? wallet[id].tokenName : wallet[id].tokenSymbol
     spanSymbol.classList.add('symbol')
     li.appendChild(spanSymbol)
 
     let spanBalance = document.createElement('span')
-    spanBalance.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
+    spanBalance.innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
     spanBalance.classList.add('balance')
     li.appendChild(spanBalance)
 
     let spanValue = document.createElement('span')
-    spanValue.innerHTML = displayBalance(wallet[token.address].value, wallet[token.address].tokenDecimal)
+    let price = wallet[id].price
+    spanValue.innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
     spanValue.classList.add('value')
-    li.appendChild(spanBalance)
+    li.appendChild(spanValue)
 
     ul.appendChild(li)
 
@@ -265,89 +228,219 @@ function displayWallet() {
 
     })
   })
-  document.getElementById('wallet').appendChild(ul)
+
+  if(tokens.length > 0) {
+    document.getElementById('wallet').appendChild(ul)
+    document.getElementById('global').classList.remove('none')
+    document.getElementById('state').innerHTML = null
+    document.getElementById('input-wallet-container').classList.remove('margin-top')
+  } else {
+    document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
+    const stateContainer = document.getElementById('state')
+    if(walletAddress && walletAddress.length > 0) {
+      stateContainer.innerHTML = 'No token can be found on this address'
+      stateContainer.classList.toggle('border-bottom', true)
+      stateContainer.classList.toggle('border-info', true)
+      stateContainer.classList.remove('border-error')
+    } else {
+      stateContainer.innerHTML = null
+      stateContainer.classList.remove('border-bottom', 'border-info', 'border-error')
+    }
+  }
+
+  updateGlobalPrice()
+  updateGlobalChart()
+
+}
+
+// Update & Display the total wallet value
+function updateGlobalPrice() {
+  walletValue = 0
+  filteredWallet().forEach(function (id) {
+    let price = wallet[id].price
+    if(price) {
+      walletValue += Number.parseFloat(displayBalance(wallet[id].value * price, wallet[id].tokenDecimal))
+    }
+  })
+
+  document.getElementById('wallet-value').innerHTML = walletValue > 0 ? '$' + Math.round(walletValue) : null
+
+}
+
+function displayChartTooltip(e) {
+  const value = e.tooltip.dataPoints[0].raw
+  const date = new Date(parseInt(e.tooltip.dataPoints[0].parsed.x)).toLocaleString()
+  if(e.tooltip.opacity > 0) { // display tooltip
+    document.getElementById('wallet-value-tooltip').innerHTML = value > 0 ? '$' + Math.round(value) : null
+    document.getElementById('wallet-date-tooltip').innerHTML = date
+  } else { // hide tooltip
+    document.getElementById('wallet-value-tooltip').innerHTML = null
+    document.getElementById('wallet-date-tooltip').innerHTML = null
+  }
 }
 
 
 
 /* MAIN */
 initializeHTML()
+simpleDataTimers()
 
 
 
 
 function initializeHTML() {
-  if(sessionStorage.getItem('walletAddress')) {
-    const address = sessionStorage.getItem('walletAddress')
+  const urlParams = new URLSearchParams(window.location.search)
+  let address = null
+  if(urlParams.has('address')) {
+    address = urlParams.get('address')
+  }
+  else if(sessionStorage.getItem('walletAddress')) {
+    address = sessionStorage.getItem('walletAddress')
+  }
+
+  if(address) {
     document.getElementById('input-wallet').value = address
     configureWallet(address)
   }
 }
 
-
-/* Utils - Return the web3 to use depending on the network */
-const getWeb3 = (network) => {
-  switch (network) {
-      case NETWORK.ETHEREUM:
-        return web3_ethereum
-      case NETWORK.POLYGON:
-        return web3_polygon
-      case NETWORK.FANTOM:
-        return web3_fantom
-      case NETWORK.XDAI:
-        return web3_xdai
-      case NETWORK.BSC:
-        return web3_bsc
-      default:
-        return
-    }
+function simpleDataTimers() {
+  Object.keys(NETWORK).forEach((network, i) => {
+    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 500)
+  })
+  setTimeout(function(){ simpleDataTimers() }, 60000)
 }
+
+
+function updateGlobalChart() {
+  if(!walletAddress || walletValue === 0) {
+    if(globalChart) {
+      globalChart.destroy()
+      globalChart = null
+    }
+    return
+  }
+  const network = NETWORK.ETHEREUM.enum
+  const address = NETWORK.ETHEREUM.tokenPriceContract
+  let chart = JSON.parse(sessionStorage.getItem(network + '-' + address))
+
+  if(!chart || (chart && !chart.chart_often) || (chart && chart.chart_often && chart.chart_often.length < 1)) {
+    getChartsByAddress(NETWORK.ETHEREUM.tokenPriceContract, NETWORK.ETHEREUM.enum, updateGlobalChart)
+    return
+  }
+
+  chart = extract24hChart(chart.chart_often)
+
+  const last_price = chart[chart.length - 1].p
+
+  const timeData = chart.map(coords => new Date(coords.t))
+  const tokenData = chart.map(coords => coords.p * walletValue / last_price)
+
+  const ctx = document.getElementById('wallet-chart').getContext('2d')
+  if(globalChart) {
+    globalChart.data.labels = timeData
+    globalChart.data.datasets[0].data = tokenData
+    globalChart.update()
+  } else {
+    globalChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: timeData,
+        datasets: [{
+          data: tokenData,
+          backgroundColor: '#0000FF88',
+          borderColor: '#0000FF88',
+          //fill: '#0000FF44',
+          radius: 0,
+          tension: 0.3,
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: false
+          },
+          legend: {
+            display: false
+          },
+          tooltip: {
+            enabled: false,
+            intersect: false,
+            external: displayChartTooltip
+          }
+        },
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
+        //aspectRatio: 3,
+        scaleShowLabels: false,
+        tooltipEvents: [],
+        pointDot: false,
+        scaleShowGridLines: true,
+        scales: {
+          x: {
+            type: 'time',
+            display: false
+          },
+          y: {
+            display: false
+          }
+        }
+      }
+    })
+  }
+}
+
 
 /* Utils - Return the Contract depending on the network */
 const getContract = (contractAddress, network) => {
   switch (network) {
-      case NETWORK.ETHEREUM:
+      case NETWORK.ETHEREUM.enum:
         return new web3_ethereum.eth.Contract(minABI, contractAddress)
-      case NETWORK.POLYGON:
+      case NETWORK.POLYGON.enum:
         return new web3_polygon.eth.Contract(minABI, contractAddress)
-      case NETWORK.FANTOM:
+      case NETWORK.FANTOM.enum:
         return new web3_fantom.eth.Contract(minABI, contractAddress)
-      case NETWORK.XDAI:
+      case NETWORK.XDAI.enum:
         return new web3_xdai.eth.Contract(minABI, contractAddress)
-      case NETWORK.BSC:
+      case NETWORK.BSC.enum:
         return new web3_bsc.eth.Contract(minABI, contractAddress)
       default:
         return
     }
 }
 
-
-/* Utils - Create a document network img tag */
-const createNetworkImg = (network) => {
-  let img = document.createElement('img')
-  img.src = REQUESTS[network].img
-  img.alt = REQUESTS[network].name + ' logo'
-  img.title = REQUESTS[network].name
-  img.classList.add('network')
-  return img
+/* Utils - sort the wallet */
+const sortWallet = (id_a, id_b) => {
+  let a = wallet[id_a]
+  let b = wallet[id_b]
+  // sort by network
+  if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
+  if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+  // then sort by token network (eg: Ethereum, Matic, etc are first)
+  if(NETWORK[a.network].tokenContract === a.contract) return -1
+  if(NETWORK[b.network].tokenContract === b.contract) return 1
+  // then sort by price value
+  if(a.value * a.price > b.value * b.price) return -1
+  if(a.value * a.price < b.value * b.price) return 1
+  // then sort by name
+  return a.tokenName.localeCompare(b.tokenName)
 }
 
-/* Utils - Progress Bar */
-const changeProgress = () => {
-  const progressbar = document.getElementById('progress-bar');
-  const width = Object.keys(wallet).filter(address => wallet[address].upToDate).length / Object.keys(wallet).length * 100
-  progressbar.style.width = `${width}%`
-
-  displayWallet()
-};
+/* Utils - getId from Address and Network */
+const getId = (address, network) => {
+  return network + '-' + address
+}
 
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
   const filtered = Object.keys(wallet)
-    .filter(address => wallet[address].value && wallet[address].value !== '0')
-    .map(
-      address => ({ address: address, ...wallet[address] })
-    )
+    .filter(id => wallet[id].value && wallet[id].value !== '0')
   return filtered
 }
 
@@ -358,11 +451,4 @@ const displayBalance = (value, decimal) => {
   } else {
     return 0
   }
-}
-
-// Round number
-const precise = (x) => {
-  if(x > 9999) { return Math.round(x) }
-  else if(x > 0.0001) { return Number.parseFloat(x).toPrecision(5) }
-  return Number.parseFloat(x).toPrecision(2)
 }

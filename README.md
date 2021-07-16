@@ -1,17 +1,19 @@
 # DexPairs
 
-[www.dexpairs.xyz](http://www.dexpairs.xyz)
+[dexpairs.xyz](https://dexpairs.xyz)
 
 * Get and store subgraph data on different protocols
 * Display the price charts of any token against any other token
-* Wallet
+* [Wallet](https://dexpairs.xyz/wallet)
   * Search tokens in transactions on different protocols
   * Display prices/values
-  * Estimate wallet history in a global chart
+  * Estimate wallet history with a global chart
 
 
 ## Supported protocols
 * [x] Uniswap v2 - Ethereum
 * [x] SushiSwap - Polygon/Matic
-* [ ] PancakeSwap - Binance Smart Chain (subgraph data are very late)
+* [x] PancakeSwap - Binance Smart Chain
+* [x] SpiritSwap - Fantom
+* [x] HoneySwap - xDai
 

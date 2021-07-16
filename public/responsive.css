@@ -4,6 +4,9 @@ body {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+#body-background {
+    background-size: 30%;
+}
 header {
   font-size: 3rem;
   padding: 12px 24px;
@@ -25,6 +28,12 @@ header .version .low {
 #menu .menu-item .low {
   font-size: 0.6em;
 }
+#dex-selector {
+  font-size: 1.2em;
+}
+.dex-selection-img-container {
+  height: 36px;
+}
 .left-menu {
   width: 25%;
   min-width: 12em;
@@ -34,6 +43,7 @@ header .version .low {
 }
 #top {
   font-size: 0.85em;
+  min-height: 96px;
 }
 .top-token {
   padding: 0.25em 1em;
@@ -44,6 +54,7 @@ header .version .low {
   font-size: initial;
 }
 #list {
+  height: 420px;
   margin: 0.5em 1em;
   padding: 1em;
 }
@@ -60,7 +71,6 @@ header .version .low {
 #chart {
   margin: 0.5em 1em 1em;
   padding: 0.25em;
-  max-height: 45vh;
 }
 #source {
   margin-top: 2em;
@@ -77,6 +87,9 @@ header .version .low {
   html {
     font-size: 0.9em;
   }
+  #body-background {
+      background-size: 40%;
+  }
   header {
     font-size: 2rem;
     padding: 8px 16px;
@@ -84,6 +97,16 @@ header .version .low {
   #menu {
     padding: 6px 12px;
     width: 75%;
+  }
+  #dex-selector {
+    font-size: 1.1em;
+  }
+  .dex-selection-img-container {
+    height: 30px;
+  }
+  #top {
+    min-height: 145px;
+    margin: auto 0.5em;
   }
   .top-column {
     width: 50%;
@@ -106,7 +129,7 @@ header .version .low {
   #list {
     margin: 0.25em 0.5em;
     padding: 0.5em;
-    height: 12vh;
+    height: 96px;
   }
   #list li {
     display: inline-flex;
@@ -122,7 +145,6 @@ header .version .low {
   #chart {
     margin: 0.25em 0.5em 1em;
     padding: 0.5em;
-    max-height: 45vh;
   }
   #source {
     margin-top: 1.25em;
@@ -134,9 +156,12 @@ header .version .low {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 460px) {
   html {
     font-size: 0.8em;
+  }
+  #body-background {
+      background-size: 50%;
   }
   header {
     font-size: 1.5rem;
@@ -146,13 +171,18 @@ header .version .low {
     padding: 3px 6px;
     width: 95%;
   }
+  #dex-selector {
+    font-size: 1em;
+  }
+  .dex-selection-img-container {
+    height: 20px;
+  }
   #top {
     flex-wrap: wrap;
+    min-height: 280px;
   }
   .top-column {
     width: 100%;
-  }
-  .top-token {
   }
   #search_field {
     margin: 0.1em 0.25em;
@@ -161,10 +191,10 @@ header .version .low {
   #list {
     margin: 0.1em 0.25em;
     padding: 0.25em;
-    height: 14vh;
+    height: 80px;
   }
   #list li {
-    padding: 10px;
+    padding: 8px;
   }
   #token, #base {
     margin: 0.1em 0.25em;
@@ -175,7 +205,6 @@ header .version .low {
   }
   #chart {
     margin: 0.1em 0.25em 1em;
-    max-height: 50vh;
   }
   #source {
     margin-top: 0.5em;

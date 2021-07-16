@@ -3,6 +3,18 @@ body {
   font-family: Sans-Serif;
 }
 
+#body-background {
+    opacity: 0.4;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: -1;
+}
+
 h1, h2, h3 {
   font-size: inherit;
   font-weight: normal;
@@ -17,19 +29,17 @@ a, a:hover, a:visited, a:active {
 #header {
   display: flex;
   align-items: baseline;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 #title {
   cursor: pointer;
-}
-
-header {
   transition: all 250ms ease-in-out;
 }
-header:hover {
+#title:hover {
   opacity: 0.6;
 }
-header h1 a {
+
+header h1 {
   display: inline-flex;
   align-items: baseline;
 }
@@ -50,13 +60,15 @@ header .version {
   cursor: pointer;
   margin: 0 5%;
   text-align: center;
-  padding: 0.5em;
   border-radius: 10px;
   box-shadow: 0px 0px 12px #AAAE;
   transition: all 150ms ease-in-out;
 }
 #menu .menu-item:hover {
   box-shadow: 0px 0px 12px #888E;
+}
+#menu .menu-item h2 {
+  padding: 12px 9px 9px;
 }
 
 .flex-column {
@@ -79,14 +91,23 @@ header .version {
 }
 
 #dex-selection {
-  margin: 1em;
-  text-align: end;
+  margin: 12px;
+  display: flex;
+  align-items: center;
+}
+.dex-selection-img-container {
+  display: inline-flex;
+  flex: auto;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 1em;
+}
+.dex-selection-img-container img {
+  height: 100%;
 }
 #dex-selector {
-  font-size: larger;
   border: none;
   padding: 0.25em;
-  text-align: end;
   outline: none;
 }
 
@@ -95,6 +116,7 @@ header .version {
   max-width: 1024px;
   border-radius: 12px;
   padding: 4px;
+  transition: all 500ms ease-in-out;
 }
 #top::after {
   content: "";
@@ -138,11 +160,11 @@ header .version {
 }
 
 #list {
-  height: 45vh;
   overflow-y: scroll;
   overflow-x: hidden;
   border: 1px solid #CCC;
   border-radius: 12px;
+  transition: all 500ms ease-in-out;
 }
 #list ul {
   list-style: none;

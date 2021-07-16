@@ -9,7 +9,7 @@ const { writeFile } = require('fs')
 
 /********************************
 
-          DexPairs.xyz
+DexPairs.xyz
 
 *********************************/
 /*        Dorian Bayart         */
@@ -32,12 +32,15 @@ const dir_home = os.homedir()
 console.log(dir_home)
 
 
-const HISTORY_SIZE = 120
-const VOLUME_SIZE = 10
+const VOLUME_SIZE = 12
+const REALTIME = 20000 // 20 seconds
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAYS = 259200000 // 3 days
 const WEEK = 604800000 // 1 week
+const HISTORY_SIZE = 192
+const HISTORY_SIZE_24H = 96 // 24h / 15min
+const TOP_SIZE = 6
 
 
 /* DexPairs */
@@ -55,7 +58,7 @@ let tokens_list = {}
 let top_tokens = {}
 let tokens_data = {}
 let tokens_charts = {}
-let tokens_volume = {}
+let pancakeswap_volume = {}
 
 // Sushiswap data - Polygon/Matic
 let sushiswap_list = {}
@@ -103,51 +106,65 @@ async function get(url, query = null) {
 }
 
 
-// Get Pancake's top
-async function getTopTokens() {
-  return await get("https://api.pancakeswap.info/api/v2/tokens")
+// Get Pancakeswap's top
+const pancakeswap_request = `
+query
+{
+  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
+    id
+    name
+    symbol
+    derivedBNB,
+    tradeVolumeUSD
+  }
+  bundle(id: "1" ) {
+    bnbPrice
+  }
 }
-async function getTopPairs() {
-  return await get("https://api.pancakeswap.info/api/v2/pairs")
+`
+
+// Use TheGraph API - https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2
+async function getPancakeswapTopTokens() {
+  return await get("https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2", pancakeswap_request)
 }
 
 // Get Uniswap's top
 const uniswap_request = `
 query
-  {
-    tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
-      id
-      name
-      symbol
-      derivedETH,
-      tradeVolumeUSD
-    }
-    bundle(id: "1" ) {
-      ethPrice
-    }
+{
+  tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { volumeUSD_gt: "100" } ) {
+    id
+    name
+    symbol
+    derivedETH,
+    volumeUSD
   }
+  bundle(id: "1" ) {
+    ethPriceUSD
+  }
+}
 `
 
-// Use TheGraph API - https://thegraph.com/explorer/subgraph/uniswap/uniswap-v2
+// Use TheGraph API - https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3
 async function getUniswapTopTokens() {
-  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2", uniswap_request)
+  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3", uniswap_request)
 }
 
 // Get Sushiswap's top
 const sushiswap_request = `
 query
-  {
-    tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { liquidity_gt: "10" } ) {
-      id
-      name
-      symbol
-      derivedETH,
-      volumeUSD
-    }
-    bundle(id: "1" ) {
-      ethPrice
-    }
+{
+  tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { liquidity_gt: "10" } ) {
+    id
+    name
+    symbol
+    derivedETH,
+    volumeUSD
   }
+  bundle(id: "1" ) {
+    ethPrice
+  }
+}
 `
 
 // Use TheGraph API - https://thegraph.com/explorer/subgraph/sushiswap/matic-exchange
@@ -158,18 +175,18 @@ async function getSushiswapTopTokens() {
 // Get Spiritswap's top
 const spiritswap_request = `
 query
-  {
-    tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
-      id
-      name
-      symbol
-      derivedFTM,
-      tradeVolumeUSD
-    }
-    bundle(id: "1" ) {
-      ftmPrice
-    }
+{
+  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
+    id
+    name
+    symbol
+    derivedFTM,
+    tradeVolumeUSD
   }
+  bundle(id: "1" ) {
+    ftmPrice
+  }
+}
 `
 
 // Use TheGraph API - https://thegraph.com/explorer/subgraph/layer3org/spiritswap-analytics
@@ -180,18 +197,18 @@ async function getSpiritswapTopTokens() {
 // Get Honeywap's top
 const honeyswap_request = `
 query
-  {
-    tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
-      id
-      name
-      symbol
-      derivedETH,
-      tradeVolumeUSD
-    }
-    bundle(id: "1" ) {
-      ethPrice
-    }
+{
+  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
+    id
+    name
+    symbol
+    derivedETH,
+    tradeVolumeUSD
   }
+  bundle(id: "1" ) {
+    ethPrice
+  }
+}
 `
 
 // Use TheGraph API - https://thegraph.com/explorer/subgraph/kirkins/honeyswap
@@ -205,130 +222,162 @@ async function getHoneyswapTopTokens() {
 // Program - Pancake
 async function launch() {
   // loop
-  setTimeout(function(){ launch() }, OFTEN) // every 15 minutes
+  setTimeout(function(){ launch() }, REALTIME) // every 15 minutes
 
   let tokens_data_file = {}
   let tokens_charts_file = {}
+  let pancakeswap_volume_file = {}
   try {
     tokens_data_file = require(path.join(dir_home, 'pancake-simple.json'))
     tokens_charts_file = require(path.join(dir_home, 'pancake-charts.json'))
+    pancakeswap_volume_file = require(path.join(dir_home, 'pancake-volume.json'))
+
+    tokens_data = tokens_data_file
+    tokens_charts = tokens_charts_file
+    pancakeswap_volume = pancakeswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
-  tokens_data = tokens_data_file
-  tokens_charts = tokens_charts_file
+
 
   tokens_list = {}
 
   // get data from PancakeSwap
-  const top = await getTopTokens()
+  let top = {}
+  try {
+    top = await getPancakeswapTopTokens()
+  } catch(error) {
+    console.log(error)
+    return
+  }
 
 
+  const time = Date.now()
+  const tokens = top.data ? top.data.tokens : []
 
-  const time = top.updated_at
-  const tokens = top.data
-
-  for (var token in tokens) {
-    if (tokens.hasOwnProperty(token)) {
-      const address = token
-      const symbol = tokens[token].symbol
-      const name = tokens[token].name
-      const price = tokens[token].price
-
-      // create tokens list
-      tokens_list[address] = symbol
+  const bnb_price = top.data ? top.data.bundle.bnbPrice : 0
 
 
-      // update tokens simple data
-      tokens_data[address] = {
+  tokens.forEach(token => {
+    const address = token.id
+    const symbol = token.symbol
+    const name = token.name
+    const price_BNB = token.derivedBNB
+    const price = price_BNB * bnb_price
+    const volumeUSD = token.tradeVolumeUSD
+
+    // create tokens list
+    tokens_list[address] = symbol
+
+
+    // update tokens simple data
+    tokens_data[address] = {
+      s: symbol,
+      n: name,
+      p: price,
+      t: time
+    }
+
+    // update tokens charts
+    //
+    if(tokens_charts[address]) {
+      if(time - tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]['t'] > OFTEN) {
+        tokens_charts[address].chart_often.push({
+          t: time,
+          p: price
+        })
+        tokens_charts[address].chart_often = tokens_charts[address].chart_often.slice(-HISTORY_SIZE)
+      }
+    } else {
+      tokens_charts[address] = {
         s: symbol,
         n: name,
-        p: price,
-        t: time
-      }
-
-      // update tokens charts
-      //
-      if(tokens_charts[address]) {
-        if(time - tokens_charts[address].chart_often[tokens_charts[address].chart_often.length-1]['t'] > OFTEN) {
-          tokens_charts[address].chart_often.push({
-            t: time,
-            p: price
-          })
-          tokens_charts[address].chart_often = tokens_charts[address].chart_often.slice(-HISTORY_SIZE)
-        }
-      } else {
-        tokens_charts[address] = {
-          s: symbol,
-          n: name,
-          chart_often: [{
-            t: time,
-            p: price
-          }]
-        }
-      }
-      if(tokens_charts[address].chart_4h) {
-        if((time - tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t']) > HOURS) {
-          tokens_charts[address].chart_4h.push({
-            t: time,
-            p: price,
-          })
-          tokens_charts[address].chart_4h = tokens_charts[address].chart_4h.slice(-HISTORY_SIZE)
-        }
-      } else {
-        tokens_charts[address].chart_4h = [{
-          t: time,
-          p: price
-        }]
-      }
-      if(tokens_charts[address].chart_3d) {
-        if((time - tokens_charts[address].chart_3d[tokens_charts[address].chart_3d.length-1]['t']) > DAYS) {
-          tokens_charts[address].chart_3d.push({
-            t: time,
-            p: price,
-          })
-          tokens_charts[address].chart_3d = tokens_charts[address].chart_3d.slice(-HISTORY_SIZE)
-        }
-      } else {
-        tokens_charts[address].chart_3d = [{
-          t: time,
-          p: price
-        }]
-      }
-      if(tokens_charts[address].chart_1w) {
-        if((time - tokens_charts[address].chart_1w[tokens_charts[address].chart_1w.length-1]['t']) > WEEK) {
-          tokens_charts[address].chart_1w.push({
-            t: time,
-            p: price,
-          })
-          tokens_charts[address].chart_1w = tokens_charts[address].chart_1w.slice(-HISTORY_SIZE)
-        }
-      } else {
-        tokens_charts[address].chart_1w = [{
+        chart_often: [{
           t: time,
           p: price
         }]
       }
     }
-  }
+    if(pancakeswap_volume[address]) {
+      if(time - pancakeswap_volume[address][pancakeswap_volume[address].length-1]['t'] > OFTEN) {
+        pancakeswap_volume[address].push({
+          t: time,
+          v: volumeUSD,
+        })
+        pancakeswap_volume[address] = pancakeswap_volume[address].slice(-VOLUME_SIZE)
+      }
+    } else {
+      pancakeswap_volume[address] = [{
+        t: time,
+        v: volumeUSD,
+      }]
+    }
+    if(tokens_charts[address].chart_4h) {
+      if((time - tokens_charts[address].chart_4h[tokens_charts[address].chart_4h.length-1]['t']) > HOURS) {
+        tokens_charts[address].chart_4h.push({
+          t: time,
+          p: price,
+        })
+        tokens_charts[address].chart_4h = tokens_charts[address].chart_4h.slice(-HISTORY_SIZE)
+      }
+    } else {
+      tokens_charts[address].chart_4h = [{
+        t: time,
+        p: price
+      }]
+    }
+    if(tokens_charts[address].chart_3d) {
+      if((time - tokens_charts[address].chart_3d[tokens_charts[address].chart_3d.length-1]['t']) > DAYS) {
+        tokens_charts[address].chart_3d.push({
+          t: time,
+          p: price,
+        })
+        tokens_charts[address].chart_3d = tokens_charts[address].chart_3d.slice(-HISTORY_SIZE)
+      }
+    } else {
+      tokens_charts[address].chart_3d = [{
+        t: time,
+        p: price
+      }]
+    }
+    if(tokens_charts[address].chart_1w) {
+      if((time - tokens_charts[address].chart_1w[tokens_charts[address].chart_1w.length-1]['t']) > WEEK) {
+        tokens_charts[address].chart_1w.push({
+          t: time,
+          p: price,
+        })
+        tokens_charts[address].chart_1w = tokens_charts[address].chart_1w.slice(-HISTORY_SIZE)
+      }
+    } else {
+      tokens_charts[address].chart_1w = [{
+        t: time,
+        p: price
+      }]
+    }
+  })
 
 
-  // build Top 25 list
+  // Sort tokens depending on volume
+  tokens_list = sortTokensByVolume(tokens_list, pancakeswap_volume)
+
+  // build Top 10 list
   top_tokens = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
-      const token = Object.keys(tokens)[i]
-      const address = token
-      const symbol = tokens[token].symbol
-      const name = tokens[token].name
-      const price = tokens[token].price
+    for (var i = 0; i < TOP_SIZE; i++) {
+      const address = Object.keys(tokens_list)[i]
+      const symbol = tokens_list[address]
+      const name = tokens_data[address].n
+      const price = tokens_data[address].p
+      const volume = pancakeswap_volume[address][pancakeswap_volume[address].length-1].v - pancakeswap_volume[address][0].v
 
       top_tokens[address] = {
         s: symbol,
         n: name,
         p: price,
-        chart: tokens_charts[token].chart_often
+        v: volume,
+        chart: tokens_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -345,7 +394,7 @@ async function launch() {
     if (err) throw err;
   });
 
-  // Update the top 25 tokens list
+  // Update the Top 10 tokens list
   pathFile = path.join(dir_home, 'pancake-top.json')
   writeFile( pathFile, JSON.stringify( top_tokens ), "utf8", (err) => {
     if (err) throw err;
@@ -363,13 +412,19 @@ async function launch() {
     if (err) throw err;
   });
 
+  // Update the Pancakeswap volumeUSD
+  pathFile = path.join(dir_home, 'pancake-volume.json')
+  writeFile( pathFile, JSON.stringify( pancakeswap_volume ), "utf8", (err) => {
+    if (err) throw err;
+  });
+
 }
 
 
 // Program - Uniswap
 async function launchUniswap() {
   // loop
-  setTimeout(function(){ launchUniswap() }, OFTEN) // every 15 minutes
+  setTimeout(function(){ launchUniswap() }, REALTIME) // every 15 minutes
 
   let uniswap_data_file = {}
   let uniswap_charts_file = {}
@@ -383,7 +438,8 @@ async function launchUniswap() {
     uniswap_charts = uniswap_charts_file
     uniswap_volume = uniswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
@@ -397,113 +453,113 @@ async function launchUniswap() {
   const time = Date.now()
   const tokens = top.data ? top.data.tokens : []
 
-  const eth_price = top.data ? top.data.bundle.ethPrice : 0
+  const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
 
   tokens.forEach(token => {
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_ETH = token.derivedETH
-      const price = price_ETH * eth_price
-      const volumeUSD = token.tradeVolumeUSD
+    const address = token.id
+    const symbol = token.symbol
+    const name = token.name
+    const price_ETH = token.derivedETH
+    const price = price_ETH * eth_price
+    const volumeUSD = token.volumeUSD
 
-      // create Uniswap list
-      uniswap_list[address] = symbol
+    // create Uniswap list
+    uniswap_list[address] = symbol
 
 
-      // update Uniswap simple data
-      uniswap_data[address] = {
+    // update Uniswap simple data
+    uniswap_data[address] = {
+      s: symbol,
+      n: name,
+      p: price,
+      t: time
+    }
+
+    // update Uniswap charts
+    //
+    if(uniswap_charts[address]) {
+      if(time - uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
+        uniswap_charts[address].chart_often.push({
+          t: time,
+          p: price,
+        })
+        uniswap_charts[address].chart_often = uniswap_charts[address].chart_often.slice(-HISTORY_SIZE)
+      }
+    } else {
+      uniswap_charts[address] = {
         s: symbol,
         n: name,
-        p: price,
-        t: time
+        chart_often: [{
+          t: time,
+          p: price,
+        }]
       }
-
-      // update Uniswap charts
-      //
-      if(uniswap_charts[address]) {
-        if(time - uniswap_charts[address].chart_often[uniswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
-          uniswap_charts[address].chart_often.push({
-            t: time,
-            p: price,
-          })
-          uniswap_charts[address].chart_often = uniswap_charts[address].chart_often.slice(-HISTORY_SIZE)
-        }
-      } else {
-        uniswap_charts[address] = {
-          s: symbol,
-          n: name,
-          chart_often: [{
-            t: time,
-            p: price,
-          }]
-        }
-      }
-      if(uniswap_volume[address]) {
-        if(time - uniswap_volume[address][uniswap_volume[address].length-1]['t'] > OFTEN) {
-          uniswap_volume[address].push({
-            t: time,
-            v: volumeUSD,
-          })
-          uniswap_volume[address] = uniswap_volume[address].slice(-VOLUME_SIZE)
-        }
-      } else {
-        uniswap_volume[address] = [{
+    }
+    if(uniswap_volume[address]) {
+      if(time - uniswap_volume[address][uniswap_volume[address].length-1]['t'] > OFTEN) {
+        uniswap_volume[address].push({
           t: time,
           v: volumeUSD,
-        }]
+        })
+        uniswap_volume[address] = uniswap_volume[address].slice(-VOLUME_SIZE)
       }
-      if(uniswap_charts[address].chart_4h) {
-        if((time - uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
-          uniswap_charts[address].chart_4h.push({
-            t: time,
-            p: price,
-          })
-          uniswap_charts[address].chart_4h = uniswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
-        }
-      } else {
-        uniswap_charts[address].chart_4h = [{
+    } else {
+      uniswap_volume[address] = [{
+        t: time,
+        v: volumeUSD,
+      }]
+    }
+    if(uniswap_charts[address].chart_4h) {
+      if((time - uniswap_charts[address].chart_4h[uniswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
+        uniswap_charts[address].chart_4h.push({
           t: time,
           p: price,
-        }]
+        })
+        uniswap_charts[address].chart_4h = uniswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
       }
-      if(uniswap_charts[address].chart_3d) {
-        if((time - uniswap_charts[address].chart_3d[uniswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-          uniswap_charts[address].chart_3d.push({
-            t: time,
-            p: price,
-          })
-          uniswap_charts[address].chart_3d = uniswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
-        }
-      } else {
-        uniswap_charts[address].chart_3d = [{
+    } else {
+      uniswap_charts[address].chart_4h = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(uniswap_charts[address].chart_3d) {
+      if((time - uniswap_charts[address].chart_3d[uniswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
+        uniswap_charts[address].chart_3d.push({
           t: time,
           p: price,
-        }]
+        })
+        uniswap_charts[address].chart_3d = uniswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
       }
-      if(uniswap_charts[address].chart_1w) {
-        if((time - uniswap_charts[address].chart_1w[uniswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
-          uniswap_charts[address].chart_1w.push({
-            t: time,
-            p: price,
-          })
-          uniswap_charts[address].chart_1w = uniswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
-        }
-      } else {
-        uniswap_charts[address].chart_1w = [{
+    } else {
+      uniswap_charts[address].chart_3d = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(uniswap_charts[address].chart_1w) {
+      if((time - uniswap_charts[address].chart_1w[uniswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
+        uniswap_charts[address].chart_1w.push({
           t: time,
           p: price,
-        }]
+        })
+        uniswap_charts[address].chart_1w = uniswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
       }
+    } else {
+      uniswap_charts[address].chart_1w = [{
+        t: time,
+        p: price,
+      }]
+    }
   })
 
   // Sort tokens depending on volume
   uniswap_list = sortTokensByVolume(uniswap_list, uniswap_volume)
 
-  // build Top 25 list of Uniswap
+  // build Top 10 list of Uniswap
   uniswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(uniswap_list)[i]
       const symbol = uniswap_list[address]
       const name = uniswap_data[address].n
@@ -515,7 +571,7 @@ async function launchUniswap() {
         n: name,
         p: price,
         v: volume,
-        chart: uniswap_charts[address].chart_often
+        chart: uniswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -529,7 +585,7 @@ async function launchUniswap() {
     if (err) throw err;
   });
 
-  // Update the Uniswap top 25
+  // Update the Uniswap Top 10
   pathFile = path.join(dir_home, 'uniswap-top.json')
   writeFile( pathFile, JSON.stringify( uniswap_top ), "utf8", (err) => {
     if (err) throw err;
@@ -559,7 +615,7 @@ async function launchUniswap() {
 // Program - Sushiswap
 async function launchSushiswap() {
   // loop
-  setTimeout(function(){ launchSushiswap() }, OFTEN) // every 15 minutes
+  setTimeout(function(){ launchSushiswap() }, REALTIME) // every 15 minutes
 
   let sushiswap_data_file = {}
   let sushiswap_charts_file = {}
@@ -573,7 +629,8 @@ async function launchSushiswap() {
     sushiswap_charts = sushiswap_charts_file
     sushiswap_volume = sushiswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
@@ -592,110 +649,110 @@ async function launchSushiswap() {
   const eth_price = top.data ? top.data.bundle.ethPrice : 0
 
   tokens.forEach(token => {
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_ETH = token.derivedETH
-      const price = price_ETH * eth_price
-      const volumeUSD = token.volumeUSD
+    const address = token.id
+    const symbol = token.symbol
+    const name = token.name
+    const price_ETH = token.derivedETH
+    const price = price_ETH * eth_price
+    const volumeUSD = token.volumeUSD
 
-      // create Sushiswap list
-      sushiswap_list[address] = symbol
+    // create Sushiswap list
+    sushiswap_list[address] = symbol
 
 
-      // update Sushiswap simple data
-      sushiswap_data[address] = {
+    // update Sushiswap simple data
+    sushiswap_data[address] = {
+      s: symbol,
+      n: name,
+      p: price,
+      t: time
+    }
+
+    // update Sushiswap charts
+    //
+    if(sushiswap_charts[address]) {
+      if(time - sushiswap_charts[address].chart_often[sushiswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
+        sushiswap_charts[address].chart_often.push({
+          t: time,
+          p: price,
+        })
+        sushiswap_charts[address].chart_often = sushiswap_charts[address].chart_often.slice(-HISTORY_SIZE)
+      }
+    } else {
+      sushiswap_charts[address] = {
         s: symbol,
         n: name,
-        p: price,
-        t: time
+        chart_often: [{
+          t: time,
+          p: price,
+        }]
       }
-
-      // update Sushiswap charts
-      //
-      if(sushiswap_charts[address]) {
-        if(time - sushiswap_charts[address].chart_often[sushiswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
-          sushiswap_charts[address].chart_often.push({
-            t: time,
-            p: price,
-          })
-          sushiswap_charts[address].chart_often = sushiswap_charts[address].chart_often.slice(-HISTORY_SIZE)
-        }
-      } else {
-        sushiswap_charts[address] = {
-          s: symbol,
-          n: name,
-          chart_often: [{
-            t: time,
-            p: price,
-          }]
-        }
-      }
-      if(sushiswap_volume[address]) {
-        if(time - sushiswap_volume[address][sushiswap_volume[address].length-1]['t'] > OFTEN) {
-          sushiswap_volume[address].push({
-            t: time,
-            v: volumeUSD,
-          })
-          sushiswap_volume[address] = sushiswap_volume[address].slice(-VOLUME_SIZE)
-        }
-      } else {
-        sushiswap_volume[address] = [{
+    }
+    if(sushiswap_volume[address]) {
+      if(time - sushiswap_volume[address][sushiswap_volume[address].length-1]['t'] > OFTEN) {
+        sushiswap_volume[address].push({
           t: time,
           v: volumeUSD,
-        }]
+        })
+        sushiswap_volume[address] = sushiswap_volume[address].slice(-VOLUME_SIZE)
       }
-      if(sushiswap_charts[address].chart_4h) {
-        if((time - sushiswap_charts[address].chart_4h[sushiswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
-          sushiswap_charts[address].chart_4h.push({
-            t: time,
-            p: price,
-          })
-          sushiswap_charts[address].chart_4h = sushiswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
-        }
-      } else {
-        sushiswap_charts[address].chart_4h = [{
+    } else {
+      sushiswap_volume[address] = [{
+        t: time,
+        v: volumeUSD,
+      }]
+    }
+    if(sushiswap_charts[address].chart_4h) {
+      if((time - sushiswap_charts[address].chart_4h[sushiswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
+        sushiswap_charts[address].chart_4h.push({
           t: time,
           p: price,
-        }]
+        })
+        sushiswap_charts[address].chart_4h = sushiswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
       }
-      if(sushiswap_charts[address].chart_3d) {
-        if((time - sushiswap_charts[address].chart_3d[sushiswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-          sushiswap_charts[address].chart_3d.push({
-            t: time,
-            p: price,
-          })
-          sushiswap_charts[address].chart_3d = sushiswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
-        }
-      } else {
-        sushiswap_charts[address].chart_3d = [{
+    } else {
+      sushiswap_charts[address].chart_4h = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(sushiswap_charts[address].chart_3d) {
+      if((time - sushiswap_charts[address].chart_3d[sushiswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
+        sushiswap_charts[address].chart_3d.push({
           t: time,
           p: price,
-        }]
+        })
+        sushiswap_charts[address].chart_3d = sushiswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
       }
-      if(sushiswap_charts[address].chart_1w) {
-        if((time - sushiswap_charts[address].chart_1w[sushiswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
-          sushiswap_charts[address].chart_1w.push({
-            t: time,
-            p: price,
-          })
-          sushiswap_charts[address].chart_1w = sushiswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
-        }
-      } else {
-        sushiswap_charts[address].chart_1w = [{
+    } else {
+      sushiswap_charts[address].chart_3d = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(sushiswap_charts[address].chart_1w) {
+      if((time - sushiswap_charts[address].chart_1w[sushiswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
+        sushiswap_charts[address].chart_1w.push({
           t: time,
           p: price,
-        }]
+        })
+        sushiswap_charts[address].chart_1w = sushiswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
       }
+    } else {
+      sushiswap_charts[address].chart_1w = [{
+        t: time,
+        p: price,
+      }]
+    }
   })
 
   // Sort tokens depending on volume
   sushiswap_list = sortTokensByVolume(sushiswap_list, sushiswap_volume)
 
-  // build Top 25 list of Sushiswap
+  // build Top 10 list of Sushiswap
   sushiswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(sushiswap_list)[i]
       const symbol = sushiswap_list[address]
       const name = sushiswap_data[address].n
@@ -707,7 +764,7 @@ async function launchSushiswap() {
         n: name,
         p: price,
         v: volume,
-        chart: sushiswap_charts[address].chart_often
+        chart: sushiswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -721,7 +778,7 @@ async function launchSushiswap() {
     if (err) throw err;
   });
 
-  // Update the Sushiswap top 25
+  // Update the Sushiswap Top 10
   pathFile = path.join(dir_home, 'sushiswap-top.json')
   writeFile( pathFile, JSON.stringify( sushiswap_top ), "utf8", (err) => {
     if (err) throw err;
@@ -751,7 +808,7 @@ async function launchSushiswap() {
 // Program - Spiritswap
 async function launchSpiritswap() {
   // loop
-  setTimeout(function(){ launchSpiritswap() }, OFTEN) // every 15 minutes
+  setTimeout(function(){ launchSpiritswap() }, REALTIME) // every 15 minutes
 
   let spiritswap_data_file = {}
   let spiritswap_charts_file = {}
@@ -765,15 +822,21 @@ async function launchSpiritswap() {
     spiritswap_charts = spiritswap_charts_file
     spiritswap_volume = spiritswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
   spiritswap_list = {}
 
   // get data from Spiritswap
-  const top = await getSpiritswapTopTokens()
-
+  let top = {}
+  try {
+    top = await getSpiritswapTopTokens()
+  } catch(error) {
+    console.log(error)
+    return
+  }
 
 
   const time = Date.now()
@@ -782,110 +845,110 @@ async function launchSpiritswap() {
   const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
 
   tokens.forEach(token => {
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_FTM = token.derivedFTM
-      const price = price_FTM * ftm_price
-      const volumeUSD = token.tradeVolumeUSD
+    const address = token.id
+    const symbol = token.symbol
+    const name = token.name
+    const price_FTM = token.derivedFTM
+    const price = price_FTM * ftm_price
+    const volumeUSD = token.tradeVolumeUSD
 
-      // create Spiritswap list
-      spiritswap_list[address] = symbol
+    // create Spiritswap list
+    spiritswap_list[address] = symbol
 
 
-      // update Spiritswap simple data
-      spiritswap_data[address] = {
+    // update Spiritswap simple data
+    spiritswap_data[address] = {
+      s: symbol,
+      n: name,
+      p: price,
+      t: time
+    }
+
+    // update Spiritswap charts
+    //
+    if(spiritswap_charts[address]) {
+      if(time - spiritswap_charts[address].chart_often[spiritswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
+        spiritswap_charts[address].chart_often.push({
+          t: time,
+          p: price,
+        })
+        spiritswap_charts[address].chart_often = spiritswap_charts[address].chart_often.slice(-HISTORY_SIZE)
+      }
+    } else {
+      spiritswap_charts[address] = {
         s: symbol,
         n: name,
-        p: price,
-        t: time
+        chart_often: [{
+          t: time,
+          p: price,
+        }]
       }
-
-      // update Spiritswap charts
-      //
-      if(spiritswap_charts[address]) {
-        if(time - spiritswap_charts[address].chart_often[spiritswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
-          spiritswap_charts[address].chart_often.push({
-            t: time,
-            p: price,
-          })
-          spiritswap_charts[address].chart_often = spiritswap_charts[address].chart_often.slice(-HISTORY_SIZE)
-        }
-      } else {
-        spiritswap_charts[address] = {
-          s: symbol,
-          n: name,
-          chart_often: [{
-            t: time,
-            p: price,
-          }]
-        }
-      }
-      if(spiritswap_volume[address]) {
-        if(time - spiritswap_volume[address][spiritswap_volume[address].length-1]['t'] > OFTEN) {
-          spiritswap_volume[address].push({
-            t: time,
-            v: volumeUSD,
-          })
-          spiritswap_volume[address] = spiritswap_volume[address].slice(-VOLUME_SIZE)
-        }
-      } else {
-        spiritswap_volume[address] = [{
+    }
+    if(spiritswap_volume[address]) {
+      if(time - spiritswap_volume[address][spiritswap_volume[address].length-1]['t'] > OFTEN) {
+        spiritswap_volume[address].push({
           t: time,
           v: volumeUSD,
-        }]
+        })
+        spiritswap_volume[address] = spiritswap_volume[address].slice(-VOLUME_SIZE)
       }
-      if(spiritswap_charts[address].chart_4h) {
-        if((time - spiritswap_charts[address].chart_4h[spiritswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
-          spiritswap_charts[address].chart_4h.push({
-            t: time,
-            p: price,
-          })
-          spiritswap_charts[address].chart_4h = spiritswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
-        }
-      } else {
-        spiritswap_charts[address].chart_4h = [{
+    } else {
+      spiritswap_volume[address] = [{
+        t: time,
+        v: volumeUSD,
+      }]
+    }
+    if(spiritswap_charts[address].chart_4h) {
+      if((time - spiritswap_charts[address].chart_4h[spiritswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
+        spiritswap_charts[address].chart_4h.push({
           t: time,
           p: price,
-        }]
+        })
+        spiritswap_charts[address].chart_4h = spiritswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
       }
-      if(spiritswap_charts[address].chart_3d) {
-        if((time - spiritswap_charts[address].chart_3d[spiritswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-          spiritswap_charts[address].chart_3d.push({
-            t: time,
-            p: price,
-          })
-          spiritswap_charts[address].chart_3d = spiritswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
-        }
-      } else {
-        spiritswap_charts[address].chart_3d = [{
+    } else {
+      spiritswap_charts[address].chart_4h = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(spiritswap_charts[address].chart_3d) {
+      if((time - spiritswap_charts[address].chart_3d[spiritswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
+        spiritswap_charts[address].chart_3d.push({
           t: time,
           p: price,
-        }]
+        })
+        spiritswap_charts[address].chart_3d = spiritswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
       }
-      if(spiritswap_charts[address].chart_1w) {
-        if((time - spiritswap_charts[address].chart_1w[spiritswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
-          spiritswap_charts[address].chart_1w.push({
-            t: time,
-            p: price,
-          })
-          spiritswap_charts[address].chart_1w = spiritswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
-        }
-      } else {
-        spiritswap_charts[address].chart_1w = [{
+    } else {
+      spiritswap_charts[address].chart_3d = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(spiritswap_charts[address].chart_1w) {
+      if((time - spiritswap_charts[address].chart_1w[spiritswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
+        spiritswap_charts[address].chart_1w.push({
           t: time,
           p: price,
-        }]
+        })
+        spiritswap_charts[address].chart_1w = spiritswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
       }
+    } else {
+      spiritswap_charts[address].chart_1w = [{
+        t: time,
+        p: price,
+      }]
+    }
   })
 
   // Sort tokens depending on volume
   spiritswap_list = sortTokensByVolume(spiritswap_list, spiritswap_volume)
 
-  // build Top 25 list of Spiritswap
+  // build Top 10 list of Spiritswap
   spiritswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(spiritswap_list)[i]
       const symbol = spiritswap_list[address]
       const name = spiritswap_data[address].n
@@ -897,7 +960,7 @@ async function launchSpiritswap() {
         n: name,
         p: price,
         v: volume,
-        chart: spiritswap_charts[address].chart_often
+        chart: spiritswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -911,7 +974,7 @@ async function launchSpiritswap() {
     if (err) throw err;
   });
 
-  // Update the Spiritswap top 25
+  // Update the Spiritswap Top 10
   pathFile = path.join(dir_home, 'spiritswap-top.json')
   writeFile( pathFile, JSON.stringify( spiritswap_top ), "utf8", (err) => {
     if (err) throw err;
@@ -942,7 +1005,7 @@ async function launchSpiritswap() {
 // Program - Honeyswap
 async function launchHoneyswap() {
   // loop
-  setTimeout(function(){ launchHoneyswap() }, OFTEN) // every 15 minutes
+  setTimeout(function(){ launchHoneyswap() }, REALTIME) // every 15 minutes
 
   let honeyswap_data_file = {}
   let honeyswap_charts_file = {}
@@ -956,15 +1019,21 @@ async function launchHoneyswap() {
     honeyswap_charts = honeyswap_charts_file
     honeyswap_volume = honeyswap_volume_file
   } catch(error) {
-    // console.log(error)
+    console.log(error)
+    return
   }
 
 
   honeyswap_list = {}
 
   // get data from Honeyswap
-  const top = await getHoneyswapTopTokens()
-
+  let top = {}
+  try {
+    top = await getHoneyswapTopTokens()
+  } catch(error) {
+    console.log(error)
+    return
+  }
 
 
   const time = Date.now()
@@ -973,110 +1042,110 @@ async function launchHoneyswap() {
   const eth_price = top.data ? top.data.bundle.ethPrice : 0
 
   tokens.forEach(token => {
-      const address = token.id
-      const symbol = token.symbol
-      const name = token.name
-      const price_ETH = token.derivedETH
-      const price = price_ETH * eth_price
-      const volumeUSD = token.tradeVolumeUSD
+    const address = token.id
+    const symbol = token.symbol
+    const name = token.name
+    const price_ETH = token.derivedETH
+    const price = price_ETH * eth_price
+    const volumeUSD = token.tradeVolumeUSD
 
-      // create Honeyswap list
-      honeyswap_list[address] = symbol
+    // create Honeyswap list
+    honeyswap_list[address] = symbol
 
 
-      // update Honeyswap simple data
-      honeyswap_data[address] = {
+    // update Honeyswap simple data
+    honeyswap_data[address] = {
+      s: symbol,
+      n: name,
+      p: price,
+      t: time
+    }
+
+    // update Honeyswap charts
+    //
+    if(honeyswap_charts[address]) {
+      if(time - honeyswap_charts[address].chart_often[honeyswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
+        honeyswap_charts[address].chart_often.push({
+          t: time,
+          p: price,
+        })
+        honeyswap_charts[address].chart_often = honeyswap_charts[address].chart_often.slice(-HISTORY_SIZE)
+      }
+    } else {
+      honeyswap_charts[address] = {
         s: symbol,
         n: name,
-        p: price,
-        t: time
+        chart_often: [{
+          t: time,
+          p: price,
+        }]
       }
-
-      // update Honeyswap charts
-      //
-      if(honeyswap_charts[address]) {
-        if(time - honeyswap_charts[address].chart_often[honeyswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
-          honeyswap_charts[address].chart_often.push({
-            t: time,
-            p: price,
-          })
-          honeyswap_charts[address].chart_often = honeyswap_charts[address].chart_often.slice(-HISTORY_SIZE)
-        }
-      } else {
-        honeyswap_charts[address] = {
-          s: symbol,
-          n: name,
-          chart_often: [{
-            t: time,
-            p: price,
-          }]
-        }
-      }
-      if(honeyswap_volume[address]) {
-        if(time - honeyswap_volume[address][honeyswap_volume[address].length-1]['t'] > OFTEN) {
-          honeyswap_volume[address].push({
-            t: time,
-            v: volumeUSD,
-          })
-          honeyswap_volume[address] = honeyswap_volume[address].slice(-VOLUME_SIZE)
-        }
-      } else {
-        honeyswap_volume[address] = [{
+    }
+    if(honeyswap_volume[address]) {
+      if(time - honeyswap_volume[address][honeyswap_volume[address].length-1]['t'] > OFTEN) {
+        honeyswap_volume[address].push({
           t: time,
           v: volumeUSD,
-        }]
+        })
+        honeyswap_volume[address] = honeyswap_volume[address].slice(-VOLUME_SIZE)
       }
-      if(honeyswap_charts[address].chart_4h) {
-        if((time - honeyswap_charts[address].chart_4h[honeyswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
-          honeyswap_charts[address].chart_4h.push({
-            t: time,
-            p: price,
-          })
-          honeyswap_charts[address].chart_4h = honeyswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
-        }
-      } else {
-        honeyswap_charts[address].chart_4h = [{
+    } else {
+      honeyswap_volume[address] = [{
+        t: time,
+        v: volumeUSD,
+      }]
+    }
+    if(honeyswap_charts[address].chart_4h) {
+      if((time - honeyswap_charts[address].chart_4h[honeyswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
+        honeyswap_charts[address].chart_4h.push({
           t: time,
           p: price,
-        }]
+        })
+        honeyswap_charts[address].chart_4h = honeyswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
       }
-      if(honeyswap_charts[address].chart_3d) {
-        if((time - honeyswap_charts[address].chart_3d[honeyswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-          honeyswap_charts[address].chart_3d.push({
-            t: time,
-            p: price,
-          })
-          honeyswap_charts[address].chart_3d = honeyswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
-        }
-      } else {
-        honeyswap_charts[address].chart_3d = [{
+    } else {
+      honeyswap_charts[address].chart_4h = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(honeyswap_charts[address].chart_3d) {
+      if((time - honeyswap_charts[address].chart_3d[honeyswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
+        honeyswap_charts[address].chart_3d.push({
           t: time,
           p: price,
-        }]
+        })
+        honeyswap_charts[address].chart_3d = honeyswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
       }
-      if(honeyswap_charts[address].chart_1w) {
-        if((time - honeyswap_charts[address].chart_1w[honeyswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
-          honeyswap_charts[address].chart_1w.push({
-            t: time,
-            p: price,
-          })
-          honeyswap_charts[address].chart_1w = honeyswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
-        }
-      } else {
-        honeyswap_charts[address].chart_1w = [{
+    } else {
+      honeyswap_charts[address].chart_3d = [{
+        t: time,
+        p: price,
+      }]
+    }
+    if(honeyswap_charts[address].chart_1w) {
+      if((time - honeyswap_charts[address].chart_1w[honeyswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
+        honeyswap_charts[address].chart_1w.push({
           t: time,
           p: price,
-        }]
+        })
+        honeyswap_charts[address].chart_1w = honeyswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
       }
+    } else {
+      honeyswap_charts[address].chart_1w = [{
+        t: time,
+        p: price,
+      }]
+    }
   })
 
   // Sort tokens depending on volume
   honeyswap_list = sortTokensByVolume(honeyswap_list, honeyswap_volume)
 
-  // build Top 25 list of Honeyswap
+  // build Top 10 list of Honeyswap
   honeyswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(honeyswap_list)[i]
       const symbol = honeyswap_list[address]
       const name = honeyswap_data[address].n
@@ -1088,7 +1157,7 @@ async function launchHoneyswap() {
         n: name,
         p: price,
         v: volume,
-        chart: honeyswap_charts[address].chart_often
+        chart: honeyswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
       }
     }
   }
@@ -1102,7 +1171,7 @@ async function launchHoneyswap() {
     if (err) throw err;
   });
 
-  // Update the Honeyswap top 25
+  // Update the Honeyswap Top 10
   pathFile = path.join(dir_home, 'honeyswap-top.json')
   writeFile( pathFile, JSON.stringify( honeyswap_top ), "utf8", (err) => {
     if (err) throw err;
@@ -1132,11 +1201,11 @@ async function launchHoneyswap() {
 
 
 /* MAIN */
-setTimeout(function(){ launchUniswap() }, 2000)
-setTimeout(function(){ launchSushiswap() }, 4000)
-setTimeout(function(){ launchSpiritswap() }, 6000)
-setTimeout(function(){ launchHoneyswap() }, 8000)
-setTimeout(function(){ launch() }, 10000)
+setTimeout(function(){ launchUniswap() }, 2500)
+setTimeout(function(){ launchSushiswap() }, 5000)
+setTimeout(function(){ launchSpiritswap() }, 7500)
+setTimeout(function(){ launchHoneyswap() }, 1000)
+setTimeout(function(){ launch() }, 12500)
 
 
 

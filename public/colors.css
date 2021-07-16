@@ -21,6 +21,17 @@ html {
   color: tomato;
 }
 
+.border-bottom {
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 1em;
+}
+.border-info {
+  border-color: mediumslateblue;
+}
+.border-error {
+  border-color: palevioletred;
+}
+
 .color-transition {
-  transition: color 750ms ease-in-out, background-color 750ms ease-in-out;
+  transition: color 750ms ease-in-out, background-color 750ms ease-in-out, border-color 750ms ease-in-out;
 }

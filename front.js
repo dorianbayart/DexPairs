@@ -178,7 +178,7 @@ setTimeout(function(){ launchUniswap() }, 1000)
 setTimeout(function(){ launchSushiswap() }, 2000)
 setTimeout(function(){ launchSpiritswap() }, 3000)
 setTimeout(function(){ launchHoneyswap() }, 4000)
-setTimeout(function(){ launch() }, 50000)
+setTimeout(function(){ launch() }, 5000)
 
 
 
@@ -191,22 +191,8 @@ app.use(compression())
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
 app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/wallet.html')))
-app.get('/public/common.js', (req, res) => res.sendFile(path.join(__dirname, '/public/common.js')))
-app.get('/public/script.js', (req, res) => res.sendFile(path.join(__dirname, '/public/script.js')))
-app.get('/public/wallet.js', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.js')))
-app.get('/public/footer.css', (req, res) => res.sendFile(path.join(__dirname, '/public/footer.css')))
-app.get('/public/design.css', (req, res) => res.sendFile(path.join(__dirname, '/public/design.css')))
-app.get('/public/responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/responsive.css')))
-app.get('/public/colors.css', (req, res) => res.sendFile(path.join(__dirname, '/public/colors.css')))
-app.get('/public/wallet.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet.css')))
-app.get('/public/wallet-responsive.css', (req, res) => res.sendFile(path.join(__dirname, '/public/wallet-responsive.css')))
-app.get('/public/graph-background-min.png', (req, res) => res.sendFile(path.join(__dirname, '/public/graph-background-min.png')))
-
-app.get('/lib/chart.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/chart.min.js')))
-app.get('/lib/chartjs-adapter-moment.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/chartjs-adapter-moment.js')))
-app.get('/lib/moment.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/moment.min.js')))
-app.get('/lib/require.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/require.js')))
-app.get('/lib/web3.min.js', (req, res) => res.sendFile(path.join(__dirname, '/lib/web3.min.js')))
+app.use('/img', express.static('img'))
+app.use('/public', express.static('public'))
 
 // Pancake URLs
 app.get('/pancake/token/:token', (req, res) => {
@@ -362,7 +348,7 @@ function listFilter(list, listWithPrices) {
   return filtered_list
 }
 
-// useful Math.random timer - between 15 and 30 seconds
+// useful Math.random timer - between 8 and 20 seconds
 function getTimer() {
-   return Math.round((15*Math.random() + 15)*1000)
+   return Math.round((12*Math.random() + 8)*1000)
 }
