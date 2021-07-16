@@ -31,6 +31,7 @@ body {
 }
 #input-wallet:hover, #input-wallet:focus {
   border: 1px solid #CCC;
+  outline: none;
 }
 #input-wallet-container.margin-top #input-wallet {
   font-size: initial;
