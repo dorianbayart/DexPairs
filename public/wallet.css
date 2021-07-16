@@ -87,13 +87,11 @@ canvas#wallet-chart {
 #wallet ul {
   list-style: none;
   padding: 3px;
-  background-color: #0000001F;
   border-radius: 12px;
 }
 
 #wallet ul li {
   padding: 0.5em 1em 0.5em 0.5em;
-  background-color: #FFFE;
   margin: 0.25em;
   border-radius: 8px;
   cursor: pointer;
@@ -123,22 +121,4 @@ canvas#wallet-chart {
   text-align: end;
   width: 20%;
   font-size: smaller;
-}
-
-
-/* Progress Bar */
-.progress-container {
-  height: 4px;
-  width: 45%;
-  margin: auto;
-  border-radius: 4px;
-  background: #000;
-}
-
-.progress-container .progress {
-  height: 100%;
-  width: 0;
-  border-radius: 0.4rem;
-  background: #ff4754;
-  transition: width 0.4s ease-in-out;
 }
