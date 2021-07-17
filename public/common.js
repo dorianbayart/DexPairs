@@ -174,9 +174,10 @@ const setGas = (network) => {
       li.appendChild(span)
       span = document.createElement('span')
       span.classList.add('gas-value')
-      span.innerHTML = gasRound(web3.utils.fromWei(gas, 'gwei'))
+      const gwei = gasRound(web3.utils.fromWei(gas, 'gwei'))
+      span.innerHTML = gwei
       li.appendChild(span)
-      li.title = gasRound(web3.utils.fromWei(gas, 'gwei')) + ' gwei on ' + NETWORK[network].name
+      li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
     }, error => {
       // console.log(error)
     })
