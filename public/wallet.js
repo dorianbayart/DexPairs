@@ -17,7 +17,7 @@ function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
   const globalInforationContainer = document.getElementById('global')
   const stateContainer = document.getElementById('state')
-  
+
   Object.keys(timerGetTokenTx).forEach(network => {
     clearTimeout(timerGetTokenTx[network])
   })
@@ -39,7 +39,7 @@ function configureWallet(inputAddress) {
   if(!web3_ethereum.utils.isAddress(inputAddress)) {
     inputContainer.classList.toggle('margin-top', true)
     globalInforationContainer.classList.toggle('none', true)
-    
+
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
       window.history.replaceState(null, document.title, window.location.href.split("?")[0]);
@@ -49,7 +49,7 @@ function configureWallet(inputAddress) {
     sessionStorage.removeItem('walletAddress', walletAddress)
     wallet = {}
     displayWallet()
-    
+
     stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
     stateContainer.classList.toggle('shadow-white', true)
 
@@ -136,7 +136,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
 function searchTokens(network) {
   let tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
   const latestBlock = sessionStorage.getItem('latest-block-' + network)
-  
+
   if(!tokentx || typeof tokentx === 'string' || tokentx.length === 0) {
     return
   }
@@ -144,7 +144,7 @@ function searchTokens(network) {
   if(latestBlock) {
     tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
   }
-  
+
   if(tokentx.length > 0) {
     tokentx.forEach((item, i) => {
       const id = getId(item.contractAddress, network)
@@ -162,7 +162,7 @@ function searchTokens(network) {
     Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
       setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 75)
     })
-    
+
     sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
   }
 }
@@ -208,8 +208,9 @@ function displayWallet() {
   const tokens = filteredWallet().sort(sortWallet)
 
   tokens.forEach(function (id) {
+    let price = wallet[id].price
     let li = document.createElement('li')
-    li.title = (wallet[id].tokenName && wallet[id].tokenName !== '') ? wallet[id].tokenName : wallet[id].tokenSymbol
+    li.title = '1 ' + wallet[id].tokenSymbol + ' = $' + precise(price)
 
     let spanNetwork = document.createElement('span')
     spanNetwork.classList.add('network')
@@ -227,7 +228,6 @@ function displayWallet() {
     li.appendChild(spanBalance)
 
     let spanValue = document.createElement('span')
-    let price = wallet[id].price
     spanValue.innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
     spanValue.classList.add('value')
     li.appendChild(spanValue)
@@ -235,7 +235,7 @@ function displayWallet() {
     ul.appendChild(li)
 
     li.addEventListener("click", function(e) {
-
+      console.log(e.target)
     })
   })
 
