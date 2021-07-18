@@ -299,18 +299,22 @@ header .version {
   border-radius: 12px;
   width: auto;
 }
-#timeframe {
+#interval-title {
+  font-size: small;
+  margin-left: 6px;
+}
+#interval-title, #interval {
   display: inline-flex;
 }
-#timeframe .timeframe-choice {
+#interval .interval-choice {
   cursor: pointer;
   font-size: small;
-  margin: 0.5em;
+  margin: 0.4em;
   border: 1px solid #CCC;
   border-radius: 8px;
   padding: 0.25em 0.5em;
 }
-#timeframe .timeframe-choice:hover {
+#interval .interval-choice:hover {
   box-shadow: 1px 1px 8px #BBB;
 }
 #myChart {

@@ -23,10 +23,10 @@ const COLOR_THEMES = {
 const server = 'https://api.dexpairs.xyz' // Empty for localhost
 
 const TIME_24H = 86400000
-const TIMEFRAME_15M = '15m'
-const TIMEFRAME_4H = '4h'
-const TIMEFRAME_3D = '3d'
-const TIMEFRAME_1W = '1w'
+const INTERVAL_15M = '15m'
+const INTERVAL_4H = '4h'
+const INTERVAL_3D = '3d'
+const INTERVAL_1W = '1w'
 
 
 const NETWORK = {

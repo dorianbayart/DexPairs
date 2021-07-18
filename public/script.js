@@ -81,7 +81,7 @@ let dexList = {
 }
 
 const LIST_INITIAL_SIZE = 100
-let timeframe = TIMEFRAME_4H
+let interval = INTERVAL_4H
 
 
 // get tokens list
@@ -501,28 +501,28 @@ document.getElementById('swapper_switch').addEventListener(
   }
 )
 
-// Timeframe selection
-document.getElementById('timeframe_15m').addEventListener(
+// Interval selection
+document.getElementById('interval_15m').addEventListener(
   "click", function(e) {
-    timeframe = TIMEFRAME_15M
+    interval = INTERVAL_15M
     updateCharts()
   }
 )
-document.getElementById('timeframe_4h').addEventListener(
+document.getElementById('interval_4h').addEventListener(
   "click", function(e) {
-    timeframe = TIMEFRAME_4H
+    interval = INTERVAL_4H
     updateCharts()
   }
 )
-document.getElementById('timeframe_3d').addEventListener(
+document.getElementById('interval_3d').addEventListener(
   "click", function(e) {
-    timeframe = TIMEFRAME_3D
+    interval = INTERVAL_3D
     updateCharts()
   }
 )
-document.getElementById('timeframe_1w').addEventListener(
+document.getElementById('interval_1w').addEventListener(
   "click", function(e) {
-    timeframe = TIMEFRAME_1W
+    interval = INTERVAL_1W
     updateCharts()
   }
 )
@@ -545,7 +545,7 @@ function initializeHTML() {
     dex = sessionStorage.getItem('dex')
     selectedToken = sessionStorage.getItem('selectedToken')
     selectedBase = sessionStorage.getItem('selectedBase')
-    timeframe = sessionStorage.getItem('timeframe')
+    interval = sessionStorage.getItem('interval')
     list = JSON.parse(sessionStorage.getItem('list'))
     if(list && Object.keys(list).length > 0) { updateList() }
     topTokens = JSON.parse(sessionStorage.getItem('topTokens'))
@@ -590,7 +590,7 @@ function saveSessionVariables() {
   sessionStorage.setItem('dex', dex)
   sessionStorage.setItem('selectedToken', selectedToken)
   sessionStorage.setItem('selectedBase', selectedBase)
-  sessionStorage.setItem('timeframe', timeframe)
+  sessionStorage.setItem('interval', interval)
 }
 
 
@@ -598,23 +598,23 @@ function updateCharts() {
   saveSessionVariables()
 
   let tokenChart = null, baseChart = null, scaleUnit = 'hour'
-  switch (timeframe) {
-    case TIMEFRAME_15M:
+  switch (interval) {
+    case INTERVAL_15M:
       tokenChart = tokenCharts.chart_often
       baseChart = baseCharts.chart_often
       scaleUnit = 'hour'
       break;
-    case TIMEFRAME_3D:
+    case INTERVAL_3D:
       tokenChart = tokenCharts.chart_3d
       baseChart = baseCharts.chart_3d
       scaleUnit = 'day'
       break;
-    case TIMEFRAME_1W:
+    case INTERVAL_1W:
       tokenChart = tokenCharts.chart_1w
       baseChart = baseCharts.chart_1w
       scaleUnit = 'month'
       break;
-    case TIMEFRAME_4H:
+    case INTERVAL_4H:
     default:
       tokenChart = tokenCharts.chart_4h
       baseChart = baseCharts.chart_4h
