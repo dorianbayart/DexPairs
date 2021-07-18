@@ -272,7 +272,7 @@ function setTop() {
 
     let div = document.createElement('div')
     div.classList.add('top-token')
-    div.id = symbol
+    div.id = address
     let div_symbol = document.createElement('div')
     div_symbol.innerHTML = symbol
     div_symbol.classList.add('top-symbol')
@@ -303,7 +303,7 @@ function setTop() {
     setTopMiniChart(address, miniChart)
 
     div.addEventListener("click", function(e) {
-      selectedToken = findAddressFromSymbol(e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id)
+      selectedToken = e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id
       setToken(selectedToken)
       getCharts()
       setSwapperToken()
