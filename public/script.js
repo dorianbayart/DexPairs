@@ -250,8 +250,8 @@ function updateBaseList() {
     let option = document.createElement('option')
     select.appendChild(option)
     option.innerHTML += currentList[address]
-    option.value = currentList[address]
-    option.selected = currentList[address] === selectedBase
+    option.value = address
+    option.selected = address === selectedBase
   })
 }
 
@@ -474,7 +474,7 @@ document.getElementById('base_select').addEventListener(
     document.getElementById('base_symbol').style.display = "flex"
     document.getElementById('base_change').style.display = "initial"
     document.getElementById('base_select').style.display = "none"
-    const selected = findAddressFromSymbol(e.target.value)
+    const selected = e.target.value
     if(selected === selectedToken) {
       selectedToken = selectedBase
       setToken(selectedToken)
