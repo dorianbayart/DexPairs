@@ -11,7 +11,7 @@
 
 
 ## Supported protocols
-* [x] Uniswap v2 - Ethereum
+* [x] Uniswap - Ethereum
 * [x] SushiSwap - Polygon/Matic
 * [x] PancakeSwap - Binance Smart Chain
 * [x] SpiritSwap - Fantom
