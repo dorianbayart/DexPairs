@@ -389,9 +389,9 @@ function initializeHTML() {
 
 function simpleDataTimers() {
   Object.keys(NETWORK).forEach((network, i) => {
-    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 400)
+    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 750)
   })
-  setTimeout(function(){ simpleDataTimers() }, 60000)
+  setTimeout(function(){ simpleDataTimers() }, 100000)
 }
 
 
