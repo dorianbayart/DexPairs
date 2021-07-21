@@ -107,6 +107,9 @@ function getTokenTx(network) {
       }, (Math.round(Math.random() * 15) + 45) * 1000)
     }
   }
+  xmlhttp.onerror = function() {
+    console.log('getTokenTx', this)
+  }
   xmlhttp.open("GET", NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress), true)
   xmlhttp.send()
 }
@@ -122,6 +125,11 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
+    if(error) {
+      console.log('getTokenBalanceWeb3', error)
+      setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 1250)
+      return
+    }
     wallet[id].value = value
     wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
     wallet[id].upToDate = true
@@ -181,7 +189,8 @@ function getNetworkBalance(network) {
       tokenName: NETWORK[network].tokenName,
       tokenDecimal: NETWORK[network].tokenDecimal,
       value: balance,
-      price: getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
+      price: getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network),
+      upToDate: true
     }
     displayWallet()
 
@@ -190,6 +199,7 @@ function getNetworkBalance(network) {
     }, (Math.round(Math.random() * 15) + 15) * 1000)
 
   }, error => {
+    console.log('getNetworkBalance', network, error)
 
     timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
@@ -203,40 +213,100 @@ function getNetworkBalance(network) {
 
 // Display Wallet
 function displayWallet() {
-  document.getElementById('wallet').innerHTML = null;
-  ul = document.createElement('ul')
+  const listLi = document.getElementById('wallet').querySelectorAll('li')
   const tokens = filteredWallet().sort(sortWallet)
 
+  if(listLi.length === 0 || listLi.length !== tokens.length) {
+    document.getElementById('wallet').innerHTML = null
+    ul = document.createElement('ul')
+  }
+
   tokens.forEach(function (id) {
+    let element = Array.from(listLi).find(el => el.id === id)
     let price = wallet[id].price
-    let li = document.createElement('li')
-    li.title = '1 ' + wallet[id].tokenSymbol + ' = $' + precise(price)
 
-    let spanNetwork = document.createElement('span')
-    spanNetwork.classList.add('network')
-    spanNetwork.appendChild(createNetworkImg(wallet[id].network))
-    li.appendChild(spanNetwork)
+    if(element) {
 
-    let spanSymbol = document.createElement('span')
-    spanSymbol.innerHTML = (wallet[id].tokenName && wallet[id].tokenName !== '') ? wallet[id].tokenName : wallet[id].tokenSymbol
-    spanSymbol.classList.add('symbol')
-    li.appendChild(spanSymbol)
+      element.querySelector('span.price').innerHTML = '$' + precise(price)
+      element.querySelector('span.value').innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
+      element.querySelector('span.balance').innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
 
-    let spanBalance = document.createElement('span')
-    spanBalance.innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
-    spanBalance.classList.add('balance')
-    li.appendChild(spanBalance)
+    } else {
 
-    let spanValue = document.createElement('span')
-    spanValue.innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
-    spanValue.classList.add('value')
-    li.appendChild(spanValue)
+      let li = document.createElement('li')
+      li.title = ''
+      li.id = id
 
-    ul.appendChild(li)
+      let spanNetwork = document.createElement('span')
+      spanNetwork.classList.add('network')
+      spanNetwork.appendChild(createNetworkImg(wallet[id].network))
+      li.appendChild(spanNetwork)
 
-    li.addEventListener("click", function(e) {
-      console.log(e.target)
-    })
+      let spanNameSymbol = document.createElement('span')
+      spanNameSymbol.classList.add('nameSymbol')
+      li.appendChild(spanNameSymbol)
+
+      let spanSymbol = document.createElement('span')
+      spanSymbol.innerHTML = wallet[id].tokenSymbol
+      spanSymbol.classList.add('symbol')
+      spanNameSymbol.appendChild(spanSymbol)
+      let spanName = document.createElement('span')
+      spanName.innerHTML = wallet[id].tokenName
+      spanName.classList.add('name')
+      spanNameSymbol.appendChild(spanName)
+
+      let spanPrice = document.createElement('span')
+      spanPrice.innerHTML = '$' + precise(price)
+      spanPrice.classList.add('price')
+      li.appendChild(spanPrice)
+
+      let spanValueBalance = document.createElement('span')
+      spanValueBalance.classList.add('valueBalance')
+      li.appendChild(spanValueBalance)
+
+      let spanValue = document.createElement('span')
+      spanValue.innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
+      spanValue.classList.add('value')
+      spanValueBalance.appendChild(spanValue)
+      let spanBalance = document.createElement('span')
+      spanBalance.innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
+      spanBalance.classList.add('balance')
+      spanValueBalance.appendChild(spanBalance)
+
+      let spanAddress = document.createElement('span')
+      spanAddress.innerHTML = wallet[id].contract
+      spanAddress.classList.add('address')
+      li.appendChild(spanAddress)
+
+      let spanChart = document.createElement('span')
+      spanChart.id = id + '-chart'
+      spanChart.classList.add('chart')
+      li.appendChild(spanChart)
+
+
+      ul.appendChild(li)
+
+      li.addEventListener("click", function(e) {
+        let item = e.target
+
+        while(item.id.length < 1 || item.id.includes('chart')) {
+          item = item.parentNode
+        }
+
+        if(item.classList.contains('expanded')) {
+          item.classList.remove('expanded')
+        } else {
+          item.classList.toggle('expanded', true)
+        }
+      })
+
+
+
+
+
+
+    }
+
   })
 
   if(tokens.length > 0) {
@@ -259,6 +329,11 @@ function displayWallet() {
   updateGlobalPrice()
   updateGlobalChart()
 
+}
+
+// Insert a DOM element after a Reference element
+function insertAfter(refElement, element) {
+  refElement.parentNode.insertBefore(element, refElement.nextSibling);
 }
 
 // Update & Display the total wallet value

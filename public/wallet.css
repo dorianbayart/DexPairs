@@ -80,7 +80,7 @@ canvas#wallet-chart {
   margin: auto;
   transition: all 1s ease-in-out;
 }
-  
+
 
 
 #wallet {
@@ -100,29 +100,69 @@ canvas#wallet-chart {
   border-radius: 8px;
   cursor: pointer;
   display: flex;
-  align-items: center;
-  height: 1.2em;
+  align-items: flex-start;
+  height: 1.5em;
+  flex-wrap: wrap;
+  transition: all 400ms ease-in-out;
+}
+#wallet ul li.expanded {
+  height: 10em;
 }
 
 #wallet ul li span {
   display: inline-block;
+  transition: all 400ms ease-in-out;
 }
 #wallet ul li span.network {
-  width: 10%;
-  height: 100%;
+  width: 8%;
+  height: 1.5em;
 }
 #wallet ul li span.network img.network {
   height: 100%;
 }
-#wallet ul li span.symbol {
-  width: 60%;
+#wallet ul li span.nameSymbol {
+  width: 55%;
+  display: flex;
+  flex-flow: column;
+}
+#wallet ul li span.name {
+  font-size: 0.75em;
+}
+#wallet ul li span.price {
+  text-align: end;
+  width: 20%;
+  font-size: 0.8em;
+  padding-top: 0.5em;
+}
+#wallet ul li span.valueBalance {
+  text-align: end;
+  width: 16%;
+  display: flex;
+  flex-flow: column;
 }
 #wallet ul li span.balance {
-  text-align: end;
-  width: 20%;
+  font-size: 0.75em;
 }
-#wallet ul li span.value {
-  text-align: end;
-  width: 20%;
-  font-size: smaller;
+#wallet ul li span.address {
+  font-size: 0.85em;
+  width: 100%;
+}
+#wallet ul li span.chart {
+  width: 100%;
+}
+#wallet ul li span.address, #wallet ul li span.chart {
+  height: 0;
+  line-height: 0;
+  opacity: 0;
+  transition: all 400ms ease-in-out;
+}
+#wallet ul li.expanded span.address {
+  height: 1em;
+  line-height: 1em;
+  opacity: 1;
+}
+#wallet ul li.expanded span.chart {
+  height: 100%;
+  line-height: 100%;
+  opacity: 1;
 }
