@@ -36,7 +36,7 @@ let dexList = {
     explorer: 'https://polygonscan.com/token/',
     tokens: {
       token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-      base: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
+      base: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
     }
   },
   PANCAKESWAP: {
