@@ -20,7 +20,9 @@ const COLOR_THEMES = {
   }
 }
 
-const server = 'https://api.dexpairs.xyz' // Empty for localhost
+/* Backend server */
+/* https://api.dexpairs.xyz or empty for localhost */
+const server = 'https://api.dexpairs.xyz'
 
 const TIME_24H = 86400000
 const INTERVAL_15M = '15m'
@@ -204,6 +206,9 @@ function getSimpleData(network, callback) {
       }
     }
   }
+  xmlhttp.onerror = function() {
+    console.log('getSimpleData', this)
+  }
   xmlhttp.open("GET", NETWORK[network].url_data + "/simple", true)
   xmlhttp.send()
 }
@@ -226,6 +231,9 @@ function getChartsByAddress(address, network, callback) {
         }
       }
     }
+  }
+  xmlhttp.onerror = function() {
+    console.log('getChartsByAddress', this)
   }
   xmlhttp.open("GET", NETWORK[network].url_data + "/charts/" + address, true)
   xmlhttp.send()
