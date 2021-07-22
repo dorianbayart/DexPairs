@@ -92,6 +92,7 @@ header .version {
   align-items: center;
   margin: auto;
   width: 100%;
+  max-width: 920px;
 }
 
 #dex-selection {
@@ -330,6 +331,10 @@ header .version {
 }
 #swapper_token_symbol, #swapper_base_symbol {
   margin: 0.25em;
+  flex: auto;
+}
+#swapper_token_symbol {
+  text-align: right;
 }
 
 #swapper_switch {
