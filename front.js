@@ -3,7 +3,6 @@ const path = require('path')
 const express = require('express')
 const compression = require('compression')
 const fetch = require('node-fetch')
-const cors = require('cors')
 
 
 
@@ -189,7 +188,6 @@ setTimeout(function(){ launch() }, 5000)
 const port = process.env.PORT || 3001
 const app = express()
 app.use(compression())
-app.use(cors({ origin: 'https://dexpairs.xyz' }))
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
 app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/wallet.html')))
