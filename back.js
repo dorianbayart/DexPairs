@@ -222,7 +222,7 @@ async function getHoneyswapTopTokens() {
 // Program - Pancake
 async function launch() {
   // loop
-  setTimeout(function(){ launch() }, REALTIME) // every 15 minutes
+  setTimeout(function(){ launch() }, REALTIME) // every few seconds
 
   let tokens_data_file = {}
   let tokens_charts_file = {}
@@ -424,7 +424,7 @@ async function launch() {
 // Program - Uniswap
 async function launchUniswap() {
   // loop
-  setTimeout(function(){ launchUniswap() }, REALTIME) // every 15 minutes
+  setTimeout(function(){ launchUniswap() }, REALTIME) // every few seconds
 
   let uniswap_data_file = {}
   let uniswap_charts_file = {}
@@ -615,7 +615,7 @@ async function launchUniswap() {
 // Program - Sushiswap
 async function launchSushiswap() {
   // loop
-  setTimeout(function(){ launchSushiswap() }, REALTIME) // every 15 minutes
+  setTimeout(function(){ launchSushiswap() }, REALTIME) // every few seconds
 
   let sushiswap_data_file = {}
   let sushiswap_charts_file = {}
@@ -808,7 +808,7 @@ async function launchSushiswap() {
 // Program - Spiritswap
 async function launchSpiritswap() {
   // loop
-  setTimeout(function(){ launchSpiritswap() }, REALTIME) // every 15 minutes
+  setTimeout(function(){ launchSpiritswap() }, REALTIME) // every few seconds
 
   let spiritswap_data_file = {}
   let spiritswap_charts_file = {}
@@ -1005,7 +1005,7 @@ async function launchSpiritswap() {
 // Program - Honeyswap
 async function launchHoneyswap() {
   // loop
-  setTimeout(function(){ launchHoneyswap() }, REALTIME) // every 15 minutes
+  setTimeout(function(){ launchHoneyswap() }, REALTIME) // every few seconds
 
   let honeyswap_data_file = {}
   let honeyswap_charts_file = {}
