@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   display: block !important;
   font-family: Sans-Serif;
@@ -87,6 +91,7 @@ header .version {
   flex-flow: row;
   align-items: center;
   margin: auto;
+  width: 100%;
 }
 
 #dex-selection {
@@ -119,8 +124,10 @@ header .version {
 #top::before {
   content: "Top tokens by USD volume";
   display: block;
-  font-size: 0.75em;
+  font-size: 0.85em;
+  font-weight: lighter;
   margin-left: 8px;
+  margin-top: 2px;
 }
 #top::after {
   content: "";
@@ -201,54 +208,51 @@ header .version {
 #token, #base {
   display: inline-flex;
   flex: 40%;
-  flex-wrap: wrap;
   border: 1px solid #CCC;
   border-radius: 12px;
+  min-height: 64px;
+}
+.flex-auto {
+  flex: auto;
+}
+#token_name, #token_address, #base_name, #base_address, #base_select {
+  font-size: 0.85em;
+}
+.symbol_name, .percentages, .price_address {
+  display: flex;
+  flex-flow: column;
+  flex: auto;
+}
+#token_price, #token_address, #base_price, #base_address {
+  text-align: right;
+}
+.base_symbol_container {
+  display: inline-flex;
+  align-items: center;
+}
+#token_symbol,
+#token_price,
+#base_symbol,
+#base_price {
+  font-size: 1.1em;
+}
+#base_select {
+  font-size: 0.9em;
 }
 
-#token #token_symbol,
-#token #token_name,
-#token #token_price,
-#token #token_price_BNB,
-#base #base_symbol,
-#base #base_select,
-#base #base_name,
-#base #base_price,
-#base #base_price_BNB {
-  display: inline-block;
-
-}
 #token #token_symbol,
 #token #token_name,
 #token #token_address,
 #token #token_price,
-#token #token_price_BNB,
 #base #base_symbol,
 #base #base_select,
 #base #base_name,
 #base #base_address,
-#base #base_price,
-#base #base_price_BNB {
-  flex: 40%;
+#base #base_price {
   text-overflow: ellipsis;
   overflow: hidden;
-  padding: 3px 12px;
-  display: flex;
-  align-items: end;
 }
-#token #token_symbol,
-#token #token_price,
-#base #base_symbol,
-#base #base_select,
-#base #base_price {
-  font-size: larger;
-}
-#token #token_address,
-#token #token_price,
-#base #base_address,
-#base #base_price {
-  flex: initial;
-}
+
 #token #token_price,
 #token #token_price_BNB,
 #base #base_price,
@@ -256,47 +260,29 @@ header .version {
   text-overflow: ellipsis;
   overflow-wrap: anywhere;
 }
-#token #token_address,
-#token #token_price_BNB,
-#base #base_address,
-#base #base_price_BNB {
-  font-size: 0.85em;
-}
-
-#token #token_price_BNB,
-#base #base_price_BNB {
-  display: none;
-}
 
 #base #base_change {
+  display: flex;
   border-radius: 12px;
-  width: 28px;
-  height: 28px;
-  padding: 8px;
-  margin: 0;
+  width: 18px;
+  height: 18px;
+  padding: 2px;
+  margin-right: 4px;
   border: none;
   transition: padding 80ms ease-in-out;
   z-index: 1;
   cursor: pointer;
 }
 #base #base_change:hover {
-  padding: 6px;
-}
-#base #base_change:active {
+  padding: 1px;
 }
 #base #base_change img {
   height: auto;
   width: 100%;
 }
-#base #base_change:active img {
-}
 
-#base #base_symbol {
-  padding: 3px;
-}
 #base #base_select {
   display: none;
-  font-size: 0.85em;
   cursor: pointer;
 }
 

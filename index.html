@@ -93,27 +93,45 @@
     <div class='flex-column'>
       <div class='flex-pair'>
         <div id='token'>
-          <div id='token_symbol'></div>
-          <div id='token_price'></div>
-          <div id='token_name'></div>
-          <div id='token_address'></div>
-          <div id='token_price_BNB'></div>
+          <div class='symbol_name'>
+            <div id='token_symbol' class='flex-auto'></div>
+            <div id='token_name' class='flex-auto'></div>
+          </div>
+          <div class='percentages'>
+            <div id='token_percentage_24h' class='flex-auto'></div>
+            <div id='token_percentage_7d'></div>
+            <div id='token_percentage_1m' class='flex-auto'></div>
+          </div>
+          <div class='price_address'>
+            <div id='token_price' class='flex-auto'></div>
+            <div id='token_address' class='flex-auto'></div>
+          </div>
         </div>
         <button id='swapper_switch' title='Switch'>
           <img src="https://cdn0.iconfinder.com/data/icons/google-material-design-3-0/48/ic_swap_horiz_48px-256.png"
           alt="Swap icon" width="32px" height="32px">
         </button>
         <div id='base'>
-          <button id='base_change' title='Edit'>
-            <img src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/edit-change-pencil-512.png"
-            alt="Edit icon" width="28px" height="28px">
-          </button>
-          <div id='base_symbol'></div>
-          <select id='base_select' title='Select the reference token'></select>
-          <div id='base_price'></div>
-          <div id='base_name'></div>
-          <div id='base_address'></div>
-          <div id='base_price_BNB'></div>
+          <div class='symbol_name'>
+            <div class='base_symbol_container flex-auto'>
+              <button id='base_change' title='Edit'>
+                <img src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/edit-change-pencil-512.png"
+                alt="Edit icon" width="28px" height="28px">
+              </button>
+              <div id='base_symbol'></div>
+              <select id='base_select' title='Select the reference token'></select>
+            </div>
+            <div id='base_name' class='flex-auto'></div>
+          </div>
+          <div class='percentages'>
+            <div id='base_percentage_24h' class='flex-auto'></div>
+            <div id='base_percentage_7d'></div>
+            <div id='base_percentage_1m' class='flex-auto'></div>
+          </div>
+          <div class='price_address'>
+            <div id='base_price' class='flex-auto'></div>
+            <div id='base_address' class='flex-auto'></div>
+          </div>
         </div>
       </div>
       <div id='chart'>
