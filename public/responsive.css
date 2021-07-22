@@ -50,7 +50,6 @@ header .version .low {
 #search_field {
   margin: 0.5em 1em;
   padding: 1em;
-  font-size: initial;
 }
 #list {
   height: 420px;

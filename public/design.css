@@ -116,6 +116,12 @@ header .version {
   border-radius: 12px;
   padding: 4px;
 }
+#top::before {
+  content: "Top tokens by USD volume";
+  display: block;
+  font-size: 0.75em;
+  margin-left: 8px;
+}
 #top::after {
   content: "";
   clear: both;
