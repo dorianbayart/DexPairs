@@ -228,9 +228,9 @@ async function launch() {
   let tokens_charts_file = {}
   let pancakeswap_volume_file = {}
   try {
-    tokens_data_file = require(path.join(dir_home, 'pancake-simple.json'))
-    tokens_charts_file = require(path.join(dir_home, 'pancake-charts.json'))
-    pancakeswap_volume_file = require(path.join(dir_home, 'pancake-volume.json'))
+    tokens_data_file = require(JSON.parse(path.join(dir_home, 'pancake-simple.json')))
+    tokens_charts_file = require(JSON.parse(path.join(dir_home, 'pancake-charts.json')))
+    pancakeswap_volume_file = require(JSON.parse(path.join(dir_home, 'pancake-volume.json')))
 
     tokens_data = tokens_data_file
     tokens_charts = tokens_charts_file
@@ -1204,7 +1204,7 @@ async function launchHoneyswap() {
 setTimeout(function(){ launchUniswap() }, 2500)
 setTimeout(function(){ launchSushiswap() }, 5000)
 setTimeout(function(){ launchSpiritswap() }, 7500)
-setTimeout(function(){ launchHoneyswap() }, 1000)
+setTimeout(function(){ launchHoneyswap() }, 10000)
 setTimeout(function(){ launch() }, 12500)
 
 
