@@ -228,13 +228,16 @@ async function launch() {
   let tokens_charts_file = {}
   let pancakeswap_volume_file = {}
   try {
-    tokens_data_file = require(JSON.parse(path.join(dir_home, 'pancake-simple.json')))
-    tokens_charts_file = require(JSON.parse(path.join(dir_home, 'pancake-charts.json')))
-    pancakeswap_volume_file = require(JSON.parse(path.join(dir_home, 'pancake-volume.json')))
+    //tokens_data_file = require(JSON.parse(path.join(dir_home, 'pancake-simple.json')))
+    tokens_data_file = fs.readFileSync(path.join(dir_home, 'pancake-simple.json'), 'utf8');
+    //tokens_charts_file = require(JSON.parse(path.join(dir_home, 'pancake-charts.json')))
+    tokens_charts_file = fs.readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8');
+    //pancakeswap_volume_file = require(JSON.parse(path.join(dir_home, 'pancake-volume.json')))
+    pancakeswap_volume_file = fs.readFileSync(path.join(dir_home, 'pancake-volume.json'), 'utf8');
 
-    tokens_data = tokens_data_file
-    tokens_charts = tokens_charts_file
-    pancakeswap_volume = pancakeswap_volume_file
+    tokens_data = JSON.parse(tokens_data_file.toString());
+    tokens_charts = JSON.parse(tokens_charts_file.toString());
+    pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString());
   } catch(error) {
     console.log(error)
     return
