@@ -24,7 +24,7 @@ const fetch = require('node-fetch')
 */
 
 const DOMAIN_NAME = 'dexpairs.xyz'
-const BACKEND_URL = 'http://localhost:3000'
+const BACKEND_URL = 'http://127.0.0.1:3000'
 
 
 // Pancake data - BSC
