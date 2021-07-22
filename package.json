@@ -2,7 +2,7 @@
   "name": "DexPairs",
   "version": "0.0.1",
   "url": "https://dexpairs.xyz",
-  "description": "Check the historical price of any pair token you want !",
+  "description": "Multi-Chain && Multi-Protocol wallet tracker",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
