@@ -28,30 +28,26 @@ ul.gas-list {
   border-radius: 8px;
   padding: 3px;
   margin: 3px;
-  height: 18px;
   display: flex;
   align-items: center;
   min-width: 32px;
 }
 .gas-list li span {
-  height: 100%;
+  height: 14px;
 }
 .gas-list li span.gas-network {
-  padding: 0 3px;
-  text-align: right;
+  display: flex;
+  padding: 1px 3px;
 }
 .gas-list li span.gas-value {
   padding: 1px 3px;
-  display: inline-flex;
-  align-items: baseline;
   font-size: 12px;
   line-height: 12px;
 }
 .gas-list li img {
   max-width: 2em;
-  max-height: 100%;
   width: auto;
-  height: 100%;
+  height: 12px;
 }
 
 @media (max-width: 800px) {
