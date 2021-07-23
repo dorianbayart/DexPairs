@@ -536,7 +536,7 @@ const calculateBalance = (balance, decimal) => {
   return 0
 }
 /* Utils - Calculate value from value */
-const calculatePrice = (balance, price, decimal) => {
+const calculateValue = (balance, price, decimal) => {
   if(balance && price && balance * price > 0) {
     return calculateBalance(balance * price, decimal)
   }
