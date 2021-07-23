@@ -551,7 +551,7 @@ const displayBalance = (value, decimal) => {
 }
 /* Utils - Display dollar value readable by human */
 const displayValue = (balance, price, decimal) => {
-  const value = calculateBalance(value * price, decimal)
+  const value = calculateBalance(balance * price, decimal)
   if(value === 0) return 0
   if(value < 0.01) return '≈ 0'
   return '$' + value
