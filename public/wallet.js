@@ -63,6 +63,7 @@ function configureWallet(inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
     displayWallet()
   } else {
+    sessionStorage.removeItem('wallet')
     wallet = {}
   }
 
