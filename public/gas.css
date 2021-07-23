@@ -45,6 +45,7 @@ ul.gas-list {
   display: inline-flex;
   align-items: baseline;
   font-size: 12px;
+  line-height: 12px;
 }
 .gas-list li img {
   max-width: 2em;
