@@ -227,20 +227,35 @@ async function launch() {
   let tokens_data_file = {}
   let tokens_charts_file = {}
   let pancakeswap_volume_file = {}
-  try {
-    //tokens_data_file = require(JSON.parse(path.join(dir_home, 'pancake-simple.json')))
-    tokens_data_file = readFileSync(path.join(dir_home, 'pancake-simple.json'), 'utf8');
-    //tokens_charts_file = require(JSON.parse(path.join(dir_home, 'pancake-charts.json')))
-    tokens_charts_file = readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8');
-    //pancakeswap_volume_file = require(JSON.parse(path.join(dir_home, 'pancake-volume.json')))
-    pancakeswap_volume_file = readFileSync(path.join(dir_home, 'pancake-volume.json'), 'utf8');
 
-    tokens_data = JSON.parse(tokens_data_file.toString());
-    tokens_charts = JSON.parse(tokens_charts_file.toString());
-    pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString());
+  try {
+    tokens_data_file = readFileSync(path.join(dir_home, 'pancake-simple.json'), 'utf8')
+    tokens_data = JSON.parse(tokens_data_file.toString())
+    let pathFile = path.join(dir_home, 'save_pancake-simple.json')
+    writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
   } catch(error) {
-    console.log(error)
-    return
+    tokens_data_file = readFileSync(path.join(dir_home, 'save_pancake-simple.json'), 'utf8')
+    tokens_data = JSON.parse(tokens_data_file.toString())
+  }
+
+  try {
+    tokens_charts_file = readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8')
+    tokens_charts = JSON.parse(tokens_charts_file.toString())
+    let pathFile = path.join(dir_home, 'save_pancake-charts.json')
+    writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
+  } catch(error) {
+    tokens_charts_file = readFileSync(path.join(dir_home, 'save_pancake-charts.json'), 'utf8')
+    tokens_charts = JSON.parse(tokens_charts_file.toString())
+  }
+
+  try {
+    pancakeswap_volume_file = readFileSync(path.join(dir_home, 'pancake-volume.json'), 'utf8')
+    pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
+    let pathFile = path.join(dir_home, 'save_pancake-volume.json')
+    writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
+  } catch(error) {
+    pancakeswap_volume_file = readFileSync(path.join(dir_home, 'save_pancake-volume.json'), 'utf8')
+    pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
   }
 
 
