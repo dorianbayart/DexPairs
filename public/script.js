@@ -474,7 +474,7 @@ document.getElementById('base_change').addEventListener(
 document.getElementById('base_select').addEventListener(
   "change", function(e) {
     document.getElementById('base_symbol').style.display = "flex"
-    document.getElementById('base_change').style.display = "initial"
+    document.getElementById('base_change').style.display = "flex"
     document.getElementById('base_select').style.display = "none"
     const selected = e.target.value
     if(selected === selectedToken) {
