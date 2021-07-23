@@ -540,6 +540,6 @@ const calculateBalance = (value, decimal) => {
 const displayBalance = (value, decimal) => {
   const balance = calculateBalance(value, decimal)
   if(balance === 0) return 0
-  if(balance < 0.01) return '≈0'
+  if(balance < 0.01) return ' ≈ 0'
   return balance
 }
