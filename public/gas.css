@@ -5,7 +5,6 @@
   width: max-content;
   margin-left: 24px;
   margin-bottom: 1em;
-  background-color: #EEEE;
   border-radius: 10px;
   padding: 1px 1px 1px 6px;
 }
@@ -24,13 +23,13 @@ ul.gas-list {
   list-style: none;
 }
 .gas-list li {
-  background-color: #FFFE;
   border-radius: 8px;
   padding: 3px;
   margin: 3px;
   display: flex;
   align-items: center;
   min-width: 32px;
+  min-height: 20px;
 }
 .gas-list li span {
   height: 14px;

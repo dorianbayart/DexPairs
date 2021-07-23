@@ -4,18 +4,26 @@ html {
 
 /* Common */
 #menu .menu-item, input, select {
+  color: #000D;
+  background-color: #FFFE;
+}
+/* Gas */
+.gas-list li {
+  color: #000D;
   background-color: #FFFE;
 }
 /* Charts */
 .top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart {
+  color: #000D;
   background-color: #FFFE;
 }
 /* Wallet */
 #global.wallet-information, #wallet ul li {
+  color: #000D;
   background-color: #FFFE;
 }
 
-#top, #top-title, #wallet ul {
+#top, #top-title, #wallet ul, .gas-container {
   background-color: #0002;
 }
 
