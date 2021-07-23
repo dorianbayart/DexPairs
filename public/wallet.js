@@ -63,6 +63,7 @@ function configureWallet(inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
     displayWallet()
   } else {
+    sessionStorage.removeItem('wallet')
     wallet = {}
   }
 
@@ -213,12 +214,14 @@ function getNetworkBalance(network) {
 
 // Display Wallet
 function displayWallet() {
-  const listLi = document.getElementById('wallet').querySelectorAll('li')
+  let listLi = document.getElementById('wallet').querySelectorAll('li')
   const tokens = filteredWallet().sort(sortWallet)
 
   if(listLi.length === 0 || listLi.length !== tokens.length) {
     document.getElementById('wallet').innerHTML = null
     ul = document.createElement('ul')
+    document.getElementById('wallet').appendChild(ul)
+    listLi = []
   }
 
   tokens.forEach(function (id) {
@@ -227,8 +230,8 @@ function displayWallet() {
 
     if(element) {
 
-      element.querySelector('span.price').innerHTML = '$' + precise(price)
-      element.querySelector('span.value').innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
+      element.querySelector('span.price').innerHTML = price ? '$' + precise(price) : '-'
+      element.querySelector('span.value').innerHTML = price ? displayValue(wallet[id].value, price, wallet[id].tokenDecimal) : '-'
       element.querySelector('span.balance').innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
 
     } else {
@@ -256,7 +259,7 @@ function displayWallet() {
       spanNameSymbol.appendChild(spanName)
 
       let spanPrice = document.createElement('span')
-      spanPrice.innerHTML = '$' + precise(price)
+      spanPrice.innerHTML = price ? '$' + precise(price) : '-'
       spanPrice.classList.add('price')
       li.appendChild(spanPrice)
 
@@ -265,7 +268,7 @@ function displayWallet() {
       li.appendChild(spanValueBalance)
 
       let spanValue = document.createElement('span')
-      spanValue.innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
+      spanValue.innerHTML = price ? displayValue(wallet[id].value, price, wallet[id].tokenDecimal) : '-'
       spanValue.classList.add('value')
       spanValueBalance.appendChild(spanValue)
       let spanBalance = document.createElement('span')
@@ -301,16 +304,11 @@ function displayWallet() {
       })
 
 
-
-
-
-
     }
 
   })
 
   if(tokens.length > 0) {
-    document.getElementById('wallet').appendChild(ul)
     document.getElementById('global').classList.remove('none')
     document.getElementById('state').innerHTML = null
     document.getElementById('input-wallet-container').classList.remove('margin-top')
@@ -342,7 +340,7 @@ function updateGlobalPrice() {
   filteredWallet().forEach(function (id) {
     let price = wallet[id].price
     if(price) {
-      walletValue += Number.parseFloat(displayBalance(wallet[id].value * price, wallet[id].tokenDecimal))
+      walletValue += Number.parseFloat(calculateValue(wallet[id].value, price, wallet[id].tokenDecimal))
     }
   })
 
@@ -530,11 +528,31 @@ const filteredWallet = () => {
   return filtered
 }
 
-/* Utils - Display balance from value */
-const displayBalance = (value, decimal) => {
-  if(value && value > 0) {
-    return precise(value * Math.pow(10, -decimal))
-  } else {
-    return 0
+/* Utils - Calculate balance from value */
+const calculateBalance = (balance, decimal) => {
+  if(balance && balance > 0) {
+    return precise(balance * Math.pow(10, -decimal))
   }
+  return 0
+}
+/* Utils - Calculate value from value */
+const calculateValue = (balance, price, decimal) => {
+  if(balance && price && balance * price > 0) {
+    return calculateBalance(balance * price, decimal)
+  }
+  return 0
+}
+/* Utils - Display balance readable by human */
+const displayBalance = (value, decimal) => {
+  const balance = calculateBalance(value, decimal)
+  if(balance === 0) return 0
+  if(balance < 0.01) return '≈ 0'
+  return balance
+}
+/* Utils - Display dollar value readable by human */
+const displayValue = (balance, price, decimal) => {
+  const value = calculateBalance(balance * price, decimal)
+  if(value === 0) return 0
+  if(value < 0.01) return '≈ 0'
+  return '$' + value
 }
