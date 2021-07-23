@@ -340,7 +340,7 @@ function updateGlobalPrice() {
   filteredWallet().forEach(function (id) {
     let price = wallet[id].price
     if(price) {
-      walletValue += Number.parseFloat(displayBalance(wallet[id].value * price, wallet[id].tokenDecimal))
+      walletValue += Number.parseFloat(calculateBalance(wallet[id].value * price, wallet[id].tokenDecimal))
     }
   })
 
@@ -528,11 +528,18 @@ const filteredWallet = () => {
   return filtered
 }
 
-/* Utils - Display balance from value */
-const displayBalance = (value, decimal) => {
+/* Utils - Calculate balance from value */
+const calculateBalance = (value, decimal) => {
   if(value && value > 0) {
     return precise(value * Math.pow(10, -decimal))
   } else {
     return 0
   }
+}
+/* Utils - Display balance readable by human */
+const displayBalance = (value, decimal) => {
+  const balance = calculateBalance(value, decimal)
+  if(balance === 0) return 0
+  if(balance < 0.01) return '≈0'
+  return balance
 }
