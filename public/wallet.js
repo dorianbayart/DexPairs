@@ -213,12 +213,13 @@ function getNetworkBalance(network) {
 
 // Display Wallet
 function displayWallet() {
-  const listLi = document.getElementById('wallet').querySelectorAll('li')
+  let listLi = document.getElementById('wallet').querySelectorAll('li')
   const tokens = filteredWallet().sort(sortWallet)
 
   if(listLi.length === 0 || listLi.length !== tokens.length) {
     document.getElementById('wallet').innerHTML = null
     ul = document.createElement('ul')
+    listLi = []
   }
 
   tokens.forEach(function (id) {
