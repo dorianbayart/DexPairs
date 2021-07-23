@@ -231,7 +231,7 @@ function displayWallet() {
     if(element) {
 
       element.querySelector('span.price').innerHTML = price ? '$' + precise(price) : '-'
-      element.querySelector('span.value').innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
+      element.querySelector('span.value').innerHTML = price ? displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
       element.querySelector('span.balance').innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
 
     } else {
@@ -268,7 +268,7 @@ function displayWallet() {
       li.appendChild(spanValueBalance)
 
       let spanValue = document.createElement('span')
-      spanValue.innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
+      spanValue.innerHTML = price ? displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
       spanValue.classList.add('value')
       spanValueBalance.appendChild(spanValue)
       let spanBalance = document.createElement('span')
@@ -540,6 +540,6 @@ const calculateBalance = (value, decimal) => {
 const displayBalance = (value, decimal) => {
   const balance = calculateBalance(value, decimal)
   if(balance === 0) return 0
-  if(balance < 0.01) return ' ≈ 0'
-  return balance
+  if(balance < 0.01) return '≈ 0'
+  return '$' + balance
 }
