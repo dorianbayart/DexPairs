@@ -101,7 +101,7 @@ canvas#wallet-chart {
   cursor: pointer;
   display: flex;
   align-items: flex-start;
-  height: 1.5em;
+  height: 40px;
   flex-wrap: wrap;
   transition: all 400ms ease-in-out;
 }
