@@ -219,6 +219,7 @@ function displayWallet() {
   if(listLi.length === 0 || listLi.length !== tokens.length) {
     document.getElementById('wallet').innerHTML = null
     ul = document.createElement('ul')
+    document.getElementById('wallet').appendChild(ul)
     listLi = []
   }
 
@@ -302,16 +303,11 @@ function displayWallet() {
       })
 
 
-
-
-
-
     }
 
   })
 
   if(tokens.length > 0) {
-    document.getElementById('wallet').appendChild(ul)
     document.getElementById('global').classList.remove('none')
     document.getElementById('state').innerHTML = null
     document.getElementById('input-wallet-container').classList.remove('margin-top')
