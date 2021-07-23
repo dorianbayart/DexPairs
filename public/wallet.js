@@ -259,7 +259,7 @@ function displayWallet() {
       spanNameSymbol.appendChild(spanName)
 
       let spanPrice = document.createElement('span')
-      spanPrice.innerHTML = '$' + precise(price)
+      spanPrice.innerHTML = price ? '$' + precise(price) : '-'
       spanPrice.classList.add('price')
       li.appendChild(spanPrice)
 
