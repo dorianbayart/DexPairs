@@ -230,7 +230,7 @@ function displayWallet() {
 
     if(element) {
 
-      element.querySelector('span.price').innerHTML = '$' + precise(price)
+      element.querySelector('span.price').innerHTML = price ? '$' + precise(price) : '-'
       element.querySelector('span.value').innerHTML = price ? '$'+displayBalance(wallet[id].value * price, wallet[id].tokenDecimal) : '-'
       element.querySelector('span.balance').innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
 
