@@ -183,7 +183,7 @@ function getNetworkBalance(network) {
   }
 
   const address = NETWORK[network].tokenContract
-  let sessionWallet = JSON.parse(sessionStorage.getItem(wallet))
+  let sessionWallet = JSON.parse(sessionStorage.getItem('wallet'))
   if(sessionWallet[getId(address, network)]) {
     wallet[getId(address, network)] = sessionWallet[getId(address, network)]
   } else {
