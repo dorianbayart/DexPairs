@@ -181,18 +181,27 @@ function getNetworkBalance(network) {
   if(!web3 || !web3.utils.isAddress(walletAddress)) {
     return
   }
-  web3.eth.getBalance(walletAddress).then(balance => {
-    const address = NETWORK[network].tokenContract
+
+  const address = NETWORK[network].tokenContract
+  let sessionWallet = JSON.parse(sessionStorage.getItem(wallet))
+  if(sessionWallet[getId(address, network)]) {
+    wallet[getId(address, network)] = sessionWallet[getId(address, network)]
+  } else {
     wallet[getId(address, network)] = {
       network: network,
       contract: address,
       tokenSymbol: NETWORK[network].tokenSymbol,
       tokenName: NETWORK[network].tokenName,
-      tokenDecimal: NETWORK[network].tokenDecimal,
-      value: balance,
-      price: getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network),
-      upToDate: true
+      tokenDecimal: NETWORK[network].tokenDecimal
     }
+  }
+  wallet[getId(address, network)].price = getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
+
+
+  web3.eth.getBalance(walletAddress).then(balance => {
+    wallet[getId(address, network)].value = balance
+    wallet[getId(address, network)].upToDate = true
+
     displayWallet()
 
     timerGetNetworkBalance[network] = setTimeout(function(){
@@ -201,6 +210,8 @@ function getNetworkBalance(network) {
 
   }, error => {
     console.log('getNetworkBalance', network, error)
+
+    wallet[getId(address, network)].upToDate = false
 
     timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
