@@ -243,7 +243,7 @@ async function launch() {
     tokens_charts_file = readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8')
     tokens_charts = JSON.parse(tokens_charts_file.toString())
     let pathFile = path.join(dir_home, 'save_pancake-charts.json')
-    writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
+    writeFileSync(pathFile, JSON.stringify( tokens_charts ), 'utf8')
   } catch(error) {
     console.log('pancake-charts.json', error)
     tokens_charts_file = readFileSync(path.join(dir_home, 'save_pancake-charts.json'), 'utf8')
@@ -254,13 +254,12 @@ async function launch() {
     pancakeswap_volume_file = readFileSync(path.join(dir_home, 'pancake-volume.json'), 'utf8')
     pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
     let pathFile = path.join(dir_home, 'save_pancake-volume.json')
-    writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
+    writeFileSync(pathFile, JSON.stringify( pancakeswap_volume ), 'utf8')
   } catch(error) {
     console.log('pancake-volume.json', error)
     pancakeswap_volume_file = readFileSync(path.join(dir_home, 'save_pancake-volume.json'), 'utf8')
     pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
   }
-
 
 
   tokens_list = {}
@@ -450,17 +449,38 @@ async function launchUniswap() {
   let uniswap_data_file = {}
   let uniswap_charts_file = {}
   let uniswap_volume_file = {}
-  try {
-    uniswap_data_file = require(path.join(dir_home, 'uniswap-simple.json'))
-    uniswap_charts_file = require(path.join(dir_home, 'uniswap-charts.json'))
-    uniswap_volume_file = require(path.join(dir_home, 'uniswap-volume.json'))
 
-    uniswap_data = uniswap_data_file
-    uniswap_charts = uniswap_charts_file
-    uniswap_volume = uniswap_volume_file
+  try {
+    uniswap_data_file = readFileSync(path.join(dir_home, 'uniswap-simple.json'), 'utf8')
+    uniswap_data = JSON.parse(uniswap_data_file.toString())
+    let pathFile = path.join(dir_home, 'save_uniswap-simple.json')
+    writeFileSync(pathFile, JSON.stringify( uniswap_data ), 'utf8')
   } catch(error) {
-    console.log(error)
-    return
+    console.log('uniswap-simple.json', error)
+    uniswap_data_file = readFileSync(path.join(dir_home, 'save_uniswap-simple.json'), 'utf8')
+    uniswap_data = JSON.parse(uniswap_data_file.toString())
+  }
+
+  try {
+    uniswap_charts_file = readFileSync(path.join(dir_home, 'uniswap-charts.json'), 'utf8')
+    uniswap_charts = JSON.parse(uniswap_charts_file.toString())
+    let pathFile = path.join(dir_home, 'save_uniswap-charts.json')
+    writeFileSync(pathFile, JSON.stringify( uniswap_charts ), 'utf8')
+  } catch(error) {
+    console.log('uniswap-charts.json', error)
+    uniswap_charts_file = readFileSync(path.join(dir_home, 'save_uniswap-charts.json'), 'utf8')
+    uniswap_charts = JSON.parse(uniswap_charts_file.toString())
+  }
+
+  try {
+    uniswap_volume_file = readFileSync(path.join(dir_home, 'uniswap-volume.json'), 'utf8')
+    uniswap_volume = JSON.parse(uniswap_volume_file.toString())
+    let pathFile = path.join(dir_home, 'save_uniswap-volume.json')
+    writeFileSync(pathFile, JSON.stringify( uniswap_volume ), 'utf8')
+  } catch(error) {
+    console.log('uniswap-volume.json', error)
+    uniswap_volume_file = readFileSync(path.join(dir_home, 'save_uniswap-volume.json'), 'utf8')
+    uniswap_volume = JSON.parse(uniswap_volume_file.toString())
   }
 
 
@@ -641,19 +661,39 @@ async function launchSushiswap() {
   let sushiswap_data_file = {}
   let sushiswap_charts_file = {}
   let sushiswap_volume_file = {}
-  try {
-    sushiswap_data_file = require(path.join(dir_home, 'sushiswap-simple.json'))
-    sushiswap_charts_file = require(path.join(dir_home, 'sushiswap-charts.json'))
-    sushiswap_volume_file = require(path.join(dir_home, 'sushiswap-volume.json'))
 
-    sushiswap_data = sushiswap_data_file
-    sushiswap_charts = sushiswap_charts_file
-    sushiswap_volume = sushiswap_volume_file
+  try {
+    sushiswap_data_file = readFileSync(path.join(dir_home, 'sushiswap-simple.json'), 'utf8')
+    sushiswap_data = JSON.parse(sushiswap_data_file.toString())
+    let pathFile = path.join(dir_home, 'save_sushiswap-simple.json')
+    writeFileSync(pathFile, JSON.stringify( sushiswap_data ), 'utf8')
   } catch(error) {
-    console.log(error)
-    return
+    console.log('sushiswap-simple.json', error)
+    sushiswap_data_file = readFileSync(path.join(dir_home, 'save_sushiswap-simple.json'), 'utf8')
+    sushiswap_data = JSON.parse(sushiswap_data_file.toString())
   }
 
+  try {
+    sushiswap_charts_file = readFileSync(path.join(dir_home, 'sushiswap-charts.json'), 'utf8')
+    sushiswap_charts = JSON.parse(sushiswap_charts_file.toString())
+    let pathFile = path.join(dir_home, 'save_sushiswap-charts.json')
+    writeFileSync(pathFile, JSON.stringify( sushiswap_charts ), 'utf8')
+  } catch(error) {
+    console.log('sushiswap-charts.json', error)
+    sushiswap_charts_file = readFileSync(path.join(dir_home, 'save_sushiswap-charts.json'), 'utf8')
+    sushiswap_charts = JSON.parse(sushiswap_charts_file.toString())
+  }
+
+  try {
+    sushiswap_volume_file = readFileSync(path.join(dir_home, 'sushiswap-volume.json'), 'utf8')
+    sushiswap_volume = JSON.parse(sushiswap_volume_file.toString())
+    let pathFile = path.join(dir_home, 'save_sushiswap-volume.json')
+    writeFileSync(pathFile, JSON.stringify( sushiswap_volume ), 'utf8')
+  } catch(error) {
+    console.log('sushiswap-volume.json', error)
+    sushiswap_volume_file = readFileSync(path.join(dir_home, 'save_sushiswap-volume.json'), 'utf8')
+    sushiswap_volume = JSON.parse(sushiswap_volume_file.toString())
+  }
 
 
   sushiswap_list = {}
@@ -834,17 +874,38 @@ async function launchSpiritswap() {
   let spiritswap_data_file = {}
   let spiritswap_charts_file = {}
   let spiritswap_volume_file = {}
-  try {
-    spiritswap_data_file = require(path.join(dir_home, 'spiritswap-simple.json'))
-    spiritswap_charts_file = require(path.join(dir_home, 'spiritswap-charts.json'))
-    spiritswap_volume_file = require(path.join(dir_home, 'spiritswap-volume.json'))
 
-    spiritswap_data = spiritswap_data_file
-    spiritswap_charts = spiritswap_charts_file
-    spiritswap_volume = spiritswap_volume_file
+  try {
+    spiritswap_data_file = readFileSync(path.join(dir_home, 'spiritswap-simple.json'), 'utf8')
+    spiritswap_data = JSON.parse(spiritswap_data_file.toString())
+    let pathFile = path.join(dir_home, 'save_spiritswap-simple.json')
+    writeFileSync(pathFile, JSON.stringify( spiritswap_data ), 'utf8')
   } catch(error) {
-    console.log(error)
-    return
+    console.log('spiritswap-simple.json', error)
+    spiritswap_data_file = readFileSync(path.join(dir_home, 'save_spiritswap-simple.json'), 'utf8')
+    spiritswap_data = JSON.parse(spiritswap_data_file.toString())
+  }
+
+  try {
+    spiritswap_charts_file = readFileSync(path.join(dir_home, 'spiritswap-charts.json'), 'utf8')
+    spiritswap_charts = JSON.parse(spiritswap_charts_file.toString())
+    let pathFile = path.join(dir_home, 'save_spiritswap-charts.json')
+    writeFileSync(pathFile, JSON.stringify( spiritswap_charts ), 'utf8')
+  } catch(error) {
+    console.log('spiritswap-charts.json', error)
+    spiritswap_charts_file = readFileSync(path.join(dir_home, 'save_spiritswap-charts.json'), 'utf8')
+    spiritswap_charts = JSON.parse(spiritswap_charts_file.toString())
+  }
+
+  try {
+    spiritswap_volume_file = readFileSync(path.join(dir_home, 'spiritswap-volume.json'), 'utf8')
+    spiritswap_volume = JSON.parse(spiritswap_volume_file.toString())
+    let pathFile = path.join(dir_home, 'save_spiritswap-volume.json')
+    writeFileSync(pathFile, JSON.stringify( spiritswap_volume ), 'utf8')
+  } catch(error) {
+    console.log('spiritswap-volume.json', error)
+    spiritswap_volume_file = readFileSync(path.join(dir_home, 'save_spiritswap-volume.json'), 'utf8')
+    spiritswap_volume = JSON.parse(spiritswap_volume_file.toString())
   }
 
 
@@ -1031,17 +1092,38 @@ async function launchHoneyswap() {
   let honeyswap_data_file = {}
   let honeyswap_charts_file = {}
   let honeyswap_volume_file = {}
-  try {
-    honeyswap_data_file = require(path.join(dir_home, 'honeyswap-simple.json'))
-    honeyswap_charts_file = require(path.join(dir_home, 'honeyswap-charts.json'))
-    honeyswap_volume_file = require(path.join(dir_home, 'honeyswap-volume.json'))
 
-    honeyswap_data = honeyswap_data_file
-    honeyswap_charts = honeyswap_charts_file
-    honeyswap_volume = honeyswap_volume_file
+  try {
+    honeyswap_data_file = readFileSync(path.join(dir_home, 'honeyswap-simple.json'), 'utf8')
+    honeyswap_data = JSON.parse(honeyswap_data_file.toString())
+    let pathFile = path.join(dir_home, 'save_honeyswap-simple.json')
+    writeFileSync(pathFile, JSON.stringify( honeyswap_data ), 'utf8')
   } catch(error) {
-    console.log(error)
-    return
+    console.log('honeyswap-simple.json', error)
+    honeyswap_data_file = readFileSync(path.join(dir_home, 'save_honeyswap-simple.json'), 'utf8')
+    honeyswap_data = JSON.parse(honeyswap_data_file.toString())
+  }
+
+  try {
+    honeyswap_charts_file = readFileSync(path.join(dir_home, 'honeyswap-charts.json'), 'utf8')
+    honeyswap_charts = JSON.parse(honeyswap_charts_file.toString())
+    let pathFile = path.join(dir_home, 'save_honeyswap-charts.json')
+    writeFileSync(pathFile, JSON.stringify( honeyswap_charts ), 'utf8')
+  } catch(error) {
+    console.log('honeyswap-charts.json', error)
+    honeyswap_charts_file = readFileSync(path.join(dir_home, 'save_honeyswap-charts.json'), 'utf8')
+    honeyswap_charts = JSON.parse(honeyswap_charts_file.toString())
+  }
+
+  try {
+    honeyswap_volume_file = readFileSync(path.join(dir_home, 'honeyswap-volume.json'), 'utf8')
+    honeyswap_volume = JSON.parse(honeyswap_volume_file.toString())
+    let pathFile = path.join(dir_home, 'save_honeyswap-volume.json')
+    writeFileSync(pathFile, JSON.stringify( honeyswap_volume ), 'utf8')
+  } catch(error) {
+    console.log('honeyswap-volume.json', error)
+    honeyswap_volume_file = readFileSync(path.join(dir_home, 'save_honeyswap-volume.json'), 'utf8')
+    honeyswap_volume = JSON.parse(honeyswap_volume_file.toString())
   }
 
 
