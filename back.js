@@ -3,7 +3,7 @@ const os = require('os')
 const path = require('path')
 const express = require('express')
 const fetch = require('node-fetch')
-const { readFileSync, writeFile } = require('fs')
+const { readFileSync, writeFile, writeFileSync } = require('fs')
 
 
 
