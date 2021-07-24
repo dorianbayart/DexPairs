@@ -129,12 +129,12 @@ function getTokenBalanceWeb3(contractAddress, network) {
     if(error) {
       console.log('getTokenBalanceWeb3', network, error)
       setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 5000)
-      return
+    } else {
+      wallet[id].value = value
+      wallet[id].upToDate = true
     }
-    wallet[id].value = value
-    wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
-    wallet[id].upToDate = true
 
+    wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
     sessionStorage.setItem('wallet', JSON.stringify(wallet))
 
     displayWallet()
