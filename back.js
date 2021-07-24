@@ -234,6 +234,7 @@ async function launch() {
     let pathFile = path.join(dir_home, 'save_pancake-simple.json')
     writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
   } catch(error) {
+    console.log('pancake-simple.json', error)
     tokens_data_file = readFileSync(path.join(dir_home, 'save_pancake-simple.json'), 'utf8')
     tokens_data = JSON.parse(tokens_data_file.toString())
   }
@@ -244,6 +245,7 @@ async function launch() {
     let pathFile = path.join(dir_home, 'save_pancake-charts.json')
     writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
   } catch(error) {
+    console.log('pancake-charts.json', error)
     tokens_charts_file = readFileSync(path.join(dir_home, 'save_pancake-charts.json'), 'utf8')
     tokens_charts = JSON.parse(tokens_charts_file.toString())
   }
@@ -254,6 +256,7 @@ async function launch() {
     let pathFile = path.join(dir_home, 'save_pancake-volume.json')
     writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
   } catch(error) {
+    console.log('pancake-volume.json', error)
     pancakeswap_volume_file = readFileSync(path.join(dir_home, 'save_pancake-volume.json'), 'utf8')
     pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
   }
