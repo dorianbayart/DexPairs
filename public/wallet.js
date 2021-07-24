@@ -215,7 +215,7 @@ function getNetworkBalance(network) {
 
     timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
-    }, 3000)
+    }, 5000)
 
   })
 
