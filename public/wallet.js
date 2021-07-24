@@ -127,7 +127,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
     if(error) {
-      console.log('getTokenBalanceWeb3', error)
+      console.log('getTokenBalanceWeb3', network, error)
       setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 5000)
       return
     }
