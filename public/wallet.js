@@ -128,7 +128,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
   contract.methods.balanceOf(walletAddress).call((error, value) => {
     if(error) {
       console.log('getTokenBalanceWeb3', network, error)
-      setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 5000)
+      setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 15000)
     } else {
       wallet[id].value = value
       wallet[id].upToDate = true
@@ -206,7 +206,7 @@ function getNetworkBalance(network) {
 
     timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
-    }, (Math.round(Math.random() * 15) + 15) * 1000)
+    }, (Math.round(Math.random() * 15) + 25) * 1000)
 
   }, error => {
     console.log('getNetworkBalance', network, error)
@@ -215,7 +215,7 @@ function getNetworkBalance(network) {
 
     timerGetNetworkBalance[network] = setTimeout(function(){
       getNetworkBalance(network)
-    }, 5000)
+    }, 10000)
 
   })
 
