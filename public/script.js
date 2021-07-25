@@ -763,6 +763,7 @@ function updateURLParams() {
   const fullTitle = DOMAIN_NAME + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p)
   document.title = fullTitle
   document.querySelector('meta[property="og:title"]').setAttribute("content", fullTitle)
+  document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href)
 
   window.history.replaceState(null, fullTitle, window.location.href.split("?")[0] + '?' + params.toString())
 }
