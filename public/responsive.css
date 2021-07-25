@@ -34,7 +34,7 @@ header .version .low {
   height: 36px;
 }
 .left-menu {
-  width: 25%;
+  width: 24%;
   min-width: 12em;
   max-width: 20em;
   font-size: 0.8em;
@@ -64,11 +64,11 @@ header .version .low {
   padding: 12px;
 }
 #chart {
-  margin: 0.5em 1em 1em;
+  margin: 0.5em 1em;
   padding: 0.25em;
 }
 #source {
-  margin-top: 2em;
+
 }
 #swapper_token, #swapper_base {
   width: 30%;
@@ -109,13 +109,14 @@ header .version .low {
   .top-token {
     border-radius: 8px;
   }
-  #flex-main {
-    flex-wrap: wrap;
-  }
+
   .left-menu {
     width: 100%;
     max-width: none;
     margin-bottom: 2em;
+  }
+  .main-chart {
+    width: 100%;
   }
   #search_field {
     margin: 0.25em 0.5em;
@@ -137,11 +138,11 @@ header .version .low {
     margin: 0.25em 0.5em;
   }
   #chart {
-    margin: 0.25em 0.5em 1em;
+    margin: 0.25em 0.5em;
     padding: 0.5em;
   }
   #source {
-    margin-top: 1.25em;
+
   }
   #swapper_token, #swapper_base {
     margin: 0.5em;
@@ -197,10 +198,10 @@ header .version .low {
     margin: 0 0.25em;
   }
   #chart {
-    margin: 0.1em 0.25em 1em;
+    margin: 0.1em 0.25em;
   }
   #source {
-    margin-top: 0.5em;
+
   }
   #swapper_token, #swapper_base {
     margin: 0.25em;

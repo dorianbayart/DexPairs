@@ -82,7 +82,7 @@
 
   <div id='top' class='flex-row'>
   </div>
-  <div id='flex-main'>
+  <div id='main'>
     <div class="flex-column left-menu">
       <input type='text' id='search_field' placeholder='Search a token' title='Search by symbol, name or contract addres'>
       <div id='order-list'>
@@ -90,7 +90,7 @@
       </div>
       <div id='list'></div>
     </div>
-    <div class='flex-column'>
+    <div class='flex-column main-chart'>
       <div class='flex-pair'>
         <div id='token'>
           <div class='symbol_name'>
@@ -143,7 +143,12 @@
           <div id='interval_1w' class='interval-choice'>1w</div>
         </div>
         <canvas id="myChart"></canvas>
+      </div>
+      <div class='source_share_container'>
         <div id='source'></div>
+        <div id='share_charts_container'>
+          <button id='share_charts'>Share this chart</button>
+        </div>
       </div>
       <div class='flex-pair'>
         <div id='swapper_token_symbol'></div>

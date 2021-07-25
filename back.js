@@ -385,7 +385,7 @@ async function launch() {
   // build Top 10 list
   top_tokens = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < TOP_SIZE; i++) {
+    for (let i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(tokens_list)[i]
       const symbol = tokens_list[address]
       const name = tokens_data[address].n
@@ -600,7 +600,7 @@ async function launchUniswap() {
   // build Top 10 list of Uniswap
   uniswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < TOP_SIZE; i++) {
+    for (let i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(uniswap_list)[i]
       const symbol = uniswap_list[address]
       const name = uniswap_data[address].n
@@ -813,7 +813,7 @@ async function launchSushiswap() {
   // build Top 10 list of Sushiswap
   sushiswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < TOP_SIZE; i++) {
+    for (let i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(sushiswap_list)[i]
       const symbol = sushiswap_list[address]
       const name = sushiswap_data[address].n
@@ -1030,7 +1030,7 @@ async function launchSpiritswap() {
   // build Top 10 list of Spiritswap
   spiritswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < TOP_SIZE; i++) {
+    for (let i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(spiritswap_list)[i]
       const symbol = spiritswap_list[address]
       const name = spiritswap_data[address].n
@@ -1248,7 +1248,7 @@ async function launchHoneyswap() {
   // build Top 10 list of Honeyswap
   honeyswap_top = {}
   if(tokens.length > 0) {
-    for (var i = 0; i < TOP_SIZE; i++) {
+    for (let i = 0; i < TOP_SIZE; i++) {
       const address = Object.keys(honeyswap_list)[i]
       const symbol = honeyswap_list[address]
       const name = honeyswap_data[address].n

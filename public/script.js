@@ -1,3 +1,4 @@
+'use strict'
 
 let getListTimer, getTopTimer, getSimpleTimer
 let list = {}
@@ -88,10 +89,10 @@ let interval = INTERVAL_4H
 // + put the list on the page
 // + define events to update the main token when selected
 function getList() {
-  var xmlhttp = new XMLHttpRequest()
+  let xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText)
+      let data = JSON.parse(this.responseText)
       list = data
       if(list && Object.keys(list).length > 0) {
         updateList()
@@ -110,10 +111,10 @@ function getList() {
 // get simple data from server
 // + update main/base tokens with default ones (WBNB/BUSD)
 function getTop() {
-  xmlhttp = new XMLHttpRequest()
+  let xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText)
+      let data = JSON.parse(this.responseText)
       topTokens = data
       if(topTokens && Object.keys(topTokens).length > 0) {
         setTop()
@@ -132,12 +133,31 @@ function getTop() {
 // get simple data from server
 // + update main/base tokens with default ones
 function getSimple() {
-  xmlhttp = new XMLHttpRequest()
+  let xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText)
+      let data = JSON.parse(this.responseText)
       simple = data
       if(simple && Object.keys(simple).length > 0) {
+
+        if(selectedToken.length !== 42) {
+          let found = findAddressFromSymbol(selectedToken)
+          if(found) {
+            selectedToken = found
+          } else {
+            selectedToken = dexList[dex].tokens.token
+          }
+        }
+
+        if(selectedBase.length !== 42) {
+          let found = findAddressFromSymbol(selectedBase)
+          if(found) {
+            selectedBase = found
+          } else {
+            selectedBase = dexList[dex].tokens.base
+          }
+        }
+
         setToken(selectedToken)
         setBase(selectedBase)
         getCharts()
@@ -156,10 +176,10 @@ function getSimple() {
 // get charts data from server
 // + update chart
 function getCharts() {
-  xmlhttp = new XMLHttpRequest()
+  let xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText)
+      let data = JSON.parse(this.responseText)
       tokenCharts = data[selectedToken]
       baseCharts = data[selectedBase]
       if(tokenCharts && Object.keys(tokenCharts).length > 0) {
@@ -202,11 +222,11 @@ function updateList() {
   let currentList = search.length > 0 ? filteredList : list
 
   document.getElementById('list').innerHTML = null;
-  ul = document.createElement('ul')
+  const ul = document.createElement('ul')
 
   const fullList = sessionStorage.getItem('full-list')
   const length = Object.keys(currentList).length > LIST_INITIAL_SIZE && !fullList ? LIST_INITIAL_SIZE : Object.keys(currentList).length
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     let address = Object.keys(currentList)[i]
     let li = document.createElement('li')
     ul.appendChild(li)
@@ -263,7 +283,7 @@ function setTop() {
   }
   let top = document.getElementById('top')
   top.innerHTML = null
-  for (var i = 0; i < 6; i++) {
+  for (let i = 0; i < 6; i++) {
     const address = Object.keys(topTokens)[i]
     const symbol = topTokens[address].s
     let div_column = document.createElement('div')
@@ -529,6 +549,22 @@ document.getElementById('interval_1w').addEventListener(
   }
 )
 
+// Share this chart - Button
+document.getElementById('share_charts').addEventListener('click', event => {
+  const location = window.location
+  if (navigator.share) {
+    navigator.share({
+      title: location.hostname + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p),
+      url: window.location.href
+    }).then(() => {
+      console.log('Thanks for sharing!')
+    })
+    .catch(console.error);
+  } else {
+    console.log(location.hostname + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p))
+  }
+});
+
 
 
 
@@ -543,33 +579,49 @@ getTop()
 
 
 function initializeHTML() {
-  if(sessionStorage.getItem('list')) {
+  // default tokens
+  selectedToken = dexList[dex].tokens.token
+  selectedBase = dexList[dex].tokens.base
+
+  if(sessionStorage.getItem('dex')) {
     dex = sessionStorage.getItem('dex')
+    selectedToken = dexList[dex].tokens.token
+    selectedBase = dexList[dex].tokens.base
+  }
+  if(sessionStorage.getItem('selectedToken')) {
     selectedToken = sessionStorage.getItem('selectedToken')
+  }
+  if(sessionStorage.getItem('selectedBase')) {
     selectedBase = sessionStorage.getItem('selectedBase')
+  }
+  if(sessionStorage.getItem('interval')) {
     interval = sessionStorage.getItem('interval')
+  }
+
+  if(sessionStorage.getItem('list')) {
     list = JSON.parse(sessionStorage.getItem('list'))
     if(list && Object.keys(list).length > 0) { updateList() }
     topTokens = JSON.parse(sessionStorage.getItem('topTokens'))
     if(topTokens && Object.keys(topTokens).length > 0) { setTop() }
     simple = JSON.parse(sessionStorage.getItem('simple'))
-    if(simple && Object.keys(simple).length > 0) {
-      setToken(selectedToken)
-      setBase(selectedBase)
+  }
 
-      tokenCharts = JSON.parse(sessionStorage.getItem('tokenCharts'))
-      baseCharts = JSON.parse(sessionStorage.getItem('baseCharts'))
-      if(tokenCharts && baseCharts && Object.keys(tokenCharts).length > 0 && Object.keys(baseCharts).length > 0) {
-        updateCharts()
-        setSwapperToken()
-        setSwapperBase()
-      }
-    }
-  } else {
-    // default selection
+  const params = new URLSearchParams(window.location.search)
+  if(params.has('dex')) {
+    dex = params.get('dex')
     selectedToken = dexList[dex].tokens.token
     selectedBase = dexList[dex].tokens.base
   }
+  if(params.has('token')) {
+    selectedToken = params.get('token')
+  }
+  if(params.has('base')) {
+    selectedBase = params.get('base')
+  }
+  if(params.has('interval')) {
+    interval = params.get('interval')
+  }
+
 
   let dexSelector = document.getElementById('dex-selector')
   Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item, i) => {
@@ -593,6 +645,8 @@ function saveSessionVariables() {
   sessionStorage.setItem('selectedToken', selectedToken)
   sessionStorage.setItem('selectedBase', selectedBase)
   sessionStorage.setItem('interval', interval)
+
+  updateURLParams()
 }
 
 
@@ -634,7 +688,7 @@ function updateCharts() {
     return price ? coords.p / price : null
   })
 
-  var ctx = document.getElementById('myChart').getContext('2d')
+  let ctx = document.getElementById('myChart').getContext('2d')
   if(myChart) {
     myChart.data.labels = timeData
     myChart.data.datasets[0].label = simple[selectedToken].s + ' / ' + simple[selectedBase].s
@@ -658,8 +712,8 @@ function updateCharts() {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
-        //aspectRatio: 0.75,
+        maintainAspectRatio: true,
+        aspectRatio: window.matchMedia( "(min-width: 600px)" ).matches ? 2.25 : 1.5,
         radius: 0,
         interaction: {
           intersect: false,
@@ -693,6 +747,22 @@ function estimatePriceInterpolation(chart, t) {
   return (t-chart[index - 1].t)*(chart[index].p-chart[index - 1].p)/(chart[index].t-chart[index - 1].t) + chart[index - 1].p
 }
 
+
+
+
+// Utils
+// Update URL with parameters
+function updateURLParams() {
+  const params = new URLSearchParams(window.location.search)
+  params.set('dex', dex)
+  params.set('token', selectedToken)
+  params.set('base', selectedBase)
+  params.set('interval', interval)
+
+  const fullTitle = document.title + ' | ' + simple[selectedToken].s + ' | ' + simple[selectedToken].p
+
+  window.history.replaceState(null, fullTitle, window.location.href.split("?")[0] + '?' + params.toString())
+}
 
 
 

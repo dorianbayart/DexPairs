@@ -42,7 +42,7 @@ function configureWallet(inputAddress) {
 
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
-      window.history.replaceState(null, document.title, window.location.href.split("?")[0]);
+      window.history.replaceState(null, document.title, window.location.href.split("?")[0])
     }
 
     walletAddress = null
@@ -75,7 +75,7 @@ function configureWallet(inputAddress) {
 
   const urlParams = new URLSearchParams(window.location.search)
   if(window.history.replaceState && (!urlParams.has('address') || urlParams.has('address') && urlParams.get('address') !== walletAddress)) {
-    window.history.replaceState(null, walletAddress, window.location.href.split("?")[0] + '?address=' + walletAddress);
+    window.history.replaceState(null, walletAddress, window.location.href.split("?")[0] + '?address=' + walletAddress)
   }
 
   Object.keys(NETWORK).forEach((network, i) => {
@@ -94,10 +94,10 @@ function getTokenTx(network) {
   if(!walletAddress) {
     return
   }
-  var xmlhttp = new XMLHttpRequest()
+  let xmlhttp = new XMLHttpRequest()
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText)
+      let data = JSON.parse(this.responseText)
       const tokentx = data.result
       sessionStorage.setItem('tokentx-' + network, JSON.stringify(tokentx))
 
@@ -184,7 +184,7 @@ function getNetworkBalance(network) {
 
   const address = NETWORK[network].tokenContract
   let sessionWallet = JSON.parse(sessionStorage.getItem('wallet'))
-  if(sessionWallet[getId(address, network)]) {
+  if(sessionWallet && sessionWallet[getId(address, network)]) {
     wallet[getId(address, network)] = sessionWallet[getId(address, network)]
   } else {
     wallet[getId(address, network)] = {
@@ -310,7 +310,7 @@ function displayWallet() {
         if(item.classList.contains('expanded')) {
           item.classList.remove('expanded')
         } else {
-          item.classList.toggle('expanded', true)
+          //item.classList.toggle('expanded', true)
         }
       })
 

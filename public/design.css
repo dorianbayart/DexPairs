@@ -75,15 +75,17 @@ header .version {
 }
 
 .flex-column {
-  display: flex;
-  flex: auto;
+  display: inline-flex;
   flex-flow: column;
   max-width: 100%;
 }
 
-#flex-main {
-  display: flex;
+#main {
   margin-top: 2em;
+}
+
+.main-chart {
+  width: 75%;
 }
 
 .flex-pair {
@@ -312,14 +314,28 @@ header .version {
 }
 #myChart {
   width: 95% !important;
-  max-height: 85%;
   margin: auto;
 }
+.source_share_container {
+  display: inline-flex;
+  margin: 0 1em;
+}
 #source {
+  flex: auto;
   color: grey;
   text-align: end;
   font-style: italic;
   font-size: 0.8rem;
+}
+#share_charts_container button {
+  border: 1px solid #EFEFEF;
+  border-radius: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: white;
+}
+#share_charts_container button:hover {
+  background-color: #EFEFEF;
 }
 
 #swapper_token, #swapper_base {
