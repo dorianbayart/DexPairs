@@ -555,6 +555,7 @@ document.getElementById('share_charts').addEventListener('click', event => {
   if (navigator.share) {
     navigator.share({
       title: location.hostname + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p),
+      text: simple[selectedToken].s + ' price on ' + DOMAIN_NAME + ' | $' + precise(simple[selectedToken].p),
       url: window.location.href
     }).then(() => {
       console.log('Thanks for sharing!')
