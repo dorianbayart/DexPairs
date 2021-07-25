@@ -28,6 +28,21 @@ function configureWallet(inputAddress) {
   if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
     stateContainer.innerHTML = null
     stateContainer.classList.remove('shadow-white')
+
+    inputContainer.classList.toggle('margin-top', true)
+    globalInforationContainer.classList.toggle('none', true)
+
+    const urlParams = new URLSearchParams(window.location.search)
+    if(urlParams.has('address') && window.history.replaceState) {
+      window.history.replaceState(null, DOMAIN_NAME + ' | Wallet', window.location.href.split("?")[0])
+      document.querySelector('meta[property="og:title"]').setAttribute("content", DOMAIN_NAME + ' | Wallet')
+    }
+
+    walletAddress = null
+    sessionStorage.removeItem('walletAddress', walletAddress)
+    wallet = {}
+    displayWallet()
+
     return
   }
 
@@ -42,7 +57,8 @@ function configureWallet(inputAddress) {
 
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
-      window.history.replaceState(null, document.title, window.location.href.split("?")[0])
+      window.history.replaceState(null, DOMAIN_NAME + ' | Wallet', window.location.href.split("?")[0])
+      document.querySelector('meta[property="og:title"]').setAttribute("content", DOMAIN_NAME + ' | Wallet')
     }
 
     walletAddress = null
@@ -75,7 +91,9 @@ function configureWallet(inputAddress) {
 
   const urlParams = new URLSearchParams(window.location.search)
   if(window.history.replaceState && (!urlParams.has('address') || urlParams.has('address') && urlParams.get('address') !== walletAddress)) {
-    window.history.replaceState(null, walletAddress, window.location.href.split("?")[0] + '?address=' + walletAddress)
+    document.title = DOMAIN_NAME + ' | ' + walletAddress
+    window.history.replaceState(null, document.title, window.location.href.split("?")[0] + '?address=' + walletAddress)
+    document.querySelector('meta[property="og:title"]').setAttribute("content", document.title)
   }
 
   Object.keys(NETWORK).forEach((network, i) => {
@@ -118,7 +136,7 @@ function getTokenTx(network) {
 
 // Get token balance
 function getTokenBalanceWeb3(contractAddress, network) {
-  if(contractAddress === '0x0') return
+  if(contractAddress === '0x0' || !walletAddress) return
 
   const id = getId(contractAddress, network)
   // Get ERC20 Token contract instance
@@ -178,7 +196,7 @@ function searchTokens(network) {
 
 function getNetworkBalance(network) {
   const web3 = getWeb3(network)
-  if(!web3 || !web3.utils.isAddress(walletAddress)) {
+  if(!web3 || !walletAddress || !web3.utils.isAddress(walletAddress)) {
     return
   }
 
@@ -230,8 +248,11 @@ function displayWallet() {
 
   if(listLi.length === 0 || listLi.length !== tokens.length) {
     document.getElementById('wallet').innerHTML = null
-    ul = document.createElement('ul')
-    document.getElementById('wallet').appendChild(ul)
+    if(tokens.length > 0) {
+      let ul = document.createElement('ul')
+      ul.id = 'wallet-ul'
+      document.getElementById('wallet').appendChild(ul)
+    }
     listLi = []
   }
 
@@ -298,7 +319,7 @@ function displayWallet() {
       li.appendChild(spanChart)
 
 
-      ul.appendChild(li)
+      document.getElementById('wallet-ul').appendChild(li)
 
       li.addEventListener("click", function(e) {
         let item = e.target
@@ -323,6 +344,7 @@ function displayWallet() {
     document.getElementById('global').classList.remove('none')
     document.getElementById('state').innerHTML = null
     document.getElementById('input-wallet-container').classList.remove('margin-top')
+    document.getElementById('state').classList.remove('shadow-white')
   } else {
     document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
     const stateContainer = document.getElementById('state')

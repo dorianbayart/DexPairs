@@ -759,7 +759,9 @@ function updateURLParams() {
   params.set('base', selectedBase)
   params.set('interval', interval)
 
-  const fullTitle = document.title + ' | ' + simple[selectedToken].s + ' | ' + simple[selectedToken].p
+  const fullTitle = DOMAIN_NAME + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p)
+  document.title = fullTitle
+  document.querySelector('meta[property="og:title"]').setAttribute("content", fullTitle)
 
   window.history.replaceState(null, fullTitle, window.location.href.split("?")[0] + '?' + params.toString())
 }
