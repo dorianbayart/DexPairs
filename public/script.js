@@ -662,7 +662,7 @@ function setSourceDataText() {
   let a = document.createElement('a')
   a.href = NETWORK[dexList[dex].chain_enum].subgraph_url
   a.target = '_blank'
-  a.innerHTML = 'Source: ' + dexList[dex].name + ' on TheGraph'
+  a.innerHTML = 'Source: ' + dexList[dex].name + ' | ' + dexList[dex].chain + ' on TheGraph'
   a.title = 'Subgraph\'s playground of ' + dexList[dex].name + ' on ' + dexList[dex].chain
   source_data.appendChild(a)
 }
