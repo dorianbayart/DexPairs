@@ -658,6 +658,7 @@ function saveSessionVariables() {
 // Update text indicating the source of data
 function setSourceDataText() {
   let source_data = document.getElementById('source_data')
+  source_data.innerHTML = null
   let a = document.createElement('a')
   a.href = NETWORK[dexList[dex].chain_enum].subgraph_url
   a.target = '_blank'
