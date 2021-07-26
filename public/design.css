@@ -320,12 +320,12 @@ header .version {
   display: inline-flex;
   margin: 0 1em;
 }
-#source {
+#source_data {
   flex: auto;
   color: grey;
-  text-align: end;
   font-style: italic;
   font-size: 0.8rem;
+  font-weight: lighter;
 }
 #share_charts_container button {
   border: 1px solid #CCC;

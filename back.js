@@ -145,7 +145,7 @@ query
 }
 `
 
-// Use TheGraph API - https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3
+// Use TheGraph API - https://thegraph.com/explorer/subgraph/uniswap/uniswap-v3
 async function getUniswapTopTokens() {
   return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3", uniswap_request)
 }

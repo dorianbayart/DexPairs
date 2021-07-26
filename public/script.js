@@ -459,6 +459,8 @@ document.getElementById('dex-selector').addEventListener(
     getList()
     getSimple()
     getTop()
+
+    setSourceDataText()
   }
 )
 
@@ -639,6 +641,8 @@ function initializeHTML() {
 
   const bodyBackground = document.getElementById('body-background')
   bodyBackground.style.backgroundImage = "url(" + NETWORK[dexList[dex].chain_enum].img + ")"
+
+  setSourceDataText()
 }
 
 function saveSessionVariables() {
@@ -648,6 +652,18 @@ function saveSessionVariables() {
   sessionStorage.setItem('interval', interval)
 
   updateURLParams()
+}
+
+
+// Update text indicating the source of data
+function setSourceDataText() {
+  let source_data = document.getElementById('source_data')
+  let a = document.createElement('a')
+  a.href = NETWORK[dexList[dex].chain_enum].subgraph_url
+  a.target = '_blank'
+  a.innerHTML = 'Source: ' + dexList[dex].name + ' on TheGraph'
+  a.title = 'Subgraph\'s playground of ' + dexList[dex].name
+  source_data.appendChild(a)
 }
 
 
