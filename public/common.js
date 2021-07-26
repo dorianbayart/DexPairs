@@ -46,7 +46,8 @@ const NETWORK = {
     tokenSymbol: 'ETH',
     tokenName: 'Ethereum',
     tokenDecimal: 18,
-    tokenPriceContract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+    tokenPriceContract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    subgraph_url: 'https://thegraph.com/explorer/subgraph/uniswap/uniswap-v3'
   },
   POLYGON: {
     order: 2,
@@ -61,7 +62,8 @@ const NETWORK = {
     tokenSymbol: 'MATIC',
     tokenName: 'Matic',
     tokenDecimal: 18,
-    tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
+    tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    subgraph_url: 'https://thegraph.com/explorer/subgraph/sushiswap/matic-exchange'
   },
   BSC : {
     order: 3,
@@ -76,7 +78,8 @@ const NETWORK = {
     tokenSymbol: 'BNB',
     tokenName: 'BNB',
     tokenDecimal: 18,
-    tokenPriceContract: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
+    tokenPriceContract: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+    subgraph_url: 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2'
   },
   FANTOM: {
     order: 4,
@@ -91,7 +94,8 @@ const NETWORK = {
     tokenSymbol: 'FTM',
     tokenName: 'Fantom',
     tokenDecimal: 18,
-    tokenPriceContract: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'
+    tokenPriceContract: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+    subgraph_url: 'https://thegraph.com/explorer/subgraph/layer3org/spiritswap-analytics'
   },
   XDAI: {
     order: 5,
@@ -106,7 +110,8 @@ const NETWORK = {
     tokenSymbol: 'XDAI',
     tokenName: 'xDai',
     tokenDecimal: 18,
-    tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
+    tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+    subgraph_url: 'https://thegraph.com/explorer/subgraph/kirkins/honeyswap'
   },
 }
 
