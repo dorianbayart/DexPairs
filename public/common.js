@@ -143,6 +143,7 @@ let web3_bsc = null
 let walletAddress = ''
 let wallet = {}
 
+let gasIsRealtime = false
 let loadingChartsByAddress = false
 
 
@@ -164,7 +165,7 @@ const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'
 
 
 const updateGas = () => {
-  setTimeout(updateGas, 4000)
+  setTimeout(updateGas, gasIsRealtime ? 500 : 5000)
   // randomly select a network to update gas
   let network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
   setGas(network)
@@ -247,6 +248,13 @@ function getChartsByAddress(address, network, callback) {
   loadingChartsByAddress = true
 }
 
+
+
+document.getElementById('gas-realtime-button').addEventListener('click', (e) => {
+  gasIsRealtime = !gasIsRealtime
+  let element = e.target.id ? e.target : e.target.parentElement
+  element.classList.toggle('active', gasIsRealtime)
+})
 
 
 
