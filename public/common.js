@@ -25,6 +25,7 @@ const COLOR_THEMES = {
 const server = 'https://api.dexpairs.xyz'
 const DOMAIN_NAME = 'DexPairs.xyz'
 
+const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
 const TIME_24H = 86400000
 const INTERVAL_15M = '15m'
 const INTERVAL_4H = '4h'
@@ -312,6 +313,16 @@ function extractChartByDuration(chart, duration) {
   return chart.filter(({t}) => last_t-t <= duration)
 }
 
+
+
+/* Utils - Debounce function */
+let debounceTimer
+function debounce(func, timeout = 500) {
+  return (...args) => {
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => { func.apply(this, args) }, timeout)
+  }
+}
 
 
 // Round number

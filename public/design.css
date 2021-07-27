@@ -188,6 +188,11 @@ header .version {
   cursor: pointer;
   border-radius: 12px;
   margin: 2px;
+  border: 1px solid white;
+  transition: all 75ms ease-in-out, border 1s ease-in-out;
+}
+#list li.active {
+  border: 1px solid #CCC;
 }
 #list li:hover {
   background-color: #EFEFEF;

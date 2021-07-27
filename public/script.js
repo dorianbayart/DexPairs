@@ -198,8 +198,7 @@ function getCharts() {
 
 // defines event on search field
 document.getElementById('search_field').addEventListener("keyup", function(e) {
-  let searchValue = e.target.value.toLowerCase()
-  search = searchValue
+  search = e.target.value.toLowerCase()
 
   filteredList = {}
   Object.keys(list).forEach(function (address) {
@@ -209,7 +208,27 @@ document.getElementById('search_field').addEventListener("keyup", function(e) {
   })
 
   updateList()
+
+  if(search.length > 0 && ALPHA_NUM.includes(e.key.toLowerCase())) {
+    debounce(selectToken)(Object.keys(filteredList)[0])
+  }
 })
+
+/* Select the token */
+function selectToken(selected) {
+  if(!simple[selected]) return
+
+  selectedToken = selected
+  setToken(selectedToken)
+  getCharts()
+  setSwapperToken()
+  setSwapperBase()
+
+  let listLi = document.getElementById('list').querySelectorAll('li')
+  listLi.forEach((li, i) => {
+    li.classList.toggle('active', li.id === selectedToken)
+  });
+}
 
 
 
@@ -232,12 +251,9 @@ function updateList() {
     ul.appendChild(li)
     li.id = address
     li.innerHTML += currentList[address]
+    li.classList.toggle('active', li.id === selectedToken)
     li.addEventListener("click", function(e) {
-      selectedToken = e.target.id
-      setToken(selectedToken)
-      getCharts()
-      setSwapperToken()
-      setSwapperBase()
+      selectToken(e.target.id)
     })
   }
   document.getElementById('list').appendChild(ul)
@@ -662,7 +678,7 @@ function setSourceDataText() {
   let a = document.createElement('a')
   a.href = NETWORK[dexList[dex].chain_enum].subgraph_url
   a.target = '_blank'
-  a.innerHTML = 'Source: ' + dexList[dex].name + ' | ' + dexList[dex].chain + ' on TheGraph'
+  a.innerHTML = 'Source: ' + dexList[dex].name + ' on ' + dexList[dex].chain + ' | TheGraph'
   a.title = 'Subgraph\'s playground of ' + dexList[dex].name + ' on ' + dexList[dex].chain
   source_data.appendChild(a)
 }
