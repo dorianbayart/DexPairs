@@ -1,8 +1,8 @@
 
-# [DexPairs.xyz](https://dexpairs.xyz)
+# [DexPairs.xyz](https://dexpairs.xyz/)
 
 * Get and store subgraph data on different protocols
-* [Charts](https://dexpairs.xyz)
+* [Charts](https://dexpairs.xyz/)
   * Display the price charts of any token against any other token
 * [Wallet](https://dexpairs.xyz/wallet)
   * Search tokens in transactions on different protocols

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://dexpairs.xyz/</loc>
+        <priority>0.7</prority>
+    </url>
+    <url>
+        <loc>https://dexpairs.xyz/wallet</loc>
+        <priority>0.7</prority>
+    </url>
+</urlset>
