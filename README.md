@@ -13,11 +13,11 @@
 
 ## Supported protocols
 
-* [x] Uniswap - Ethereum => [https://dexpairs.xyz/?dex=UNISWAP](https://dexpairs.xyz/?dex=UNISWAP)
-* [x] SushiSwap - Polygon/Matic => [https://dexpairs.xyz/?dex=SUSHISWAP](https://dexpairs.xyz/?dex=SUSHISWAP)
-* [x] PancakeSwap - Binance Smart Chain => [https://dexpairs.xyz/?dex=PANCAKESWAP](https://dexpairs.xyz/?dex=PANCAKESWAP)
-* [x] SpiritSwap - Fantom => [https://dexpairs.xyz/?dex=SPIRITSWAP](https://dexpairs.xyz/?dex=SPIRITSWAP)
-* [x] HoneySwap - xDai => [https://dexpairs.xyz/?dex=HONEYSWAP](https://dexpairs.xyz/?dex=HONEYSWAP)
+* [x] [Uniswap - Ethereum](https://dexpairs.xyz/?dex=UNISWAP)
+* [x] [SushiSwap - Polygon/Matic](https://dexpairs.xyz/?dex=SUSHISWAP)
+* [x] [PancakeSwap - Binance Smart Chain](https://dexpairs.xyz/?dex=PANCAKESWAP)
+* [x] [SpiritSwap - Fantom](https://dexpairs.xyz/?dex=SPIRITSWAP)
+* [x] [HoneySwap - xDai](https://dexpairs.xyz/?dex=HONEYSWAP)
 
 
 
