@@ -1,10 +1,10 @@
 * {
   box-sizing: border-box;
+  font-family: system-ui, Sans-Serif, Arial;
 }
 
 body {
   display: block !important;
-  font-family: Sans-Serif;
 }
 
 #body-background {
