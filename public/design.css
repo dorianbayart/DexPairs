@@ -323,7 +323,6 @@ header .version {
 }
 .source_share_container {
   display: inline-flex;
-  margin: 0 1em;
 }
 #source_data {
   flex: auto;
@@ -337,7 +336,6 @@ header .version {
   border-radius: 12px;
   padding: 6px 12px;
   cursor: pointer;
-  background-color: white;
   font-size: 0.8em;
   font-weight: lighter;
   transition: all 150ms ease-in-out;

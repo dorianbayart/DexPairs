@@ -3,7 +3,7 @@ html {
 }
 
 /* Common */
-#menu .menu-item, input, select {
+#menu .menu-item, input, select, button {
   color: #000D;
   background-color: #FFFE;
 }

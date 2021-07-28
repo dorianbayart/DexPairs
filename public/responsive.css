@@ -67,8 +67,8 @@ header .version .low {
   margin: 0.5em 1em;
   padding: 0.25em;
 }
-#source {
-
+.source_share_container {
+  margin: 0 1em;
 }
 #swapper_token, #swapper_base {
   width: 30%;
@@ -141,8 +141,8 @@ header .version .low {
     margin: 0.25em 0.5em;
     padding: 0.5em;
   }
-  #source {
-
+  .source_share_container {
+    margin: 0 0.5em;
   }
   #swapper_token, #swapper_base {
     margin: 0.5em;
@@ -200,8 +200,8 @@ header .version .low {
   #chart {
     margin: 0.1em 0.25em;
   }
-  #source {
-
+  .source_share_container {
+    margin: 0 0.25em;
   }
   #swapper_token, #swapper_base {
     margin: 0.25em;
