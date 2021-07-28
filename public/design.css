@@ -24,7 +24,7 @@ h1, h2, h3 {
   font-weight: normal;
   margin: 0;
 }
-a, a:hover, a:visited, a:active {
+a, a:hover, a:visited, a:active, a:focus {
   text-decoration: none;
   color: #000;
 }

@@ -19,6 +19,51 @@ body {
   margin-top: 20vh;
 }
 
+.connect-demo-container {
+  max-height: 140px;
+  display: flex;
+  flex-flow: column;
+  margin: 1em auto;
+  text-align: center;
+  transition: all 1s ease-in-out;
+}
+.connect-demo-container.none {
+  max-height: 0;
+  padding: 0;
+  margin: 0 auto;
+  z-index: -1;
+  opacity: 0;
+}
+#connect-wallet {
+  border: 1px solid #6495ED;
+  border-radius: 8px;
+  padding: 0.5em 1em;
+  margin: 0.75em;
+  font-size: 1em;
+  cursor: not-allowed;
+  transition: all 150ms ease-in-out;
+  background-color: #6495ED; /* cornflowerblue */
+  color: white;
+  font-weight: lighter;
+}
+#connect-wallet:hover {
+  border: 1px solid #CCC;
+  box-shadow: 0px 0px 12px #888E;
+}
+#demo-wallet {
+  border: 1px solid white;
+  border-radius: 8px;
+  margin: 0.5em;
+  font-size: 0.9em;
+  padding: 0.25em 0.5em;
+  font-weight: lighter;
+  transition: all 150ms ease-in-out;
+  color: #000A;
+}
+#demo-wallet:hover {
+  border: 1px solid #CCC;
+}
+
 #input-wallet {
   border: 1px solid #FFF;
   border-radius: 12px;

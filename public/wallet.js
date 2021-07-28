@@ -17,6 +17,7 @@ function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
   const globalInforationContainer = document.getElementById('global')
   const stateContainer = document.getElementById('state')
+  const connectDemoContainer = document.getElementById('connect-demo-container')
 
   Object.keys(timerGetTokenTx).forEach(network => {
     clearTimeout(timerGetTokenTx[network])
@@ -31,6 +32,7 @@ function configureWallet(inputAddress) {
 
     inputContainer.classList.toggle('margin-top', true)
     globalInforationContainer.classList.toggle('none', true)
+    connectDemoContainer.classList.toggle('none', true)
 
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
@@ -342,11 +344,13 @@ function displayWallet() {
 
   if(tokens.length > 0) {
     document.getElementById('global').classList.remove('none')
+    document.getElementById('connect-demo-container').classList.toggle('none', true)
     document.getElementById('state').innerHTML = null
     document.getElementById('input-wallet-container').classList.remove('margin-top')
     document.getElementById('state').classList.remove('shadow-white')
   } else {
     document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
+    document.getElementById('connect-demo-container').classList.remove('none')
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
       stateContainer.innerHTML = 'No token can be found on this address'
