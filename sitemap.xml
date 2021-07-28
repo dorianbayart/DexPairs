@@ -2,10 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://dexpairs.xyz/</loc>
-        <priority>0.7</prority>
+        <priority>0.7</priority>
     </url>
     <url>
         <loc>https://dexpairs.xyz/wallet</loc>
-        <priority>0.7</prority>
+        <priority>0.7</priority>
     </url>
 </urlset>
