@@ -86,6 +86,7 @@ body {
   max-height: none;
   border-radius: 12px;
   border: 1px solid #0002;
+  flex-wrap: wrap;
 }
 #global.wallet-information.none {
   max-height: 0;
@@ -93,8 +94,17 @@ body {
   border-color: #FFF;
   z-index: -1;
 }
+.wallet-title {
+  margin: 0.5em auto;
+  font-weight: lighter;
+}
 #global .wallet-chart {
   flex: auto;
+}
+.wallet-chart-description {
+  font-size: 0.75em;
+  line-height: 0;
+  font-weight: lighter;
 }
 canvas#wallet-chart {
 }
@@ -103,6 +113,9 @@ canvas#wallet-chart {
   flex: auto;
   display: flex;
   flex-direction: column;
+}
+#global #wallet-value-tooltip {
+  font-weight: lighter;
 }
 #global #global-select-networks {
   flex: auto;
@@ -126,7 +139,7 @@ canvas#wallet-chart {
   padding: 3px 6px;
   display: inline-flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
 #hide-small-balances-container {
   display: inline-flex;

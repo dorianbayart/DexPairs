@@ -10,15 +10,24 @@
     }
 }
 
+.gas {
+  width: max-content;
+  margin-left: 24px;
+  margin-bottom: 1em;
+}
+.gas .gas-title {
+  font-size: 0.75em;
+  font-weight: lighter;
+  margin-left: 8px;
+}
 .gas-container {
   display: inline-flex;
   justify-content: center;
   align-items: center;
   width: max-content;
-  margin-left: 24px;
-  margin-bottom: 1em;
   border-radius: 10px;
   padding: 1px 1px 1px 6px;
+  flex-wrap: wrap;
 }
 .gas-container .gas-icon {
   height: 1em;
@@ -82,13 +91,13 @@ ul.gas-list {
 }
 
 @media (max-width: 800px) {
-  .gas-container {
+  .gas {
     margin-left: 16px;
   }
 }
 
 @media (max-width: 460px) {
-  .gas-container {
+  .gas {
     margin-left: 12px;
   }
 }
