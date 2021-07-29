@@ -28,7 +28,7 @@
   font-size: 1.8em;
 }
 
-#wallet {
+#wallet, .wallet-options {
   width: 45%;
 }
 
@@ -72,7 +72,7 @@
     font-size: 1.5em;
   }
 
-  #wallet {
+  #wallet, .wallet-options {
     width: 75%;
   }
 }
@@ -110,7 +110,7 @@
     font-size: 1.2em;
   }
 
-  #wallet {
+  #wallet, .wallet-options {
     width: 95%;
   }
 }

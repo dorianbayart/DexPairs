@@ -27,13 +27,6 @@ body {
   text-align: center;
   transition: all 1s ease-in-out;
 }
-.connect-demo-container.none {
-  max-height: 0;
-  padding: 0;
-  margin: 0 auto;
-  z-index: -1;
-  opacity: 0;
-}
 #connect-wallet {
   border: 1px solid #6495ED;
   border-radius: 8px;
@@ -128,6 +121,31 @@ canvas#wallet-chart {
 
 
 
+.wallet-options {
+  margin: 1em auto 0;
+  padding: 3px 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: end;
+}
+#hide-small-balances-container {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8em;
+  font-weight: lighter;
+  cursor: pointer;
+}
+#hide-small-balances-container img#hide-small-balances-icon {
+  height: 12px;
+  padding: 0;
+  margin: 0 6px;
+  cursor: pointer;
+}
+#hide-small-balances-container span {
+
+}
+
+
 #wallet {
   margin: auto;
   flex: auto;
@@ -136,6 +154,7 @@ canvas#wallet-chart {
 #wallet ul {
   list-style: none;
   padding: 3px;
+  margin: 0;
   border-radius: 12px;
 }
 
@@ -210,4 +229,14 @@ canvas#wallet-chart {
   height: 100%;
   line-height: 100%;
   opacity: 1;
+}
+
+
+/* helper */
+.none {
+  max-height: 0;
+  padding: 0;
+  margin: 0 auto;
+  z-index: -1;
+  opacity: 0;
 }

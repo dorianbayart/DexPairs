@@ -3,6 +3,7 @@ let globalChart = null
 let walletValue = 0
 let timerGetTokenTx = {}
 let timerGetNetworkBalance = {}
+let hideSmallBalance = true
 
 
 
@@ -18,6 +19,7 @@ function configureWallet(inputAddress) {
   const globalInforationContainer = document.getElementById('global')
   const stateContainer = document.getElementById('state')
   const connectDemoContainer = document.getElementById('connect-demo-container')
+  const walletOptions = document.getElementById('wallet-options')
 
   Object.keys(timerGetTokenTx).forEach(network => {
     clearTimeout(timerGetTokenTx[network])
@@ -33,6 +35,7 @@ function configureWallet(inputAddress) {
     inputContainer.classList.toggle('margin-top', true)
     globalInforationContainer.classList.toggle('none', true)
     connectDemoContainer.classList.toggle('none', true)
+    walletOptions.classList.remove('none')
 
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
@@ -345,12 +348,14 @@ function displayWallet() {
   if(tokens.length > 0) {
     document.getElementById('global').classList.remove('none')
     document.getElementById('connect-demo-container').classList.toggle('none', true)
+    document.getElementById('wallet-options').classList.remove('none')
     document.getElementById('state').innerHTML = null
     document.getElementById('input-wallet-container').classList.remove('margin-top')
     document.getElementById('state').classList.remove('shadow-white')
   } else {
     document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
     document.getElementById('connect-demo-container').classList.remove('none')
+    document.getElementById('wallet-options').classList.toggle('none', true)
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
       stateContainer.innerHTML = 'No token can be found on this address'
@@ -416,6 +421,10 @@ function initializeHTML() {
     address = sessionStorage.getItem('walletAddress')
   }
 
+  hideSmallBalance = sessionStorage.getItem('hideSmallBalances') ? JSON.parse(sessionStorage.getItem('hideSmallBalances')) : true
+  document.getElementById('hide-small-balances-icon').src = hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
+
+
   if(address) {
     document.getElementById('input-wallet').value = address
     configureWallet(address)
@@ -428,6 +437,16 @@ function simpleDataTimers() {
   })
   setTimeout(function(){ simpleDataTimers() }, 100000)
 }
+
+
+document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
+  e.preventDefault()
+  hideSmallBalance = !hideSmallBalance
+  sessionStorage.setItem('hideSmallBalances', hideSmallBalance)
+  document.getElementById('hide-small-balances-icon').src = hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
+
+  displayWallet()
+})
 
 
 function updateGlobalChart() {
@@ -560,8 +579,11 @@ const getId = (address, network) => {
 
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
-  const filtered = Object.keys(wallet)
+  let filtered = Object.keys(wallet)
     .filter(id => wallet[id].value && wallet[id].value !== '0')
+  if(hideSmallBalance) {
+    filtered = filtered.filter(id => calculateValue(wallet[id].value, wallet[id].price, wallet[id].tokenDecimal) >= 0.01 )
+  }
   return filtered
 }
 

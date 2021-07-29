@@ -2,6 +2,13 @@
   box-sizing: border-box;
   font-family: system-ui, Sans-Serif, Arial;
 }
+*.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
 
 body {
   display: block !important;
