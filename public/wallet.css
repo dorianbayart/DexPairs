@@ -177,8 +177,8 @@ canvas#wallet-chart {
   border-radius: 8px;
   cursor: pointer;
   display: flex;
-  align-items: flex-start;
-  height: 44px;
+  align-items: center;
+  height: 42px;
   flex-wrap: wrap;
   transition: all 400ms ease-in-out;
 }
@@ -192,7 +192,6 @@ canvas#wallet-chart {
 }
 #wallet ul li span.network {
   width: 8%;
-  height: 1.5em;
 }
 #wallet ul li span.network img.network {
   height: 100%;
@@ -213,7 +212,7 @@ canvas#wallet-chart {
 }
 #wallet ul li span.valueBalance {
   text-align: end;
-  width: 16%;
+  width: 17%;
   display: flex;
   flex-flow: column;
 }

@@ -93,6 +93,7 @@
 
   #global.wallet-information {
     padding: 0.5em;
+    width: 95%;
   }
   #global .wallet-chart {
     height: 64px;
@@ -112,5 +113,8 @@
 
   #wallet, .wallet-options {
     width: 95%;
+  }
+  #wallet ul li {
+    height: 40px;
   }
 }
