@@ -128,8 +128,8 @@ async function getPancakeswapTopTokens() {
   return await get("https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2", pancakeswap_request)
 }
 
-// Get Uniswap's top
-const uniswap_request = `
+// Get Uniswap v3 top
+const uniswapV3_request = `
 query
 {
   tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { volumeUSD_gt: "100" } ) {
@@ -146,8 +146,30 @@ query
 `
 
 // Use TheGraph API - https://thegraph.com/explorer/subgraph/uniswap/uniswap-v3
-async function getUniswapTopTokens() {
-  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3", uniswap_request)
+async function getUniswapV3TopTokens() {
+  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3", uniswapV3_request)
+}
+
+// Get Uniswap v2 top
+const uniswapV2_request = `
+query
+{
+  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "100" } ) {
+    id
+    name
+    symbol
+    derivedETH,
+    tradeVolumeUSD
+  }
+  bundle(id: "1" ) {
+    ethPrice
+  }
+}
+`
+
+// Use TheGraph API - https://thegraph.com/explorer/subgraph/uniswap/uniswap-v2
+async function getUniswapV2TopTokens() {
+  return await get("https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2", uniswapV2_request)
 }
 
 // Get Sushiswap's top
@@ -487,12 +509,19 @@ async function launchUniswap() {
   uniswap_list = {}
 
   // get data from Uniswap
-  const top = await getUniswapTopTokens()
+  const top = await getUniswapV3TopTokens()
+  const topV2 = await getUniswapV2TopTokens()
 
 
 
   const time = Date.now()
-  const tokens = top.data ? top.data.tokens : []
+  const tokensV3 = top.data ? top.data.tokens : []
+  const tokensV2 = topV2.data ? topV2.data.tokens : []
+
+  // Keep in v2 only tokens that are not already in v3
+  let filteredv2 = tokensV2.filter(token => !tokensV3.map(item => item.id).includes(token.id))
+  // then concat tokanV2 and filteredTokensV2
+  const tokens = tokensV3.concat(filteredv2)
 
   const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
 
@@ -502,7 +531,7 @@ async function launchUniswap() {
     const name = token.name
     const price_ETH = token.derivedETH
     const price = price_ETH * eth_price
-    const volumeUSD = token.volumeUSD
+    const volumeUSD = token.volumeUSD ? token.volumeUSD : token.tradeVolumeUSD
 
     // create Uniswap list
     uniswap_list[address] = symbol

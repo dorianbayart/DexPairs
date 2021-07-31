@@ -216,7 +216,7 @@ document.getElementById('search_field').addEventListener("keyup", function(e) {
 
 /* Select the token */
 function selectToken(selected) {
-  if(!simple[selected]) return
+  if(!selected || !simple[selected]) return
 
   selectedToken = selected
   setToken(selectedToken)
