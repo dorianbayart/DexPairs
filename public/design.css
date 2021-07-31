@@ -223,82 +223,70 @@ header .version {
 #token, #base {
   display: inline-flex;
   flex: 40%;
+  flex-wrap: wrap;
   border: 1px solid #CCC;
   border-radius: 12px;
-  min-height: 64px;
 }
 .flex-auto {
   flex: auto;
 }
-#token_name, #token_address, #base_name, #base_address, #base_select {
-  font-size: 0.85em;
-}
+
 .symbol_name, .percentages, .price_address {
   display: flex;
   flex-flow: column;
   flex: auto;
+  align-self: center;
 }
 #token_price, #token_address, #base_price, #base_address {
   text-align: right;
 }
-.base_symbol_container {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
+#token_symbol, #token_price,
+#base_change, #base_price {
+  font-size: 16px;
+  height: 17px;
+  margin-bottom: 3px;
 }
-#token_symbol,
-#token_price,
-#base_symbol,
-#base_price {
-  font-size: 1.1em;
-}
-#base_select {
-  font-size: 0.9em;
+#token_name, #token_address, #base_name, #base_address {
+  font-size: 10px;
+  height: 12px;
 }
 
-#token_symbol,
-#token_name,
-#token_address,
-#token_price,
-#base_symbol,
-#base_select,
-#base_name,
-#base_address,
-#base_price {
+#token_symbol, #token_name, #token_address, #token_price,
+#base_symbol, #base_select, #base_name, #base_address, #base_price {
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-#token_price,
-#token_price_BNB,
-#base_price,
-#base_price_BNB {
+#token_price, #base_price {
   text-overflow: ellipsis;
   overflow-wrap: anywhere;
 }
 
-#base_change {
+button#base_change {
   display: flex;
+  padding: 0;
   border-radius: 12px;
-  height: 18px;
-  padding: 2px;
   border: none;
-  transition: padding 80ms ease-in-out;
   z-index: 1;
-
+  cursor: pointer;
 }
-.base_symbol_container:hover #base_change {
-  padding: 1px;
-}
-#base_change img {
-  height: 100%;
+button#base_change img {
+  height: 14px;
   width: auto;
   margin-right: 4px;
+  transition: all 250ms ease-in-out;
+}
+button#base_change:hover img {
+  transform: rotate(-90deg);
 }
 
 #base_select {
   display: none;
   cursor: pointer;
+  border: 1px solid #CCC;
+  border-radius: 8px;
+  padding: 2px 4px;
+  margin: -3px 0 3px -3px;
 }
 
 #chart {
