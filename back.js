@@ -528,7 +528,7 @@ async function launchUniswap() {
     const address = token.id
     const symbol = token.symbol
     const name = token.name
-    const price_ETH = token.derivedETH
+    const price_ETH = token.derivedETH === '0' && tokensV2.find(item => item.id === address) ? tokensV2.find(item => item.id === address).derivedETH : token.derivedETH
     const price = price_ETH * eth_price
     const volumeUSD = token.volumeUSD ? token.volumeUSD : token.tradeVolumeUSD
 
