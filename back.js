@@ -244,7 +244,7 @@ async function getHoneyswapTopTokens() {
 // Program - Pancake
 async function launch() {
   // loop
-  setTimeout(function(){ launch() }, REALTIME) // every few seconds
+  setTimeout(launch, REALTIME) // every few seconds
 
   let tokens_data_file = {}
   let tokens_charts_file = {}
@@ -466,7 +466,7 @@ async function launch() {
 // Program - Uniswap
 async function launchUniswap() {
   // loop
-  setTimeout(function(){ launchUniswap() }, REALTIME) // every few seconds
+  setTimeout(launchUniswap, REALTIME) // every few seconds
 
   let uniswap_data_file = {}
   let uniswap_charts_file = {}
@@ -511,7 +511,6 @@ async function launchUniswap() {
   // get data from Uniswap
   const top = await getUniswapV3TopTokens()
   const topV2 = await getUniswapV2TopTokens()
-
 
 
   const time = Date.now()
@@ -685,7 +684,7 @@ async function launchUniswap() {
 // Program - Sushiswap
 async function launchSushiswap() {
   // loop
-  setTimeout(function(){ launchSushiswap() }, REALTIME) // every few seconds
+  setTimeout(launchSushiswap, REALTIME) // every few seconds
 
   let sushiswap_data_file = {}
   let sushiswap_charts_file = {}
@@ -898,7 +897,7 @@ async function launchSushiswap() {
 // Program - Spiritswap
 async function launchSpiritswap() {
   // loop
-  setTimeout(function(){ launchSpiritswap() }, REALTIME) // every few seconds
+  setTimeout(launchSpiritswap, REALTIME) // every few seconds
 
   let spiritswap_data_file = {}
   let spiritswap_charts_file = {}
@@ -1116,7 +1115,7 @@ async function launchSpiritswap() {
 // Program - Honeyswap
 async function launchHoneyswap() {
   // loop
-  setTimeout(function(){ launchHoneyswap() }, REALTIME) // every few seconds
+  setTimeout(launchHoneyswap, REALTIME) // every few seconds
 
   let honeyswap_data_file = {}
   let honeyswap_charts_file = {}
@@ -1333,11 +1332,11 @@ async function launchHoneyswap() {
 
 
 /* MAIN */
-setTimeout(function(){ launchUniswap() }, 2500)
-setTimeout(function(){ launchSushiswap() }, 5000)
-setTimeout(function(){ launchSpiritswap() }, 7500)
-setTimeout(function(){ launchHoneyswap() }, 10000)
-setTimeout(function(){ launch() }, 12500)
+setTimeout(launchUniswap, 2000)
+setTimeout(launchSushiswap, 5000)
+setTimeout(launchSpiritswap, 8000)
+setTimeout(launchHoneyswap, 11000)
+setTimeout(launch, 14000)
 
 
 

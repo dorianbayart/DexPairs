@@ -174,11 +174,11 @@ function launchHoneyswap() {
 
 
 /* MAIN */
-setTimeout(function(){ launchUniswap() }, 1000)
-setTimeout(function(){ launchSushiswap() }, 2000)
-setTimeout(function(){ launchSpiritswap() }, 3000)
-setTimeout(function(){ launchHoneyswap() }, 4000)
-setTimeout(function(){ launch() }, 5000)
+setTimeout(function(){ launchUniswap() }, 5000)
+setTimeout(function(){ launchSushiswap() }, 6000)
+setTimeout(function(){ launchSpiritswap() }, 7000)
+setTimeout(function(){ launchHoneyswap() }, 8000)
+setTimeout(function(){ launch() }, 9000)
 
 
 
@@ -341,7 +341,7 @@ const server = http.createServer((req, res) => {
 function listFilter(list, listWithPrices) {
   let filtered_list = {}
   Object.keys(list).forEach(function (address) {
-    if(listWithPrices[address] && listWithPrices[address].p !== 0) {
+    if(listWithPrices[address]/* && listWithPrices[address].p !== 0*/) {
       filtered_list[address] = list[address]
     }
   })
