@@ -13,6 +13,17 @@ document.getElementById('input-wallet').addEventListener("change", function(e) {
   configureWallet(inputAddress)
 })
 
+document.getElementById('connect-wallet').addEventListener('click', function(e) {
+  if (window.ethereum) {
+    window.ethereum.request({ method: 'eth_requestAccounts' }).then(addresses => {
+      document.getElementById('input-wallet').value = addresses[0]
+      configureWallet(addresses[0])
+    })
+  } else {
+    alert('Connection is only supported through Metamask extension')
+  }
+})
+
 // search transactions / tokens for the specified wallet address
 function configureWallet(inputAddress) {
   const inputContainer = document.getElementById('input-wallet-container')
@@ -149,9 +160,13 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
+    if(!wallet[id]) {
+      return
+    }
+
     if(error) {
       console.log('getTokenBalanceWeb3', network, error)
-      setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 15000)
+      setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 10000)
     } else {
       wallet[id].value = value
       wallet[id].upToDate = true
@@ -192,7 +207,11 @@ function searchTokens(network) {
     })
 
     Object.keys(wallet).filter(id => wallet[id].network === network).forEach((id, i) => {
-      setTimeout(function(){ getTokenBalanceWeb3(wallet[id].contract, network) }, (i+1) * 75)
+      setTimeout(function() {
+        if(wallet[id]) {
+          getTokenBalanceWeb3(wallet[id].contract, network)
+        }
+      }, (i+1) * 75)
     })
 
     sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
@@ -391,6 +410,9 @@ function updateGlobalPrice() {
 }
 
 function displayChartTooltip(e) {
+  if(!e.tooltip.dataPoints) {
+    return
+  }
   const value = e.tooltip.dataPoints[0].raw
   const date = new Date(parseInt(e.tooltip.dataPoints[0].parsed.x)).toLocaleString()
   if(e.tooltip.opacity > 0) { // display tooltip

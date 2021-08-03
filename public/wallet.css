@@ -30,18 +30,25 @@ body {
 #connect-wallet {
   border: 1px solid #6495ED;
   border-radius: 8px;
-  padding: 0.5em 1em;
+  padding: 0 8px;
   margin: 0.75em;
   font-size: 1em;
-  cursor: not-allowed;
+  height: 36px;
+  cursor: pointer;
   transition: all 150ms ease-in-out;
   background-color: #6495ED; /* cornflowerblue */
   color: white;
   font-weight: lighter;
+  display: inline-flex;
+  align-items: center;
 }
 #connect-wallet:hover {
   border: 1px solid #CCC;
   box-shadow: 0px 0px 12px #888E;
+}
+#connect-wallet img {
+  height: 100%;
+  margin-right: 6px;
 }
 #demo-wallet {
   border: 1px solid white;
