@@ -97,13 +97,16 @@ function getList() {
       if(list && Object.keys(list).length > 0) {
         updateList()
         sessionStorage.setItem('list', JSON.stringify(list))
+      } else {
+        clearTimeout(getListTimer)
+        getListTimer = setTimeout(getList, 3000)
       }
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/list", true)
   xmlhttp.send()
 
-  getListTimer = setTimeout(function(){ getList() }, Math.round((90*Math.random() + 180)*1000))
+  getListTimer = setTimeout(getList, Math.round((90*Math.random() + 180)*1000))
 }
 
 
@@ -119,13 +122,16 @@ function getTop() {
       if(topTokens && Object.keys(topTokens).length > 0) {
         setTop()
         sessionStorage.setItem('topTokens', JSON.stringify(topTokens))
+      } else {
+        clearTimeout(getTopTimer)
+        getTopTimer = setTimeout(getTop, 5000)
       }
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
   xmlhttp.send()
 
-  getTopTimer = setTimeout(function(){ getTop() }, Math.round((5*Math.random() + 15)*1000))
+  getTopTimer = setTimeout(getTop, Math.round((5*Math.random() + 15)*1000))
 }
 
 
@@ -162,13 +168,16 @@ function getSimple() {
         setBase(selectedBase)
         getCharts()
         sessionStorage.setItem('simple', JSON.stringify(simple))
+      } else {
+        clearTimeout(getSimpleTimer)
+        getSimpleTimer = setTimeout(getSimple, 4000)
       }
     }
   }
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
   xmlhttp.send()
 
-  getSimpleTimer = setTimeout(function(){ getSimple() }, Math.round((30*Math.random() + 30)*1000))
+  getSimpleTimer = setTimeout(getSimple, Math.round((30*Math.random() + 30)*1000))
 }
 
 
@@ -187,6 +196,8 @@ function getCharts() {
         setSwapperBase()
         sessionStorage.setItem('tokenCharts', JSON.stringify(tokenCharts))
         sessionStorage.setItem('baseCharts', JSON.stringify(baseCharts))
+      } else {
+        setTimeout(getCharts, 3000)
       }
     }
   }

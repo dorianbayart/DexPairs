@@ -63,7 +63,7 @@ function configureWallet(inputAddress) {
   }
 
   if(!web3_ethereum) {
-    setTimeout(function(){ configureWallet(inputAddress) }, 400)
+    setTimeout(configureWallet(inputAddress), 400)
     return
   }
 
@@ -137,9 +137,7 @@ function getTokenTx(network) {
 
       searchTokens(network)
 
-      timerGetTokenTx[network] = setTimeout(function(){
-        getTokenTx(network)
-      }, (Math.round(Math.random() * 15) + 45) * 1000)
+      timerGetTokenTx[network] = setTimeout(getTokenTx(network), (Math.round(Math.random() * 15) + 45) * 1000)
     }
   }
   xmlhttp.onerror = function() {
@@ -166,7 +164,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
     if(error) {
       console.log('getTokenBalanceWeb3', network, error)
-      setTimeout(function(){ getTokenBalanceWeb3(contractAddress, network) }, 10000)
+      setTimeout(getTokenBalanceWeb3(contractAddress, network), 10000)
     } else {
       wallet[id].value = value
       wallet[id].upToDate = true
@@ -246,19 +244,13 @@ function getNetworkBalance(network) {
 
     displayWallet()
 
-    timerGetNetworkBalance[network] = setTimeout(function(){
-      getNetworkBalance(network)
-    }, (Math.round(Math.random() * 15) + 25) * 1000)
+    timerGetNetworkBalance[network] = setTimeout(getNetworkBalance(network), (Math.round(Math.random() * 15) + 25) * 1000)
 
   }, error => {
     console.log('getNetworkBalance', network, error)
-
     wallet[getId(address, network)].upToDate = false
-
-    timerGetNetworkBalance[network] = setTimeout(function(){
-      getNetworkBalance(network)
-    }, 10000)
-
+    clearTimeout(timerGetNetworkBalance[network])
+    timerGetNetworkBalance[network] = setTimeout(getNetworkBalance(network), 10000)
   })
 
 
@@ -455,9 +447,9 @@ function initializeHTML() {
 
 function simpleDataTimers() {
   Object.keys(NETWORK).forEach((network, i) => {
-    setTimeout(function(){ getSimpleData(NETWORK[network].enum, displayWallet) }, (i+1) * 750)
+    setTimeout(getSimpleData(NETWORK[network].enum, displayWallet), (i+1) * 750)
   })
-  setTimeout(function(){ simpleDataTimers() }, 100000)
+  setTimeout(simpleDataTimers, 100000)
 }
 
 
