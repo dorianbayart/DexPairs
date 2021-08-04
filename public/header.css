@@ -1,0 +1,89 @@
+
+#header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1em;
+  flex-wrap: wrap;
+}
+#title {
+  cursor: pointer;
+  transition: opacity 250ms ease-in-out;
+}
+#title:hover {
+  opacity: 0.6;
+}
+header {
+  font-size: 3rem;
+  padding: 12px 24px;
+}
+header h1 {
+  display: inline-flex;
+  align-items: baseline;
+}
+header .version {
+  font-style: italic;
+  margin-left: 0.5em;
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap-reverse;
+  font-size: 0.5em;
+}
+header .version .low {
+  font-size: 0.5em;
+  margin-right: 0.5em;
+}
+#menu {
+  display: inline-flex;
+  flex: auto;
+  font-size: 1.2rem;
+  padding: 12px 24px;
+}
+#menu .menu-item {
+  flex-grow: 1;
+  cursor: pointer;
+  margin: 0 2%;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0px 0px 12px #AAAE;
+  transition: box-shadow 150ms ease-in-out;
+}
+#menu .menu-item#menu-news {
+  flex-grow: 0.25;
+}
+#menu .menu-item:hover {
+  box-shadow: 0px 0px 12px #888E;
+}
+#menu .menu-item h2 {
+  padding: 12px 9px 9px;
+}
+#menu .menu-item#menu-news h2 {
+  padding: 12px 0 0;
+}
+#menu .menu-item .low {
+  font-size: 0.6em;
+}
+
+
+
+
+@media (max-width: 800px) {
+  header {
+    font-size: 2rem;
+    padding: 8px 16px;
+  }
+  #menu {
+    padding: 6px 12px;
+    width: 75%;
+  }
+}
+
+@media (max-width: 460px) {
+  header {
+    font-size: 1.5rem;
+    padding: 6px 12px;
+  }
+  #menu {
+    padding: 3px 6px;
+    width: 95%;
+  }
+}

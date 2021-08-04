@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>tag:dexpairs.xyz,2021-08-04:news</id>
 
@@ -18,7 +19,7 @@
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-04:atom-feed-creation</id>
-    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news/atom-feed-creation"/>-->
+    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=atom-feed-creation"/>-->
     <title>Creation of an Atom feed</title>
     <published>2021-08-04T15:00:00Z</published>
     <updated>2021-08-04T21:00:00Z</updated>
@@ -32,7 +33,8 @@
           Another way to know what's coming is to directly have a look at <a href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank">the Roadmap on GitHub</a>
         </div>
         <ul class="tags">
-          <li>Atom</li>
+          <li>atom</li>
+          <li>feed</li>
           <li>news</li>
           <li>feature</li>
         </ul>

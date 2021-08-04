@@ -7,14 +7,14 @@
   opacity: 0.75;
 }
 
-#github_link, #roadmap_link {
+.link-with-img {
   display: inline-flex;
   align-items: flex-end;
   padding: 0.25em;
   margin: 0.75em;
 }
 
-#github_link img, #roadmap_link img {
+.link-with-img img {
   margin-right: 8px;
   height: 20px;
 }

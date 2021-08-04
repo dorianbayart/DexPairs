@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, Sans-Serif, Arial;
+}
+*.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+#body-background {
+    opacity: 0.4;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: -1;
+}
+
+h1, h2, h3 {
+  font-size: inherit;
+  font-weight: normal;
+  margin: 0;
+}
+a, a:hover, a:visited, a:active, a:focus {
+  text-decoration: none;
+  color: #000;
+}
+
+.flex-auto {
+  flex: auto;
+}

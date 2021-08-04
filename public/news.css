@@ -1,0 +1,62 @@
+
+#main {
+  max-width: 800px;
+  margin: 2em auto;
+}
+
+
+
+
+
+#main > h1 {
+  font-size: 1.6em;
+  padding: 12px 0;
+}
+
+article {
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 1em;
+  margin: 1em auto;
+}
+
+article h1 {
+  font-size: 1.4em;
+  padding: 6px 0;
+  text-decoration-line: underline;
+  text-align: center;
+}
+article h2 {
+  font-size: 1.2em;
+  padding: 3px 0;
+}
+article h3 {
+  font-size: 1.1em;
+}
+
+.timestamp {
+  font-size: 0.8em;
+}
+
+.content {
+  text-align: justify;
+}
+.content a {
+  text-decoration-line: underline;
+}
+.chapter-title {
+  font-style: italic;
+  margin: 6px auto;
+}
+ul.tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+}
+ul.tags li {
+  border: 1px solid #CCC;
+  border-radius: 8px;
+  padding: 3px 6px;
+  margin: 24px 6px 0 0;
+}
