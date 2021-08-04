@@ -1,0 +1,38 @@
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>tag:dexpairs.xyz,2021-08-04:news</id>
+
+  <title>DexPairs.xyz - News</title>
+  <subtitle>List new functionnalities and important news about DexPairs.xyz</subtitle>
+
+  <link href="https://dexpairs.xyz/feed.atom" rel="self" type="application/atom+xml" />
+  <!--<link href="https://dexpairs.xyz/news" rel="alternate" type="text/html" />-->
+
+  <updated>2021-08-04T15:00:00Z</updated>
+
+  <author>
+    <name>Dorian Bayart</name>
+    <uri>https://twitter.com/dorianbayart</uri>
+  </author>
+
+  <link href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license" />
+
+  <entry>
+    <id>tag:dexpairs.xyz,2021-08-04:atom-feed-creation</id>
+    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news/atom-feed-creation"/>-->
+    <title>Creation of an Atom feed</title>
+    <published>2021-08-04T15:00:00Z</published>
+    <updated>2021-08-04T15:00:00Z</updated>
+    <content type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <h2 class="chapter-title">Discovering new features</h2>
+        <div class="content">
+          This Atom feed will be used to briefly list each new functionnality implemented on DexPairs.xyz<br />
+          Feel free to subscribe and be the first to discover the latest features !<br />
+          <br />
+          Another way to know what's coming is to directly have a look at <a href="https://github.com/dorianbayart/DexPairs/projects/1">the Roadmap on GitHub</a>
+        </div>
+      </div>
+    </content>
+  </entry>
+
+</feed>
