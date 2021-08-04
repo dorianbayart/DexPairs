@@ -48,7 +48,7 @@ header .version .low {
   transition: box-shadow 150ms ease-in-out;
 }
 #menu .menu-item#menu-news {
-  flex-grow: 0.25;
+  flex-grow: 0.15;
 }
 #menu .menu-item:hover {
   box-shadow: 0px 0px 12px #888E;
