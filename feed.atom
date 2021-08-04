@@ -1,4 +1,4 @@
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>tag:dexpairs.xyz,2021-08-04:news</id>
 
   <title>DexPairs.xyz - News</title>
@@ -16,7 +16,7 @@
 
   <link href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license" />
 
-  <entry>
+  <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-04:atom-feed-creation</id>
     <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news/atom-feed-creation"/>-->
     <title>Creation of an Atom feed</title>
