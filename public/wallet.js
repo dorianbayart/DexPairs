@@ -137,7 +137,7 @@ function getTokenTx(network) {
 
       searchTokens(network)
 
-      timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), (Math.round(Math.random() * 15) + 45) * 1000)
+      timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), (Math.round(Math.random() * 15) + 45) * 1000 * (tokentx.length > 0 ? 1 : 3))
     }
   }
   xmlhttp.onerror = function() {

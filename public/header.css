@@ -19,8 +19,7 @@ header {
   transition: all 1s ease-in-out;
 }
 header h1 {
-  display: inline-flex;
-  align-items: baseline;
+  display: inline-block;
   background: linear-gradient(-45deg, yellow, red);
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -28,10 +27,6 @@ header h1 {
 }
 header .version {
   font-style: italic;
-  margin-left: 0.5em;
-  display: inline-flex;
-  align-items: baseline;
-  flex-wrap: wrap-reverse;
   font-size: 0.5em;
   background: linear-gradient(45deg, yellow, red);
   background-clip: text;
