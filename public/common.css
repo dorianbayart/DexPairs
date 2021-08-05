@@ -10,6 +10,11 @@
    user-select: none;
 }
 
+body {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 1rem;
+}
 #body-background {
     opacity: 0.4;
     position: fixed;
@@ -19,6 +24,7 @@
     left: 0;
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 60%;
     z-index: -1;
 }
 
@@ -34,4 +40,28 @@ a, a:hover, a:visited, a:active, a:focus {
 
 .flex-auto {
   flex: auto;
+}
+
+@media (max-width: 1200px) {
+  #body-background {
+    background-size: 75%;
+  }
+}
+
+@media (max-width: 800px) {
+  html {
+    font-size: 0.9em;
+  }
+  #body-background {
+      background-size: 85%;
+  }
+}
+
+@media (max-width: 460px) {
+  html {
+    font-size: 0.8em;
+  }
+  #body-background {
+      background-size: 95%;
+  }
 }

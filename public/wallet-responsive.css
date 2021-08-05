@@ -1,7 +1,5 @@
 
-#body-background {
-    background-size: 60%;
-}
+
 #input-wallet-container.margin-top #input-wallet {
   width: 50%;
 }
@@ -32,17 +30,7 @@
   width: 45%;
 }
 
-
-@media (max-width: 1200px) {
-  #body-background {
-    background-size: 75%;
-  }
-}
-
 @media (max-width: 800px) {
-  #body-background {
-    background-size: 85%;
-  }
   #input-wallet-container.margin-top #input-wallet {
     width: 60%;
   }
@@ -78,9 +66,6 @@
 }
 
 @media (max-width: 460px) {
-  #body-background {
-    background-size: 95%;
-  }
   #input-wallet-container.margin-top #input-wallet {
     width: 85%;
   }

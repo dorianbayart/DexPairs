@@ -27,10 +27,13 @@
       <div xmlns="http://www.w3.org/1999/xhtml">
         <h2 class="chapter-title">Discovering new features</h2>
         <div class="content">
-          This Atom feed will be used to briefly list each new functionnality implemented on DexPairs.xyz<br />
-          Feel free to subscribe and be the first to discover the latest features !<br />
-          <br />
-          Another way to know what's coming is to directly have a look at <a href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank">the Roadmap on GitHub</a>
+          <p>
+            This Atom feed will be used to briefly list each new functionnality implemented on DexPairs.xyz<br />
+            Feel free to subscribe and be the first to discover the latest features !
+          </p>
+          <p>
+            Another way to know what's coming is to directly have a look at <a href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank">the Roadmap on GitHub</a>
+          </p>
         </div>
         <ul class="tags">
           <li>atom</li>

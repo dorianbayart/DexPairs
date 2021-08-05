@@ -1,12 +1,18 @@
-
-#main {
-  max-width: 800px;
-  margin: 2em auto;
+body {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+}
+#body-background {
+  background-image: url('/img/background-multichain.svg');
 }
 
-
-
-
+#main {
+  flex: auto;
+  width: 100%;
+  max-width: 800px;
+  margin: 24px auto;
+}
 
 #main > h1 {
   font-size: 1.6em;
@@ -40,6 +46,8 @@ article h3 {
 
 .content {
   text-align: justify;
+  text-indent: 12px;
+  line-height: 1.25em;
 }
 .content a {
   text-decoration-line: underline;
@@ -59,4 +67,10 @@ ul.tags li {
   border-radius: 8px;
   padding: 3px 6px;
   margin: 24px 6px 0 0;
+}
+
+@media (max-width: 800px) {
+  #main {
+    max-width: calc(100% - 24px);
+  }
 }

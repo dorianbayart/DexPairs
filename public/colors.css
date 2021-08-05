@@ -19,6 +19,11 @@
   color: #000D;
   background-color: #FFFE;
 }
+/* News */
+article.entry {
+  color: #000D;
+  background-color: #FFFE;
+}
 
 #top, #top-title, #wallet ul, .gas-container {
   background-color: #0002;

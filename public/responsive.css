@@ -1,12 +1,6 @@
-body {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding-top: 1rem;
-}
 #body-background {
-    background-size: 30%;
+  background-size: 30%;
 }
-
 #dex-selector {
   font-size: 1.2em;
 }
@@ -59,11 +53,8 @@ body {
 
 
 @media (max-width: 800px) {
-  html {
-    font-size: 0.9em;
-  }
   #body-background {
-      background-size: 40%;
+    background-size: 40%;
   }
   #dex-selector {
     font-size: 1.1em;
@@ -124,11 +115,8 @@ body {
 }
 
 @media (max-width: 460px) {
-  html {
-    font-size: 0.8em;
-  }
   #body-background {
-      background-size: 50%;
+    background-size: 50%;
   }
   #dex-selector {
     font-size: 1em;
