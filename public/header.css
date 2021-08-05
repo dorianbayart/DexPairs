@@ -20,7 +20,7 @@ header {
 }
 header h1 {
   display: inline-block;
-  background: linear-gradient(-45deg, yellow, red);
+  background: linear-gradient(-45deg, yellow, lightseagreen);
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: #0001 3px 3px 3px;
