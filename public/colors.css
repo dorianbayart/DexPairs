@@ -2,27 +2,27 @@
 /* Common */
 #menu .menu-item, input, select, button {
   color: #000D;
-  background-color: #FFFE;
+  background-color: #FFFD;
 }
 /* Gas */
 .gas-list li {
   color: #000D;
-  background-color: #FFFE;
+  background-color: #FFFD;
 }
 /* Charts */
 .top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart {
   color: #000D;
-  background-color: #FFFE;
+  background-color: #FFFD;
 }
 /* Wallet */
 #global.wallet-information, #wallet ul li, #connect-wallet {
   color: #000D;
-  background-color: #FFFE;
+  background-color: #FFFD;
 }
 /* News */
-article.entry {
+#main > h1, article.entry {
   color: #000D;
-  background-color: #FFFE;
+  background-color: #FFFD;
 }
 
 #top, #top-title, #wallet ul, .gas-container {
@@ -49,7 +49,7 @@ article.entry {
 
 .shadow-white {
   box-shadow: 0 0 16px 12px white;
-  background-color: #FFFE;
+  background-color: #FFFD;
 }
 
 .color-transition {
