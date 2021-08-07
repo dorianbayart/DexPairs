@@ -21,6 +21,7 @@ header {
 header h1 {
   display: inline-block;
   background: linear-gradient(-45deg, yellow, lightseagreen);
+  -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: #0001 3px 3px 3px;
@@ -29,6 +30,7 @@ header .version {
   font-style: italic;
   font-size: 0.5em;
   background: linear-gradient(45deg, yellow, red);
+  -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
