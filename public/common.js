@@ -291,10 +291,18 @@ const createNetworkImg = (network) => {
 
 
 /* Utils - Get Price of Address on Network */
-const getPriceByAddressNetwork = (address, network) => {
+const getPriceByAddressNetwork = (searchedAddress, network) => {
+  let address = searchedAddress
+  let debt = 1
+  let rate = 1
+  if(Object.keys(underlyingAssets).includes(network + '-' + searchedAddress)) {
+    address = underlyingAssets[network + '-' + searchedAddress].address
+    rate = underlyingAssets[network + '-' + searchedAddress].rate
+    debt = underlyingAssets[network + '-' + searchedAddress].debt
+  }
   let prices = JSON.parse(sessionStorage.getItem('simple-' + network))
   if(prices && Object.keys(prices).length > 0) {
-    return prices[address] ? prices[address].p : null
+    return prices[address] ? prices[address].p * debt * rate : null
   }
 }
 
@@ -335,10 +343,10 @@ function debounce(func, timeout = 500) {
 
 // Round number
 const precise = (x) => {
-  if(x > 999) { return Math.round(x) }
-  else if(x > 99) { return Math.round(10*x)/10 }
-  else if(x > 1.09) { return Math.round(100*x)/100 }
-  else if(x > 0.001) { return Math.round(10000*x)/10000 }
+  if(Math.abs(x) > 999) { return Math.round(x) }
+  else if(Math.abs(x) > 99) { return Math.round(10*x)/10 }
+  else if(Math.abs(x) > 1.09) { return Math.round(100*x)/100 }
+  else if(Math.abs(x) > 0.001) { return Math.round(10000*x)/10000 }
   return Number.parseFloat(x).toPrecision(2)
 }
 const gasRound = (x) => {

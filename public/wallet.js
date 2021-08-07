@@ -163,7 +163,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
     }
 
     if(error) {
-      console.log('getTokenBalanceWeb3', network, error)
+      // console.log('getTokenBalanceWeb3', network, error)
       setTimeout(() => getTokenBalanceWeb3(contractAddress, network), 10000)
     } else {
       wallet[id].value = value
@@ -390,7 +390,7 @@ function insertAfter(refElement, element) {
 // Update & Display the total wallet value
 function updateGlobalPrice() {
   walletValue = 0
-  filteredWallet().forEach(function (id) {
+  Object.keys(wallet).filter(id => wallet[id].value && wallet[id].value !== '0').forEach(function (id) {
     let price = wallet[id].price
     if(price) {
       walletValue += Number.parseFloat(calculateValue(wallet[id].value, price, wallet[id].tokenDecimal))
@@ -448,6 +448,15 @@ function initializeHTML() {
 function simpleDataTimers() {
   Object.keys(NETWORK).forEach((network, i) => {
     setTimeout(() => getSimpleData(NETWORK[network].enum, displayWallet), (i+1) * 750)
+
+    if(network === NETWORK.ETHEREUM.enum) {
+      getAaveEthereumUnderlyingAddresses(displayWallet)
+      getCompoundEthereumUnderlyingAddresses(displayWallet)
+    } else if(network === NETWORK.POLYGON.enum) {
+      getAavePolygonUnderlyingAddresses(displayWallet)
+    } else if(network === NETWORK.BSC.enum) {
+      getVenusBscUnderlyingAddresses(displayWallet)
+    }
   })
   setTimeout(simpleDataTimers, 100000)
 }
@@ -596,21 +605,21 @@ const filteredWallet = () => {
   let filtered = Object.keys(wallet)
     .filter(id => wallet[id].value && wallet[id].value !== '0')
   if(hideSmallBalance) {
-    filtered = filtered.filter(id => calculateValue(wallet[id].value, wallet[id].price, wallet[id].tokenDecimal) >= 0.01 )
+    filtered = filtered.filter(id => Math.abs(calculateValue(wallet[id].value, wallet[id].price, wallet[id].tokenDecimal)) >= 0.01 )
   }
   return filtered
 }
 
 /* Utils - Calculate balance from value */
 const calculateBalance = (balance, decimal) => {
-  if(balance && balance > 0) {
+  if(balance && Math.abs(balance) > 0) {
     return precise(balance * Math.pow(10, -decimal))
   }
   return 0
 }
 /* Utils - Calculate value from value */
 const calculateValue = (balance, price, decimal) => {
-  if(balance && price && balance * price > 0) {
+  if(balance && price && Math.abs(balance * price) > 0) {
     return calculateBalance(balance * price, decimal)
   }
   return 0
@@ -619,13 +628,13 @@ const calculateValue = (balance, price, decimal) => {
 const displayBalance = (value, decimal) => {
   const balance = calculateBalance(value, decimal)
   if(balance === 0) return 0
-  if(balance < 0.01) return '≈ 0'
+  if(Math.abs(balance) < 0.01) return '≈ 0'
   return balance
 }
 /* Utils - Display dollar value readable by human */
 const displayValue = (balance, price, decimal) => {
   const value = calculateBalance(balance * price, decimal)
   if(value === 0) return 0
-  if(value < 0.01) return '≈ 0'
+  if(Math.abs(value) < 0.01) return '≈ 0'
   return '$' + value
 }
