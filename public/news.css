@@ -22,11 +22,21 @@ body {
   font-weight: lighter;
 }
 
+#items {
+  min-height: 25vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  font-weight: lighter;
+}
+
 article {
   border: 1px solid #CCC;
   border-radius: 12px;
   padding: 1em;
   margin: 1em auto;
+  width: 100%;
 }
 
 article h1 {
