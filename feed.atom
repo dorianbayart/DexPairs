@@ -17,6 +17,44 @@
 
   <link href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license" />
 
+  <!-- ....... -->
+  <!-- Entries -->
+  <!-- ....... -->
+
+  <entry xml:lang="en">
+    <id>tag:dexpairs.xyz,2021-08-07:protocols-full-support-aave-v2</id>
+    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=protocols-support-aave-v2"/>-->
+    <title>Full support of AAVE v2 protocol</title>
+    <published>2021-08-07T23:00:00Z</published>
+    <updated>2021-08-07T23:00:00Z</updated>
+    <content type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <h2 class="chapter-title">Track your AAVE tokens on Ethereum and Polygon</h2>
+        <div class="content">
+          <p>
+            AAVE v2 tokens are fully supported on Ethereum and Polygon !<br />
+            Track your collateral tokens, monitor your borrowed assets, and your debt is taken into account in the global wallet value.
+          </p>
+        </div>
+        <h2 class="chapter-title">Partial support of Compound and Venus</h2>
+        <div class="content">
+          <p>
+            Compound (Ethereum) and Venus (Binance Smart Chain) are partially supported.<br />
+            Only collateral tokens have a value, the borrowed tokens don't have price yet.
+          </p>
+        </div>
+        <ul class="tags">
+          <li>wallet</li>
+          <li>protocol</li>
+          <li>aave</li>
+          <li>compound</li>
+          <li>venus</li>
+          <li>feature</li>
+        </ul>
+      </div>
+    </content>
+  </entry>
+
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-04:atom-feed-creation</id>
     <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=atom-feed-creation"/>-->
