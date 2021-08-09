@@ -191,6 +191,8 @@ app.use(compression())
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
 app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/wallet.html')))
+app.get('/news', (req, res) => res.sendFile(path.join(__dirname, '/news.html')))
+app.get('/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/feed.atom')))
 app.use('/img', express.static('img'))
 app.use('/public', express.static('public'))
 

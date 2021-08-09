@@ -13,7 +13,7 @@
 body {
   max-width: 1400px;
   margin: 0 auto;
-  padding-top: 1rem;
+  padding: 0;
 }
 #body-background {
     opacity: 0.4;

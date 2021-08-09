@@ -22,6 +22,39 @@
   <!-- ....... -->
 
   <entry xml:lang="en">
+    <id>tag:dexpairs.xyz,2021-08-10:welcome-nfts</id>
+    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=welcome-nfts"/>-->
+    <title>Welcome NFTs !</title>
+    <published>2021-08-10T01:00:00Z</published>
+    <updated>2021-08-10T01:00:00Z</updated>
+    <content type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <h2 class="chapter-title">Explore ERC-721 transactions</h2>
+        <div class="content">
+          <p>
+            <a href="https://dexpairs.xyz/wallet">The Wallet tracker</a> can now explore ERC-721 transactions in order to find tokens.<br />
+            ERC-721 tokens are also well known as ... NFTs !<br />
+            Yes, your <a href="https://ethereum.org/en/nft/" target="_blank" rel="external">Non-Fungible Tokens</a> are now displayed in the wallet !
+          </p>
+        </div>
+        <h2 class="chapter-title">How can I view my NFTs ?</h2>
+        <div class="content">
+          <p>
+            To view a NFT, the contract has to respect the <a href="https://eips.ethereum.org/EIPS/eip-721" target="_blank" rel="external">ERC-721 standard</a> and must implement the optionnal <i>tokenURI</i> function. Just sit in your chair and let the Wallet search this for you !<br />
+            Otherwise, use the contract address to find where to preview the NFT.
+          </p>
+        </div>
+        <ul class="tags">
+          <li>nft</li>
+          <li>erc-721</li>
+          <li>wallet</li>
+          <li>feature</li>
+        </ul>
+      </div>
+    </content>
+  </entry>
+
+  <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-07:protocols-full-support-aave-v2</id>
     <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=protocols-support-aave-v2"/>-->
     <title>Full support of Aave v2 protocol</title>
@@ -44,11 +77,11 @@
           </p>
         </div>
         <ul class="tags">
-          <li>wallet</li>
           <li>protocol</li>
           <li>aave</li>
           <li>compound</li>
           <li>venus</li>
+          <li>wallet</li>
           <li>feature</li>
         </ul>
       </div>
@@ -70,7 +103,7 @@
             Feel free to subscribe and be the first to discover the latest features !
           </p>
           <p>
-            Another way to know what's coming is to directly have a look at <a href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank">the Roadmap on GitHub</a>
+            Another way to know what's coming is to directly have a look at <a href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank" rel="external">the Roadmap on GitHub</a>
           </p>
         </div>
         <ul class="tags">

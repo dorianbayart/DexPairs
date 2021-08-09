@@ -2,8 +2,25 @@
 let globalChart = null
 let walletValue = 0
 let timerGetTokenTx = {}
+let timerGetERC721Tx = {}
 let timerGetNetworkBalance = {}
-let hideSmallBalance = true
+let walletOptions = {
+  menu: {
+    tokens: {
+      name: 'Tokens',
+      isActive: true
+    },
+    nfts: {
+      name: 'NFTs',
+      isActive: false
+    },
+    transactions: {
+      name: 'Transactions',
+      isActive: false
+    }
+  },
+  hideSmallBalance: true
+}
 
 
 
@@ -116,6 +133,7 @@ function configureWallet(inputAddress) {
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
     getTokenTx(NETWORK[network].enum)
+    setTimeout(() => getERC721Tx(NETWORK[network].enum), 5750)
   });
 
   sessionStorage.setItem('walletAddress', walletAddress)
@@ -147,6 +165,30 @@ function getTokenTx(network) {
   xmlhttp.send()
 }
 
+// get ERC-721 (NFT) transactions list
+function getERC721Tx(network) {
+  if(!walletAddress) {
+    return
+  }
+  let xmlhttp = new XMLHttpRequest()
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      let data = JSON.parse(this.responseText)
+      const erc721tx = data.result
+      sessionStorage.setItem('erc721tx-' + network, JSON.stringify(erc721tx))
+
+      searchNFTs(network)
+
+      timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx.length > 0 ? 1 : 3))
+    }
+  }
+  xmlhttp.onerror = function() {
+    console.log('getERC721Tx', this)
+  }
+  xmlhttp.open("GET", NETWORK[network].erc721tx.replace('WALLET_ADDRESS', walletAddress), true)
+  xmlhttp.send()
+}
+
 
 // Get token balance
 function getTokenBalanceWeb3(contractAddress, network) {
@@ -158,20 +200,39 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
   // Call balanceOf function
   contract.methods.balanceOf(walletAddress).call((error, value) => {
-    if(!wallet[id]) {
+    if(!wallet[id] && !wallet_NFT[id]) {
       return
     }
 
     if(error) {
-      // console.log('getTokenBalanceWeb3', network, error)
       setTimeout(() => getTokenBalanceWeb3(contractAddress, network), 10000)
     } else {
-      wallet[id].value = value
-      wallet[id].upToDate = true
+      if(Object.keys(wallet).includes(id)) { // ERC-20
+        wallet[id].value = value
+        wallet[id].upToDate = true
+      } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
+        wallet_NFT[id].number = value
+
+        contract.methods.tokenURI(wallet_NFT[id].tokenID).call((error, uri) => {
+          wallet_NFT[id].tokenURI = uri
+          displayWallet()
+        })
+      }
+
     }
 
-    wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
-    sessionStorage.setItem('wallet', JSON.stringify(wallet))
+    if(Object.keys(wallet).includes(id)) { // ERC-20
+      wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
+      sessionStorage.setItem('wallet', JSON.stringify(wallet))
+    } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
+      sessionStorage.setItem('wallet-NFT', JSON.stringify(wallet_NFT))
+
+      if(Object.keys(wallet_NFT).some(id => wallet_NFT[id].number > 0)) {
+        document.getElementById('menu-nfts').classList.remove('none')
+      } else {
+        document.getElementById('menu-nfts').classList.toggle('none', true)
+      }
+    }
 
     displayWallet()
   })
@@ -219,6 +280,46 @@ function searchTokens(network) {
   }
 }
 
+function searchNFTs(network) {
+  let erc721tx = JSON.parse(sessionStorage.getItem('erc721tx-' + network))
+  const latestBlock = sessionStorage.getItem('latest-erc721-block-' + network)
+
+  if(!erc721tx || typeof erc721tx === 'string' || erc721tx.length === 0) {
+    return
+  }
+
+  if(latestBlock) {
+    //erc721tx = erc721tx.filter(tx => tx.blockNumber > latestBlock)
+  }
+
+  // search tokens only in received transactions
+  erc721tx = erc721tx.filter(tx => tx.to.toLowerCase() === walletAddress.toLowerCase())
+
+  if(erc721tx.length > 0) {
+    erc721tx.forEach((item, i) => {
+      const id = getId(item.contractAddress, network)
+      wallet_NFT[id] = {
+        network: network,
+        contract: item.contractAddress,
+        tokenID: item.tokenID,
+        tokenSymbol: item.tokenSymbol,
+        tokenName: item.tokenName,
+        tokenDecimal: item.tokenDecimal
+      }
+    })
+
+    Object.keys(wallet_NFT).filter(id => wallet_NFT[id].network === network).forEach((id, i) => {
+      setTimeout(function() {
+        if(wallet_NFT[id]) {
+          getTokenBalanceWeb3(wallet_NFT[id].contract, network)
+        }
+      }, (i+1) * 75)
+    })
+
+    sessionStorage.setItem('latest-erc721-block-' + network, erc721tx[0].blockNumber)
+  }
+}
+
 function getNetworkBalance(network) {
   const web3 = getWeb3(network)
   if(!web3 || !walletAddress || !web3.utils.isAddress(walletAddress)) {
@@ -260,8 +361,18 @@ function getNetworkBalance(network) {
 }
 
 
-// Display Wallet
 function displayWallet() {
+  if(walletOptions.menu.tokens.isActive) {
+    displayTokens()
+  } else if(walletOptions.menu.nfts.isActive) {
+    displayNFTs()
+  } else if(walletOptions.menu.transactions.isActive) {
+    displayTransactions()
+  }
+}
+
+// Display Wallet Tokens
+function displayTokens() {
   let listLi = document.getElementById('wallet').querySelectorAll('li')
   const tokens = filteredWallet().sort(sortWallet)
 
@@ -327,6 +438,7 @@ function displayWallet() {
       spanBalance.classList.add('balance')
       spanValueBalance.appendChild(spanBalance)
 
+      /*
       let spanAddress = document.createElement('span')
       spanAddress.innerHTML = wallet[id].contract
       spanAddress.classList.add('address')
@@ -336,7 +448,7 @@ function displayWallet() {
       spanChart.id = id + '-chart'
       spanChart.classList.add('chart')
       li.appendChild(spanChart)
-
+      */
 
       document.getElementById('wallet-ul').appendChild(li)
 
@@ -347,13 +459,13 @@ function displayWallet() {
           item = item.parentNode
         }
 
+        // TODO Replace with : expandCollapseItem(item)
         if(item.classList.contains('expanded')) {
           item.classList.remove('expanded')
         } else {
           //item.classList.toggle('expanded', true)
         }
       })
-
 
     }
 
@@ -383,6 +495,132 @@ function displayWallet() {
   updateGlobalPrice()
   updateGlobalChart()
 
+}
+
+// Display Wallet NFTs
+function displayNFTs() {
+  let listLi = document.getElementById('wallet').querySelectorAll('li')
+  const tokens = Object.keys(wallet_NFT)
+
+  if(listLi.length === 0 || listLi.length !== tokens.length) {
+    document.getElementById('wallet').innerHTML = null
+    if(tokens.length > 0) {
+      let ul = document.createElement('ul')
+      ul.id = 'wallet-ul'
+      document.getElementById('wallet').appendChild(ul)
+    }
+    listLi = []
+  }
+
+  tokens.forEach(function (id) {
+    let element = Array.from(listLi).find(el => el.id === id)
+
+    if(element) {
+      element.querySelector('a.tokenURI').href = wallet_NFT[id].tokenURI
+      element.querySelector('img.preview').src = wallet_NFT[id].tokenURI
+    } else {
+      let li = document.createElement('li')
+      li.title = ''
+      li.id = id
+      li.classList.add('nft')
+
+      let spanNetwork = document.createElement('span')
+      spanNetwork.classList.add('network')
+      spanNetwork.appendChild(createNetworkImg(wallet_NFT[id].network))
+      li.appendChild(spanNetwork)
+
+      let spanNameSymbol = document.createElement('span')
+      spanNameSymbol.classList.add('nameSymbol')
+      li.appendChild(spanNameSymbol)
+
+      let spanSymbol = document.createElement('span')
+      spanSymbol.innerHTML = wallet_NFT[id].tokenSymbol
+      spanSymbol.classList.add('symbol')
+      spanNameSymbol.appendChild(spanSymbol)
+      let spanName = document.createElement('span')
+      spanName.innerHTML = wallet_NFT[id].tokenName
+      spanName.classList.add('name')
+      spanNameSymbol.appendChild(spanName)
+
+      let aAddress = document.createElement('a')
+      let spanAddress = document.createElement('span')
+      spanAddress.innerHTML = wallet_NFT[id].contract.slice(0, 5) + "..." + wallet_NFT[id].contract.slice(-5)
+      spanAddress.classList.add('address')
+      aAddress.href = NETWORK[wallet_NFT[id].network].explorer + wallet_NFT[id].contract
+      aAddress.target = "_blank"
+      aAddress.classList.add('address')
+      aAddress.appendChild(spanAddress)
+      spanNameSymbol.appendChild(aAddress)
+
+      let spanTokenId = document.createElement('span')
+      spanTokenId.innerHTML = '#' + wallet_NFT[id].tokenID
+      spanTokenId.classList.add('tokenID')
+      li.appendChild(spanTokenId)
+
+      let aTokenURI = document.createElement('a')
+      let imgPreview = document.createElement('img')
+      imgPreview.src = wallet_NFT[id].tokenURI
+      imgPreview.classList.add('preview')
+      imgPreview.alt = 'NFT Preview'
+      aTokenURI.href = wallet_NFT[id].tokenURI
+      aTokenURI.target = "_blank"
+      aTokenURI.classList.add('tokenURI')
+      aTokenURI.appendChild(imgPreview)
+      li.appendChild(aTokenURI)
+
+
+      aTokenURI.addEventListener("click", function(e) {
+        let item = e.target
+
+        while(item.id.length < 1) {
+          item = item.parentNode
+        }
+
+        expandCollapseItem(item)
+      })
+
+      document.getElementById('wallet-ul').appendChild(li)
+
+      li.addEventListener("click", function(e) {
+        let item = e.target
+
+        while(item.id.length < 1 || item.id.includes('chart')) {
+          item = item.parentNode
+        }
+
+        expandCollapseItem(item)
+      })
+
+    }
+
+  })
+
+  if(tokens.length > 0) {
+    document.getElementById('global').classList.remove('none')
+    document.getElementById('connect-demo-container').classList.toggle('none', true)
+    document.getElementById('wallet-options').classList.remove('none')
+    document.getElementById('state').innerHTML = null
+    document.getElementById('input-wallet-container').classList.remove('margin-top')
+    document.getElementById('state').classList.remove('shadow-white')
+  } else {
+    const stateContainer = document.getElementById('state')
+    if(walletAddress && walletAddress.length > 0) {
+      stateContainer.innerHTML = 'No NFT can be found on this address'
+      stateContainer.classList.toggle('shadow-white', true)
+    } else {
+      stateContainer.innerHTML = null
+      stateContainer.classList.remove('shadow-white')
+    }
+  }
+
+}
+
+function expandCollapseItem(item) {
+  if(item.classList.contains('expanded')) {
+    item.classList.remove('expanded')
+  } else {
+    item.classList.toggle('expanded', true)
+  }
 }
 
 // Insert a DOM element after a Reference element
@@ -438,8 +676,12 @@ function initializeHTML() {
     address = sessionStorage.getItem('walletAddress')
   }
 
-  hideSmallBalance = sessionStorage.getItem('hideSmallBalances') ? JSON.parse(sessionStorage.getItem('hideSmallBalances')) : true
-  document.getElementById('hide-small-balances-icon').src = hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
+  if(sessionStorage.getItem('walletOptions')) {
+    walletOptions = JSON.parse(sessionStorage.getItem('walletOptions'))
+  }
+  document.getElementById('hide-small-balances-icon').src = walletOptions.hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
+  walletOptions.menu[Object.keys(walletOptions.menu).find(menu => walletOptions.menu[menu].isActive)].isActive = false
+  walletOptions.menu.tokens.isActive = true
 
 
   if(address) {
@@ -465,11 +707,33 @@ function simpleDataTimers() {
 }
 
 
+document.getElementById('menu-tokens').addEventListener('click', (e) => {
+  e.preventDefault()
+  if(walletOptions.menu.tokens.isActive) {
+    return
+  }
+  walletOptions.menu[Object.keys(walletOptions.menu).find(menu => walletOptions.menu[menu].isActive)].isActive = false
+  walletOptions.menu.tokens.isActive = true
+  sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
+
+  displayWallet()
+})
+document.getElementById('menu-nfts').addEventListener('click', (e) => {
+  e.preventDefault()
+  if(walletOptions.menu.nfts.isActive) {
+    return
+  }
+  walletOptions.menu[Object.keys(walletOptions.menu).find(menu => walletOptions.menu[menu].isActive)].isActive = false
+  walletOptions.menu.nfts.isActive = true
+  sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
+
+  displayWallet()
+})
 document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
   e.preventDefault()
-  hideSmallBalance = !hideSmallBalance
-  sessionStorage.setItem('hideSmallBalances', hideSmallBalance)
-  document.getElementById('hide-small-balances-icon').src = hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
+  walletOptions.hideSmallBalance = !walletOptions.hideSmallBalance
+  sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
+  document.getElementById('hide-small-balances-icon').src = walletOptions.hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
 
   displayWallet()
 })
@@ -607,7 +871,7 @@ const getId = (address, network) => {
 const filteredWallet = () => {
   let filtered = Object.keys(wallet)
     .filter(id => wallet[id].value && wallet[id].value !== '0')
-  if(hideSmallBalance) {
+  if(walletOptions.hideSmallBalance) {
     filtered = filtered.filter(id => Math.abs(calculateValue(wallet[id].value, wallet[id].price, wallet[id].tokenDecimal)) >= 0.01 )
   }
   return filtered

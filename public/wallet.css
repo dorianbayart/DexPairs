@@ -135,7 +135,7 @@ canvas#wallet-chart {
   flex: 0.05;
   display: flex;
   align-items: center;
-  margin: auto;
+  margin: 12px auto;
   transition: all 750ms ease-in-out;
 }
 
@@ -143,16 +143,22 @@ canvas#wallet-chart {
 
 .wallet-options {
   margin: 1em auto 0;
-  padding: 3px 6px;
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  font-weight: lighter;
+}
+.wallet-menu {
+  margin-right: 12px;
+  padding: 6px 9px 0px 9px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
 }
 #hide-small-balances-container {
   display: inline-flex;
+  flex: auto;
+  justify-content: flex-end;
   align-items: center;
   font-size: 0.8em;
-  font-weight: lighter;
   cursor: pointer;
 }
 #hide-small-balances-container img#hide-small-balances-icon {
@@ -175,7 +181,7 @@ canvas#wallet-chart {
   list-style: none;
   padding: 3px;
   margin: 0;
-  border-radius: 12px;
+  border-radius: 0 12px 12px;
 }
 
 #wallet ul li {
@@ -186,11 +192,10 @@ canvas#wallet-chart {
   display: flex;
   align-items: center;
   height: 42px;
-  flex-wrap: wrap;
   transition: all 400ms ease-in-out;
 }
 #wallet ul li.expanded {
-  height: 10em;
+  height: 128px;
 }
 
 #wallet ul li span {
@@ -199,14 +204,15 @@ canvas#wallet-chart {
 }
 #wallet ul li span.network {
   width: 8%;
+  display: flex;
 }
 #wallet ul li span.network img.network {
   height: 100%;
 }
 #wallet ul li span.nameSymbol {
-  width: 55%;
   display: flex;
   flex-flow: column;
+  flex: auto;
 }
 #wallet ul li span.name {
   font-size: 0.75em;
@@ -226,20 +232,20 @@ canvas#wallet-chart {
 #wallet ul li span.balance {
   font-size: 0.75em;
 }
-#wallet ul li span.address {
+#wallet ul li a.address {
   font-size: 0.85em;
   width: 100%;
 }
 #wallet ul li span.chart {
   width: 100%;
 }
-#wallet ul li span.address, #wallet ul li span.chart {
+#wallet ul li a.address, #wallet ul li span.chart {
   height: 0;
   line-height: 0;
   opacity: 0;
   transition: all 400ms ease-in-out;
 }
-#wallet ul li.expanded span.address {
+#wallet ul li.expanded a.address {
   height: 1em;
   line-height: 1em;
   opacity: 1;
@@ -250,6 +256,26 @@ canvas#wallet-chart {
   opacity: 1;
 }
 
+
+/* NFT */
+#wallet ul li.nft {
+  padding: 0 0 0 0.5em;
+  height: 64px;
+}
+#wallet ul li.expanded {
+  height: 192px;
+}
+#wallet ul li.nft span.tokenID {
+  padding-right: 6px;
+}
+#wallet ul li.nft a.tokenURI {
+  height: 100%;
+}
+#wallet ul li.nft a.tokenURI img.preview{
+  width: auto;
+  height: 100%;
+  border-radius: 0 8px 8px 0;
+}
 
 /* helper */
 .none {

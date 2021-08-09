@@ -40,7 +40,9 @@ const NETWORK = {
     name: 'Ethereum',
     img: '/img/ethereum-icon.svg',
     rpc: 'https://cloudflare-eth.com',
+    explorer: 'https://etherscan.io/token/',
     tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    erc721tx: 'https://api.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
     url_data: server,
     tokenContract: '0x0',
@@ -56,7 +58,9 @@ const NETWORK = {
     name: 'Polygon/Matic',
     img: '/img/polygon-icon.svg',
     rpc: 'https://rpc-mainnet.maticvigil.com',
+    explorer: 'https://polygonscan.com/token/',
     tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
     url_data: server + '/sushiswap',
     tokenContract: '0x0',
@@ -72,7 +76,9 @@ const NETWORK = {
     name: 'Binance Smart Chain',
     img: '/img/bsc-icon.svg',
     rpc: 'https://bsc-dataseed.binance.org',
+    explorer: 'https://bscscan.com/token/',
     tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    erc721tx: 'https://api.bscscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
     url_data: server + '/pancake',
     tokenContract: '0x0',
@@ -88,7 +94,9 @@ const NETWORK = {
     name: 'Fantom/Opera',
     img: '/img/fantom-icon.svg',
     rpc: 'https://rpcapi.fantom.network',
+    explorer: 'https://ftmscan.com/token/',
     tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    erc721tx: 'https://api.ftmscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
     url_data: server + '/spiritswap',
     tokenContract: '0x0',
@@ -104,7 +112,9 @@ const NETWORK = {
     name: 'xDai',
     img: '/img/xdai-icon.svg',
     rpc: 'https://rpc.xdaichain.com/',
+    explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
     tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&sort=desc',
+    erc721tx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&sort=desc',
     tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
     url_data: server + '/honeyswap',
     tokenContract: '0x0',
@@ -132,6 +142,14 @@ const minABI = [
          "name":"decimals",
          "outputs":[{"name":"","type":"uint8"}],
          "type":"function"
+       },
+       // tokenURI
+       {
+         "constant":true,
+         "inputs":[{"name":"_tokenId","type":"uint256"}],
+         "name":"tokenURI",
+         "outputs":[{"name":"","type":"string"}],
+         "type":"function"
        }
      ]
 
@@ -142,6 +160,7 @@ let web3_xdai = null
 let web3_bsc = null
 let walletAddress = ''
 let wallet = {}
+let wallet_NFT = {}
 
 let gasIsRealtime = false
 let loadingChartsByAddress = false
