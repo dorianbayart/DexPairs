@@ -74,6 +74,7 @@ function configureWallet(inputAddress) {
     walletAddress = null
     sessionStorage.removeItem('walletAddress', walletAddress)
     wallet = {}
+    wallet_NFT = {}
     displayWallet()
 
     return
@@ -97,6 +98,7 @@ function configureWallet(inputAddress) {
     walletAddress = null
     sessionStorage.removeItem('walletAddress', walletAddress)
     wallet = {}
+    wallet_NFT = {}
     displayWallet()
 
     stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
@@ -114,6 +116,7 @@ function configureWallet(inputAddress) {
   } else {
     sessionStorage.removeItem('wallet')
     wallet = {}
+    wallet_NFT = {}
   }
 
   Object.keys(wallet).forEach(id => {
