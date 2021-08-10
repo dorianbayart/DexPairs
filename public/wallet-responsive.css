@@ -63,6 +63,10 @@
   #wallet, .wallet-options {
     width: 75%;
   }
+
+  #wallet ul li.expanded {
+    height: 192px;
+  }
 }
 
 @media (max-width: 460px) {
