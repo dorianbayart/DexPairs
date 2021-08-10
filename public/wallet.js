@@ -546,7 +546,9 @@ function displayNFTs() {
     if(element) {
       element.querySelector('a.tokenURI').href = wallet_NFT[id].tokenURI
       // TODO Display text when wallet_NFT[id].image is empty
-      element.querySelector('img.preview').src = wallet_NFT[id].image
+      if(element.querySelector('img.preview').src !== wallet_NFT[id].image) {
+        element.querySelector('img.preview').src = wallet_NFT[id].image
+      }
     } else {
       let li = document.createElement('li')
       li.title = ''
@@ -591,7 +593,7 @@ function displayNFTs() {
       let imgPreview = document.createElement('img')
       imgPreview.src = wallet_NFT[id].image
       imgPreview.classList.add('preview')
-      imgPreview.alt = 'NFT Preview'
+      imgPreview.alt = 'NFT Metadata'
       aTokenURI.href = wallet_NFT[id].tokenURI
       aTokenURI.target = "_blank"
       aTokenURI.classList.add('tokenURI')
