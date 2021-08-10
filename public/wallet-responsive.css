@@ -29,6 +29,14 @@
 #wallet, .wallet-options {
   width: 45%;
 }
+#wallet ul li.nft a.tokenURI {
+  height: 64px;
+  width: 64px;
+}
+#wallet ul li.nft.expanded a.tokenURI {
+  height: 192px;
+  width: 192px;
+}
 
 @media (max-width: 800px) {
   #input-wallet-container.margin-top #input-wallet {
@@ -66,6 +74,10 @@
 
   #wallet ul li.expanded {
     height: min(192px, 25vh);
+  }
+  #wallet ul li.nft.expanded a.tokenURI {
+    height: min(192px, 25vh);
+    width: min(192px, 25vh);
   }
 }
 
@@ -108,5 +120,9 @@
   }
   #wallet ul li.expanded {
     height: min(192px, 18vh);
+  }
+  #wallet ul li.nft.expanded a.tokenURI {
+    height: min(192px, 18vh);
+    width: min(192px, 18vh);
   }
 }

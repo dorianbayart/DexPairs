@@ -272,10 +272,10 @@ canvas#wallet-chart {
   max-width: 40%;
 }
 #wallet ul li.nft a.tokenURI {
-  height: 100%;
+  transition: all 400ms ease-in-out;
 }
 #wallet ul li.nft a.tokenURI img.preview{
-  width: auto;
+  width: 100%;
   height: 100%;
   border-radius: 0 8px 8px 0;
 }
