@@ -136,7 +136,7 @@ function configureWallet(inputAddress) {
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
     getTokenTx(NETWORK[network].enum)
-    setTimeout(() => getERC721Tx(NETWORK[network].enum), 5750)
+    setTimeout(() => getERC721Tx(NETWORK[network].enum), 6000)
   });
 
   sessionStorage.setItem('walletAddress', walletAddress)
@@ -219,7 +219,6 @@ function getTokenBalanceWeb3(contractAddress, network) {
         contract.methods.tokenURI(wallet_NFT[id].tokenID).call((error, tokenURI) => {
           wallet_NFT[id].tokenURI = tokenURI
           readNFTMetadata(id)
-          displayWallet()
         })
       }
 
@@ -261,6 +260,7 @@ function readNFTMetadata(id) {
       })
       .catch(error => {
         wallet_NFT[id].image = tokenURI
+        displayWallet()
       })
   }
 
