@@ -264,7 +264,7 @@ canvas#wallet-chart {
   height: 64px;
 }
 #wallet ul li.expanded {
-  height: min(192px, 18vh);
+  height: 192px;
 }
 #wallet ul li.nft span.tokenID {
   padding-right: 6px;

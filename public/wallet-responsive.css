@@ -65,7 +65,7 @@
   }
 
   #wallet ul li.expanded {
-    height: 192px;
+    height: min(192px, 25vh);
   }
 }
 
@@ -105,5 +105,8 @@
   }
   #wallet ul li {
     height: 40px;
+  }
+  #wallet ul li.expanded {
+    height: min(192px, 18vh);
   }
 }
