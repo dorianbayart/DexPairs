@@ -216,8 +216,9 @@ function getTokenBalanceWeb3(contractAddress, network) {
       } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
         wallet_NFT[id].number = value
 
-        contract.methods.tokenURI(wallet_NFT[id].tokenID).call((error, uri) => {
-          wallet_NFT[id].tokenURI = uri
+        contract.methods.tokenURI(wallet_NFT[id].tokenID).call((error, tokenURI) => {
+          wallet_NFT[id].tokenURI = tokenURI
+          readNFTMetadata(id)
           displayWallet()
         })
       }
@@ -239,6 +240,30 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
     displayWallet()
   })
+}
+
+function readNFTMetadata(id) {
+  const tokenURI = wallet_NFT[id].tokenURI
+  if(tokenURI.includes('http')) {
+    fetch(tokenURI, { mode: 'cors' })
+      .then(response => response.text())
+      .then(json => {
+        const data = JSON.parse(json)
+        wallet_NFT[id].metadata = data
+        if(data.image) {
+          wallet_NFT[id].image = data.image
+        } else if (data.image_url) {
+          wallet_NFT[id].image = data.image_url
+        } else {
+          wallet_NFT[id].image = tokenURI
+        }
+        displayWallet()
+      })
+      .catch(error => {
+        wallet_NFT[id].image = tokenURI
+      })
+  }
+
 }
 
 
@@ -520,7 +545,8 @@ function displayNFTs() {
 
     if(element) {
       element.querySelector('a.tokenURI').href = wallet_NFT[id].tokenURI
-      element.querySelector('img.preview').src = wallet_NFT[id].tokenURI
+      // TODO Display text when wallet_NFT[id].image is empty
+      element.querySelector('img.preview').src = wallet_NFT[id].image
     } else {
       let li = document.createElement('li')
       li.title = ''
@@ -561,8 +587,9 @@ function displayNFTs() {
       li.appendChild(spanTokenId)
 
       let aTokenURI = document.createElement('a')
+      // TODO Display text when wallet_NFT[id].image is empty
       let imgPreview = document.createElement('img')
-      imgPreview.src = wallet_NFT[id].tokenURI
+      imgPreview.src = wallet_NFT[id].image
       imgPreview.classList.add('preview')
       imgPreview.alt = 'NFT Preview'
       aTokenURI.href = wallet_NFT[id].tokenURI

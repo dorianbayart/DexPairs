@@ -267,6 +267,8 @@ canvas#wallet-chart {
 }
 #wallet ul li.nft span.tokenID {
   padding-right: 6px;
+  word-break: break-all;
+  max-width: 40%;
 }
 #wallet ul li.nft a.tokenURI {
   height: 100%;
@@ -275,6 +277,13 @@ canvas#wallet-chart {
   width: auto;
   height: 100%;
   border-radius: 0 8px 8px 0;
+}
+#wallet ul li.nft a.tokenURI img.preview:before {
+  font-size: 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  word-wrap: anywhere;
 }
 
 /* helper */
