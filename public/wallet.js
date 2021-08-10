@@ -245,14 +245,14 @@ function getTokenBalanceWeb3(contractAddress, network) {
 function readNFTMetadata(id) {
   const tokenURI = wallet_NFT[id].tokenURI
   if(tokenURI.includes('http')) {
-    fetch(tokenURI, { mode: 'cors' })
-      .then(response => response.text())
+    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
+      .then(res => res.json())
       .then(json => {
-        const data = JSON.parse(json)
+        const data = JSON.parse(json.contents)
         wallet_NFT[id].metadata = data
-        if(data.image) {
+        if(data && data.image) {
           wallet_NFT[id].image = data.image
-        } else if (data.image_url) {
+        } else if (data && data.image_url) {
           wallet_NFT[id].image = data.image_url
         } else {
           wallet_NFT[id].image = tokenURI
