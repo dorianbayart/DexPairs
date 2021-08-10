@@ -204,6 +204,7 @@ canvas#wallet-chart {
 }
 #wallet ul li span.network {
   width: 8%;
+  min-width: 32px;
   display: flex;
 }
 #wallet ul li span.network img.network {
@@ -263,7 +264,7 @@ canvas#wallet-chart {
   height: 64px;
 }
 #wallet ul li.expanded {
-  height: 192px;
+  height: min(192px, 18vh);
 }
 #wallet ul li.nft span.tokenID {
   padding-right: 6px;
