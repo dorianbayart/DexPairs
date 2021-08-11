@@ -150,6 +150,14 @@ const minABI = [
          "name":"tokenURI",
          "outputs":[{"name":"","type":"string"}],
          "type":"function"
+       },
+       // tokenOfOwnerByIndex
+       {
+         "constant":true,
+         "inputs":[{"name":"_owner","type":"address"}, {"name":"_index","type":"uint256"}],
+         "name":"tokenOfOwnerByIndex",
+         "outputs":[{"name":"tokenId","type":"uint256"}],
+         "type":"function"
        }
      ]
 

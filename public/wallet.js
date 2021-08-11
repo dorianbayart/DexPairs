@@ -253,6 +253,8 @@ function readNFTMetadata(id) {
           wallet_NFT[id].image = data.image
         } else if (data && data.image_url) {
           wallet_NFT[id].image = data.image_url
+        } else if (data && data.imageUrl) {
+          wallet_NFT[id].image = data.imageUrl
         } else {
           wallet_NFT[id].image = tokenURI
         }
