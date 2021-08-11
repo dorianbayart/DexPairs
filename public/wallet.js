@@ -741,9 +741,15 @@ function initializeHTML() {
   walletOptions.menu[Object.keys(walletOptions.menu).find(item => walletOptions.menu[item].isActive)].isActive = false
   if(hash) {
     const menu = Object.keys(walletOptions.menu).find(item => walletOptions.menu[item].hash === hash)
-    walletOptions.menu[menu].isActive = true
+    try {
+      walletOptions.menu[menu].isActive = true
+    } catch {
+      walletOptions.menu.tokens.isActive = true
+      window.location.hash = walletOptions.menu.tokens.hash
+    }
   } else {
     walletOptions.menu.tokens.isActive = true
+    window.location.hash = walletOptions.menu.tokens.hash
   }
 
 
