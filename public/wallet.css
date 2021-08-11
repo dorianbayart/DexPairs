@@ -279,6 +279,7 @@ canvas#wallet-chart {
   padding-right: 6px;
   word-break: break-all;
   max-width: 40%;
+  font-size: smaller;
 }
 #wallet ul li.nft a.tokenURI {
   transition: all 400ms ease-in-out;
