@@ -655,7 +655,7 @@ function displayNFTs() {
 
       }
 
-    }
+    })
 
   })
 
