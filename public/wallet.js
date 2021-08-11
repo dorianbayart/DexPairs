@@ -215,13 +215,18 @@ function getTokenBalanceWeb3(contractAddress, network) {
         wallet[id].upToDate = true
       } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
         wallet_NFT[id].number = value
-
-        contract.methods.tokenURI(wallet_NFT[id].tokenID).call((error, tokenURI) => {
-          wallet_NFT[id].tokenURI = tokenURI
-          readNFTMetadata(id)
-        })
+        // Loop over each NFT hold on this Contract by the WalletAddress
+        for (var i = 0; i < wallet_NFT[id].number; i++) {
+          contract.methods.tokenOfOwnerByIndex(wallet_NFT[id].walletAddress, i).call((error, indexId) => {
+            if(error) { return }
+            contract.methods.tokenURI(indexId).call((error, tokenURI) => {
+              if(error) { return }
+              wallet_NFT[id].tokens.push({ id: indexId, tokenURI: tokenURI })
+              readNFTMetadata(id, indexId, tokenURI)
+            })
+          })
+        }
       }
-
     }
 
     if(Object.keys(wallet).includes(id)) { // ERC-20
@@ -241,27 +246,27 @@ function getTokenBalanceWeb3(contractAddress, network) {
   })
 }
 
-function readNFTMetadata(id) {
-  const tokenURI = wallet_NFT[id].tokenURI
-  if(tokenURI.includes('http')) {
+function readNFTMetadata(id, indexId, tokenURI) {
+  const tokenIndex = Object.keys(wallet_NFT[id]).findIndex(id => wallet_NFT[id].tokens.id === indexId)
+  if(tokenURI && tokenURI.includes('http')) {
     fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
       .then(res => res.json())
       .then(json => {
         const data = JSON.parse(json.contents)
-        wallet_NFT[id].metadata = data
+        wallet_NFT[id].tokens[tokenIndex].metadata = data
         if(data && data.image) {
-          wallet_NFT[id].image = data.image
+          wallet_NFT[id].tokens[tokenIndex].image = data.image
         } else if (data && data.image_url) {
-          wallet_NFT[id].image = data.image_url
+          wallet_NFT[id].tokens[tokenIndex].image = data.image_url
         } else if (data && data.imageUrl) {
-          wallet_NFT[id].image = data.imageUrl
+          wallet_NFT[id].tokens[tokenIndex].image = data.imageUrl
         } else {
-          wallet_NFT[id].image = tokenURI
+          wallet_NFT[id].tokens[tokenIndex].image = tokenURI
         }
         displayWallet()
       })
       .catch(error => {
-        wallet_NFT[id].image = tokenURI
+        wallet_NFT[id].tokens[tokenIndex].image = tokenURI
         displayWallet()
       })
   }
@@ -331,7 +336,7 @@ function searchNFTs(network) {
       wallet_NFT[id] = {
         network: network,
         contract: item.contractAddress,
-        tokenID: item.tokenID,
+        tokens: [],
         tokenSymbol: item.tokenSymbol,
         tokenName: item.tokenName,
         tokenDecimal: item.tokenDecimal
@@ -530,11 +535,12 @@ function displayTokens() {
 // Display Wallet NFTs
 function displayNFTs() {
   let listLi = document.getElementById('wallet').querySelectorAll('li')
-  const tokens = Object.keys(wallet_NFT)
+  // TODO Check if it works ...
+  const nftContracts = Object.keys(wallet_NFT)
 
-  if(listLi.length === 0 || listLi.length !== tokens.length) {
+  if(listLi.length === 0 || listLi.length !== nftContracts.length) {
     document.getElementById('wallet').innerHTML = null
-    if(tokens.length > 0) {
+    if(nftContracts.length > 0) {
       let ul = document.createElement('ul')
       ul.id = 'wallet-ul'
       document.getElementById('wallet').appendChild(ul)
@@ -542,94 +548,100 @@ function displayNFTs() {
     listLi = []
   }
 
-  tokens.forEach(function (id) {
-    let element = Array.from(listLi).find(el => el.id === id)
+  nftContracts.forEach(function (id) {
 
-    if(element) {
-      element.querySelector('a.tokenURI').href = wallet_NFT[id].tokenURI
-      // TODO Display text when wallet_NFT[id].image is empty
-      if(element.querySelector('img.preview').src !== wallet_NFT[id].image) {
-        element.querySelector('img.preview').src = wallet_NFT[id].image
+    const nfts = tokens
+
+    nfts.forEach(function (nft) {
+      let element = Array.from(listLi).find(el => el.id === id + nft.tokenSymbol + nft.tokenID)
+
+      if(element) {
+        element.querySelector('a.tokenURI').href = nft.tokenURI
+        // TODO Display text when nft.image is empty
+        if(nft.image && element.querySelector('img.preview').src !== nft.image) {
+          element.querySelector('img.preview').src = nft.image
+        }
+      } else {
+        let li = document.createElement('li')
+        li.title = ''
+        li.id = id + nft.tokenSymbol + nft.tokenID
+        li.classList.add('nft')
+
+        let spanNetwork = document.createElement('span')
+        spanNetwork.classList.add('network')
+        spanNetwork.appendChild(createNetworkImg(wallet_NFT[id].network))
+        li.appendChild(spanNetwork)
+
+        let spanNameSymbol = document.createElement('span')
+        spanNameSymbol.classList.add('nameSymbol')
+        li.appendChild(spanNameSymbol)
+
+        let spanSymbol = document.createElement('span')
+        spanSymbol.innerHTML = wallet_NFT[id].tokenSymbol
+        spanSymbol.classList.add('symbol')
+        spanNameSymbol.appendChild(spanSymbol)
+        let spanName = document.createElement('span')
+        spanName.innerHTML = wallet_NFT[id].tokenName
+        spanName.classList.add('name')
+        spanNameSymbol.appendChild(spanName)
+
+        let aAddress = document.createElement('a')
+        let spanAddress = document.createElement('span')
+        spanAddress.innerHTML = wallet_NFT[id].contract.slice(0, 5) + "..." + wallet_NFT[id].contract.slice(-5)
+        spanAddress.classList.add('address')
+        aAddress.href = NETWORK[wallet_NFT[id].network].explorer + wallet_NFT[id].contract
+        aAddress.target = "_blank"
+        aAddress.classList.add('address')
+        aAddress.appendChild(spanAddress)
+        spanNameSymbol.appendChild(aAddress)
+
+        let spanTokenId = document.createElement('span')
+        spanTokenId.innerHTML = '#' + nft.id
+        spanTokenId.classList.add('tokenID')
+        li.appendChild(spanTokenId)
+
+        let aTokenURI = document.createElement('a')
+        // TODO Display text when nft.image is empty
+        let imgPreview = document.createElement('img')
+        imgPreview.src = nft.image
+        imgPreview.classList.add('preview')
+        imgPreview.alt = 'NFT Metadata'
+        aTokenURI.href = nft.tokenURI
+        aTokenURI.target = "_blank"
+        aTokenURI.classList.add('tokenURI')
+        aTokenURI.appendChild(imgPreview)
+        li.appendChild(aTokenURI)
+
+
+        aTokenURI.addEventListener("click", function(e) {
+          let item = e.target
+
+          while(item.id.length < 1) {
+            item = item.parentNode
+          }
+
+          expandCollapseItem(item)
+        })
+
+        document.getElementById('wallet-ul').appendChild(li)
+
+        li.addEventListener("click", function(e) {
+          let item = e.target
+
+          while(item.id.length < 1 || item.id.includes('chart')) {
+            item = item.parentNode
+          }
+
+          expandCollapseItem(item)
+        })
+
       }
-    } else {
-      let li = document.createElement('li')
-      li.title = ''
-      li.id = id
-      li.classList.add('nft')
-
-      let spanNetwork = document.createElement('span')
-      spanNetwork.classList.add('network')
-      spanNetwork.appendChild(createNetworkImg(wallet_NFT[id].network))
-      li.appendChild(spanNetwork)
-
-      let spanNameSymbol = document.createElement('span')
-      spanNameSymbol.classList.add('nameSymbol')
-      li.appendChild(spanNameSymbol)
-
-      let spanSymbol = document.createElement('span')
-      spanSymbol.innerHTML = wallet_NFT[id].tokenSymbol
-      spanSymbol.classList.add('symbol')
-      spanNameSymbol.appendChild(spanSymbol)
-      let spanName = document.createElement('span')
-      spanName.innerHTML = wallet_NFT[id].tokenName
-      spanName.classList.add('name')
-      spanNameSymbol.appendChild(spanName)
-
-      let aAddress = document.createElement('a')
-      let spanAddress = document.createElement('span')
-      spanAddress.innerHTML = wallet_NFT[id].contract.slice(0, 5) + "..." + wallet_NFT[id].contract.slice(-5)
-      spanAddress.classList.add('address')
-      aAddress.href = NETWORK[wallet_NFT[id].network].explorer + wallet_NFT[id].contract
-      aAddress.target = "_blank"
-      aAddress.classList.add('address')
-      aAddress.appendChild(spanAddress)
-      spanNameSymbol.appendChild(aAddress)
-
-      let spanTokenId = document.createElement('span')
-      spanTokenId.innerHTML = '#' + wallet_NFT[id].tokenID
-      spanTokenId.classList.add('tokenID')
-      li.appendChild(spanTokenId)
-
-      let aTokenURI = document.createElement('a')
-      // TODO Display text when wallet_NFT[id].image is empty
-      let imgPreview = document.createElement('img')
-      imgPreview.src = wallet_NFT[id].image
-      imgPreview.classList.add('preview')
-      imgPreview.alt = 'NFT Metadata'
-      aTokenURI.href = wallet_NFT[id].tokenURI
-      aTokenURI.target = "_blank"
-      aTokenURI.classList.add('tokenURI')
-      aTokenURI.appendChild(imgPreview)
-      li.appendChild(aTokenURI)
-
-
-      aTokenURI.addEventListener("click", function(e) {
-        let item = e.target
-
-        while(item.id.length < 1) {
-          item = item.parentNode
-        }
-
-        expandCollapseItem(item)
-      })
-
-      document.getElementById('wallet-ul').appendChild(li)
-
-      li.addEventListener("click", function(e) {
-        let item = e.target
-
-        while(item.id.length < 1 || item.id.includes('chart')) {
-          item = item.parentNode
-        }
-
-        expandCollapseItem(item)
-      })
 
     }
 
   })
 
-  if(tokens.length > 0) {
+  if(nftContracts.length > 0) {
     document.getElementById('global').classList.remove('none')
     document.getElementById('connect-demo-container').classList.toggle('none', true)
     document.getElementById('wallet-options').classList.remove('none')
