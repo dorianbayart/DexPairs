@@ -76,7 +76,7 @@ function configureWallet(inputAddress) {
     }
 
     walletAddress = null
-    sessionStorage.removeItem('walletAddress', walletAddress)
+    sessionStorage.removeItem('walletAddress')
     wallet = {}
     wallet_NFT = {}
     loading = false
@@ -103,7 +103,7 @@ function configureWallet(inputAddress) {
     }
 
     walletAddress = null
-    sessionStorage.removeItem('walletAddress', walletAddress)
+    sessionStorage.removeItem('walletAddress')
     wallet = {}
     wallet_NFT = {}
     loading = false
@@ -145,6 +145,7 @@ function configureWallet(inputAddress) {
 
   Object.keys(NETWORK).forEach((network, i) => {
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
+    sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
     setTimeout(() => getTokenTx(NETWORK[network].enum), walletOptions.menu.tokens.isActive ? 50 : 750)
     setTimeout(() => getERC721Tx(NETWORK[network].enum), walletOptions.menu.nfts.isActive ? 50 : 750)
