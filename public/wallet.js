@@ -233,11 +233,12 @@ function getTokenBalanceWeb3(contractAddress, network) {
         wallet[id].upToDate = true
       } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
         wallet_NFT[id].number = value
+        let nftContract = getNFTContract(contractAddress, network)
         // Loop over each NFT hold on this Contract by the WalletAddress
         for (var i = 0; i < wallet_NFT[id].number; i++) {
-          contract.methods.tokenOfOwnerByIndex(wallet_NFT[id].walletAddress, i).call((error, indexId) => {
+          nftContract.methods.tokenOfOwnerByIndex(walletAddress, i).call((error, indexId) => {
             if(error) { return }
-            contract.methods.tokenURI(indexId).call((error, tokenURI) => {
+            nftContract.methods.tokenURI(indexId).call((error, tokenURI) => {
               if(error) { return }
               wallet_NFT[id].tokens.push({ id: indexId, tokenURI: tokenURI })
               readNFTMetadata(id, indexId, tokenURI)
@@ -265,7 +266,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
 }
 
 function readNFTMetadata(id, indexId, tokenURI) {
-  const tokenIndex = Object.keys(wallet_NFT[id]).findIndex(id => wallet_NFT[id].tokens.id === indexId)
+  const tokenIndex = wallet_NFT[id].tokens.findIndex(token => token.id === indexId)
   if(tokenURI && tokenURI.includes('http')) {
     fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
       .then(res => res.json())
@@ -346,7 +347,7 @@ function searchNFTs(network) {
   loading = false
 
   if(latestBlock) {
-    //erc721tx = erc721tx.filter(tx => tx.blockNumber > latestBlock)
+    erc721tx = erc721tx.filter(tx => tx.blockNumber > latestBlock)
   }
 
   // search tokens only in received transactions
@@ -556,7 +557,7 @@ function displayNFTs() {
   // TODO Check if it works ...
   const nftContracts = Object.keys(wallet_NFT)
 
-  if(listLi.length === 0 || listLi.length !== tokens.length || tokens.length === filteredWallet().length) {
+  if(listLi.length === 0 || listLi.length !== nftContracts.length || nftContracts.length === filteredWallet().length) {
     document.getElementById('wallet').innerHTML = null
     if(nftContracts.length > 0) {
       let ul = document.createElement('ul')
@@ -568,7 +569,7 @@ function displayNFTs() {
 
   nftContracts.forEach(function (id) {
 
-    const nfts = tokens
+    const nfts = wallet_NFT[id].tokens
 
     nfts.forEach(function (nft) {
       let element = Array.from(listLi).find(el => el.id === id + nft.tokenSymbol + nft.tokenID)
@@ -621,7 +622,7 @@ function displayNFTs() {
         let aTokenURI = document.createElement('a')
         // TODO Display text when nft.image is empty
         let imgPreview = document.createElement('img')
-        imgPreview.src = nft.image
+        if(nft.image) { imgPreview.src = nft.image }
         imgPreview.classList.add('preview')
         imgPreview.alt = 'NFT Metadata'
         aTokenURI.href = nft.tokenURI
@@ -659,7 +660,7 @@ function displayNFTs() {
 
   })
 
-  if(tokens.length > 0) {
+  if(nftContracts.length > 0) {
 
   } else {
     const stateContainer = document.getElementById('state')
@@ -927,6 +928,23 @@ const getContract = (contractAddress, network) => {
         return new web3_xdai.eth.Contract(minABI, contractAddress)
       case NETWORK.BSC.enum:
         return new web3_bsc.eth.Contract(minABI, contractAddress)
+      default:
+        return
+    }
+}
+/* Utils - Return the NFT Contract depending on the network */
+const getNFTContract = (contractAddress, network) => {
+  switch (network) {
+      case NETWORK.ETHEREUM.enum:
+        return new web3_ethereum.eth.Contract(nftABI, contractAddress)
+      case NETWORK.POLYGON.enum:
+        return new web3_polygon.eth.Contract(nftABI, contractAddress)
+      case NETWORK.FANTOM.enum:
+        return new web3_fantom.eth.Contract(nftABI, contractAddress)
+      case NETWORK.XDAI.enum:
+        return new web3_xdai.eth.Contract(nftABI, contractAddress)
+      case NETWORK.BSC.enum:
+        return new web3_bsc.eth.Contract(nftABI, contractAddress)
       default:
         return
     }
