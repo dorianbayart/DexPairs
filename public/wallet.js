@@ -430,7 +430,7 @@ function displayTokens() {
   let listLi = document.getElementById('wallet').querySelectorAll('li')
   const tokens = filteredWallet().sort(sortWallet)
 
-  if(listLi.length === 0 || listLi.length !== tokens.length) {
+  if(listLi.length === 0 || listLi.length !== tokens.length || tokens.length === Object.keys(wallet_NFT).length) {
     document.getElementById('wallet').innerHTML = null
     if(tokens.length > 0) {
       let ul = document.createElement('ul')
@@ -550,7 +550,7 @@ function displayNFTs() {
   let listLi = document.getElementById('wallet').querySelectorAll('li')
   const tokens = Object.keys(wallet_NFT)
 
-  if(listLi.length === 0 || listLi.length !== tokens.length) {
+  if(listLi.length === 0 || listLi.length !== tokens.length || tokens.length === filteredWallet().length) {
     document.getElementById('wallet').innerHTML = null
     if(tokens.length > 0) {
       let ul = document.createElement('ul')
