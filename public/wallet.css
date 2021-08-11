@@ -177,6 +177,15 @@ canvas#wallet-chart {
   flex: auto;
 }
 
+#wallet .loading-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  border-radius: 0 12px 12px;
+  font-weight: lighter;
+}
+
 #wallet ul {
   list-style: none;
   padding: 3px;

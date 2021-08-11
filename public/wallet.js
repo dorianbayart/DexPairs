@@ -1,6 +1,7 @@
 
 let globalChart = null
 let walletValue = 0
+let loading = false
 let timerGetTokenTx = {}
 let timerGetERC721Tx = {}
 let timerGetNetworkBalance = {}
@@ -8,14 +9,17 @@ let walletOptions = {
   menu: {
     tokens: {
       name: 'Tokens',
+      hash: '#tokens',
       isActive: true
     },
     nfts: {
       name: 'NFTs',
+      hash: '#nfts',
       isActive: false
     },
     transactions: {
       name: 'Transactions',
+      hash: '#transactions',
       isActive: false
     }
   },
@@ -47,7 +51,7 @@ function configureWallet(inputAddress) {
   const globalInforationContainer = document.getElementById('global')
   const stateContainer = document.getElementById('state')
   const connectDemoContainer = document.getElementById('connect-demo-container')
-  const walletOptions = document.getElementById('wallet-options')
+  const walletOptionsContainer = document.getElementById('wallet-options')
 
   Object.keys(timerGetTokenTx).forEach(network => {
     clearTimeout(timerGetTokenTx[network])
@@ -63,7 +67,7 @@ function configureWallet(inputAddress) {
     inputContainer.classList.toggle('margin-top', true)
     globalInforationContainer.classList.toggle('none', true)
     connectDemoContainer.classList.toggle('none', true)
-    walletOptions.classList.remove('none')
+    walletOptionsContainer.classList.remove('none')
 
     const urlParams = new URLSearchParams(window.location.search)
     if(urlParams.has('address') && window.history.replaceState) {
@@ -75,7 +79,10 @@ function configureWallet(inputAddress) {
     sessionStorage.removeItem('walletAddress', walletAddress)
     wallet = {}
     wallet_NFT = {}
+    loading = false
     displayWallet()
+
+    walletOptionsContainer.classList.toggle('none', true)
 
     return
   }
@@ -99,16 +106,20 @@ function configureWallet(inputAddress) {
     sessionStorage.removeItem('walletAddress', walletAddress)
     wallet = {}
     wallet_NFT = {}
+    loading = false
     displayWallet()
 
     stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
     stateContainer.classList.toggle('shadow-white', true)
+    walletOptionsContainer.classList.toggle('none', true)
 
     return
   }
 
+  loading = true
   stateContainer.innerHTML = 'Searching for transactions and tokens ...'
   stateContainer.classList.toggle('shadow-white', true)
+  walletOptionsContainer.classList.remove('none')
 
   if(sessionStorage.getItem('walletAddress') === inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
@@ -135,8 +146,8 @@ function configureWallet(inputAddress) {
   Object.keys(NETWORK).forEach((network, i) => {
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
-    getTokenTx(NETWORK[network].enum)
-    setTimeout(() => getERC721Tx(NETWORK[network].enum), 6000)
+    setTimeout(() => getTokenTx(NETWORK[network].enum), walletOptions.menu.tokens.isActive ? 50 : 750)
+    setTimeout(() => getERC721Tx(NETWORK[network].enum), walletOptions.menu.nfts.isActive ? 50 : 750)
   });
 
   sessionStorage.setItem('walletAddress', walletAddress)
@@ -159,6 +170,9 @@ function getTokenTx(network) {
       searchTokens(network)
 
       timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), (Math.round(Math.random() * 15) + 45) * 1000 * (tokentx.length > 0 ? 1 : 3))
+    } else if(this.response && this.response.includes("Max rate limit reached")) {
+      clearTimeout(timerGetTokenTx[network])
+      setTimeout(() => getTokenTx(network), 750)
     }
   }
   xmlhttp.onerror = function() {
@@ -183,6 +197,9 @@ function getERC721Tx(network) {
       searchNFTs(network)
 
       timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx.length > 0 ? 1 : 3))
+    } else if(this.response && this.response.includes("Max rate limit reached")) {
+      clearTimeout(timerGetERC721Tx[network])
+      setTimeout(() => getERC721Tx(network), 750)
     }
   }
   xmlhttp.onerror = function() {
@@ -208,6 +225,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
     }
 
     if(error) {
+      console.log('getTokenBalanceWeb3', error)
       setTimeout(() => getTokenBalanceWeb3(contractAddress, network), 10000)
     } else {
       if(Object.keys(wallet).includes(id)) { // ERC-20
@@ -277,6 +295,8 @@ function searchTokens(network) {
     return
   }
 
+  loading = false
+
   if(latestBlock) {
     tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
   }
@@ -317,6 +337,8 @@ function searchNFTs(network) {
   if(!erc721tx || typeof erc721tx === 'string' || erc721tx.length === 0) {
     return
   }
+
+  loading = false
 
   if(latestBlock) {
     //erc721tx = erc721tx.filter(tx => tx.blockNumber > latestBlock)
@@ -399,6 +421,8 @@ function displayWallet() {
   } else if(walletOptions.menu.transactions.isActive) {
     displayTransactions()
   }
+  updateGlobalPrice()
+  updateGlobalChart()
 }
 
 // Display Wallet Tokens
@@ -504,14 +528,12 @@ function displayTokens() {
   if(tokens.length > 0) {
     document.getElementById('global').classList.remove('none')
     document.getElementById('connect-demo-container').classList.toggle('none', true)
-    document.getElementById('wallet-options').classList.remove('none')
     document.getElementById('state').innerHTML = null
     document.getElementById('input-wallet-container').classList.remove('margin-top')
     document.getElementById('state').classList.remove('shadow-white')
   } else {
     document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
     document.getElementById('connect-demo-container').classList.remove('none')
-    document.getElementById('wallet-options').classList.toggle('none', true)
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
       stateContainer.innerHTML = 'No token can be found on this address'
@@ -521,10 +543,6 @@ function displayTokens() {
       stateContainer.classList.remove('shadow-white')
     }
   }
-
-  updateGlobalPrice()
-  updateGlobalChart()
-
 }
 
 // Display Wallet NFTs
@@ -630,23 +648,28 @@ function displayNFTs() {
   })
 
   if(tokens.length > 0) {
-    document.getElementById('global').classList.remove('none')
-    document.getElementById('connect-demo-container').classList.toggle('none', true)
-    document.getElementById('wallet-options').classList.remove('none')
-    document.getElementById('state').innerHTML = null
-    document.getElementById('input-wallet-container').classList.remove('margin-top')
-    document.getElementById('state').classList.remove('shadow-white')
+
   } else {
     const stateContainer = document.getElementById('state')
     if(walletAddress && walletAddress.length > 0) {
-      stateContainer.innerHTML = 'No NFT can be found on this address'
-      stateContainer.classList.toggle('shadow-white', true)
+      const spanNoNft = document.createElement('span')
+      spanNoNft.innerHTML = loading ? 'Loading ...' : 'No NFT can be found on this address'
+      spanNoNft.classList.add('loading-message')
+      document.getElementById('wallet').appendChild(spanNoNft)
+      //stateContainer.innerHTML = 'No NFT can be found on this address'
+      //stateContainer.classList.toggle('shadow-white', true)
     } else {
       stateContainer.innerHTML = null
       stateContainer.classList.remove('shadow-white')
     }
   }
 
+  document.getElementById('global').classList.remove('none')
+  document.getElementById('connect-demo-container').classList.toggle('none', true)
+
+  document.getElementById('state').innerHTML = null
+  document.getElementById('input-wallet-container').classList.remove('margin-top')
+  document.getElementById('state').classList.remove('shadow-white')
 }
 
 function expandCollapseItem(item) {
@@ -702,6 +725,7 @@ simpleDataTimers()
 
 function initializeHTML() {
   const urlParams = new URLSearchParams(window.location.search)
+  const hash = window.location.hash
   let address = null
   if(urlParams.has('address')) {
     address = urlParams.get('address')
@@ -714,8 +738,13 @@ function initializeHTML() {
     walletOptions = JSON.parse(sessionStorage.getItem('walletOptions'))
   }
   document.getElementById('hide-small-balances-icon').src = walletOptions.hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
-  walletOptions.menu[Object.keys(walletOptions.menu).find(menu => walletOptions.menu[menu].isActive)].isActive = false
-  walletOptions.menu.tokens.isActive = true
+  walletOptions.menu[Object.keys(walletOptions.menu).find(item => walletOptions.menu[item].isActive)].isActive = false
+  if(hash) {
+    const menu = Object.keys(walletOptions.menu).find(item => walletOptions.menu[item].hash === hash)
+    walletOptions.menu[menu].isActive = true
+  } else {
+    walletOptions.menu.tokens.isActive = true
+  }
 
 
   if(address) {
@@ -750,6 +779,8 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
   walletOptions.menu.tokens.isActive = true
   sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
 
+  window.location.hash = walletOptions.menu.tokens.hash
+
   displayWallet()
 })
 document.getElementById('menu-nfts').addEventListener('click', (e) => {
@@ -761,6 +792,8 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
   walletOptions.menu.nfts.isActive = true
   sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
 
+  window.location.hash = walletOptions.menu.nfts.hash
+
   displayWallet()
 })
 document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
@@ -768,6 +801,8 @@ document.getElementById('hide-small-balances-container').addEventListener('click
   walletOptions.hideSmallBalance = !walletOptions.hideSmallBalance
   sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
   document.getElementById('hide-small-balances-icon').src = walletOptions.hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
+
+  window.location.hash = walletOptions.menu.transactions.hash
 
   displayWallet()
 })
