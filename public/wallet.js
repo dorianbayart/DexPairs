@@ -577,7 +577,7 @@ function displayTokens() {
 // Display Wallet NFTs
 function displayNFTs() {
   let listLi = document.getElementById('wallet').querySelectorAll('li')
-  const nftContracts = filteredNFTWallet()
+  const nftContracts = filteredNFTWallet().sort(sortNFTWallet)
 
   if(listLi.length === 0 || listLi.length !== nftContracts.length || nftContracts.length === filteredWallet().length) {
     document.getElementById('wallet').innerHTML = null
@@ -591,7 +591,7 @@ function displayNFTs() {
 
   nftContracts.forEach(function (id) {
 
-    const nfts = wallet_NFT[id].tokens
+    const nfts = wallet_NFT[id].tokens.sort(sortNFTTokens)
 
     nfts.forEach(function (nft) {
       if(walletOptions.hideNoImage && !nft.image) {
@@ -1019,6 +1019,20 @@ const sortWallet = (id_a, id_b) => {
   if(a.value * a.price < b.value * b.price) return 1
   // then sort by name
   return a.tokenName.localeCompare(b.tokenName)
+}
+/* Utils - sort the NFT wallet */
+const sortNFTWallet = (id_a, id_b) => {
+  let a = wallet_NFT[id_a]
+  let b = wallet_NFT[id_b]
+  // sort by network
+  if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
+  if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+  // then sort by name
+  return a.tokenName.localeCompare(b.tokenName)
+}
+/* Utils - sort the NFT tokens (can have many tokens of the same contract) */
+const sortNFTTokens = (t_a, t_b) => {
+  return t_a.localeCompare(t_b)
 }
 
 /* Utils - getId from Address and Network */
