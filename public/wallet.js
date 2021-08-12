@@ -586,6 +586,10 @@ function displayNFTs() {
       }
       let element = Array.from(listLi).find(el => el.id === id + nft.tokenSymbol + nft.tokenID)
 
+      if(nft.image.includes('ipfs://') && !nft.alt_image) {
+        nft.alt_image = 'https://ipfs.io/ipfs/' + nft.slice(0, 7)
+      }
+
       if(element) {
         element.querySelector('a.tokenURI').href = nft.tokenURI
         // TODO Display text when nft.image is empty
@@ -638,6 +642,11 @@ function displayNFTs() {
             imgPreview.src = nft.image
             imgPreview.classList.add('preview')
             imgPreview.alt = 'NFT Metadata'
+            imgPreview.onerror = function() {
+              this.onerror = null
+              this.src = nft.alt_image
+              return true
+            }
             aTokenURI.appendChild(imgPreview)
           }
           aTokenURI.href = nft.tokenURI
