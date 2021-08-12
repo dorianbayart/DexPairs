@@ -161,6 +161,9 @@ canvas#wallet-chart {
   font-size: 0.8em;
   cursor: pointer;
 }
+#hide-small-balances-container.none, #hide-no-image-container.none {
+  display: none;
+}
 #hide-small-balances-container img#hide-small-balances-icon,
 #hide-no-image-container img#hide-no-image-icon {
   height: 12px;
