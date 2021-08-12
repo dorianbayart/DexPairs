@@ -149,8 +149,8 @@ function configureWallet(inputAddress) {
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
-    setTimeout(() => getTokenTx(NETWORK[network].enum), walletOptions.menu.tokens.isActive ? 50 : 750)
-    setTimeout(() => getERC721Tx(NETWORK[network].enum), walletOptions.menu.nfts.isActive ? 50 : 750)
+    setTimeout(() => getTokenTx(NETWORK[network].enum), walletOptions.menu.tokens.isActive ? 50 : 2500)
+    setTimeout(() => getERC721Tx(NETWORK[network].enum), walletOptions.menu.nfts.isActive ? 50 : 2500)
   });
 
   sessionStorage.setItem('walletAddress', walletAddress)
@@ -174,8 +174,9 @@ function getTokenTx(network) {
 
       timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), (Math.round(Math.random() * 15) + 45) * 1000 * (tokentx.length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
+      console.log(network, 'getTokenTx', this.response)
       clearTimeout(timerGetTokenTx[network])
-      setTimeout(() => getTokenTx(network), 750)
+      setTimeout(() => getTokenTx(network), 1250)
     }
   }
   xmlhttp.onerror = function() {
@@ -201,8 +202,9 @@ function getERC721Tx(network) {
 
       timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx.length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
+      console.log(network, 'getERC721Tx', this.response)
       clearTimeout(timerGetERC721Tx[network])
-      setTimeout(() => getERC721Tx(network), 750)
+      setTimeout(() => getERC721Tx(network), 1250)
     }
   }
   xmlhttp.onerror = function() {
@@ -594,8 +596,8 @@ function displayNFTs() {
         }
       } else {
         let li = document.createElement('li')
-        li.title = ''
-        li.id = id + wallet_NFT[id].tokenSymbol + nft.id
+        li.title = wallet_NFT[id].tokenName + ' #' + nft.id
+        li.id = id + '-' + wallet_NFT[id].tokenSymbol + '-' + nft.id
         li.classList.add('nft')
 
         let spanNetwork = document.createElement('span')
