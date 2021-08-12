@@ -24,7 +24,8 @@ let walletOptions = {
       isActive: false
     }
   },
-  hideSmallBalance: true
+  hideSmallBalance: true,
+  hideNoImage: true
 }
 
 
@@ -563,8 +564,7 @@ function displayTokens() {
 // Display Wallet NFTs
 function displayNFTs() {
   let listLi = document.getElementById('wallet').querySelectorAll('li')
-  // TODO Check if it works ...
-  const nftContracts = Object.keys(wallet_NFT)
+  const nftContracts = filteredNFTWallet()
 
   if(listLi.length === 0 || listLi.length !== nftContracts.length || nftContracts.length === filteredWallet().length) {
     document.getElementById('wallet').innerHTML = null
@@ -581,6 +581,9 @@ function displayNFTs() {
     const nfts = wallet_NFT[id].tokens
 
     nfts.forEach(function (nft) {
+      if(walletOptions.hideNoImage && !nft.image) {
+        return
+      }
       let element = Array.from(listLi).find(el => el.id === id + nft.tokenSymbol + nft.tokenID)
 
       if(element) {
@@ -760,6 +763,7 @@ function initializeHTML() {
     walletOptions = JSON.parse(sessionStorage.getItem('walletOptions'))
   }
   document.getElementById('hide-small-balances-icon').src = walletOptions.hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
+  document.getElementById('hide-no-image-icon').src = walletOptions.hideNoImage ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
   walletOptions.menu[Object.keys(walletOptions.menu).find(item => walletOptions.menu[item].isActive)].isActive = false
   if(hash) {
     const menu = Object.keys(walletOptions.menu).find(item => walletOptions.menu[item].hash === hash)
@@ -774,10 +778,25 @@ function initializeHTML() {
     window.location.hash = walletOptions.menu.tokens.hash
   }
 
+  toggleHideButtons()
+
 
   if(address) {
     document.getElementById('input-wallet').value = address
     configureWallet(address)
+  }
+}
+
+function toggleHideButtons() {
+  if(walletOptions.menu.tokens.isActive) {
+    document.getElementById('hide-small-balances-icon').classList.remove('none')
+    document.getElementById('hide-no-image-icon').classList.toggle('none', true)
+  } else if(walletOptions.menu.nfts.isActive) {
+    document.getElementById('hide-no-image-icon').classList.remove('none')
+    document.getElementById('hide-small-balances-icon').classList.toggle('none', true)
+  } else if(walletOptions.menu.transactions.isActive) {
+    document.getElementById('hide-no-image-icon').classList.toggle('none', true)
+    document.getElementById('hide-small-balances-icon').classList.toggle('none', true)
   }
 }
 
@@ -809,6 +828,7 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
 
   window.location.hash = walletOptions.menu.tokens.hash
 
+  toggleHideButtons()
   displayWallet()
 })
 document.getElementById('menu-nfts').addEventListener('click', (e) => {
@@ -822,6 +842,7 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
 
   window.location.hash = walletOptions.menu.nfts.hash
 
+  toggleHideButtons()
   displayWallet()
 })
 document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
@@ -830,7 +851,13 @@ document.getElementById('hide-small-balances-container').addEventListener('click
   sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
   document.getElementById('hide-small-balances-icon').src = walletOptions.hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
 
-  window.location.hash = walletOptions.menu.transactions.hash
+  displayWallet()
+})
+document.getElementById('hide-no-image-container').addEventListener('click', (e) => {
+  e.preventDefault()
+  walletOptions.hideNoImage = !walletOptions.hideNoImage
+  sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
+  document.getElementById('hide-no-image-icon').src = walletOptions.hideNoImage ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
 
   displayWallet()
 })
@@ -989,6 +1016,15 @@ const filteredWallet = () => {
     filtered = filtered.filter(id => Math.abs(calculateValue(wallet[id].value, wallet[id].price, wallet[id].tokenDecimal)) >= 0.01 )
   }
   return filtered
+}
+
+/* Utils - Wallet with/without preview images */
+const filteredNFTWallet = () => {
+  let filteredNFTContracts = Object.keys(wallet_NFT)
+  if(walletOptions.hideNoImage) {
+    filteredNFTContracts = filteredNFTContracts.filter(id => wallet_NFT[id].tokens.some(token => token.tokenURI && token.image))
+  }
+  return filteredNFTContracts
 }
 
 /* Utils - Calculate balance from value */

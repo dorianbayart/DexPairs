@@ -222,7 +222,7 @@ const setGas = (network) => {
   let web3 = getWeb3(NETWORK[network].enum)
   if(web3) {
     web3.eth.getGasPrice().then(gas => {
-      sessionStorage.setItem('gas-' + NETWORK[network].enum, gasRound(web3.utils.fromWei(gas, 'gwei')))
+      // sessionStorage.setItem('gas-' + NETWORK[network].enum, gasRound(web3.utils.fromWei(gas, 'gwei')))
       const li = document.getElementById('gas-' + NETWORK[network].enum)
       li.innerHTML = ''
       let span = document.createElement('span')
