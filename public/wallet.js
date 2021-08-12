@@ -631,45 +631,42 @@ function displayNFTs() {
         spanTokenId.classList.add('tokenID')
         li.appendChild(spanTokenId)
 
-        let aTokenURI = document.createElement('a')
-        // TODO Display text when nft.image is empty
-        let imgPreview = document.createElement('img')
-        if(nft.image) { imgPreview.src = nft.image }
-        imgPreview.classList.add('preview')
-        imgPreview.alt = 'NFT Metadata'
-        aTokenURI.href = nft.tokenURI
-        aTokenURI.target = "_blank"
-        aTokenURI.classList.add('tokenURI')
-        aTokenURI.appendChild(imgPreview)
-        li.appendChild(aTokenURI)
+        if(nft.tokenURI) {
+          let aTokenURI = document.createElement('a')
+          if(nft.image) {
+            let imgPreview = document.createElement('img')
+            imgPreview.src = nft.image
+            imgPreview.classList.add('preview')
+            imgPreview.alt = 'NFT Metadata'
+            aTokenURI.appendChild(imgPreview)
+          }
+          aTokenURI.href = nft.tokenURI
+          aTokenURI.target = "_blank"
+          aTokenURI.classList.add('tokenURI')
+          li.appendChild(aTokenURI)
+        }
 
 
         aTokenURI.addEventListener("click", function(e) {
           let item = e.target
-
           while(item.id.length < 1) {
             item = item.parentNode
           }
+          expandCollapseItem(item)
+        })
 
+        li.addEventListener("click", function(e) {
+          let item = e.target
+          while(item.id.length < 1 || item.id.includes('chart')) {
+            item = item.parentNode
+          }
           expandCollapseItem(item)
         })
 
         document.getElementById('wallet-ul').appendChild(li)
 
-        li.addEventListener("click", function(e) {
-          let item = e.target
-
-          while(item.id.length < 1 || item.id.includes('chart')) {
-            item = item.parentNode
-          }
-
-          expandCollapseItem(item)
-        })
-
       }
-
     })
-
   })
 
   if(nftContracts.length > 0) {
