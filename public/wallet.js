@@ -2,6 +2,7 @@
 let globalChart = null
 let walletValue = 0
 let loading = false
+let displayWalletTimer = null
 let timerGetTokenTx = {}
 let timerGetERC721Tx = {}
 let timerGetNetworkBalance = {}
@@ -253,7 +254,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
       wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
       sessionStorage.setItem('wallet', JSON.stringify(wallet))
     } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
-      sessionStorage.setItem('wallet-NFT', JSON.stringify(wallet_NFT))
+      // sessionStorage.setItem('wallet-NFT', JSON.stringify(wallet_NFT))
 
       if(Object.keys(wallet_NFT).some(id => wallet_NFT[id].number > 0)) {
         document.getElementById('menu-nfts').classList.remove('none')
@@ -376,7 +377,7 @@ function searchNFTs(network) {
         if(wallet_NFT[id]) {
           getTokenBalanceWeb3(wallet_NFT[id].contract, network)
         }
-      }, (i+1) * 75)
+      }, (i+1) * 150)
     })
 
     sessionStorage.setItem('latest-erc721-block-' + network, erc721tx[0].blockNumber)
@@ -425,15 +426,18 @@ function getNetworkBalance(network) {
 
 
 function displayWallet() {
-  if(walletOptions.menu.tokens.isActive) {
-    displayTokens()
-  } else if(walletOptions.menu.nfts.isActive) {
-    displayNFTs()
-  } else if(walletOptions.menu.transactions.isActive) {
-    displayTransactions()
-  }
-  updateGlobalPrice()
-  updateGlobalChart()
+  clearTimeout(displayWalletTimer)
+  displayWalletTimer = setTimeout(function() {
+    if(walletOptions.menu.tokens.isActive) {
+      displayTokens()
+    } else if(walletOptions.menu.nfts.isActive) {
+      displayNFTs()
+    } else if(walletOptions.menu.transactions.isActive) {
+      displayTransactions()
+    }
+    updateGlobalPrice()
+    updateGlobalChart()
+  }, 500)
 }
 
 // Display Wallet Tokens
