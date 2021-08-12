@@ -264,7 +264,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
     if(Object.keys(wallet).includes(id)) { // ERC-20
       wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
-      sessionStorage.setItem('wallet', JSON.stringify(wallet))
+      // sessionStorage.setItem('wallet', JSON.stringify(wallet))
     } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
       // sessionStorage.setItem('wallet-NFT', JSON.stringify(wallet_NFT))
 
@@ -441,15 +441,17 @@ function displayWallet(force = false) {
   clearTimeout(displayWalletTimer)
   displayWalletTimer = setTimeout(function() {
     if(walletOptions.menu.tokens.isActive) {
+      sessionStorage.setItem('wallet', JSON.stringify(wallet))
       displayTokens()
     } else if(walletOptions.menu.nfts.isActive) {
+      sessionStorage.setItem('wallet-NFT', JSON.stringify(wallet_NFT))
       displayNFTs()
     } else if(walletOptions.menu.transactions.isActive) {
       displayTransactions()
     }
     updateGlobalPrice()
     updateGlobalChart()
-  }, force ? 15 : 500)
+  }, force ? 25 : 400)
 }
 
 // Display Wallet Tokens
