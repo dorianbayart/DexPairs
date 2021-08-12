@@ -319,9 +319,6 @@ function searchTokens(network) {
     tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
   }
 
-  // search tokens only in received transactions
-  tokentx = tokentx.filter(tx => tx.to.toLowerCase() === walletAddress.toLowerCase())
-
   if(tokentx.length > 0) {
     tokentx.forEach((item, i) => {
       const id = getId(item.contractAddress, network)
@@ -361,9 +358,6 @@ function searchNFTs(network) {
   if(latestBlock) {
     erc721tx = erc721tx.filter(tx => tx.blockNumber > latestBlock)
   }
-
-  // search tokens only in received transactions
-  erc721tx = erc721tx.filter(tx => tx.to.toLowerCase() === walletAddress.toLowerCase())
 
   if(erc721tx.length > 0) {
     erc721tx.forEach((item, i) => {
