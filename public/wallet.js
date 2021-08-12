@@ -3,6 +3,8 @@ let globalChart = null
 let walletValue = 0
 let loading = false
 let displayWalletTimer = null
+let tokentx = {}
+let erc721tx = {}
 let timerGetTokenTx = {}
 let timerGetERC721Tx = {}
 let timerGetNetworkBalance = {}
@@ -168,13 +170,12 @@ function getTokenTx(network) {
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       let data = JSON.parse(this.responseText)
-      const tokentx = data.result
-      sessionStorage.setItem('tokentx-' + network, JSON.stringify(tokentx))
+      tokentx[network] = data.result
 
       searchTokens(network)
 
       clearTimeout(timerGetTokenTx[network])
-      timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), 100000 * (tokentx.length > 0 ? 1 : 3))
+      timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), 100000 * (tokentx[network].length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
       console.log(network, 'getTokenTx', this.response)
       clearTimeout(timerGetTokenTx[network])
@@ -197,13 +198,12 @@ function getERC721Tx(network) {
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       let data = JSON.parse(this.responseText)
-      const erc721tx = data.result
-      sessionStorage.setItem('erc721tx-' + network, JSON.stringify(erc721tx))
+      erc721tx[network] = data.result
 
       searchNFTs(network)
 
       clearTimeout(timerGetERC721Tx[network])
-      timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx.length > 0 ? 1 : 3))
+      timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx[network].length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
       console.log(network, 'getERC721Tx', this.response)
       clearTimeout(timerGetERC721Tx[network])
@@ -306,21 +306,21 @@ function readNFTMetadata(id, indexId, tokenURI) {
 
 
 function searchTokens(network) {
-  let tokentx = JSON.parse(sessionStorage.getItem('tokentx-' + network))
+  let tx = tokentx[network]
   const latestBlock = sessionStorage.getItem('latest-block-' + network)
 
-  if(!tokentx || typeof tokentx === 'string' || tokentx.length === 0) {
+  if(!tx || typeof tx === 'string' || tx.length === 0) {
     return
   }
 
   loading = false
 
   if(latestBlock) {
-    tokentx = tokentx.filter(tx => tx.blockNumber > latestBlock)
+    tx = tx.filter(tx => tx.blockNumber > latestBlock)
   }
 
-  if(tokentx.length > 0) {
-    tokentx.forEach((item, i) => {
+  if(tx.length > 0) {
+    tx.forEach((item, i) => {
       const id = getId(item.contractAddress, network)
       wallet[id] = {
         network: network,
@@ -341,26 +341,26 @@ function searchTokens(network) {
       }, (i+1) * 75)
     })
 
-    sessionStorage.setItem('latest-block-' + network, tokentx[0].blockNumber)
+    sessionStorage.setItem('latest-block-' + network, tx[0].blockNumber)
   }
 }
 
 function searchNFTs(network) {
-  let erc721tx = JSON.parse(sessionStorage.getItem('erc721tx-' + network))
+  let tx = erc721tx[network]
   const latestBlock = sessionStorage.getItem('latest-erc721-block-' + network)
 
-  if(!erc721tx || typeof erc721tx === 'string' || erc721tx.length === 0) {
+  if(!tx || typeof tx === 'string' || tx.length === 0) {
     return
   }
 
   loading = false
 
   if(latestBlock) {
-    erc721tx = erc721tx.filter(tx => tx.blockNumber > latestBlock)
+    tx = tx.filter(tx => tx.blockNumber > latestBlock)
   }
 
-  if(erc721tx.length > 0) {
-    erc721tx.forEach((item, i) => {
+  if(tx.length > 0) {
+    tx.forEach((item, i) => {
       const id = getId(item.contractAddress, network)
       wallet_NFT[id] = {
         network: network,
@@ -380,7 +380,7 @@ function searchNFTs(network) {
       }, (i+1) * 150)
     })
 
-    sessionStorage.setItem('latest-erc721-block-' + network, erc721tx[0].blockNumber)
+    sessionStorage.setItem('latest-erc721-block-' + network, tx[0].blockNumber)
   }
 }
 
