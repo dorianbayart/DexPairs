@@ -595,7 +595,7 @@ function displayNFTs() {
       } else {
         let li = document.createElement('li')
         li.title = ''
-        li.id = id + nft.tokenSymbol + nft.tokenID
+        li.id = id + wallet_NFT[id].tokenSymbol + nft.id
         li.classList.add('nft')
 
         let spanNetwork = document.createElement('span')
