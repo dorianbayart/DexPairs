@@ -248,7 +248,13 @@ function getTokenBalanceWeb3(contractAddress, network) {
             if(error) { return }
             nftContract.methods.tokenURI(indexId).call((error, tokenURI) => {
               if(error) { return }
-              wallet_NFT[id].tokens.push({ id: indexId, tokenURI: tokenURI })
+              let token = { id: indexId, tokenURI: tokenURI }
+              if(tokenURI.includes('ipfs://')) {
+                token.original_tokenURI = tokenURI
+                token.tokenURI = 'https://ipfs.io/ipfs/' + tokenURI.slice(-tokenURI.length + 7)
+              }
+
+              wallet_NFT[id].tokens.push(token)
               readNFTMetadata(id, indexId, tokenURI)
             })
           })
@@ -281,6 +287,11 @@ function readNFTMetadata(id, indexId, tokenURI) {
       .then(json => {
         const data = JSON.parse(json.contents)
         wallet_NFT[id].tokens[tokenIndex].metadata = data
+        if(data && data.nft) {
+          data = data.nft
+        } else if (data && data.result && data.result.data) {
+          data = data.result.data
+        }
         if(data && data.image) {
           wallet_NFT[id].tokens[tokenIndex].image = data.image
         } else if (data && data.image_url) {
@@ -586,7 +597,7 @@ function displayNFTs() {
       }
       let element = Array.from(listLi).find(el => el.id === id + nft.tokenSymbol + nft.tokenID)
 
-      if(nft.image.includes('ipfs://') && !nft.alt_image) {
+      if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
         nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
       }
 
@@ -644,7 +655,7 @@ function displayNFTs() {
             imgPreview.alt = 'NFT Metadata'
             imgPreview.onerror = function() {
               this.onerror = null
-              this.src = nft.alt_image
+              this.src = nft.alt_image ? nft.alt_image : ""
               return true
             }
             aTokenURI.appendChild(imgPreview)
