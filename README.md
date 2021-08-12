@@ -11,6 +11,7 @@
   * Cross-chain transactions and tokens explorer
   * Search tokens in transactions on different protocols
   * Display balances/prices/values
+  * Display NFTs collection
   * Estimate wallet history with a global chart (based on Ethereum price evolution)
 
 
