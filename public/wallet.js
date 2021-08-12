@@ -587,7 +587,7 @@ function displayNFTs() {
       let element = Array.from(listLi).find(el => el.id === id + nft.tokenSymbol + nft.tokenID)
 
       if(nft.image.includes('ipfs://') && !nft.alt_image) {
-        nft.alt_image = 'https://ipfs.io/ipfs/' + nft.slice(0, 7)
+        nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
       }
 
       if(element) {
