@@ -148,7 +148,6 @@ function configureWallet(inputAddress) {
   }
 
   Object.keys(NETWORK).forEach((network, i) => {
-    console.log(network, 'forEach NETWORK')
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
@@ -177,7 +176,7 @@ function getTokenTx(network) {
       clearTimeout(timerGetTokenTx[network])
       timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), 100000 * (tokentx[network].length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
-      console.log(network, 'getTokenTx', this.response)
+      // console.log(network, 'getTokenTx', this.response)
       clearTimeout(timerGetTokenTx[network])
       setTimeout(() => getTokenTx(network), 1250)
     }
@@ -205,7 +204,7 @@ function getERC721Tx(network) {
       clearTimeout(timerGetERC721Tx[network])
       timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx[network].length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
-      console.log(network, 'getERC721Tx', this.response)
+      // console.log(network, 'getERC721Tx', this.response)
       clearTimeout(timerGetERC721Tx[network])
       setTimeout(() => getERC721Tx(network), 1250)
     }
@@ -285,7 +284,7 @@ function readNFTMetadata(id, indexId, tokenURI) {
     fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
       .then(res => res.json())
       .then(json => {
-        const data = JSON.parse(json.contents)
+        let data = JSON.parse(json.contents)
         wallet_NFT[id].tokens[tokenIndex].metadata = data
         if(data && data.nft) {
           data = data.nft
