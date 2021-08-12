@@ -253,7 +253,7 @@ function getSimpleData(network, callback) {
     if (this.readyState == 4 && this.status == 200) {
       const simple = JSON.parse(this.responseText)
       if(simple && Object.keys(simple).length > 0) {
-        sessionStorage.setItem('simple-' + network, JSON.stringify(simple))
+        NETWORK[network].simple_data = JSON.stringify(simple)
 
         if (callback && typeof callback === 'function') {
           callback();
@@ -347,7 +347,7 @@ const getPriceByAddressNetwork = (searchedAddress, network) => {
     rate = underlyingAssets[network + '-' + searchedAddress].rate
     debt = underlyingAssets[network + '-' + searchedAddress].debt
   }
-  let prices = JSON.parse(sessionStorage.getItem('simple-' + network))
+  let prices = JSON.parse(NETWORK[network].simple_data)
   if(prices && Object.keys(prices).length > 0) {
     return prices[address] ? prices[address].p * debt * rate : null
   }
