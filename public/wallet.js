@@ -82,7 +82,7 @@ function configureWallet(inputAddress) {
     wallet = {}
     wallet_NFT = {}
     loading = false
-    displayWallet()
+    displayWallet(true)
 
     walletOptionsContainer.classList.toggle('none', true)
 
@@ -109,7 +109,7 @@ function configureWallet(inputAddress) {
     wallet = {}
     wallet_NFT = {}
     loading = false
-    displayWallet()
+    displayWallet(true)
 
     stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
     stateContainer.classList.toggle('shadow-white', true)
@@ -125,7 +125,7 @@ function configureWallet(inputAddress) {
 
   if(sessionStorage.getItem('walletAddress') === inputAddress) {
     wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
-    displayWallet()
+    displayWallet(true)
   } else {
     sessionStorage.removeItem('wallet')
     wallet = {}
@@ -426,7 +426,7 @@ function getNetworkBalance(network) {
 }
 
 
-function displayWallet() {
+function displayWallet(force = false) {
   clearTimeout(displayWalletTimer)
   displayWalletTimer = setTimeout(function() {
     if(walletOptions.menu.tokens.isActive) {
@@ -438,7 +438,7 @@ function displayWallet() {
     }
     updateGlobalPrice()
     updateGlobalChart()
-  }, 500)
+  }, force ? 15 : 500)
 }
 
 // Display Wallet Tokens
@@ -789,14 +789,14 @@ function initializeHTML() {
 
 function toggleHideButtons() {
   if(walletOptions.menu.tokens.isActive) {
-    document.getElementById('hide-small-balances-icon').classList.remove('none')
-    document.getElementById('hide-no-image-icon').classList.toggle('none', true)
+    document.getElementById('hide-small-balances-container').classList.remove('none')
+    document.getElementById('hide-no-image-container').classList.toggle('none', true)
   } else if(walletOptions.menu.nfts.isActive) {
-    document.getElementById('hide-no-image-icon').classList.remove('none')
-    document.getElementById('hide-small-balances-icon').classList.toggle('none', true)
+    document.getElementById('hide-no-image-container').classList.remove('none')
+    document.getElementById('hide-small-balances-container').classList.toggle('none', true)
   } else if(walletOptions.menu.transactions.isActive) {
-    document.getElementById('hide-no-image-icon').classList.toggle('none', true)
-    document.getElementById('hide-small-balances-icon').classList.toggle('none', true)
+    document.getElementById('hide-no-image-container').classList.toggle('none', true)
+    document.getElementById('hide-small-balances-container').classList.toggle('none', true)
   }
 }
 
@@ -829,7 +829,7 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
   window.location.hash = walletOptions.menu.tokens.hash
 
   toggleHideButtons()
-  displayWallet()
+  displayWallet(true)
 })
 document.getElementById('menu-nfts').addEventListener('click', (e) => {
   e.preventDefault()
@@ -843,7 +843,7 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
   window.location.hash = walletOptions.menu.nfts.hash
 
   toggleHideButtons()
-  displayWallet()
+  displayWallet(true)
 })
 document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
   e.preventDefault()
@@ -851,7 +851,7 @@ document.getElementById('hide-small-balances-container').addEventListener('click
   sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
   document.getElementById('hide-small-balances-icon').src = walletOptions.hideSmallBalance ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
 
-  displayWallet()
+  displayWallet(true)
 })
 document.getElementById('hide-no-image-container').addEventListener('click', (e) => {
   e.preventDefault()
@@ -859,7 +859,7 @@ document.getElementById('hide-no-image-container').addEventListener('click', (e)
   sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
   document.getElementById('hide-no-image-icon').src = walletOptions.hideNoImage ? '/img/icons/check-square.svg' : '/img/icons/square.svg'
 
-  displayWallet()
+  displayWallet(true)
 })
 
 
