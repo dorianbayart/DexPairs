@@ -146,11 +146,12 @@ function configureWallet(inputAddress) {
   }
 
   Object.keys(NETWORK).forEach((network, i) => {
+    console.log(network, 'forEach NETWORK')
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
     getNetworkBalance(NETWORK[network].enum)
-    setTimeout(() => getTokenTx(NETWORK[network].enum), walletOptions.menu.tokens.isActive ? 50 : 2500)
-    setTimeout(() => getERC721Tx(NETWORK[network].enum), walletOptions.menu.nfts.isActive ? 50 : 2500)
+    timerGetTokenTx[network] = setTimeout(() => getTokenTx(NETWORK[network].enum), walletOptions.menu.tokens.isActive ? 50 : 2500)
+    timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(NETWORK[network].enum), walletOptions.menu.nfts.isActive ? 50 : 2500)
   });
 
   sessionStorage.setItem('walletAddress', walletAddress)
@@ -172,7 +173,8 @@ function getTokenTx(network) {
 
       searchTokens(network)
 
-      timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), (Math.round(Math.random() * 15) + 45) * 1000 * (tokentx.length > 0 ? 1 : 3))
+      clearTimeout(timerGetTokenTx[network])
+      timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), 100000 * (tokentx.length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
       console.log(network, 'getTokenTx', this.response)
       clearTimeout(timerGetTokenTx[network])
@@ -200,6 +202,7 @@ function getERC721Tx(network) {
 
       searchNFTs(network)
 
+      clearTimeout(timerGetERC721Tx[network])
       timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx.length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
       console.log(network, 'getERC721Tx', this.response)
@@ -415,6 +418,7 @@ function getNetworkBalance(network) {
 
     displayWallet()
 
+    clearTimeout(timerGetNetworkBalance[network])
     timerGetNetworkBalance[network] = setTimeout(() => getNetworkBalance(network), (Math.round(Math.random() * 15) + 25) * 1000)
 
   }, error => {
