@@ -176,7 +176,6 @@ function getTokenTx(network) {
       clearTimeout(timerGetTokenTx[network])
       timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), 100000 * (tokentx[network].length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
-      // console.log(network, 'getTokenTx', this.response)
       clearTimeout(timerGetTokenTx[network])
       setTimeout(() => getTokenTx(network), 1250)
     }
@@ -204,7 +203,6 @@ function getERC721Tx(network) {
       clearTimeout(timerGetERC721Tx[network])
       timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx[network].length > 0 ? 1 : 3))
     } else if(this.response && this.response.includes("Max rate limit reached")) {
-      // console.log(network, 'getERC721Tx', this.response)
       clearTimeout(timerGetERC721Tx[network])
       setTimeout(() => getERC721Tx(network), 1250)
     }
@@ -263,10 +261,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
 
     if(Object.keys(wallet).includes(id)) { // ERC-20
       wallet[id].price = getPriceByAddressNetwork(contractAddress, wallet[id].network)
-      // sessionStorage.setItem('wallet', JSON.stringify(wallet))
     } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
-      // sessionStorage.setItem('wallet-NFT', JSON.stringify(wallet_NFT))
-
       if(Object.keys(wallet_NFT).some(id => wallet_NFT[id].number > 0)) {
         document.getElementById('menu-nfts').classList.remove('none')
       } else {
@@ -564,6 +559,7 @@ function displayTokens() {
     document.getElementById('input-wallet-container').classList.remove('margin-top')
     document.getElementById('state').classList.remove('shadow-white')
   } else {
+    document.getElementById('global').classList.toggle('none', true)
     document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
     document.getElementById('connect-demo-container').classList.remove('none')
     const stateContainer = document.getElementById('state')
@@ -582,7 +578,9 @@ function displayNFTs() {
   let listLi = document.getElementById('wallet').querySelectorAll('li')
   const nftContracts = filteredNFTWallet().sort(sortNFTWallet)
 
-  if(listLi.length === 0 || listLi.length !== nftContracts.length || nftContracts.length === filteredWallet().length) {
+  const nftNumber = nftContracts.reduce((prev, curr) => prev + wallet_NFT[curr].tokens.length, 0)
+
+  if(listLi.length === 0 || listLi.length !== nftNumber || nftNumber === filteredWallet().length) {
     document.getElementById('wallet').innerHTML = null
     if(nftContracts.length > 0) {
       let ul = document.createElement('ul')
@@ -600,16 +598,18 @@ function displayNFTs() {
       if(walletOptions.hideNoImage && !nft.image) {
         return
       }
-      let element = Array.from(listLi).find(el => el.id === id + nft.tokenSymbol + nft.tokenID)
+      let element = Array.from(listLi).find(el => el.id === id + '-' + wallet_NFT[id].tokenSymbol + '-' + nft.id)
 
       if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
         nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
       }
 
       if(element) {
-        element.querySelector('a.tokenURI').href = nft.tokenURI
+        if(element.querySelector('a.tokenURI')) {
+          element.querySelector('a.tokenURI').href = nft.tokenURI
+        }
         // TODO Display text when nft.image is empty
-        if(nft.image && element.querySelector('img.preview').src !== nft.image) {
+        if(nft.image && element.querySelector('img.preview') && element.querySelector('img.preview').src !== nft.image) {
           element.querySelector('img.preview').src = nft.image
         }
       } else {
@@ -710,7 +710,7 @@ function displayNFTs() {
     }
   }
 
-  document.getElementById('global').classList.remove('none')
+  // document.getElementById('global').classList.remove('none')
   document.getElementById('connect-demo-container').classList.toggle('none', true)
 
   document.getElementById('state').innerHTML = null
@@ -780,6 +780,11 @@ function initializeHTML() {
     address = sessionStorage.getItem('walletAddress')
   }
 
+  if(address) {
+    document.getElementById('input-wallet').value = address
+    configureWallet(address)
+  }
+
   if(sessionStorage.getItem('walletOptions')) {
     walletOptions = JSON.parse(sessionStorage.getItem('walletOptions'))
   }
@@ -792,32 +797,28 @@ function initializeHTML() {
       walletOptions.menu[menu].isActive = true
     } catch {
       walletOptions.menu.tokens.isActive = true
-      window.location.hash = walletOptions.menu.tokens.hash
     }
   } else {
     walletOptions.menu.tokens.isActive = true
-    window.location.hash = walletOptions.menu.tokens.hash
   }
 
   toggleHideButtons()
 
-
-  if(address) {
-    document.getElementById('input-wallet').value = address
-    configureWallet(address)
-  }
 }
 
 function toggleHideButtons() {
   if(walletOptions.menu.tokens.isActive) {
     document.getElementById('hide-small-balances-container').classList.remove('none')
     document.getElementById('hide-no-image-container').classList.toggle('none', true)
+    document.getElementById('global').classList.remove('none')
   } else if(walletOptions.menu.nfts.isActive) {
     document.getElementById('hide-no-image-container').classList.remove('none')
     document.getElementById('hide-small-balances-container').classList.toggle('none', true)
+    document.getElementById('global').classList.toggle('none', true)
   } else if(walletOptions.menu.transactions.isActive) {
     document.getElementById('hide-no-image-container').classList.toggle('none', true)
     document.getElementById('hide-small-balances-container').classList.toggle('none', true)
+    document.getElementById('global').classList.toggle('none', true)
   }
 }
 
@@ -925,7 +926,6 @@ function updateGlobalChart() {
           data: tokenData,
           backgroundColor: '#0000FF88',
           borderColor: '#0000FF88',
-          //fill: '#0000FF44',
           radius: 0,
           tension: 0.3,
           borderWidth: 1,
@@ -952,7 +952,6 @@ function updateGlobalChart() {
         animation: false,
         responsive: true,
         maintainAspectRatio: false,
-        //aspectRatio: 3,
         scaleShowLabels: false,
         tooltipEvents: [],
         pointDot: false,

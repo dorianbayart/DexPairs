@@ -90,7 +90,7 @@ body {
   margin: 1em auto 0;
   align-items: center;
   transition: all 750ms ease-in-out;
-  max-height: none;
+  max-height: 178px;
   border-radius: 12px;
   border: 1px solid #0002;
   flex-wrap: wrap;
@@ -98,6 +98,7 @@ body {
 #global.wallet-information.none {
   max-height: 0;
   padding: 0;
+  margin: 0 auto;
   border-color: #FFF;
   z-index: -1;
 }
