@@ -255,7 +255,7 @@ function getTokenBalanceWeb3(contractAddress, network) {
               }
 
               wallet_NFT[id].tokens.push(token)
-              readNFTMetadata(id, indexId, tokenURI)
+              readNFTMetadata(id, indexId, token.tokenURI)
             })
           })
         }
@@ -292,9 +292,7 @@ function readNFTMetadata(id, indexId, tokenURI) {
         } else if (data && data.result && data.result.data) {
           data = data.result.data
         }
-        if(data && data.image) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.image
-        } else if (data && data.image_url) {
+        if (data && data.image_url) {
           wallet_NFT[id].tokens[tokenIndex].image = data.image_url
         } else if (data && data.imageUrl) {
           wallet_NFT[id].tokens[tokenIndex].image = data.imageUrl
@@ -302,6 +300,12 @@ function readNFTMetadata(id, indexId, tokenURI) {
           wallet_NFT[id].tokens[tokenIndex].image = data.big_image
         } else if (data && data.small_image) {
           wallet_NFT[id].tokens[tokenIndex].image = data.small_image
+        } else if (data && data.gif) {
+          wallet_NFT[id].tokens[tokenIndex].image = data.gif
+        } else if (data && data.gif_url) {
+          wallet_NFT[id].tokens[tokenIndex].image = data.gif_url
+        } else if(data && data.image) {
+          wallet_NFT[id].tokens[tokenIndex].image = data.image
         } else {
           wallet_NFT[id].tokens[tokenIndex].image = tokenURI
         }
