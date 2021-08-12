@@ -631,7 +631,7 @@ function displayNFTs() {
         spanTokenId.classList.add('tokenID')
         li.appendChild(spanTokenId)
 
-        if(nft.tokenURI) {
+        if(nft.tokenURI) { // TODO improve display when data is not reachable
           let aTokenURI = document.createElement('a')
           if(nft.image) {
             let imgPreview = document.createElement('img')
@@ -644,16 +644,15 @@ function displayNFTs() {
           aTokenURI.target = "_blank"
           aTokenURI.classList.add('tokenURI')
           li.appendChild(aTokenURI)
+
+          aTokenURI.addEventListener("click", function(e) {
+            let item = e.target
+            while(item.id.length < 1) {
+              item = item.parentNode
+            }
+            expandCollapseItem(item)
+          })
         }
-
-
-        aTokenURI.addEventListener("click", function(e) {
-          let item = e.target
-          while(item.id.length < 1) {
-            item = item.parentNode
-          }
-          expandCollapseItem(item)
-        })
 
         li.addEventListener("click", function(e) {
           let item = e.target
