@@ -283,7 +283,7 @@ function readNFTMetadata(id, indexId, tokenURI) {
         wallet_NFT[id].tokens[tokenIndex].metadata = data
         if(data && data.nft) {
           data = data.nft
-        } else if (data && data.data &&) {
+        } else if (data && data.data) {
           data = data.data
         } else if (data && data.result && data.result.data) {
           data = data.result.data
