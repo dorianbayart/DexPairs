@@ -150,10 +150,16 @@ function configureWallet(inputAddress) {
   Object.keys(NETWORK).forEach((network, i) => {
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
-    getNetworkBalance(NETWORK[network].enum)
-    timerGetTokenTx[network] = setTimeout(() => getTokenTx(NETWORK[network].enum), walletOptions.menu.tokens.isActive ? 50 : 2500)
-    timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(NETWORK[network].enum), walletOptions.menu.nfts.isActive ? 50 : 2500)
-  });
+    if(walletOptions.menu.tokens.isActive) {
+      clearTimeout(timerGetNetworkBalance[network])
+      clearTimeout(timerGetERC721Tx[network])
+      getNetworkBalance(NETWORK[network].enum)
+      getTokenTx(NETWORK[network].enum)
+    } else if(walletOptions.menu.nfts.isActive) {
+      clearTimeout(timerGetTokenTx[network])
+      getERC721Tx(NETWORK[network].enum)
+    }
+  })
 
   sessionStorage.setItem('walletAddress', walletAddress)
 }
@@ -216,7 +222,7 @@ function getERC721Tx(network) {
 
 
 // Get token balance
-function getTokenBalanceWeb3(contractAddress, network) {
+async function getTokenBalanceWeb3(contractAddress, network) {
   if(contractAddress === '0x0' || !walletAddress) return
 
   const id = getId(contractAddress, network)
@@ -224,14 +230,15 @@ function getTokenBalanceWeb3(contractAddress, network) {
   let contract = getContract(contractAddress, network)
 
   // Call balanceOf function
-  contract.methods.balanceOf(walletAddress).call((error, value) => {
+  await contract.methods.balanceOf(walletAddress).call(async (error, value) => {
     if(!wallet[id] && !wallet_NFT[id]) {
       return
     }
 
     if(error) {
-      console.log('getTokenBalanceWeb3', error)
-      setTimeout(() => getTokenBalanceWeb3(contractAddress, network), 10000)
+      if(wallet[id]) {
+        setTimeout(() => getTokenBalanceWeb3(contractAddress, network), 10000)
+      }
     } else {
       if(Object.keys(wallet).includes(id)) { // ERC-20
         wallet[id].value = value
@@ -239,23 +246,9 @@ function getTokenBalanceWeb3(contractAddress, network) {
       } else if (Object.keys(wallet_NFT).includes(id)) { // ERC-721
         wallet_NFT[id].number = value
         let nftContract = getNFTContract(contractAddress, network)
-        // Loop over each NFT hold on this Contract by the WalletAddress
-        for (var i = 0; i < wallet_NFT[id].number; i++) {
-            nftContract.methods.tokenOfOwnerByIndex(walletAddress, i).call((error, indexId) => {
-              if(error) { return }
-              nftContract.methods.tokenURI(indexId).call((error, tokenURI) => {
-                if(error) { return }
-                let token = { id: indexId, tokenURI: tokenURI }
-                if(tokenURI.includes('ipfs://')) {
-                  token.original_tokenURI = tokenURI
-                  token.tokenURI = 'https://ipfs.io/ipfs/' + tokenURI.slice(-tokenURI.length + 7)
-                }
 
-                wallet_NFT[id].tokens.push(token)
-                setTimeout(readNFTMetadata(id, indexId, token.tokenURI), 25*i)
-              })
-            })
-        }
+        await populateNFTContract(contractAddress, network)
+        displayWallet()
       }
     }
 
@@ -273,14 +266,46 @@ function getTokenBalanceWeb3(contractAddress, network) {
   })
 }
 
-function readNFTMetadata(id, indexId, tokenURI) {
+async function populateNFTContract(contractAddress, network) {
+  const id = getId(contractAddress, network)
+  const nftContract = getNFTContract(contractAddress, network)
+
+  // Loop over each NFT hold on this Contract by the WalletAddress
+  for (var i = 0; i < wallet_NFT[id].number; i++) {
+      await nftContract.methods.tokenOfOwnerByIndex(walletAddress, i).call(async (error, indexId) => {
+        if(error) { return }
+        const t = wallet_NFT[id].tokens.find(token => token.id === indexId)
+        if(t) {
+          if(!t.image) {
+            await readNFTMetadata(id, indexId, t.tokenURI)
+          }
+          return
+        }
+        await nftContract.methods.tokenURI(indexId).call(async (error, tokenURI) => {
+          if(error) { return }
+          let token = { id: indexId, tokenURI: tokenURI }
+          if(tokenURI.includes('ipfs://')) {
+            token.original_tokenURI = tokenURI
+            token.tokenURI = 'https://ipfs.io/ipfs/' + tokenURI.slice(-tokenURI.length + 7)
+          }
+
+          wallet_NFT[id].tokens.push(token)
+          await readNFTMetadata(id, indexId, token.tokenURI)
+        })
+      })
+  }
+}
+
+async function readNFTMetadata(id, indexId, tokenURI) {
   const tokenIndex = wallet_NFT[id].tokens.findIndex(token => token.id === indexId)
   if(tokenURI && tokenURI.includes('http')) {
-    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
+    await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
       .then(res => res.json())
       .then(json => {
         let data = JSON.parse(json.contents)
         wallet_NFT[id].tokens[tokenIndex].metadata = data
+
+        let url = ""
         if(data && data.nft) {
           data = data.nft
         } else if (data && data.data) {
@@ -289,30 +314,30 @@ function readNFTMetadata(id, indexId, tokenURI) {
           data = data.result.data
         }
         if (data && data.image_url) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.image_url
+          url = data.image_url
         } else if (data && data.imageUrl) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.imageUrl
+          url = data.imageUrl
         } else if (data && data.big_image) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.big_image
+          url = data.big_image
         } else if (data && data.small_image) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.small_image
+          url = data.small_image
         } else if (data && data.gif) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.gif
+          url = data.gif
         } else if (data && data.gif_url) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.gif_url
-        } else {
-          console.log(wallet_NFT[id].tokens[tokenIndex])
-          wallet_NFT[id].tokens[tokenIndex].image = ""
+          url = data.gif_url
         }
+
         if(data && data.image) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.image
+          url = data.image
         }
-        displayWallet()
+
+        wallet_NFT[id].tokens.find(token => token.id === indexId).image = url
+        // displayWallet()
       })
       .catch(error => {
         console.log(wallet_NFT[id].tokens[tokenIndex], error)
         wallet_NFT[id].tokens[tokenIndex].image = tokenURI
-        displayWallet()
+        // displayWallet()
       })
   }
 
@@ -386,12 +411,10 @@ function searchNFTs(network) {
       }
     })
 
-    Object.keys(wallet_NFT).filter(id => wallet_NFT[id].network === network).forEach((id, i) => {
-      setTimeout(function() {
-        if(wallet_NFT[id]) {
-          getTokenBalanceWeb3(wallet_NFT[id].contract, network)
-        }
-      }, (i+1) * 80)
+    Object.keys(wallet_NFT).sort(sortNFTWallet).filter(id => wallet_NFT[id].network === network).forEach(async (id, i) => {
+      if(wallet_NFT[id]) {
+        await getTokenBalanceWeb3(wallet_NFT[id].contract, network)
+      }
     })
 
     sessionStorage.setItem('latest-erc721-block-' + network, tx[0].blockNumber)
@@ -884,6 +907,13 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
 
   toggleHideButtons()
   displayWallet(true)
+
+  Object.keys(NETWORK).forEach((network, i) => {
+    clearTimeout(timerGetNetworkBalance[network])
+    clearTimeout(timerGetERC721Tx[network])
+    getNetworkBalance(NETWORK[network].enum)
+    getTokenTx(NETWORK[network].enum)
+  })
 })
 document.getElementById('menu-nfts').addEventListener('click', (e) => {
   e.preventDefault()
@@ -898,6 +928,11 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
 
   toggleHideButtons()
   displayWallet(true)
+
+  Object.keys(NETWORK).forEach((network, i) => {
+    clearTimeout(timerGetTokenTx[network])
+    getERC721Tx(NETWORK[network].enum)
+  })
 })
 document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
   e.preventDefault()
