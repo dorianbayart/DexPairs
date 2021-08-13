@@ -1,13 +1,13 @@
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    33% {
-        transform: rotate(360deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+  33% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .gas {
@@ -30,20 +30,16 @@
   flex-wrap: wrap;
 }
 .gas-container .gas-icon {
-  height: 1em;
+  display: flex;
   margin-left: 3px;
   margin-right: 6px;
 }
-.gas-container .gas-icon img {
-  height: 100%;
-}
 .gas-container .realtime-icon {
-  height: 1em;
+  display: flex;
   margin-left: 6px;
   margin-right: 3px;
 }
 .gas-container .realtime-icon img {
-  height: 100%;
   transition: all 250ms ease-in-out;
 }
 .gas-container .realtime-icon.active img {
@@ -52,7 +48,6 @@
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
   transform-origin: 50% 50%;
-  display: inline-block;
 }
 .gas-container .realtime-icon:hover img {
   transform: rotate(180deg);
