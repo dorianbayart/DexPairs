@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
   font-family: system-ui, Sans-Serif, Arial;
+  transition: all 750ms ease-in-out;
 }
 *.unselectable {
    -moz-user-select: -moz-none;

@@ -215,7 +215,7 @@ canvas#wallet-chart {
 }
 #wallet ul li span.network {
   width: 8%;
-  min-width: 32px;
+  min-width: 30px;
   display: flex;
 }
 #wallet ul li span.network img.network {
@@ -278,7 +278,7 @@ canvas#wallet-chart {
   border-radius: 12px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-  grid-auto-rows: minmax(180px, auto);
+  grid-auto-rows: minmax(120px, auto);
   grid-column-gap: 6px;
   grid-row-gap: 6px;
   padding: 6px;
