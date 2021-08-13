@@ -27,7 +27,7 @@ let walletOptions = {
     }
   },
   hideSmallBalance: true,
-  hideNoImage: true
+  hideNoImage: false
 }
 
 
