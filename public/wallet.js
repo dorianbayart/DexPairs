@@ -602,9 +602,9 @@ function displayNFTs() {
       }
       let element = Array.from(listLi).find(el => el.id === id + '-' + wallet_NFT[id].tokenSymbol + '-' + nft.id)
 
-      if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
+      /*if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
         nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
-      }
+      }*/
 
       if(element) {
         if(element.querySelector('a.tokenURI')) {
@@ -615,16 +615,20 @@ function displayNFTs() {
           const preview = element.querySelector('img.preview')
           if(preview) {
             if(preview.src !== nft.image && preview.src !== nft.alt_image) {
-              preview.src = nft.image
+              preview.src = nft.alt_image ? nft.alt_image : nft.image
             }
           } else {
             let imgPreview = document.createElement('img')
-            imgPreview.src = nft.image
+            imgPreview.src = nft.alt_image ? nft.alt_image : nft.image
             imgPreview.classList.add('preview')
             imgPreview.alt = 'NFT Metadata'
+            imgPreview.loading = 'lazy'
             imgPreview.onerror = function() {
               this.onerror = null
-              this.src = nft.alt_image ? nft.alt_image : ""
+              if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
+                nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
+                this.src = nft.alt_image
+              }
               return true
             }
             element.querySelector('a.tokenURI').appendChild(imgPreview)
@@ -673,12 +677,16 @@ function displayNFTs() {
           let aTokenURI = document.createElement('a')
           if(nft.image) {
             let imgPreview = document.createElement('img')
-            imgPreview.src = nft.image
+            imgPreview.src = nft.alt_image ? nft.alt_image : nft.image
             imgPreview.classList.add('preview')
             imgPreview.alt = 'NFT Metadata'
+            imgPreview.loading = 'lazy'
             imgPreview.onerror = function() {
               this.onerror = null
-              this.src = nft.alt_image ? nft.alt_image : ""
+              if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
+                nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
+                this.src = nft.alt_image
+              }
               return true
             }
             aTokenURI.appendChild(imgPreview)
