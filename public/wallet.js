@@ -612,8 +612,11 @@ function displayNFTs() {
         }
         // TODO Display text when nft.image is empty
         if(nft.image) {
-          if(element.querySelector('img.preview')) {
-            if(element.querySelector('img.preview').src !== nft.image) element.querySelector('img.preview').src = nft.image
+          const preview = element.querySelector('img.preview')
+          if(preview) {
+            if(preview.src !== nft.image && preview.src !== nft.alt_image) {
+              preview.src = nft.image
+            }
           } else {
             let imgPreview = document.createElement('img')
             imgPreview.src = nft.image
