@@ -83,7 +83,7 @@
   }
 
   #wallet ul li.nft a.tokenURI img.preview {
-    max-height: 128px;
+    max-height: 256px;
   }
 }
 

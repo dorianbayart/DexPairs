@@ -293,7 +293,9 @@ canvas#wallet-chart {
   flex-wrap: wrap;
 }
 #wallet ul li.nft.expanded {
-  height: auto;
+  height: 100%;
+  grid-column-start: span 2;
+  grid-row-start: span 2;
 }
 #wallet ul li.nft span.network {
   width: auto;
@@ -333,6 +335,9 @@ canvas#wallet-chart {
   display: flex;
   align-items: center;
   word-wrap: anywhere;
+}
+#wallet ul li.nft.expanded a.tokenURI img.preview{
+  max-height: 400px;
 }
 
 /* helper */
