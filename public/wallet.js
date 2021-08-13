@@ -283,6 +283,8 @@ function readNFTMetadata(id, indexId, tokenURI) {
         wallet_NFT[id].tokens[tokenIndex].metadata = data
         if(data && data.nft) {
           data = data.nft
+        } else if (data && data.data &&) {
+          data = data.data
         } else if (data && data.result && data.result.data) {
           data = data.result.data
         }
@@ -298,11 +300,12 @@ function readNFTMetadata(id, indexId, tokenURI) {
           wallet_NFT[id].tokens[tokenIndex].image = data.gif
         } else if (data && data.gif_url) {
           wallet_NFT[id].tokens[tokenIndex].image = data.gif_url
-        } else if(data && data.image) {
-          wallet_NFT[id].tokens[tokenIndex].image = data.image
         } else {
           console.log(wallet_NFT[id].tokens[tokenIndex])
           wallet_NFT[id].tokens[tokenIndex].image = ""
+        }
+        if(data && data.image) {
+          wallet_NFT[id].tokens[tokenIndex].image = data.image
         }
         displayWallet()
       })
