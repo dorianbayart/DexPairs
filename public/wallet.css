@@ -279,14 +279,14 @@ canvas#wallet-chart {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
   grid-auto-rows: minmax(120px, auto);
-  grid-column-gap: 6px;
-  grid-row-gap: 6px;
-  padding: 6px;
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+  padding: 12px;
 }
 
 #wallet ul li.nft {
   margin: 0;
-  padding: 3px 0 0;
+  padding: 0;
   width: 100%;
   height: 100%;
   display: inline-flex;
@@ -297,11 +297,11 @@ canvas#wallet-chart {
 }
 #wallet ul li.nft span.network {
   width: auto;
-  min-width: auto;
-  padding: 3px;
+  padding: 6px;
 }
 #wallet ul li.nft span.nameSymbol {
   break-after: always;
+  padding: 6px 0;
 }
 #wallet ul li.nft span.tokenID {
   padding-right: 6px;
