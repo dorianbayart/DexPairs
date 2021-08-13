@@ -241,20 +241,20 @@ function getTokenBalanceWeb3(contractAddress, network) {
         let nftContract = getNFTContract(contractAddress, network)
         // Loop over each NFT hold on this Contract by the WalletAddress
         for (var i = 0; i < wallet_NFT[id].number; i++) {
-          nftContract.methods.tokenOfOwnerByIndex(walletAddress, i).call((error, indexId) => {
-            if(error) { return }
-            nftContract.methods.tokenURI(indexId).call((error, tokenURI) => {
+            nftContract.methods.tokenOfOwnerByIndex(walletAddress, i).call((error, indexId) => {
               if(error) { return }
-              let token = { id: indexId, tokenURI: tokenURI }
-              if(tokenURI.includes('ipfs://')) {
-                token.original_tokenURI = tokenURI
-                token.tokenURI = 'https://ipfs.io/ipfs/' + tokenURI.slice(-tokenURI.length + 7)
-              }
+              nftContract.methods.tokenURI(indexId).call((error, tokenURI) => {
+                if(error) { return }
+                let token = { id: indexId, tokenURI: tokenURI }
+                if(tokenURI.includes('ipfs://')) {
+                  token.original_tokenURI = tokenURI
+                  token.tokenURI = 'https://ipfs.io/ipfs/' + tokenURI.slice(-tokenURI.length + 7)
+                }
 
-              wallet_NFT[id].tokens.push(token)
-              readNFTMetadata(id, indexId, token.tokenURI)
+                wallet_NFT[id].tokens.push(token)
+                setTimeout(readNFTMetadata(id, indexId, token.tokenURI), 25*i)
+              })
             })
-          })
         }
       }
     }
@@ -301,11 +301,13 @@ function readNFTMetadata(id, indexId, tokenURI) {
         } else if(data && data.image) {
           wallet_NFT[id].tokens[tokenIndex].image = data.image
         } else {
-          wallet_NFT[id].tokens[tokenIndex].image = tokenURI
+          console.log(wallet_NFT[id].tokens[tokenIndex])
+          wallet_NFT[id].tokens[tokenIndex].image = ""
         }
         displayWallet()
       })
       .catch(error => {
+        console.log(wallet_NFT[id].tokens[tokenIndex], error)
         wallet_NFT[id].tokens[tokenIndex].image = tokenURI
         displayWallet()
       })
@@ -386,7 +388,7 @@ function searchNFTs(network) {
         if(wallet_NFT[id]) {
           getTokenBalanceWeb3(wallet_NFT[id].contract, network)
         }
-      }, (i+1) * 150)
+      }, (i+1) * 80)
     })
 
     sessionStorage.setItem('latest-erc721-block-' + network, tx[0].blockNumber)
@@ -449,7 +451,7 @@ function displayWallet(force = false) {
     }
     updateGlobalPrice()
     updateGlobalChart()
-  }, force ? 25 : 400)
+  }, force ? 20 : 100)
 }
 
 // Display Wallet Tokens
@@ -609,8 +611,21 @@ function displayNFTs() {
           element.querySelector('a.tokenURI').href = nft.tokenURI
         }
         // TODO Display text when nft.image is empty
-        if(nft.image && element.querySelector('img.preview') && element.querySelector('img.preview').src !== nft.image) {
-          element.querySelector('img.preview').src = nft.image
+        if(nft.image) {
+          if(element.querySelector('img.preview')) {
+            if(element.querySelector('img.preview').src !== nft.image) element.querySelector('img.preview').src = nft.image
+          } else {
+            let imgPreview = document.createElement('img')
+            imgPreview.src = nft.image
+            imgPreview.classList.add('preview')
+            imgPreview.alt = 'NFT Metadata'
+            imgPreview.onerror = function() {
+              this.onerror = null
+              this.src = nft.alt_image ? nft.alt_image : ""
+              return true
+            }
+            element.querySelector('a.tokenURI').appendChild(imgPreview)
+          }
         }
       } else {
         let li = document.createElement('li')
@@ -811,14 +826,17 @@ function toggleHideButtons() {
     document.getElementById('hide-small-balances-container').classList.remove('none')
     document.getElementById('hide-no-image-container').classList.toggle('none', true)
     document.getElementById('global').classList.remove('none')
+    document.getElementById('wallet').classList.remove('nft')
   } else if(walletOptions.menu.nfts.isActive) {
     document.getElementById('hide-no-image-container').classList.remove('none')
     document.getElementById('hide-small-balances-container').classList.toggle('none', true)
     document.getElementById('global').classList.toggle('none', true)
+    document.getElementById('wallet').classList.toggle('nft', true)
   } else if(walletOptions.menu.transactions.isActive) {
     document.getElementById('hide-no-image-container').classList.toggle('none', true)
     document.getElementById('hide-small-balances-container').classList.toggle('none', true)
     document.getElementById('global').classList.toggle('none', true)
+    document.getElementById('wallet').classList.remove('nft')
   }
 }
 

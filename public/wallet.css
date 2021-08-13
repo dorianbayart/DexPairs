@@ -270,29 +270,65 @@ canvas#wallet-chart {
 
 
 /* NFT */
-#wallet ul li.nft {
-  padding: 0 0 0 0.5em;
-  height: 64px;
+
+#wallet.nft .loading-message {
+  border-radius: 12px;
 }
-#wallet ul li.expanded {
-  height: 192px;
+#wallet.nft ul {
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  grid-auto-rows: minmax(180px, auto);
+  grid-column-gap: 6px;
+  grid-row-gap: 6px;
+  padding: 6px;
+}
+
+#wallet ul li.nft {
+  margin: 0;
+  padding: 3px 0 0;
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+#wallet ul li.nft.expanded {
+  height: auto;
+}
+#wallet ul li.nft span.network {
+  width: auto;
+  min-width: auto;
+  padding: 3px;
+}
+#wallet ul li.nft span.nameSymbol {
+  break-after: always;
 }
 #wallet ul li.nft span.tokenID {
   padding-right: 6px;
   word-break: break-all;
-  max-width: 40%;
   font-size: smaller;
+  display: flex;
+  flex: auto;
+  justify-content: flex-end;
 }
 #wallet ul li.nft a.tokenURI {
   transition: all 400ms ease-in-out;
+  flex: auto;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  min-height: 45%;
+  align-items: center;
 }
 #wallet ul li.nft a.tokenURI img.preview{
-  width: 100%;
   height: 100%;
-  border-radius: 0 8px 8px 0;
+  max-height: 200px;
+  max-width: 100%;
+  border-radius: 8px;
 }
 #wallet ul li.nft a.tokenURI img.preview:before {
-  font-size: 10px;
+  font-size: smaller;
+  font-weight: lighter;
   height: 100%;
   display: flex;
   align-items: center;

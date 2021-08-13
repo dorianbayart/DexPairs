@@ -27,15 +27,11 @@
 }
 
 #wallet, .wallet-options {
-  width: 45%;
+  width: 60%;
+  transition: all 750ms ease-in-out;
 }
-#wallet ul li.nft a.tokenURI {
-  height: 64px;
-  width: 64px;
-}
-#wallet ul li.nft.expanded a.tokenURI {
-  height: 192px;
-  width: 192px;
+#wallet.nft {
+  width: 80%;
 }
 
 @media (max-width: 800px) {
@@ -69,15 +65,22 @@
   }
 
   #wallet, .wallet-options {
-    width: 75%;
+    width: 85%;
+  }
+  #wallet.nft {
+    width: 90%;
+  }
+  #wallet.nft ul {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-auto-rows: minmax(120px, auto);;
   }
 
   #wallet ul li.expanded {
     height: min(192px, 25vh);
   }
-  #wallet ul li.nft.expanded a.tokenURI {
-    height: min(192px, 25vh);
-    width: min(192px, 25vh);
+
+  #wallet ul li.nft a.tokenURI img.preview {
+    max-height: 128px;
   }
 }
 
@@ -113,7 +116,14 @@
   }
 
   #wallet, .wallet-options {
-    width: 95%;
+    width: 92%;
+  }
+  #wallet.nft {
+    width: 98%;
+  }
+  #wallet.nft ul {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-auto-rows: minmax(120px, auto);;
   }
   #wallet ul li {
     height: 40px;
@@ -121,8 +131,7 @@
   #wallet ul li.expanded {
     height: min(192px, 18vh);
   }
-  #wallet ul li.nft.expanded a.tokenURI {
-    height: min(192px, 18vh);
-    width: min(192px, 18vh);
+  #wallet ul li.nft span.network {
+    width: 24px;
   }
 }
