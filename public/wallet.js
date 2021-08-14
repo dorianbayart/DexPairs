@@ -297,13 +297,12 @@ async function populateNFTContract(contractAddress, network) {
 }
 
 async function readNFTMetadata(id, indexId, tokenURI) {
-  const tokenIndex = wallet_NFT[id].tokens.findIndex(token => token.id === indexId)
   if(tokenURI && tokenURI.includes('http')) {
     await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
       .then(res => res.json())
       .then(json => {
         let data = JSON.parse(json.contents)
-        wallet_NFT[id].tokens[tokenIndex].metadata = data
+        wallet_NFT[id].tokens.find(token => token.id === indexId).metadata = data
 
         let url = ""
         if(data && data.nft) {
@@ -332,12 +331,9 @@ async function readNFTMetadata(id, indexId, tokenURI) {
         }
 
         wallet_NFT[id].tokens.find(token => token.id === indexId).image = url
-        // displayWallet()
       })
       .catch(error => {
-        console.log(wallet_NFT[id].tokens[tokenIndex], error)
-        wallet_NFT[id].tokens[tokenIndex].image = tokenURI
-        // displayWallet()
+        wallet_NFT[id].tokens.find(token => token.id === indexId).image = tokenURI
       })
   }
 
@@ -418,6 +414,12 @@ function searchNFTs(network) {
     })
 
     sessionStorage.setItem('latest-erc721-block-' + network, tx[0].blockNumber)
+  } else {
+    Object.keys(wallet_NFT).sort(sortNFTWallet).filter(id => wallet_NFT[id].network === network && wallet_NFT[id].tokens.length > 0).forEach(async (id, i) => {
+      wallet_NFT[id].tokens.filter(token => token.tokenURI && !token.metadata).forEach((token, i) => {
+        readNFTMetadata(id, token.id, token.tokenURI)
+      })
+    })
   }
 }
 
