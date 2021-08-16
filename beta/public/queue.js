@@ -28,11 +28,12 @@ class Queue {
 
 let q = new Queue()
 
+
 for (let i = 1; i <= 7; i++) {
     q.enqueue(i)
 }
 
 // dequeue all elements
 while (q.length > 0) {
-    console.log(q.dequeue())
+    // console.log(q.dequeue())
 }
