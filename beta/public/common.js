@@ -22,7 +22,7 @@ const COLOR_THEMES = {
 
 /* Backend server */
 /* https://api.dexpairs.xyz or empty for localhost */
-const server = ''
+const server = 'https://api.dexpairs.xyz'
 const DOMAIN_NAME = 'DexPairs.xyz'
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
