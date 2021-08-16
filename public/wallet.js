@@ -1129,6 +1129,10 @@ const filteredNFTWallet = () => {
   }
   return filteredNFTContracts
 }
+/* Utils - NFTs with/without preview images */
+const filteredNFTTokens = () => {
+  return filteredNFTWallet().map(id => wallet_NFT[id].tokens).flat()
+}
 
 /* Utils - Calculate balance from value */
 const calculateBalance = (balance, decimal) => {
