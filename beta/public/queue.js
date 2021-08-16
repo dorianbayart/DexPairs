@@ -35,5 +35,5 @@ for (let i = 1; i <= 7; i++) {
 
 // dequeue all elements
 while (q.length > 0) {
-    // console.log(q.dequeue())
+    q.dequeue()
 }
