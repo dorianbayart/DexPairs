@@ -1,0 +1,291 @@
+
+.flex-column {
+  display: inline-flex;
+  flex-flow: column;
+  max-width: 100%;
+}
+
+#main {
+  margin-top: 2em;
+}
+
+.main-chart {
+  width: 75%;
+}
+
+.flex-pair {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  margin: auto;
+  width: 100%;
+  max-width: 920px;
+}
+
+#dex-selection {
+  margin: 12px;
+  display: flex;
+  align-items: center;
+}
+.dex-selection-img-container {
+  display: inline-flex;
+  flex: auto;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 1em;
+}
+.dex-selection-img-container img {
+  height: 100%;
+}
+#dex-selector {
+  border: none;
+  padding: 0.25em;
+  outline: none;
+}
+
+#top {
+  margin: auto;
+  max-width: 1024px;
+  border-radius: 12px;
+  padding: 4px;
+}
+#top::before {
+  content: "Top tokens by USD volume";
+  display: block;
+  font-size: 0.85em;
+  font-weight: lighter;
+  margin-left: 8px;
+  margin-top: 2px;
+}
+#top::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.top-column {
+  float: left;
+  width: 33.3%;
+}
+.top-token {
+  margin: 4px;
+
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+}
+.top-token:hover {
+  box-shadow: 1px 1px 12px #BBB;
+}
+.top-symbol {
+  display: inline-flex;
+  width: 40%;
+}
+.top-price, .top-percentage {
+  display: inline-flex;
+  width: 25%;
+}
+.top-chart {
+  width: 48px;
+  height: 32px;
+}
+
+
+#search_field {
+  border: 1px solid #CCC;
+  border-radius: 12px;
+}
+
+#list {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+}
+#list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#list li {
+  cursor: pointer;
+  border-radius: 12px;
+  margin: 2px;
+  border: 1px solid white;
+  transition: all 75ms ease-in-out, border 1s ease-in-out;
+}
+#list li.active {
+  border: 1px solid #CCC;
+}
+#list li:hover {
+  background-color: #EFEFEF;
+}
+
+#list button.load-more {
+  border: 3px solid #EFEFEF;
+  border-radius: 12px;
+  padding: 6px 12px;
+  width: 100%;
+  max-width: 140px;
+  cursor: pointer;
+  background-color: white;
+  margin-bottom: 1em;
+}
+#list button.load-more:hover {
+  background-color: #EFEFEF;
+}
+
+
+#token, #base {
+  display: inline-flex;
+  flex: 40%;
+  flex-wrap: wrap;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+}
+
+.symbol_name, .percentages, .price_address {
+  display: flex;
+  flex-flow: column;
+  flex: auto;
+  align-self: center;
+}
+#token_price, #token_address, #base_price, #base_address {
+  text-align: right;
+}
+#token_symbol, #token_price,
+#base_change, #base_price {
+  font-size: 16px;
+  height: 17px;
+  margin-bottom: 3px;
+}
+#token_name, #token_address, #base_name, #base_address {
+  font-size: 10px;
+  height: 12px;
+}
+
+#token_symbol, #token_name, #token_address, #token_price,
+#base_symbol, #base_select, #base_name, #base_address, #base_price {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#token_price, #base_price {
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+button#base_change {
+  display: flex;
+  padding: 0;
+  border-radius: 12px;
+  border: none;
+  z-index: 1;
+  cursor: pointer;
+}
+button#base_change img {
+  height: 14px;
+  width: auto;
+  margin-right: 4px;
+  transition: all 250ms ease-in-out;
+}
+button#base_change:hover img {
+  transform: rotate(-90deg);
+}
+
+#base_select {
+  display: none;
+  cursor: pointer;
+  border: 1px solid #CCC;
+  border-radius: 8px;
+  padding: 2px 4px;
+  margin: -3px 0 3px -3px;
+}
+
+#chart {
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  width: auto;
+}
+#interval-title {
+  font-size: small;
+  margin-left: 6px;
+}
+#interval-title, #interval {
+  display: inline-flex;
+}
+#interval .interval-choice {
+  cursor: pointer;
+  font-size: small;
+  margin: 0.4em;
+  border: 1px solid #CCC;
+  border-radius: 8px;
+  padding: 0.25em 0.5em;
+}
+#interval .interval-choice:hover {
+  box-shadow: 1px 1px 8px #BBB;
+}
+#myChart {
+  width: 95% !important;
+  margin: auto;
+}
+.source_share_container {
+  display: inline-flex;
+}
+#source_data {
+  flex: auto;
+  color: grey;
+  font-style: italic;
+  font-size: 0.8rem;
+  font-weight: lighter;
+}
+#share_charts_container button {
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: lighter;
+  transition: all 150ms ease-in-out;
+}
+#share_charts_container button:hover {
+  box-shadow: 0px 0px 8px #AAAE;
+}
+
+#swapper_token, #swapper_base {
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  max-width: 120px;
+  text-align: center;
+  flex: auto;
+}
+#swapper_token_symbol, #swapper_base_symbol {
+  margin: 0.25em;
+  flex: auto;
+}
+#swapper_token_symbol {
+  text-align: right;
+}
+
+#swapper_switch {
+  cursor: pointer;
+  border-radius: 12px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+#swapper_switch:active {
+}
+#swapper_switch img {
+  height: auto;
+  width: 100%;
+  transition: all 250ms ease-in-out;
+}
+#swapper_switch:hover img{
+  transform: rotateY(180deg);
+}

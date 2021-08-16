@@ -196,6 +196,12 @@ app.get('/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/feed.ato
 app.use('/img', express.static('img'))
 app.use('/public', express.static('public'))
 
+app.get('/beta/', (req, res) => res.sendFile(path.join(__dirname, '/beta/index.html')))
+app.get('/beta/wallet', (req, res) => res.sendFile(path.join(__dirname, '/beta/wallet.html')))
+app.get('/beta/news', (req, res) => res.sendFile(path.join(__dirname, '/beta/news.html')))
+app.get('/beta/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/beta/feed.atom')))
+app.use('/beta/public', express.static('beta/public'))
+
 // Pancake URLs
 app.get('/pancake/token/:token', (req, res) => {
   if(

@@ -1,0 +1,163 @@
+#body-background {
+  background-size: 30%;
+}
+#dex-selector {
+  font-size: 1.2em;
+}
+.dex-selection-img-container {
+  height: 36px;
+}
+.left-menu {
+  width: 24%;
+  min-width: 12em;
+  max-width: 20em;
+  font-size: 0.8em;
+  text-align: center;
+}
+#top {
+  font-size: 0.85em;
+  min-height: 96px;
+}
+.top-token {
+  padding: 0.25em 1em;
+}
+#search_field {
+  margin: 0.5em 1em;
+  padding: 1em;
+}
+#list {
+  height: 420px;
+  margin: 0.5em 1em;
+  padding: 1em;
+}
+#list li {
+  padding: 6px 12px;
+}
+#token, #base {
+  margin: 0.5em 1em;
+  padding: 12px;
+}
+#chart {
+  margin: 0.5em 1em;
+  padding: 0.25em;
+}
+.source_share_container {
+  margin: 0 1em;
+}
+#swapper_token, #swapper_base {
+  width: 30%;
+  margin: 1em;
+  padding: 0.5em 1em;
+  font-size: 1.25em;
+}
+
+
+@media (max-width: 800px) {
+  #body-background {
+    background-size: 40%;
+  }
+  #dex-selector {
+    font-size: 1.1em;
+  }
+  .dex-selection-img-container {
+    height: 30px;
+  }
+  #top {
+    min-height: 145px;
+    margin: auto 0.5em;
+  }
+  .top-column {
+    width: 50%;
+  }
+  .top-token {
+    border-radius: 8px;
+  }
+
+  .left-menu {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 2em;
+  }
+  .main-chart {
+    width: 100%;
+  }
+  #search_field {
+    margin: 0.25em 0.5em;
+    padding: 0.5em 1em;
+  }
+  #list {
+    margin: 0.25em 0.5em;
+    padding: 0.5em;
+    height: 96px;
+  }
+  #list li {
+    display: inline-flex;
+    padding: 8px;
+  }
+  #token, #base {
+    margin: 0.25em 0.5em;
+  }
+  #interval .interval-choice {
+    margin: 0.25em 0.5em;
+  }
+  #chart {
+    margin: 0.25em 0.5em;
+    padding: 0.5em;
+  }
+  .source_share_container {
+    margin: 0 0.5em;
+  }
+  #swapper_token, #swapper_base {
+    margin: 0.5em;
+    padding: 0.25em 0.5em;
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 460px) {
+  #body-background {
+    background-size: 50%;
+  }
+  #dex-selector {
+    font-size: 1em;
+  }
+  .dex-selection-img-container {
+    height: 20px;
+  }
+  #top {
+    flex-wrap: wrap;
+    min-height: 280px;
+  }
+  .top-column {
+    width: 100%;
+  }
+  #search_field {
+    margin: 0.1em 0.25em;
+    padding: 0.25em 1em;
+  }
+  #list {
+    margin: 0.1em 0.25em;
+    padding: 0.25em;
+    height: 80px;
+  }
+  #list li {
+    padding: 8px;
+  }
+  #token, #base {
+    margin: 0.1em 0.25em;
+  }
+  #interval .interval-choice {
+    margin: 0 0.25em;
+  }
+  #chart {
+    margin: 0.1em 0.25em;
+  }
+  .source_share_container {
+    margin: 0 0.25em;
+  }
+  #swapper_token, #swapper_base {
+    margin: 0.25em;
+    padding: 0.1em 0.25em;
+    font-size: 1.1em;
+  }
+}

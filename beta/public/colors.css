@@ -1,0 +1,57 @@
+
+/* Common */
+#menu .menu-item, input, select, button {
+  color: #000D;
+  background-color: #FFFD;
+}
+/* Gas */
+.gas-list li {
+  color: #000D;
+  background-color: #FFFD;
+}
+/* Charts */
+.top-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart {
+  color: #000D;
+  background-color: #FFFD;
+}
+/* Wallet */
+#global.wallet-information, #wallet ul li, #connect-wallet {
+  color: #000D;
+  background-color: #FFFD;
+}
+/* News */
+#main > h1, article.entry {
+  color: #000D;
+  background-color: #FFFD;
+}
+
+#top, #top-title, #wallet .loading-message, .wallet-menu, #wallet ul, .gas-container {
+  background-color: #0002;
+}
+
+.green {
+  color: mediumseagreen;
+}
+.red {
+  color: tomato;
+}
+
+.border-bottom {
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 1em;
+}
+.border-info {
+  border-color: mediumslateblue;
+}
+.border-error {
+  border-color: palevioletred;
+}
+
+.shadow-white {
+  box-shadow: 0 0 16px 12px white;
+  background-color: #FFFD;
+}
+
+.color-transition {
+  transition: color 750ms ease-in-out, background-color 750ms ease-in-out, border-color 750ms ease-in-out;
+}

@@ -1,0 +1,177 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <title>DexPairs.xyz | Wallet</title>
+  <meta name="description" content="Explore your wallet tokens on multiple chains and display your NFTs gallery" />
+  <meta name="author" content="Dorian Bayart" />
+  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, bsc, fantom, xdai, wallet, defi, tracker, nft, gallery" />
+
+  <link rel="shortcut icon" type="image/png" href="/img/background-multichain-min.png" />
+  <link href="./wallet" rel="canonical" />
+
+  <meta property="og:title" content="DexPairs.xyz | Wallet" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Explore your wallet tokens on multiple chains and display your NFTs gallery" />
+  <meta property="og:url" content="./wallet" />
+  <meta property="og:image" content="/img/background-multichain-min.png" />
+  <meta property="og:site_name" content="DexPairs" />
+
+  <link rel="alternate" type="application/atom+xml" title="DexPairs.xyz News" href="./feed.atom" />
+
+  <link rel="stylesheet" href="./public/common.css">
+  <link rel="stylesheet" href="./public/header.css">
+  <link rel="stylesheet" href="./public/footer.css">
+  <link rel="stylesheet" href="./public/gas.css">
+  <link rel="stylesheet" href="./public/wallet.css">
+  <link rel="stylesheet" href="./public/wallet-responsive.css">
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+  <script defer src="./public/common.js"></script>
+  <script defer src="./public/protocols.js"></script>
+  <script defer src="./public/wallet.js"></script>
+  <script defer src="./public/queue.js"></script>
+
+</head>
+
+<body>
+  <div id='header'>
+    <header>
+      <a id='title' href="./" aria-label="Homepage">
+        <h1>
+          DexPairs
+          <span class='version'>
+            BETA
+          </span>
+        </h1>
+      </a>
+    </header>
+
+    <div id='menu'>
+      <div id='menu-charts' class='menu-item'>
+        <a href="./" aria-label="Charts">
+          <h2>
+            Charts
+          </h2>
+        </a>
+      </div>
+      <div id='menu-wallet' class='menu-item'>
+        <a href="./wallet" aria-label="Wallet">
+          <h2>
+            Wallet
+          </h2>
+        </a>
+      </div>
+      <div id='menu-news' class='menu-item'>
+        <a href="./news" aria-label="News">
+          <h2>
+            News
+          </h2>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class='gas'>
+    <h3 class='gas-title'>Current gas prices</h3>
+    <div class='gas-container'>
+      <span class='gas-icon'>
+        <img src='/img/gas-station-icon.svg' alt="Gas Station Icon" title="Network current gas" width="14px" height="16px">
+      </span>
+      <ul class='gas-list'>
+        <li id='gas-ETHEREUM'></li>
+        <li id='gas-POLYGON'></li>
+        <li id='gas-BSC'></li>
+        <li id='gas-FANTOM'></li>
+        <li id='gas-XDAI'></li>
+      </ul>
+      <span id='gas-realtime-button' class='realtime-icon'>
+        <img src='/img/icons/refresh-cw.svg' alt="Realtime Update Icon" title="Realtime update" width="14px" height="14px">
+      </span>
+    </div>
+  </div>
+
+  <div id="input-wallet-container" class="margin-top">
+    <input type='text' id='input-wallet' placeholder='ERC20 Wallet address' class='shadow-white'>
+  </div>
+
+  <div id="connect-demo-container" class="connect-demo-container">
+    <button id="connect-wallet">
+      <img src='/img/metamask-fox.svg' alt='Metamask SVG Logo' title='Metamask' />
+      Connect with Metamask
+    </button>
+    <a href="./wallet?address=0x0255c9D3850cacA1152AEB20425C264787661692" id="demo-wallet" class="shadow-white">Track a demo wallet</a>
+  </div>
+
+  <div id="global" class="wallet-information none">
+    <div class="wallet-chart">
+      <div class="wallet-chart-description">Based on Ethereum price evolution</div>
+      <canvas id="wallet-chart"></canvas>
+      <div id="wallet-date-tooltip"></div>
+    </div>
+    <div class="wallet-values">
+      <h3 class="wallet-title">Wallet value</h3>
+      <div id="wallet-value"></div>
+      <div id="wallet-value-tooltip"></div>
+    </div>
+  </div>
+
+  <div id="wallet-select-networks">
+  </div>
+
+  <div id="state">
+  </div>
+
+
+  <div id="wallet-options" class="wallet-options none">
+    <div id="menu-tokens" class="wallet-menu">
+      Tokens
+    </div>
+    <div id="menu-nfts" class="wallet-menu">
+      NFTs
+    </div>
+    <div id="hide-small-balances-container">
+      <img id="hide-small-balances-icon" src="/img/icons/check-square.svg" alt="Hide Small Balance Logo"/>
+      <span class='unselectable'>Hide small balances</span>
+    </div>
+    <div id="hide-no-image-container">
+      <img id="hide-no-image-icon" src="/img/icons/check-square.svg" alt="Hide Small Balance Logo"/>
+      <span class='unselectable'>Hide NFT without images</span>
+    </div>
+  </div>
+
+
+  <div id="wallet">
+  </div>
+
+
+
+
+  <footer class="footer">
+    <a id="roadmap_link" class="link-with-img" href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank" rel="noopener">
+      <img src="/img/roadmap-icon.svg" title="Roadmap Picture" alt="Roadmap Picture" width="20px" height="20px" />
+      <span>Roadmap</span>
+    </a>
+    <a id="github_link" class="link-with-img" href="https://github.com/dorianbayart/DexPairs" target="_blank" rel="noopener">
+      <img src="/img/GitHub-Mark-32px.png" title="Github Logo" alt="Github Logo" width="20px" height="20px" />
+      <span>GitHub</span>
+    </a>
+    <a id="news_link" class="link-with-img" href="./news">
+      <img src='/img/icons/news_feed.svg' title="RSS Feed Logo" alt="RSS News Feed Logo" width="20px" height="20px" />
+      <span>News</span>
+    </a>
+  </footer>
+
+
+  <div id="body-background"></div>
+
+
+  <link rel="stylesheet" href="./public/colors.css">
+</body>
+</html>

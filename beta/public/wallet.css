@@ -1,0 +1,334 @@
+
+body {
+  display: flex;
+  flex-flow: column;
+  min-height: 90vh;
+}
+#body-background {
+  background-image: url('/img/background-multichain.svg');
+}
+
+
+#input-wallet-container {
+  text-align: center;
+  margin-top: 0;
+  width: 100%;
+}
+#input-wallet-container.margin-top {
+  margin-top: 20vh;
+}
+
+.connect-demo-container {
+  max-height: 140px;
+  display: flex;
+  flex-flow: column;
+  margin: 1em auto;
+  text-align: center;
+}
+#connect-wallet {
+  border: 1px solid #6495ED;
+  border-radius: 8px;
+  padding: 0 8px;
+  margin: 0.75em;
+  font-size: 1em;
+  height: 36px;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  background-color: #6495ED; /* cornflowerblue */
+  color: white;
+  font-weight: lighter;
+  display: inline-flex;
+  align-items: center;
+}
+#connect-wallet:hover {
+  border: 1px solid #CCC;
+  box-shadow: 0px 0px 12px #888E;
+}
+#connect-wallet img {
+  height: 100%;
+  margin-right: 6px;
+}
+#demo-wallet {
+  border: 1px solid white;
+  border-radius: 8px;
+  margin: 0.5em;
+  font-size: 0.9em;
+  padding: 0.25em 0.5em;
+  font-weight: lighter;
+  transition: all 150ms ease-in-out;
+  color: #000A;
+}
+#demo-wallet:hover {
+  border: 1px solid #CCC;
+}
+
+#input-wallet {
+  border: 1px solid #FFF;
+  border-radius: 12px;
+  margin: 0.5em 1em;
+  padding: 1em;
+  width: 50%;
+  transition: all 400ms ease-in-out;
+  text-align: center;
+  font-size: smaller;
+}
+#input-wallet:hover, #input-wallet:focus {
+  border: 1px solid #CCC;
+  outline: none;
+}
+#input-wallet-container.margin-top #input-wallet {
+  font-size: initial;
+}
+
+
+
+#global.wallet-information {
+  display: flex;
+  max-width: 800px;
+  margin: 1em auto 0;
+  align-items: center;
+  max-height: 178px;
+  border-radius: 12px;
+  border: 1px solid #0002;
+  flex-wrap: wrap;
+}
+#global.wallet-information.none {
+  max-height: 0;
+  padding: 0;
+  margin: 0 auto;
+  border-color: #FFF;
+  z-index: -1;
+}
+.wallet-title {
+  margin: 0.5em auto;
+  font-weight: lighter;
+}
+#global .wallet-chart {
+  flex: auto;
+}
+.wallet-chart-description {
+  font-size: 0.75em;
+  line-height: 0;
+  font-weight: lighter;
+}
+canvas#wallet-chart {
+}
+#global .wallet-values {
+  text-align: center;
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+#global #wallet-value-tooltip {
+  font-weight: lighter;
+}
+#global #global-select-networks {
+  flex: auto;
+}
+
+
+#state {
+  text-align: center;
+  font-size: 0.75em;
+  flex: 0.05;
+  display: flex;
+  align-items: center;
+  margin: 12px auto;
+}
+
+
+
+.wallet-options {
+  margin: 1em auto 0;
+  display: inline-flex;
+  align-items: center;
+  font-weight: lighter;
+}
+.wallet-menu {
+  margin-right: 12px;
+  padding: 6px 9px 0px 9px;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+}
+#hide-small-balances-container, #hide-no-image-container {
+  display: inline-flex;
+  flex: auto;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 0.8em;
+  cursor: pointer;
+}
+#hide-small-balances-container.none, #hide-no-image-container.none {
+  display: none;
+}
+#hide-small-balances-container img#hide-small-balances-icon,
+#hide-no-image-container img#hide-no-image-icon {
+  height: 12px;
+  padding: 0;
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+
+#wallet {
+  margin: auto;
+  flex: auto;
+}
+
+#wallet .loading-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  border-radius: 0 12px 12px;
+  font-weight: lighter;
+}
+
+#wallet ul {
+  list-style: none;
+  padding: 3px;
+  margin: 0;
+  border-radius: 0 12px 12px;
+}
+
+#wallet ul li {
+  padding: 0.5em 1em 0.5em 0.5em;
+  margin: 0.25em;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 42px;
+  transition: all 400ms ease-in-out;
+}
+#wallet ul li.expanded {
+  height: 128px;
+}
+
+#wallet ul li span {
+  display: inline-block;
+}
+#wallet ul li span.network {
+  width: 8%;
+  min-width: 30px;
+  display: flex;
+}
+#wallet ul li span.network img.network {
+  height: 100%;
+}
+#wallet ul li span.nameSymbol {
+  display: flex;
+  flex-flow: column;
+  flex: auto;
+}
+#wallet ul li span.name {
+  font-size: 0.75em;
+}
+#wallet ul li span.price {
+  text-align: end;
+  width: 20%;
+  font-size: 0.8em;
+  padding-top: 0.5em;
+}
+#wallet ul li span.valueBalance {
+  text-align: end;
+  width: 17%;
+  display: flex;
+  flex-flow: column;
+}
+#wallet ul li span.balance {
+  font-size: 0.75em;
+}
+#wallet ul li a.address {
+  font-size: 0.85em;
+  width: 100%;
+}
+#wallet ul li span.chart {
+  width: 100%;
+}
+#wallet ul li a.address, #wallet ul li span.chart {
+  display: none;
+}
+#wallet ul li.expanded a.address, #wallet ul li.expanded span.chart {
+  display: inline-flex;
+}
+
+
+/* NFT */
+
+#wallet.nft .loading-message {
+  border-radius: 12px;
+}
+#wallet.nft ul {
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  grid-auto-rows: minmax(120px, auto);
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+  padding: 12px;
+}
+
+#wallet ul li.nft {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+#wallet ul li.nft.expanded {
+  height: 100%;
+  grid-column-start: span 2;
+  grid-row-start: span 2;
+}
+#wallet ul li.nft span.network {
+  width: auto;
+  padding: 3px;
+}
+#wallet ul li.nft span.nameSymbol {
+  padding: 0;
+  width: 70%;
+}
+#wallet ul li.nft span.tokenID {
+  padding-right: 6px;
+  word-break: break-all;
+  font-size: smaller;
+  display: flex;
+  flex: auto;
+  justify-content: flex-end;
+}
+#wallet ul li.nft a.tokenURI {
+  flex: auto;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  min-height: 45%;
+  align-items: center;
+}
+#wallet ul li.nft a.tokenURI img.preview{
+  height: auto;
+  max-height: 250px;
+  max-width: 100%;
+  border-radius: 8px;
+}
+#wallet ul li.nft a.tokenURI img.preview:before {
+  font-size: smaller;
+  font-weight: lighter;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  word-wrap: anywhere;
+}
+#wallet ul li.nft.expanded a.tokenURI img.preview{
+  max-height: 400px;
+}
+
+/* helper */
+.none {
+  max-height: 0;
+  padding: 0;
+  margin: 0 auto;
+  z-index: -1;
+  opacity: 0;
+}

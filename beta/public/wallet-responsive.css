@@ -1,0 +1,142 @@
+
+
+#input-wallet-container.margin-top #input-wallet {
+  width: 50%;
+}
+#input-wallet {
+  width: 33%;
+}
+
+#global.wallet-information {
+  padding: 1.5em;
+}
+#global .wallet-chart {
+  height: 128px;
+  width: 480px;
+  margin-right: 3em;
+}
+#global #wallet-date-tooltip {
+  font-size: 0.9em;
+  line-height: 2em;
+}
+#global #wallet-value-tooltip {
+  font-size: 1.2em;
+}
+#global #wallet-value {
+  font-size: 1.8em;
+}
+
+#wallet, .wallet-options {
+  width: 60%;
+  transition: all 750ms ease-in-out;
+}
+#wallet.nft {
+  width: 80%;
+}
+
+@media (max-width: 800px) {
+  #input-wallet-container.margin-top #input-wallet {
+    width: 60%;
+  }
+  #input-wallet {
+    font-size: 0.9em;
+    width: 80%;
+    margin: 0.25em 0.5em;
+    padding: 0.5em 1em;
+  }
+
+  #global.wallet-information {
+    padding: 1em;
+  }
+  #global .wallet-chart {
+    height: 96px;
+    width: 360px;
+    margin-right: 2em;
+  }
+  #global #wallet-date-tooltip {
+    font-size: 0.75em;
+    line-height: 1em;
+  }
+  #global #wallet-value-tooltip {
+    font-size: 1.1em;
+  }
+  #global #wallet-value {
+    font-size: 1.5em;
+  }
+
+  #wallet, .wallet-options {
+    width: 85%;
+  }
+  #wallet.nft {
+    width: 90%;
+  }
+  #wallet.nft ul {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-auto-rows: minmax(100px, auto);
+    padding: 6px;
+  }
+
+  #wallet ul li.expanded {
+    height: min(192px, 25vh);
+  }
+
+  #wallet ul li.nft a.tokenURI img.preview {
+    max-height: 256px;
+  }
+}
+
+@media (max-width: 460px) {
+  #input-wallet-container.margin-top #input-wallet {
+    width: 85%;
+  }
+  #input-wallet {
+    font-size: 0.75em;
+    width: 75%;
+    margin: 0.1em 0.25em;
+    padding: 0.25em 1em;
+  }
+
+  #global.wallet-information {
+    padding: 0.5em;
+    width: 95%;
+  }
+  #global .wallet-chart {
+    height: 64px;
+    width: 240px;
+    margin-right: 1em;
+  }
+  #global #wallet-date-tooltip {
+    font-size: 0.6em;
+    line-height: 0.6em;
+  }
+  #global #wallet-value-tooltip {
+    font-size: 1em;
+  }
+  #global #wallet-value {
+    font-size: 1.2em;
+  }
+
+  #wallet, .wallet-options {
+    width: 92%;
+  }
+  #wallet.nft {
+    width: 98%;
+  }
+  #wallet.nft ul {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-auto-rows: minmax(80px, auto);
+  }
+  #wallet ul li {
+    height: 40px;
+  }
+  #wallet ul li.expanded {
+    height: min(192px, 18vh);
+  }
+  #wallet ul li.nft span.nameSymbol {
+    padding: 0;
+    width: 70%;
+  }
+  #wallet ul li.nft span.network {
+    width: 24px;
+  }
+}
