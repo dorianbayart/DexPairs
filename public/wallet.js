@@ -1103,7 +1103,12 @@ const sortNFTWallet = (id_a, id_b) => {
 }
 /* Utils - sort the NFT tokens (can have many tokens of the same contract) */
 const sortNFTTokens = (t_a, t_b) => {
-  return t_a.id.localeCompare(t_b.id)
+  try {
+    if(parseInt(t_a.id, 10) < parseInt(t_b.id, 10)) return -1
+    if(parseInt(t_a.id, 10) > parseInt(t_b.id, 10)) return 1
+  } catch {
+    return t_a.id.localeCompare(t_b.id)
+  }
 }
 
 /* Utils - getId from Address and Network */
