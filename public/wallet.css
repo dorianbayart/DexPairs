@@ -13,7 +13,6 @@ body {
   text-align: center;
   margin-top: 0;
   width: 100%;
-  transition: all 750ms ease-in-out;
 }
 #input-wallet-container.margin-top {
   margin-top: 20vh;
@@ -25,7 +24,6 @@ body {
   flex-flow: column;
   margin: 1em auto;
   text-align: center;
-  transition: all 750ms ease-in-out;
 }
 #connect-wallet {
   border: 1px solid #6495ED;
@@ -89,7 +87,6 @@ body {
   max-width: 800px;
   margin: 1em auto 0;
   align-items: center;
-  transition: all 750ms ease-in-out;
   max-height: 178px;
   border-radius: 12px;
   border: 1px solid #0002;
@@ -137,7 +134,6 @@ canvas#wallet-chart {
   display: flex;
   align-items: center;
   margin: 12px auto;
-  transition: all 750ms ease-in-out;
 }
 
 
@@ -211,7 +207,6 @@ canvas#wallet-chart {
 
 #wallet ul li span {
   display: inline-block;
-  transition: all 400ms ease-in-out;
 }
 #wallet ul li span.network {
   width: 8%;
@@ -252,20 +247,10 @@ canvas#wallet-chart {
   width: 100%;
 }
 #wallet ul li a.address, #wallet ul li span.chart {
-  height: 0;
-  line-height: 0;
-  opacity: 0;
-  transition: all 400ms ease-in-out;
+  display: none;
 }
-#wallet ul li.expanded a.address {
-  height: 1em;
-  line-height: 1em;
-  opacity: 1;
-}
-#wallet ul li.expanded span.chart {
-  height: 100%;
-  line-height: 100%;
-  opacity: 1;
+#wallet ul li.expanded a.address, #wallet ul li.expanded span.chart {
+  display: inline-flex;
 }
 
 
@@ -299,11 +284,11 @@ canvas#wallet-chart {
 }
 #wallet ul li.nft span.network {
   width: auto;
-  padding: 6px;
+  padding: 3px;
 }
 #wallet ul li.nft span.nameSymbol {
-  break-after: always;
-  padding: 6px 0;
+  padding: 0;
+  width: 70%;
 }
 #wallet ul li.nft span.tokenID {
   padding-right: 6px;
@@ -314,7 +299,6 @@ canvas#wallet-chart {
   justify-content: flex-end;
 }
 #wallet ul li.nft a.tokenURI {
-  transition: all 400ms ease-in-out;
   flex: auto;
   display: flex;
   width: 100%;
@@ -323,8 +307,8 @@ canvas#wallet-chart {
   align-items: center;
 }
 #wallet ul li.nft a.tokenURI img.preview{
-  height: 100%;
-  max-height: 200px;
+  height: auto;
+  max-height: 250px;
   max-width: 100%;
   border-radius: 8px;
 }
