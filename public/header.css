@@ -57,6 +57,9 @@ header .version .low {
 #menu .menu-item:hover {
   border-bottom: lightgrey 1px solid;
 }
+#menu .menu-item#menu-news {
+  border-right: none;
+}
 #menu .menu-item h2 {
   padding: 12px 9px 9px;
 }
