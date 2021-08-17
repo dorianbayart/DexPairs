@@ -34,7 +34,7 @@ const displayNews = (urlTitle) => {
     }
     document.querySelector('meta[property="og:title"]').setAttribute("content", DOMAIN_NAME + ' | News')
 
-    const html = feed.map(entry => `<article id="${entry.id}" class="entry">
+    const html = feed.map(entry => `<article id="${entry.id}" class="entry condensed">
           <div class="timestamp">${entry.timestamp}</div>
           <h1 class="entry-title">${entry.title.innerHTML}</h1>
         </article>`)
