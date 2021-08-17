@@ -61,13 +61,13 @@ header .version .low {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2em;
+  font-size: 24px;
+  font-weight: lighter;
 }
 #menu .menu-item h2 img {
   height: 1em;
   max-height: 24px;
   margin-right: 0.5em;
-  margin-top: 0.1em;
 }
 #menu .menu-item .low {
   font-size: 0.6em;
@@ -116,6 +116,6 @@ header .version .low {
     width: 95%;
   }
   #menu .menu-item h2 {
-    padding: 3px 9px 3px;
+    font-size: 16px;
   }
 }

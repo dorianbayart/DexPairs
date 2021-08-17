@@ -105,6 +105,19 @@ ul.tags li {
   margin: 24px 6px 0 0;
 }
 
+#link-to-feed {
+  text-align: center;
+}
+#link-to-feed a {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9em;
+}
+#link-to-feed a img {
+  height: 0.9em;
+  margin-right: 6px;
+}
+
 @media (max-width: 800px) {
   #main {
     max-width: calc(100% - 24px);
