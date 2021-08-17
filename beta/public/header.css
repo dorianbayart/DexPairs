@@ -68,8 +68,10 @@ header .version .low {
   font-size: 1.2em;
 }
 #menu .menu-item h2 img {
-  height: 1.2em;
-  margin-right: 0.25em;
+  height: 1em;
+  max-height: 24px;
+  margin-right: 0.5em;
+  margin-top: 0.1em;
 }
 #menu .menu-item .low {
   font-size: 0.6em;
