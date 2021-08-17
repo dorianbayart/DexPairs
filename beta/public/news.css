@@ -63,6 +63,11 @@ article h1 {
   text-decoration-line: underline;
   text-align: center;
 }
+article.condensed h1 {
+  font-size: 1.2em;
+  padding: 6px 0 0;
+  text-decoration: none;
+}
 article h2 {
   font-size: 1.2em;
   padding: 3px 0;
