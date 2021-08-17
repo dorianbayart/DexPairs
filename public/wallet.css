@@ -41,7 +41,6 @@ body {
   align-items: center;
 }
 #connect-wallet:hover {
-  border: 1px solid #CCC;
   box-shadow: 0px 0px 12px #888E;
 }
 #connect-wallet img {

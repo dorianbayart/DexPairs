@@ -50,21 +50,43 @@ header .version .low {
   cursor: pointer;
   max-width: 250px;
   text-align: center;
-  transition: all 150ms ease-in-out;
   border-right: lightgrey 1px solid;
-  border-bottom: white 1px solid;
-}
-#menu .menu-item:hover {
-  border-bottom: lightgrey 1px solid;
 }
 #menu .menu-item#menu-news {
   border-right: none;
 }
 #menu .menu-item h2 {
   padding: 12px 9px 9px;
+  margin: 0.25em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: lighter;
+}
+#menu .menu-item h2 img {
+  height: 1em;
+  max-height: 24px;
+  margin-right: 0.5em;
 }
 #menu .menu-item .low {
   font-size: 0.6em;
+}
+
+#menu .menu-item.active h2 {
+    border-radius: 24px;
+}
+#menu .menu-item:hover h2 {
+    border-radius: unset;
+}
+#menu .menu-item.active#menu-charts h2, #menu .menu-item#menu-charts:hover h2 {
+    background-color: lavender;
+}
+#menu .menu-item.active#menu-wallet h2, #menu .menu-item#menu-wallet:hover h2 {
+    background-color: moccasin;
+}
+#menu .menu-item.active#menu-news h2, #menu .menu-item#menu-news:hover h2 {
+    background-color: darkseagreen;
 }
 
 
@@ -94,6 +116,6 @@ header .version .low {
     width: 95%;
   }
   #menu .menu-item h2 {
-    padding: 3px 9px 3px;
+    font-size: 16px;
   }
 }
