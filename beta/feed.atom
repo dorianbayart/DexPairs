@@ -21,9 +21,42 @@
   <!-- Entries -->
   <!-- ....... -->
 
+
+  <entry xml:lang="en">
+    <id>tag:dexpairs.xyz,2021-08-17:secret-beta-features</id>
+    <link rel="alternate" type="text/html" href="./news?title=secret-beta-features"/>
+    <title>A secret beta version for secret features</title>
+    <published>2021-08-17T11:00:00Z</published>
+    <updated>2021-08-17T11:00:00Z</updated>
+    <content type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <h2 class="chapter-title">Secret features - but don't tell anyone !</h2>
+        <div class="content">
+          <p>
+            A Beta version is online, you can now test new secret features: <a href="/beta">https://dexpairs.xyz/beta</a> !<br />
+            New secret features may be awesome, but they also may still be buggued sometimes, keep this in mind when you're using the Beta version.
+          </p>
+        </div>
+        <h2 class="chapter-title">Why a Beta version ?</h2>
+        <div class="content">
+          <p>
+            With this Beta version, I'll be able to test new design or implement new features, and test them in real life before pushing them to the regular website.<br />
+            It's supposed to prevent unwanted bugs, and make the developments easier. ;)
+          </p>
+        </div>
+        <ul class="tags">
+          <li>beta</li>
+          <li>tests</li>
+          <li>secret</li>
+          <li>feature</li>
+        </ul>
+      </div>
+    </content>
+  </entry>
+
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-10:welcome-nfts</id>
-    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=welcome-nfts"/>-->
+    <link rel="alternate" type="text/html" href="./news?title=welcome-nfts"/>
     <title>Welcome NFTs !</title>
     <published>2021-08-10T01:00:00Z</published>
     <updated>2021-08-10T01:00:00Z</updated>
@@ -56,7 +89,7 @@
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-07:protocols-full-support-aave-v2</id>
-    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=protocols-support-aave-v2"/>-->
+    <link rel="alternate" type="text/html" href="./news?title=protocols-support-aave-v2"/>
     <title>Full support of Aave v2 protocol</title>
     <published>2021-08-07T21:00:00Z</published>
     <updated>2021-08-07T21:00:00Z</updated>
@@ -90,7 +123,7 @@
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-04:atom-feed-creation</id>
-    <!--<link rel="alternate" type="text/html" href="https://dexpairs.xyz/news?title=atom-feed-creation"/>-->
+    <link rel="alternate" type="text/html" href="./news?title=atom-feed-creation"/>
     <title>Creation of an Atom feed</title>
     <published>2021-08-04T15:00:00Z</published>
     <updated>2021-08-04T21:00:00Z</updated>
