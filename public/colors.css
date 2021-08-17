@@ -24,6 +24,11 @@
   color: #000D;
   background-color: #FFFD;
 }
+/* 404 */
+#body-404 a {
+  color: #000D;
+  background-color: #FFFD;
+}
 
 #top, #top-title, #wallet .loading-message, .wallet-menu, #wallet ul, .gas-container {
   background-color: #0002;

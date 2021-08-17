@@ -1,7 +1,7 @@
 const t = (entry, tname) => entry.getElementsByTagName(tname)[0]
 const date = entry => new Date(t(entry, 'published').textContent).toLocaleString('en-US')
 
-fetch('/feed.atom')
+fetch('./feed.atom')
   .then(response => response.text())
   .then(xml => {
     const parser = new DOMParser()

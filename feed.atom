@@ -5,7 +5,7 @@
   <title>DexPairs.xyz - News</title>
   <subtitle>List new functionnalities and important news about DexPairs.xyz</subtitle>
 
-  <link href="https://dexpairs.xyz/feed.atom" rel="self" type="application/atom+xml" />
+  <link href="./feed.atom" rel="self" type="application/atom+xml" />
   <!--<link href="https://dexpairs.xyz/news" rel="alternate" type="text/html" />-->
 
   <updated>2021-08-04T15:00:00Z</updated>
@@ -32,7 +32,7 @@
         <h2 class="chapter-title">Explore ERC-721 transactions</h2>
         <div class="content">
           <p>
-            <a href="https://dexpairs.xyz/wallet">The Wallet tracker</a> can now explore ERC-721 transactions in order to find tokens.<br />
+            <a href="./wallet">The Wallet tracker</a> can now explore ERC-721 transactions in order to find tokens.<br />
             ERC-721 tokens are also well known as ... NFTs !<br />
             Yes, your <a href="https://ethereum.org/en/nft/" target="_blank" rel="external">Non-Fungible Tokens</a> are now displayed in the wallet !
           </p>
