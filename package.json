@@ -1,6 +1,6 @@
 {
   "name": "DexPairs",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "url": "https://dexpairs.xyz/",
   "description": "Multi-Chain && Multi-Protocol wallet tracker",
   "main": "index.js",
