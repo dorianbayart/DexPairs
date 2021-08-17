@@ -76,6 +76,9 @@ header .version .low {
 #menu .menu-item.active h2 {
     border-radius: 24px;
 }
+#menu .menu-item:hover h2 {
+    border-radius: unset;
+}
 #menu .menu-item.active#menu-charts h2, #menu .menu-item#menu-charts:hover h2 {
     background-color: lavender;
 }
