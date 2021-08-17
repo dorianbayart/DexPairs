@@ -10,6 +10,9 @@
         <loc>https://dexpairs.xyz/news</loc>
     </url>
     <url>
+        <loc>https://dexpairs.xyz/beta</loc>
+    </url>
+    <url>
         <loc>https://dexpairs.xyz/feed.atom</loc>
     </url>
 </urlset>
