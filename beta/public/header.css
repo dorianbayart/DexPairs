@@ -86,7 +86,7 @@ header .version .low {
     background-color: moccasin;
 }
 #menu .menu-item.active#menu-news h2, #menu .menu-item#menu-news:hover h2 {
-    background-color: darkseagreen;
+    background-color: palegreen;
 }
 
 
