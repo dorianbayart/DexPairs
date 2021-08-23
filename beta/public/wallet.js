@@ -190,8 +190,8 @@ function getTokenTx(network) {
   xmlhttp.onerror = function() {
     console.log('getTokenTx', this)
   }
-  const latestBlock = sessionStorage.getItem('latest-block-' + network) ? sessionStorage.getItem('latest-block-' + network) + 1 : 0
-  xmlhttp.open("GET", NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOC', latestBlock), true)
+  const latestBlock = sessionStorage.getItem('latest-block-' + network) ? parseInt(sessionStorage.getItem('latest-block-' + network)) + 1 : 0
+  xmlhttp.open("GET", NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
   xmlhttp.send()
 }
 
@@ -224,8 +224,8 @@ function getERC721Tx(network) {
   }
 
   // TODO Send transaction from only latest needed blocks !
-  const latestBlock = sessionStorage.getItem('latest-erc721-block-' + network) ? sessionStorage.getItem('latest-erc721-block-' + network) + 1 : 0
-  xmlhttp.open("GET", NETWORK[network].erc721tx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOC', latestBlock), true)
+  const latestBlock = sessionStorage.getItem('latest-erc721-block-' + network) ? parseInt(sessionStorage.getItem('latest-erc721-block-' + network)) + 1 : 0
+  xmlhttp.open("GET", NETWORK[network].erc721tx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
   xmlhttp.send()
 }
 
@@ -319,8 +319,8 @@ async function readNFTMetadata(id, indexId, tokenURI) {
 
 
 async function searchTokens(network) {
-  let tx = tokentx[network].filter(tx => tx.to.toLowerCase().includes(walletAddress.toLowerCase())).filter(t => !t.done)
-  const latestBlock = sessionStorage.getItem('latest-block-' + network)
+  let tx = tokentx[network].filter(t => !t.done)
+  const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + network))
 
   if(!tx || typeof tx === 'string') {
     return
@@ -329,7 +329,7 @@ async function searchTokens(network) {
   loading = true
 
   if(latestBlock) {
-    tx = tx.filter(tx => tx.blockNumber >= latestBlock)
+    tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
   }
 
   if(tx.length > 0) {
@@ -352,7 +352,7 @@ async function searchTokens(network) {
         }
       }
 
-      tokentx[network].filter(t => transaction.contractAddress === t.contractAddress).forEach((t, i) => t.done = true)
+      tokentx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach((t, i) => t.done = true)
     } catch(error) {
       //console.log(network, transaction.contractAddress, error)
     }
@@ -367,8 +367,8 @@ async function searchTokens(network) {
 }
 
 async function searchNFTs(network) {
-  let tx = erc721tx[network].filter(tx => tx.to.toLowerCase().includes(walletAddress.toLowerCase())).filter(t => !t.done)
-  const latestBlock = sessionStorage.getItem('latest-erc721-block-' + network)
+  let tx = erc721tx[network].filter(t => !t.done)
+  const latestBlock = parseInt(sessionStorage.getItem('latest-erc721-block-' + network))
 
   if(!tx || typeof tx === 'string') {
     return
@@ -377,7 +377,7 @@ async function searchNFTs(network) {
   loading = true
 
   if(latestBlock) {
-    tx = tx.filter(tx => tx.blockNumber >= latestBlock)
+    tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
   }
 
   if(tx.length > 0) {
@@ -398,7 +398,7 @@ async function searchNFTs(network) {
         }
       }
 
-      erc721tx[network].filter(t => transaction.contractAddress === t.contractAddress).forEach((t, i) => t.done = true)
+      erc721tx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach((t, i) => t.done = true)
     } catch(error) {
       // console.log(network, transaction.contractAddress, error)
     }
