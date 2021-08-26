@@ -351,10 +351,7 @@ function setTop() {
 
     div.addEventListener("click", function(e) {
       selectedToken = e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id
-      setToken(selectedToken)
-      getCharts()
-      setSwapperToken()
-      setSwapperBase()
+      selectToken(selectedToken)
     })
   }
 }
@@ -545,10 +542,8 @@ document.getElementById('swapper_switch').addEventListener(
     const temp = selectedToken
     selectedToken = selectedBase
     selectedBase = temp
-    setToken(selectedToken)
     setBase(selectedBase)
-    setSwapperToken()
-    getCharts()
+    selectToken(selectedToken)
   }
 )
 
