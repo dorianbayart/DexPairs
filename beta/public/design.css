@@ -251,7 +251,7 @@ button#base_change:hover img {
   transition: all 150ms ease-in-out;
 }
 #share_charts_container button:hover {
-  box-shadow: 0px 0px 8px #AAAE;
+  box-shadow: 0 0 8px #AAAE;
 }
 
 #swapper_token, #swapper_base {
@@ -278,8 +278,6 @@ button#base_change:hover img {
   display: flex;
   align-items: center;
   padding: 2px;
-}
-#swapper_switch:active {
 }
 #swapper_switch img {
   height: auto;

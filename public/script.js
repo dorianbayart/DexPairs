@@ -81,6 +81,10 @@ let dexList = {
   },
 }
 
+const INTERVAL_15M = '15m'
+const INTERVAL_4H = '4h'
+const INTERVAL_3D = '3d'
+const INTERVAL_1W = '1w'
 const LIST_INITIAL_SIZE = 100
 let interval = INTERVAL_4H
 
@@ -275,7 +279,7 @@ function updateList() {
     button.title = "Display the full list"
     button.classList.add('load-more')
     document.getElementById('list').appendChild(button)
-    button.addEventListener("click", function(e) {
+    button.addEventListener("click", function() {
       sessionStorage.setItem('full-list', true)
       updateList()
     })
@@ -490,7 +494,7 @@ document.getElementById('dex-selector').addEventListener(
 
 // OnChange on Calculator [Selected/Base] => Update the other value
 document.getElementById('swapper_token').addEventListener(
-  "change", function(e) {
+  "change", function() {
     document.getElementById('swapper_base').value =
     precise(document.getElementById('swapper_token').value
     * simple[selectedToken].p
@@ -499,7 +503,7 @@ document.getElementById('swapper_token').addEventListener(
 )
 
 document.getElementById('swapper_base').addEventListener(
-  "change", function(e) {
+  "change", function() {
     document.getElementById('swapper_token').value =
     precise(document.getElementById('swapper_base').value
     / simple[selectedToken].p
@@ -509,7 +513,7 @@ document.getElementById('swapper_base').addEventListener(
 
 // OnClick on Edit Base token => Display the selection list
 document.getElementById('base_change').addEventListener(
-  "click", function(e) {
+  "click", function() {
     updateBaseList()
     document.getElementById('base_symbol').style.display = "none"
     document.getElementById('base_change').style.display = "none"
@@ -538,7 +542,7 @@ document.getElementById('base_select').addEventListener(
 
 // Switch between Selected and Base tokens
 document.getElementById('swapper_switch').addEventListener(
-  "click", function(e) {
+  "click", function() {
     const temp = selectedToken
     selectedToken = selectedBase
     selectedBase = temp
@@ -549,25 +553,25 @@ document.getElementById('swapper_switch').addEventListener(
 
 // Interval selection
 document.getElementById('interval_15m').addEventListener(
-  "click", function(e) {
+  "click", function() {
     interval = INTERVAL_15M
     updateCharts()
   }
 )
 document.getElementById('interval_4h').addEventListener(
-  "click", function(e) {
+  "click", function() {
     interval = INTERVAL_4H
     updateCharts()
   }
 )
 document.getElementById('interval_3d').addEventListener(
-  "click", function(e) {
+  "click", function() {
     interval = INTERVAL_3D
     updateCharts()
   }
 )
 document.getElementById('interval_1w').addEventListener(
-  "click", function(e) {
+  "click", function() {
     interval = INTERVAL_1W
     updateCharts()
   }

@@ -27,10 +27,6 @@ const DOMAIN_NAME = 'DexPairs.xyz'
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
 const TIME_24H = 86400000
-const INTERVAL_15M = '15m'
-const INTERVAL_4H = '4h'
-const INTERVAL_3D = '3d'
-const INTERVAL_1W = '1w'
 
 
 const NETWORK = {

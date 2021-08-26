@@ -40,7 +40,7 @@ document.getElementById('input-wallet').addEventListener("change", function(e) {
   configureWallet(inputAddress)
 })
 
-document.getElementById('connect-wallet').addEventListener('click', function(e) {
+document.getElementById('connect-wallet').addEventListener('click', function() {
   if (window.ethereum) {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then(addresses => {
       document.getElementById('input-wallet').value = addresses[0]

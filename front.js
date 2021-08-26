@@ -339,7 +339,7 @@ app.get('/honeyswap/charts/:token/:base', (req, res) => {
 
 app.listen(port, () => console.log(`Frontend start at ${port}`))
 
-const server = http.createServer((req, res) => {
+http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type': 'text/html'})
   res.end('Hello World')
 })
