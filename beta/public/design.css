@@ -158,7 +158,6 @@
 #token_symbol, #token_price,
 #base_change, #base_price {
   font-size: 16px;
-  height: 17px;
   margin-bottom: 3px;
 }
 #token_name, #token_address, #base_name, #base_address {
@@ -179,6 +178,7 @@
 
 button#base_change {
   display: flex;
+  align-items: center;
   padding: 0;
   border-radius: 12px;
   border: none;
@@ -186,7 +186,7 @@ button#base_change {
   cursor: pointer;
 }
 button#base_change img {
-  height: 14px;
+  height: 15px;
   width: auto;
   margin-right: 4px;
   transition: all 250ms ease-in-out;

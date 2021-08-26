@@ -1,4 +1,5 @@
 
+let walletForage = null
 let globalChart = null
 let walletValue = 0
 let loading = false
@@ -176,8 +177,6 @@ function getTokenTx(network) {
       let data = JSON.parse(this.responseText)
       tokentx[network] = tokentx[network].concat(data.result)
 
-      sessionStorage.setItem('tokentx-' + network, JSON.stringify(tokentx[network]))
-
       searchTokens(network)
 
       clearTimeout(timerGetTokenTx[network])
@@ -209,8 +208,6 @@ function getERC721Tx(network) {
     } else if (this.readyState == 4 && this.status == 200) {
       let data = JSON.parse(this.responseText)
       erc721tx[network] = erc721tx[network].concat(data.result)
-
-      sessionStorage.setItem('erc721tx-' + network, JSON.stringify(erc721tx[network]))
 
       searchNFTs(network)
 
@@ -900,7 +897,18 @@ simpleDataTimers()
 
 
 
-function initializeHTML() {
+async function initializeHTML() {
+  /* Initialize LocalForage */
+  localforage.config({
+    size: 15000000 // 15 MB
+  })
+  walletForage = localforage.createInstance({
+    name: "wallet"
+  })
+
+
+
+
   const urlParams = new URLSearchParams(window.location.search)
   const hash = window.location.hash
   let address = null
