@@ -6,7 +6,6 @@ let search = ''
 let filteredList = {}
 let topTokens = {}
 let simple = {}
-let charts = {}
 let selectedToken = ''
 let selectedBase = ''
 let tokenCharts = {}
@@ -240,7 +239,7 @@ function selectToken(selected) {
   setSwapperBase()
 
   let listLi = document.getElementById('list').querySelectorAll('li')
-  listLi.forEach((li, i) => {
+  listLi.forEach((li) => {
     li.classList.toggle('active', li.id === selectedToken)
   });
 }
@@ -578,7 +577,7 @@ document.getElementById('interval_1w').addEventListener(
 )
 
 // Share this chart - Button
-document.getElementById('share_charts').addEventListener('click', event => {
+document.getElementById('share_charts').addEventListener('click', () => {
   const location = window.location
   if (navigator.share) {
     navigator.share({
@@ -653,7 +652,7 @@ function initializeHTML() {
 
 
   let dexSelector = document.getElementById('dex-selector')
-  Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item, i) => {
+  Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item) => {
     let option = document.createElement('option')
     dexSelector.appendChild(option)
     option.innerHTML += dexList[item].chain + ' - ' + dexList[item].name

@@ -145,7 +145,7 @@ function configureWallet(inputAddress) {
     document.querySelector('meta[property="og:title"]').setAttribute("content", document.title)
   }
 
-  Object.keys(NETWORK).forEach((network, i) => {
+  Object.keys(NETWORK).forEach((network) => {
     sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
     sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
     tokentx[network] = []
@@ -995,7 +995,7 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
   toggleHideButtons()
   displayWallet(true)
 
-  Object.keys(NETWORK).forEach((network, i) => {
+  Object.keys(NETWORK).forEach((network) => {
     clearTimeout(timerGetNetworkBalance[network])
     clearTimeout(timerGetERC721Tx[network])
     getNetworkBalance(NETWORK[network].enum)
@@ -1016,7 +1016,7 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
   toggleHideButtons()
   displayWallet(true)
 
-  Object.keys(NETWORK).forEach((network, i) => {
+  Object.keys(NETWORK).forEach((network) => {
     clearTimeout(timerGetTokenTx[network])
     getERC721Tx(NETWORK[network].enum)
   })
