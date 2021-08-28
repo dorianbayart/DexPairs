@@ -160,12 +160,24 @@
         </div>
       </div>
       <div id='chart'>
-        <div id="interval-title">Interval</div>
-        <div id='interval'>
-          <div id='interval_15m' class='interval-choice'>15m</div>
-          <div id='interval_4h' class='interval-choice'>4h</div>
-          <div id='interval_3d' class='interval-choice'>3d</div>
-          <div id='interval_1w' class='interval-choice'>1w</div>
+        <div class='interval-container'>
+          <div id="interval-title">Interval:</div>
+          <div id='interval'>
+            <div id='interval_15m' class='interval-choice' title='15 minutes'>15m</div>
+            <div id='interval_4h' class='interval-choice' title='4 hours'>4h</div>
+            <div id='interval_3d' class='interval-choice' title='3 days'>3d</div>
+            <div id='interval_1w' class='interval-choice' title='1 week'>1w</div>
+          </div>
+        </div>
+        <div class='timeframe-container'>
+          <div id="timeframe-title">Timeframe:</div>
+          <div id='timeframe'>
+            <div id='timeframe_24h' class='timeframe-choice' title='24 hours'>24h</div>
+            <div id='timeframe_1w' class='timeframe-choice' title='1 week'>1w</div>
+            <div id='timeframe_1m' class='timeframe-choice' title='1 month'>1m</div>
+            <div id='timeframe_1y' class='timeframe-choice' title='1 year'>1y</div>
+            <div id='timeframe_all' class='timeframe-choice' title='All available'>all</div>
+          </div>
         </div>
         <canvas id="myChart"></canvas>
       </div>

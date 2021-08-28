@@ -209,14 +209,21 @@ button#base_change:hover img {
   border-radius: 12px;
   width: auto;
 }
-#interval-title {
-  font-size: small;
-  margin-left: 6px;
+.interval-container, .timeframe-container {
+  display: inline-flex;
+  align-items: center;
 }
-#interval-title, #interval {
+#interval-title, #timeframe-title {
+  font-size: small;
+  margin-left: 24px;
+  margin-right: 6px;
+}
+#interval-title, #interval,
+#timeframe-title, #timeframe {
   display: inline-flex;
 }
-#interval .interval-choice {
+#interval .interval-choice,
+#timeframe .timeframe-choice {
   cursor: pointer;
   font-size: small;
   margin: 0.4em;
@@ -224,8 +231,13 @@ button#base_change:hover img {
   border-radius: 8px;
   padding: 0.25em 0.5em;
 }
-#interval .interval-choice:hover {
+#interval .interval-choice:hover,
+#timeframe .timeframe-choice:hover {
   box-shadow: 1px 1px 8px #BBB;
+}
+#interval .interval-choice.active,
+#timeframe .timeframe-choice.active {
+  box-shadow: 1px 1px 8px lightseagreen;
 }
 #myChart {
   width: 95% !important;

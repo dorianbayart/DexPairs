@@ -26,7 +26,10 @@ const server = 'https://api.dexpairs.xyz'
 const DOMAIN_NAME = 'DexPairs.xyz'
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
-const TIME_24H = 86400000
+const TIME_24H = 1000*60*60*24
+const TIME_1W = 1000*60*60*24*7
+const TIME_1M = 1000*60*60*24*30
+const TIME_1Y = 1000*60*60*24*365
 
 
 const NETWORK = {
