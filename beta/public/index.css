@@ -10,8 +10,8 @@
 header {
   width: 100%;
   text-align: center;
-  padding: min(64px, 4vh);
-  font-size: min(64px, 8vh);
+  padding: max(32px, 4vh);
+  font-size: max(48px, 8vh);
   display: inline-block;
   background: linear-gradient(-45deg, yellow, lightseagreen);
   -webkit-background-clip: text;
@@ -53,14 +53,14 @@ section.section-news {
 }
 h2 {
   text-align: center;
-  font-size: min(32px, 4vh);
+  font-size: max(32px, 4vh);
   text-transform: capitalize;
   color: #000C;
   margin-bottom: 24px;
 }
 h3 {
   text-align: center;
-  font-size: min(24px, 3vh);
+  font-size: max(24px, 3vh);
   text-transform: capitalize;
   margin-bottom: 24px;
 }
@@ -139,6 +139,9 @@ section.section-wallet .content a.GoTo {
 }
 
 @media (max-width: 840px) {
+  section {
+    margin: 72px auto;
+  }
   .content-illustration {
     flex-flow: column;
   }
@@ -157,5 +160,13 @@ section.section-wallet .content a.GoTo {
   section.supported-blockchains ul li {
     margin: 6px;
     padding: 6px 12px 6px 9px
+  }
+  section.section-charts .content,
+  section.section-news .content {
+    padding: 0 5% 24px;
+  }
+  section.section-charts .content ul,
+  section.section-news .content ul {
+    padding: 12px 0 24px;
   }
 }
