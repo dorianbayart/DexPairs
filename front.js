@@ -23,7 +23,6 @@ const fetch = require('node-fetch')
 * Expose some public URLs
 */
 
-const DOMAIN_NAME = 'dexpairs.xyz'
 const BACKEND_URL = 'http://127.0.0.1:3000'
 
 
@@ -190,6 +189,7 @@ const app = express()
 app.use(compression())
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
+app.get('/charts', (req, res) => res.sendFile(path.join(__dirname, '/charts.html')))
 app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/wallet.html')))
 app.get('/news', (req, res) => res.sendFile(path.join(__dirname, '/news.html')))
 app.get('/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/feed.atom')))
@@ -197,6 +197,7 @@ app.use('/img', express.static('img'))
 app.use('/public', express.static('public'))
 
 app.get('/beta/', (req, res) => res.sendFile(path.join(__dirname, '/beta/index.html')))
+app.get('/beta/charts', (req, res) => res.sendFile(path.join(__dirname, '/beta/charts.html')))
 app.get('/beta/wallet', (req, res) => res.sendFile(path.join(__dirname, '/beta/wallet.html')))
 app.get('/beta/news', (req, res) => res.sendFile(path.join(__dirname, '/beta/news.html')))
 app.get('/beta/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/beta/feed.atom')))

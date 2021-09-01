@@ -332,20 +332,28 @@ function setTop() {
     let div = document.createElement('div')
     div.classList.add('top-token')
     div.id = address
+    let img_logo = document.createElement('img')
+    img_logo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + address + '.png'
+    img_logo.classList.add('top-logo')
+    div.appendChild(img_logo)
     let div_symbol = document.createElement('div')
     div_symbol.innerHTML = symbol
     div_symbol.classList.add('top-symbol')
+    div.appendChild(div_symbol)
     let div_price = document.createElement('div')
     div_price.innerHTML = precise(topTokens[address].p)
     div_price.classList.add('top-price')
-    let container_chart = document.createElement('div')
-    container_chart.classList.add('top-chart')
-    let canvas_chart = document.createElement('canvas')
-    canvas_chart.id = 'chart_' + address
-
+    div.appendChild(div_price)
     let div_percentage = document.createElement('div')
     div_percentage.classList.add('top-percentage')
     div_percentage.classList.add('color-transition')
+    div.appendChild(div_percentage)
+    let container_chart = document.createElement('div')
+    container_chart.classList.add('top-chart')
+    div.appendChild(container_chart)
+    let canvas_chart = document.createElement('canvas')
+    canvas_chart.id = 'chart_' + address
+    container_chart.appendChild(canvas_chart)
 
     const miniChart = extract24hChart(topTokens[address].chart)
     const percentage = getPercentage24h(miniChart)
@@ -353,11 +361,6 @@ function setTop() {
     div_percentage.classList.add(percentage >= 0 ? 'green' : 'red')
 
     div_column.appendChild(div)
-    div.appendChild(div_symbol)
-    div.appendChild(div_price)
-    div.appendChild(div_percentage)
-    div.appendChild(container_chart)
-    container_chart.appendChild(canvas_chart)
 
     setTopMiniChart(address, miniChart)
 
@@ -426,6 +429,7 @@ function setToken(addr) {
     return
   }
   const symbol = simple[addr].s
+  document.getElementById('token_logo').src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
   document.getElementById('token_symbol').innerHTML = symbol
   document.getElementById('token_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)
@@ -447,6 +451,7 @@ function setBase(addr) {
     return
   }
   const symbol = simple[addr].s
+  document.getElementById('base_logo').src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
   document.getElementById('base_symbol').innerHTML = symbol
   document.getElementById('base_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)

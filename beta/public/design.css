@@ -79,6 +79,11 @@
 .top-token:hover {
   box-shadow: 1px 1px 12px #BBB;
 }
+.top-logo {
+  display: inline-flex;
+  height: 20px;
+  margin-right: 6px;
+}
 .top-symbol {
   display: inline-flex;
   width: 40%;
@@ -152,13 +157,26 @@
   flex: auto;
   align-self: center;
 }
+.logo_symbolName {
+  display: flex;
+  align-items: center;
+}
+#token_logo, #base_logo {
+  margin-right: 6px;
+}
+#token_logo::before, #base_logo::before {
+  font-size: 10px;
+  display: flex;
+  width: 28px;
+  height: 28px;
+  padding-top: 4px;
+}
 #token_price, #token_address, #base_price, #base_address {
   text-align: right;
 }
 #token_symbol, #token_price,
 #base_change, #base_price {
   font-size: 16px;
-  margin-bottom: 3px;
 }
 #token_name, #token_address, #base_name, #base_address {
   font-size: 10px;

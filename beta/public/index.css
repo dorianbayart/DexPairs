@@ -1,0 +1,145 @@
+
+#body-background {
+  background-image: url('/img/background-multichain.svg');
+}
+
+header {
+  width: 100%;
+  text-align: center;
+  padding: min(64px, 4vh);
+  font-size: min(64px, 8vh);
+  display: inline-block;
+  background: linear-gradient(-45deg, yellow, lightseagreen);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: #0001 3px 3px 3px;
+}
+header .version {
+  font-style: italic;
+  font-size: 0.5em;
+  background: linear-gradient(45deg, yellow, red);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+section {
+  max-width: min(1200px, 95%);
+  margin: 128px auto;
+  padding: min(48px, 4vh);
+  border-radius: 24px;
+}
+section.supported-blockchains {
+  max-width: min(920px, 95%);
+  background-color: #EEED;
+  text-align: center;
+  border-radius: 50%;
+  padding: 48px;
+}
+section.section-charts {
+  background-color: #E4E4FBCC; /* lavender */
+}
+section.section-wallet {
+  background-color: #F9DDACCC; /* moccasin */
+}
+section.section-news {
+  background-color: #BFFFBFCC; /* light palegreen */
+}
+h2 {
+  text-align: center;
+  font-size: min(32px, 4vh);
+  text-transform: capitalize;
+  color: #000C;
+  margin-bottom: 24px;
+}
+h3 {
+  text-align: center;
+  font-size: min(24px, 3vh);
+  text-transform: capitalize;
+  margin-bottom: 24px;
+}
+
+section.supported-blockchains ul {
+  list-style: none;
+  display: inline-flex;
+  flex-wrap: wrap;
+  font-size: 1.5em;
+  justify-content: center;
+  padding: 0;
+  margin: auto;
+}
+section.supported-blockchains ul li {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px 12px 18px;
+  border: 1px solid #CCC;
+  border-radius: 32px;
+  margin: 12px 24px;
+  background-color: #FFFD;
+}
+section.supported-blockchains ul li img {
+  margin-right: 12px;
+}
+
+.content-illustration {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.content {
+  width: 60%;
+  min-width: 340px;
+  font-size: 1.2em;
+  padding: 24px 5%;
+  display: flex;
+  flex-flow: column;
+}
+.content ul {
+  list-style: circle;
+  padding: 24px 0;
+  margin: 0;
+}
+.content ul li {
+  margin: 12px 0;
+}
+.content a.GoTo {
+  align-self: flex-end;
+  padding: 12px 24px;
+  border: 1px solid #CCC;
+  border-radius: 12px;
+  background-color: #FFFD;
+  transition: all 75ms ease-in-out;
+}
+section.section-wallet .content a.GoTo {
+  align-self: flex-start;
+}
+.content a.GoTo:hover {
+  /*background-color: #FFFA;*/
+  box-shadow: 0 0 24px 12px #FFFD;
+}
+
+.illustration {
+  width: 40%;
+  min-width: 340px;
+}
+.illustration img {
+  width: 100%;
+  height: auto;
+}
+
+.in-between-illustration {
+  text-align: center;
+}
+.in-between-illustration img {
+  width: min(360px, 75%);
+  opacity: 80%;
+}
+
+@media (max-width: 460px) {
+  section.supported-blockchains ul li {
+    margin: 6px;
+  }
+}

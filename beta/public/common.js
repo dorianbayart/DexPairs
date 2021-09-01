@@ -194,7 +194,7 @@ let loadingChartsByAddress = false
 
 
 require.config({ waitSeconds: 0 })
-const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
+require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
   web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
   web3_polygon = new Web3(NETWORK.POLYGON.rpc)
   web3_fantom = new Web3(NETWORK.FANTOM.rpc)
@@ -234,9 +234,9 @@ const setGas = (network) => {
       span.innerHTML = gwei
       li.appendChild(span)
       li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
-    }, error => {
-      // console.log(error)
-    })
+    }/*, error => {
+      console.log(error)
+    }*/)
   }
 }
 
