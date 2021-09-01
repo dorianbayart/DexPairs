@@ -5,17 +5,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-  <title>DexPairs.xyz | Charts</title>
-  <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Supports Ethereum, Polygon, BSC, Fantom and xDai chains." />
+  <title>DexPairs.xyz</title>
+  <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Polygon, BSC, Fantom and xDai chains." />
   <meta name="author" content="Dorian Bayart" />
-  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, bsc, fantom, xdai, wallet, defi, dex, uniswap, sushiswap, pancakeswap, spiritswap, honeyswap" />
+  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, bsc, fantom, xdai, wallet, nft, defi, dex, uniswap, sushiswap, pancakeswap, spiritswap, honeyswap" />
 
   <link rel="shortcut icon" type="image/png" href="/img/background-multichain-min.png" />
   <link href="./" rel="canonical" />
 
-  <meta property="og:title" content="DexPairs.xyz | Charts" />
+  <meta property="og:title" content="DexPairs.xyz" />
   <meta property="og:type" content="website" />
-  <meta property="og:description" content="Track prices of your tokens on multiple chains through multiple protocols. Supports Ethereum, Polygon, BSC, Fantom and xDai chains." />
+  <meta property="og:description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Polygon, BSC, Fantom and xDai chains." />
   <meta property="og:url" content="./" />
   <meta property="og:image" content="/img/background-multichain-min.png" />
   <meta property="og:site_name" content="DexPairs" />
@@ -24,163 +24,115 @@
 
   <link rel="stylesheet" href="./public/colors.css">
   <link rel="stylesheet" href="./public/common.css">
-  <link rel="stylesheet" href="./public/header.css">
+  <link rel="stylesheet" href="./public/index.css">
   <link rel="stylesheet" href="./public/footer.css">
-  <link rel="stylesheet" href="./public/gas.css">
-  <link rel="stylesheet" href="./public/design.css">
-  <link rel="stylesheet" href="./public/responsive.css">
 
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
-  <script defer src="./public/common.js"></script>
-  <script defer src="./public/script.js"></script>
 </head>
 
 <body>
-  <div id='header'>
-    <header>
-      <a id='title' href="./" aria-label="Homepage">
-        <h1>
-          DexPairs
-        </h1>
-      </a>
-    </header>
+  <header>
+    <a id='title' href="./" aria-label="Homepage">
+      <h1>
+        DexPairs
+      </h1>
+    </a>
+  </header>
 
-    <div id='menu'>
-      <div id='menu-charts' class='menu-item active'>
-        <a href="./" aria-label="Charts">
-          <h2>
-            <img src="/img/icons/bar-chart-2.svg" alt="Chart Logo" width="24px" height="24px">
-            Charts
-          </h2>
-        </a>
+
+
+
+  <section class='section-charts'>
+    <h2>Track Prices</h2>
+    <div class='content-illustration'>
+      <div class='content'>
+        <ul>
+          <li>Track historical prices of your favorite tokens</li>
+          <li>Data comes directly from popular DEXes</li>
+          <li>
+            Display price evolution based on any token you choose<br />
+            (ie: <a href='./charts?dex=UNISWAP&token=AAVE&base=COMP&interval=4h&timeframe=1m' target='_blank'>Aave/Comp</a>, <a href='./charts?dex=PANCAKESWAP&token=Cake&base=DOT&interval=4h&timeframe=1m' target='_blank'>Cake/Dot</a>)
+          </li>
+        </ul>
+
+        <a href='./charts' title='Track prices' class='GoTo'>Go to Charts</a>
       </div>
-      <div id='menu-wallet' class='menu-item'>
-        <a href="./wallet" aria-label="Wallet">
-          <h2>
-            <img src="/img/icons/briefcase.svg" alt="Wallet Logo" width="24px" height="24px">
-            Wallet
-          </h2>
-        </a>
-      </div>
-      <div id='menu-news' class='menu-item'>
-        <a href="./news" aria-label="News">
-          <h2>
-            <img src="/img/icons/news_feed.svg" alt="News Feed Logo" width="24px" height="24px">
-            News
-          </h2>
-        </a>
+      <div class='illustration'>
+        <img src='/img/illustrations/undraw_Growing_re_olpi.svg' alt='Track Prices' width='256px' height='192px' loading='lazy'>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class='gas'>
-    <h3 class='gas-title'>Current gas prices</h3>
-    <div class='gas-container'>
-      <span class='gas-icon'>
-        <img src='/img/gas-station-icon.svg' alt="Gas Station Icon" title="Network current gas" width="14px" height="16px">
-      </span>
-      <ul class='gas-list'>
-        <li id='gas-ETHEREUM'></li>
-        <li id='gas-POLYGON'></li>
-        <li id='gas-BSC'></li>
-        <li id='gas-FANTOM'></li>
-        <li id='gas-XDAI'></li>
-      </ul>
-      <span id='gas-realtime-button' class='realtime-icon unselectable'>
-        <img src='/img/icons/refresh-cw.svg' alt="Realtime Update Icon" title="Realtime update" width="14px" height="14px">
-      </span>
-    </div>
-  </div>
 
-  <div id='dex-selection'>
-    <div class="dex-selection-img-container unselectable">
-      <img id="dex-selection-img" src="/img/ethereum-icon.svg" alt="Ethereum Logo" width="36px" height="36px">
-    </div>
-    <select name='dex-selector' id='dex-selector' title='Select the Protocol/DEX'></select>
-  </div>
+  <section class='supported-blockchains'>
+    <h3>Supported Blockchains</h3>
+    <ul>
+      <li>
+        <img src="/img/ethereum-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
+        Ethereum
+      </li>
+      <li>
+        <img src="/img/polygon-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
+        Polygon/Matic
+      </li>
+      <li>
+        <img src="/img/bsc-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
+        Binance Smart Chain
+      </li>
+      <li>
+        <img src="/img/fantom-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
+        Fantom/Opera
+      </li>
+      <li>
+        <img src="/img/xdai-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
+        xDai
+      </li>
+    </ul>
+  </section>
 
-  <div id='top' class='flex-row'>
-  </div>
-  <div id='main'>
-    <div class="flex-column left-menu">
-      <input type='text' id='search_field' placeholder='Search a token' title='Search by symbol, name or contract addres'>
-      <div id='order-list'>
 
+  <section class='section-wallet'>
+    <h2>Explore your Wallet</h2>
+    <div class='content-illustration'>
+      <div class='illustration'>
+        <img src='/img/illustrations/undraw_Portfolio_re_qwm5.svg' alt='Explore your Wallet' width='256px' height='192px' loading='lazy'>
       </div>
-      <div id='list'></div>
-    </div>
-    <div class='flex-column main-chart'>
-      <div class='flex-pair'>
-        <div id='token'>
-          <div class='symbol_name'>
-            <div id='token_symbol' class='flex-auto'></div>
-            <div id='token_name' class='flex-auto'></div>
-          </div>
-          <div class='percentages'>
-            <div id='token_percentage_24h' class='flex-auto'></div>
-            <div id='token_percentage_7d'></div>
-            <div id='token_percentage_1m' class='flex-auto'></div>
-          </div>
-          <div class='price_address'>
-            <div id='token_price' class='flex-auto'></div>
-            <div id='token_address' class='flex-auto'></div>
-          </div>
-        </div>
-        <button id='swapper_switch' title='Switch'>
-          <img src="https://cdn0.iconfinder.com/data/icons/google-material-design-3-0/48/ic_swap_horiz_48px-256.png"
-          alt="Swap icon" width="32px" height="32px">
-        </button>
-        <div id='base'>
-          <div class='symbol_name'>
-            <div class='base_symbol_container flex-auto'>
-              <button id='base_change' title='Edit'>
-                <img src="https://cdn4.iconfinder.com/data/icons/basic-user-interface-elements/700/edit-change-pencil-512.png"
-                alt="Edit icon" width="28px" height="28px">
-                <div id='base_symbol'></div>
-              </button>
-              <select id='base_select' title='Select the reference token'></select>
-            </div>
-            <div id='base_name' class='flex-auto'></div>
-          </div>
-          <div class='percentages'>
-            <div id='base_percentage_24h' class='flex-auto'></div>
-            <div id='base_percentage_7d'></div>
-            <div id='base_percentage_1m' class='flex-auto'></div>
-          </div>
-          <div class='price_address'>
-            <div id='base_price' class='flex-auto'></div>
-            <div id='base_address' class='flex-auto'></div>
-          </div>
-        </div>
-      </div>
-      <div id='chart'>
-        <div id="interval-title">Interval</div>
-        <div id='interval'>
-          <div id='interval_15m' class='interval-choice'>15m</div>
-          <div id='interval_4h' class='interval-choice'>4h</div>
-          <div id='interval_3d' class='interval-choice'>3d</div>
-          <div id='interval_1w' class='interval-choice'>1w</div>
-        </div>
-        <canvas id="myChart"></canvas>
-      </div>
-      <div class='source_share_container'>
-        <div id='source_data'></div>
-        <div id='share_charts_container'>
-          <button id='share_charts'>Share this chart</button>
-        </div>
-      </div>
-      <div class='flex-pair'>
-        <div id='swapper_token_symbol'></div>
-        <input type='number' id='swapper_token' min='0' step='0.0000000000000001' title='Calculator'>
+      <div class='content'>
+        <ul>
+          <li>Your cross-chain portfolio with real prices at one place</li>
+          <li>Display your NFTs collection as a gallery, and share it!</li>
+          <li>Estimate your portfolio history value with a global chart (based on Ethereum price evolution)</li>
+          <li><i>Soon</i>: Search for any information in your transactions</li>
 
-        <input type='number' id='swapper_base' min='0' step='0.0000000000000001' title='Calculator'>
-        <div id='swapper_base_symbol'></div>
+        </ul>
+
+        <a href='./wallet' title='Explore your Wallet' class='GoTo'>Go to Wallet</a>
       </div>
     </div>
+  </section>
+
+  <div class='in-between-illustration'>
+    <img src='/img/illustrations/undraw_progressive_app_m9ms.svg' alt='Many useful features' width='256px' height='192px' loading='lazy'>
   </div>
+
+  <section class='section-news'>
+    <h2>Many other features</h2>
+    <div class='content-illustration'>
+      <div class='content'>
+        <ul>
+          <li>Keep an eye on current minimal gas fees in realtime</li>
+          <li>On mobile, tablet or desktop, the design stays responsive</li>
+          <li>Subscribe to a dedicated RSS feed - <a href='./news'>Read the news</a>!</li>
+          <li><i>Soon</i>: Many more useful features in the pipe!</li>
+
+        </ul>
+      </div>
+      <div class='illustration'>
+        <img src='/img/illustrations/undraw_ethereum_desire_wy1b.svg' alt='Many other features' width='256px' height='192px' loading='lazy'>
+      </div>
+    </div>
+  </section>
+
+
 
   <footer class="footer">
     <a id="roadmap_link" class="link-with-img" href="https://github.com/dorianbayart/DexPairs/projects/1" target="_blank" rel="noopener">

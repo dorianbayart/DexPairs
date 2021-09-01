@@ -146,6 +146,9 @@
   #token, #base {
     margin: 0.1em 0.25em;
   }
+  #interval-title, #timeframe-title {
+    margin-left: 6px;
+  }
   #interval .interval-choice {
     margin: 0 0.25em;
   }

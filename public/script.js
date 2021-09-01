@@ -84,8 +84,14 @@ const INTERVAL_15M = '15m'
 const INTERVAL_4H = '4h'
 const INTERVAL_3D = '3d'
 const INTERVAL_1W = '1w'
+const TIMEFRAME_24H = '24h'
+const TIMEFRAME_1W = '1w'
+const TIMEFRAME_1M = '1m'
+const TIMEFRAME_1Y = '1y'
+const TIMEFRAME_ALL = 'all'
 const LIST_INITIAL_SIZE = 100
 let interval = INTERVAL_4H
+let timeframe = TIMEFRAME_1W
 
 
 // get tokens list
@@ -109,6 +115,7 @@ function getList() {
   xmlhttp.open("GET", dexList[dex].url_data + "/list", true)
   xmlhttp.send()
 
+  clearTimeout(getListTimer)
   getListTimer = setTimeout(getList, Math.round((90*Math.random() + 180)*1000))
 }
 
@@ -134,6 +141,7 @@ function getTop() {
   xmlhttp.open("GET", dexList[dex].url_data + "/top", true)
   xmlhttp.send()
 
+  clearTimeout(getTopTimer)
   getTopTimer = setTimeout(getTop, Math.round((5*Math.random() + 15)*1000))
 }
 
@@ -180,6 +188,7 @@ function getSimple() {
   xmlhttp.open("GET", dexList[dex].url_data + "/simple", true)
   xmlhttp.send()
 
+  clearTimeout(getSimpleTimer)
   getSimpleTimer = setTimeout(getSimple, Math.round((30*Math.random() + 30)*1000))
 }
 
@@ -241,7 +250,7 @@ function selectToken(selected) {
   let listLi = document.getElementById('list').querySelectorAll('li')
   listLi.forEach((li) => {
     li.classList.toggle('active', li.id === selectedToken)
-  });
+  })
 }
 
 
@@ -323,20 +332,28 @@ function setTop() {
     let div = document.createElement('div')
     div.classList.add('top-token')
     div.id = address
+    let img_logo = document.createElement('img')
+    img_logo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + address + '.png'
+    img_logo.classList.add('top-logo')
+    div.appendChild(img_logo)
     let div_symbol = document.createElement('div')
     div_symbol.innerHTML = symbol
     div_symbol.classList.add('top-symbol')
+    div.appendChild(div_symbol)
     let div_price = document.createElement('div')
     div_price.innerHTML = precise(topTokens[address].p)
     div_price.classList.add('top-price')
-    let container_chart = document.createElement('div')
-    container_chart.classList.add('top-chart')
-    let canvas_chart = document.createElement('canvas')
-    canvas_chart.id = 'chart_' + address
-
+    div.appendChild(div_price)
     let div_percentage = document.createElement('div')
     div_percentage.classList.add('top-percentage')
     div_percentage.classList.add('color-transition')
+    div.appendChild(div_percentage)
+    let container_chart = document.createElement('div')
+    container_chart.classList.add('top-chart')
+    div.appendChild(container_chart)
+    let canvas_chart = document.createElement('canvas')
+    canvas_chart.id = 'chart_' + address
+    container_chart.appendChild(canvas_chart)
 
     const miniChart = extract24hChart(topTokens[address].chart)
     const percentage = getPercentage24h(miniChart)
@@ -344,11 +361,6 @@ function setTop() {
     div_percentage.classList.add(percentage >= 0 ? 'green' : 'red')
 
     div_column.appendChild(div)
-    div.appendChild(div_symbol)
-    div.appendChild(div_price)
-    div.appendChild(div_percentage)
-    div.appendChild(container_chart)
-    container_chart.appendChild(canvas_chart)
 
     setTopMiniChart(address, miniChart)
 
@@ -417,6 +429,7 @@ function setToken(addr) {
     return
   }
   const symbol = simple[addr].s
+  document.getElementById('token_logo').src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
   document.getElementById('token_symbol').innerHTML = symbol
   document.getElementById('token_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)
@@ -438,6 +451,7 @@ function setBase(addr) {
     return
   }
   const symbol = simple[addr].s
+  document.getElementById('base_logo').src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
   document.getElementById('base_symbol').innerHTML = symbol
   document.getElementById('base_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)
@@ -552,29 +566,93 @@ document.getElementById('swapper_switch').addEventListener(
 
 // Interval selection
 document.getElementById('interval_15m').addEventListener(
-  "click", function() {
+  "click", function(e) {
     interval = INTERVAL_15M
     updateCharts()
+
+    setActiveInterval(e.target)
   }
 )
 document.getElementById('interval_4h').addEventListener(
-  "click", function() {
+  "click", function(e) {
     interval = INTERVAL_4H
     updateCharts()
+
+    setActiveInterval(e.target)
   }
 )
 document.getElementById('interval_3d').addEventListener(
-  "click", function() {
+  "click", function(e) {
     interval = INTERVAL_3D
     updateCharts()
+
+    setActiveInterval(e.target)
   }
 )
 document.getElementById('interval_1w').addEventListener(
-  "click", function() {
+  "click", function(e) {
     interval = INTERVAL_1W
     updateCharts()
+
+    setActiveInterval(e.target)
   }
 )
+// Set Active class on the clicked div
+function setActiveInterval(item) {
+  let list = document.getElementById('interval').querySelectorAll('div.interval-choice')
+  list.forEach((div) => {
+    div.classList.toggle('active', div.id === item.id || div.textContent === item.textContent)
+  })
+}
+
+// Timeframe selection
+document.getElementById('timeframe_24h').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_24H
+    updateCharts()
+
+    setActiveTimeframe(e.target)
+  }
+)
+document.getElementById('timeframe_1w').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_1W
+    updateCharts()
+
+    setActiveTimeframe(e.target)
+  }
+)
+document.getElementById('timeframe_1m').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_1M
+    updateCharts()
+
+    setActiveTimeframe(e.target)
+  }
+)
+document.getElementById('timeframe_1y').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_1Y
+    updateCharts()
+
+    setActiveTimeframe(e.target)
+  }
+)
+document.getElementById('timeframe_all').addEventListener(
+  "click", function(e) {
+    timeframe = TIMEFRAME_ALL
+    updateCharts()
+
+    setActiveTimeframe(e.target)
+  }
+)
+// Set Active class on the clicked div
+function setActiveTimeframe(item) {
+  let list = document.getElementById('timeframe').querySelectorAll('div.timeframe-choice')
+  list.forEach((div) => {
+    div.classList.toggle('active', div.id === item.id || div.textContent === item.textContent)
+  })
+}
 
 // Share this chart - Button
 document.getElementById('share_charts').addEventListener('click', () => {
@@ -625,6 +703,9 @@ function initializeHTML() {
   if(sessionStorage.getItem('interval')) {
     interval = sessionStorage.getItem('interval')
   }
+  if(sessionStorage.getItem('timeframe')) {
+    timeframe = sessionStorage.getItem('timeframe')
+  }
 
   if(sessionStorage.getItem('list')) {
     list = JSON.parse(sessionStorage.getItem('list'))
@@ -649,6 +730,12 @@ function initializeHTML() {
   if(params.has('interval')) {
     interval = params.get('interval')
   }
+  if(params.has('timeframe')) {
+    timeframe = params.get('timeframe')
+  }
+
+  setActiveInterval({ textContent: interval })
+  setActiveTimeframe({ textContent: timeframe })
 
 
   let dexSelector = document.getElementById('dex-selector')
@@ -675,6 +762,7 @@ function saveSessionVariables() {
   sessionStorage.setItem('selectedToken', selectedToken)
   sessionStorage.setItem('selectedBase', selectedBase)
   sessionStorage.setItem('interval', interval)
+  sessionStorage.setItem('timeframe', timeframe)
 
   updateURLParams()
 }
@@ -696,7 +784,7 @@ function setSourceDataText() {
 function updateCharts() {
   saveSessionVariables()
 
-  let tokenChart = null, baseChart = null, scaleUnit = 'hour'
+  let tokenChart = null, baseChart = null, scaleUnit = 'day'
   switch (interval) {
     case INTERVAL_15M:
       tokenChart = tokenCharts.chart_often
@@ -718,6 +806,27 @@ function updateCharts() {
       tokenChart = tokenCharts.chart_4h
       baseChart = baseCharts.chart_4h
       scaleUnit = 'day'
+      break;
+  }
+  switch(timeframe) {
+    case TIMEFRAME_24H:
+      tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_24H)
+      baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_24H)
+      break;
+    case TIMEFRAME_1M:
+      tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_1M)
+      baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_1M)
+      break;
+    case TIMEFRAME_1Y:
+      tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_1Y)
+      baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_1Y)
+      break;
+    case TIMEFRAME_ALL:
+      break;
+    case TIMEFRAME_1W:
+    default:
+      tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_1W)
+      baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_1W)
       break;
   }
 
@@ -801,6 +910,7 @@ function updateURLParams() {
   params.set('token', selectedToken)
   params.set('base', selectedBase)
   params.set('interval', interval)
+  params.set('timeframe', timeframe)
 
   const fullTitle = DOMAIN_NAME + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p)
   document.title = fullTitle

@@ -20,7 +20,7 @@ header {
 header h1 {
   font-size: max(20px, 4vh);
   display: inline-block;
-  background: linear-gradient(125deg, lightseagreen, #ee0 75%, red);
+  background: linear-gradient(-45deg, yellow, lightseagreen);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

@@ -26,7 +26,10 @@ const server = 'https://api.dexpairs.xyz'
 const DOMAIN_NAME = 'DexPairs.xyz'
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
-const TIME_24H = 86400000
+const TIME_24H = 1000*60*60*24
+const TIME_1W = 1000*60*60*24*7
+const TIME_1M = 1000*60*60*24*30
+const TIME_1Y = 1000*60*60*24*365
 
 
 const NETWORK = {
@@ -191,7 +194,7 @@ let loadingChartsByAddress = false
 
 
 require.config({ waitSeconds: 0 })
-const Web3 = require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
+require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
   web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
   web3_polygon = new Web3(NETWORK.POLYGON.rpc)
   web3_fantom = new Web3(NETWORK.FANTOM.rpc)
@@ -231,9 +234,9 @@ const setGas = (network) => {
       span.innerHTML = gwei
       li.appendChild(span)
       li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
-    }, error => {
-      // console.log(error)
-    })
+    }/*, error => {
+      console.log(error)
+    }*/)
   }
 }
 
