@@ -1,4 +1,8 @@
 
+* {
+  transition: none;
+}
+
 #body-background {
   background-image: url('/img/background-multichain.svg');
 }
