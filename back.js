@@ -33,10 +33,10 @@ console.log(dir_home)
 
 
 const VOLUME_SIZE = 12
-const REALTIME = 20000 // 20 seconds
+const REALTIME = 30000 // 30 seconds
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
-const DAYS = 259200000 // 3 days
+const DAY = 86400000 // 1 day
 const WEEK = 604800000 // 1 week
 const HISTORY_SIZE = 192
 const HISTORY_SIZE_24H = 96 // 24h / 15min
@@ -370,19 +370,24 @@ async function launch() {
         p: price
       }]
     }
-    if(tokens_charts[address].chart_3d) {
-      if((time - tokens_charts[address].chart_3d[tokens_charts[address].chart_3d.length-1]['t']) > DAYS) {
-        tokens_charts[address].chart_3d.push({
+    if(tokens_charts[address].chart_1d) {
+      if((time - tokens_charts[address].chart_1d[tokens_charts[address].chart_1d.length-1]['t']) > DAY) {
+        tokens_charts[address].chart_1d.push({
           t: time,
           p: price,
         })
-        tokens_charts[address].chart_3d = tokens_charts[address].chart_3d.slice(-HISTORY_SIZE)
+        tokens_charts[address].chart_1d = tokens_charts[address].chart_1d.slice(-HISTORY_SIZE)
       }
     } else {
-      tokens_charts[address].chart_3d = [{
-        t: time,
-        p: price
-      }]
+      if(tokens_charts[address].chart_3d) {
+        tokens_charts[address].chart_1d = tokens_charts[address].chart_3d
+        tokens_charts[address].chart_3d = null
+      } else {
+        tokens_charts[address].chart_1d = [{
+          t: time,
+          p: price
+        }]
+      }
     }
     if(tokens_charts[address].chart_1w) {
       if((time - tokens_charts[address].chart_1w[tokens_charts[address].chart_1w.length-1]['t']) > WEEK) {
@@ -592,19 +597,24 @@ async function launchUniswap() {
         p: price,
       }]
     }
-    if(uniswap_charts[address].chart_3d) {
-      if((time - uniswap_charts[address].chart_3d[uniswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-        uniswap_charts[address].chart_3d.push({
+    if(uniswap_charts[address].chart_1d) {
+      if((time - uniswap_charts[address].chart_1d[uniswap_charts[address].chart_1d.length-1]['t']) > DAY) {
+        uniswap_charts[address].chart_1d.push({
           t: time,
           p: price,
         })
-        uniswap_charts[address].chart_3d = uniswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
+        uniswap_charts[address].chart_1d = uniswap_charts[address].chart_1d.slice(-HISTORY_SIZE)
       }
     } else {
-      uniswap_charts[address].chart_3d = [{
-        t: time,
-        p: price,
-      }]
+      if(uniswap_charts[address].chart_3d) {
+        uniswap_charts[address].chart_1d = uniswap_charts[address].chart_3d
+        uniswap_charts[address].chart_3d = null
+      } else {
+        uniswap_charts[address].chart_1d = [{
+          t: time,
+          p: price
+        }]
+      }
     }
     if(uniswap_charts[address].chart_1w) {
       if((time - uniswap_charts[address].chart_1w[uniswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
@@ -805,19 +815,24 @@ async function launchSushiswap() {
         p: price,
       }]
     }
-    if(sushiswap_charts[address].chart_3d) {
-      if((time - sushiswap_charts[address].chart_3d[sushiswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-        sushiswap_charts[address].chart_3d.push({
+    if(sushiswap_charts[address].chart_1d) {
+      if((time - sushiswap_charts[address].chart_1d[sushiswap_charts[address].chart_1d.length-1]['t']) > DAY) {
+        sushiswap_charts[address].chart_1d.push({
           t: time,
           p: price,
         })
-        sushiswap_charts[address].chart_3d = sushiswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
+        sushiswap_charts[address].chart_1d = sushiswap_charts[address].chart_1d.slice(-HISTORY_SIZE)
       }
     } else {
-      sushiswap_charts[address].chart_3d = [{
-        t: time,
-        p: price,
-      }]
+      if(sushiswap_charts[address].chart_3d) {
+        sushiswap_charts[address].chart_1d = sushiswap_charts[address].chart_3d
+        sushiswap_charts[address].chart_3d = null
+      } else {
+        sushiswap_charts[address].chart_1d = [{
+          t: time,
+          p: price
+        }]
+      }
     }
     if(sushiswap_charts[address].chart_1w) {
       if((time - sushiswap_charts[address].chart_1w[sushiswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
@@ -1022,19 +1037,24 @@ async function launchSpiritswap() {
         p: price,
       }]
     }
-    if(spiritswap_charts[address].chart_3d) {
-      if((time - spiritswap_charts[address].chart_3d[spiritswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-        spiritswap_charts[address].chart_3d.push({
+    if(spiritswap_charts[address].chart_1d) {
+      if((time - spiritswap_charts[address].chart_1d[spiritswap_charts[address].chart_1d.length-1]['t']) > DAY) {
+        spiritswap_charts[address].chart_1d.push({
           t: time,
           p: price,
         })
-        spiritswap_charts[address].chart_3d = spiritswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
+        spiritswap_charts[address].chart_1d = spiritswap_charts[address].chart_1d.slice(-HISTORY_SIZE)
       }
     } else {
-      spiritswap_charts[address].chart_3d = [{
-        t: time,
-        p: price,
-      }]
+      if(spiritswap_charts[address].chart_3d) {
+        spiritswap_charts[address].chart_1d = spiritswap_charts[address].chart_3d
+        spiritswap_charts[address].chart_3d = null
+      } else {
+        spiritswap_charts[address].chart_1d = [{
+          t: time,
+          p: price
+        }]
+      }
     }
     if(spiritswap_charts[address].chart_1w) {
       if((time - spiritswap_charts[address].chart_1w[spiritswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
@@ -1240,19 +1260,24 @@ async function launchHoneyswap() {
         p: price,
       }]
     }
-    if(honeyswap_charts[address].chart_3d) {
-      if((time - honeyswap_charts[address].chart_3d[honeyswap_charts[address].chart_3d.length-1]['t']) > DAYS) {
-        honeyswap_charts[address].chart_3d.push({
+    if(honeyswap_charts[address].chart_1d) {
+      if((time - honeyswap_charts[address].chart_1d[honeyswap_charts[address].chart_1d.length-1]['t']) > DAY) {
+        honeyswap_charts[address].chart_1d.push({
           t: time,
           p: price,
         })
-        honeyswap_charts[address].chart_3d = honeyswap_charts[address].chart_3d.slice(-HISTORY_SIZE)
+        honeyswap_charts[address].chart_1d = honeyswap_charts[address].chart_1d.slice(-HISTORY_SIZE)
       }
     } else {
-      honeyswap_charts[address].chart_3d = [{
-        t: time,
-        p: price,
-      }]
+      if(honeyswap_charts[address].chart_3d) {
+        honeyswap_charts[address].chart_1d = honeyswap_charts[address].chart_3d
+        honeyswap_charts[address].chart_3d = null
+      } else {
+        honeyswap_charts[address].chart_1d = [{
+          t: time,
+          p: price
+        }]
+      }
     }
     if(honeyswap_charts[address].chart_1w) {
       if((time - honeyswap_charts[address].chart_1w[honeyswap_charts[address].chart_1w.length-1]['t']) > WEEK) {

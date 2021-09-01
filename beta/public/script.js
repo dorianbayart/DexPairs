@@ -82,7 +82,7 @@ let dexList = {
 
 const INTERVAL_15M = '15m'
 const INTERVAL_4H = '4h'
-const INTERVAL_3D = '3d'
+const INTERVAL_1D = '1d'
 const INTERVAL_1W = '1w'
 const TIMEFRAME_24H = '24h'
 const TIMEFRAME_1W = '1w'
@@ -581,9 +581,9 @@ document.getElementById('interval_4h').addEventListener(
     setActiveInterval(e.target)
   }
 )
-document.getElementById('interval_3d').addEventListener(
+document.getElementById('interval_1d').addEventListener(
   "click", function(e) {
-    interval = INTERVAL_3D
+    interval = INTERVAL_1D
     updateCharts()
 
     setActiveInterval(e.target)
@@ -791,9 +791,9 @@ function updateCharts() {
       baseChart = baseCharts.chart_often
       scaleUnit = 'hour'
       break;
-    case INTERVAL_3D:
-      tokenChart = tokenCharts.chart_3d
-      baseChart = baseCharts.chart_3d
+    case INTERVAL_1D:
+      tokenChart = tokenCharts.chart_1d
+      baseChart = baseCharts.chart_1d
       scaleUnit = 'day'
       break;
     case INTERVAL_1W:

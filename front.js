@@ -60,113 +60,115 @@ let honeyswap_charts = {}
 
 
 // Program - Pancake
-function launch() {
-  fetch(BACKEND_URL + '/list/pancake')
+async function launch() {
+  // loop
+  setTimeout(launch, getTimer())
+
+  await fetch(BACKEND_URL + '/list/pancake')
   .then(res => res.json())
   .then(json => tokens_list = json)
 
-  fetch(BACKEND_URL + '/top/pancake')
+  await fetch(BACKEND_URL + '/top/pancake')
   .then(res => res.json())
   .then(json => top_tokens = json)
 
-  fetch(BACKEND_URL + '/simple/pancake')
+  await fetch(BACKEND_URL + '/simple/pancake')
   .then(res => res.json())
   .then(json => tokens_data = json)
 
-  fetch(BACKEND_URL + '/charts/pancake')
+  await fetch(BACKEND_URL + '/charts/pancake')
   .then(res => res.json())
   .then(json => tokens_charts = json)
-
-  // loop
-  setTimeout(function(){ launch() }, getTimer())
 }
 
 // Program - Uniswap
-function launchUniswap() {
-  fetch(BACKEND_URL + '/list/uniswap')
+async function launchUniswap() {
+
+  // loop
+  setTimeout(launchUniswap, getTimer())
+
+  await fetch(BACKEND_URL + '/list/uniswap')
   .then(res => res.json())
   .then(json => uniswap_list = json)
 
-  fetch(BACKEND_URL + '/top/uniswap')
+  await fetch(BACKEND_URL + '/top/uniswap')
   .then(res => res.json())
   .then(json => uniswap_top = json)
 
-  fetch(BACKEND_URL + '/simple/uniswap')
+  await fetch(BACKEND_URL + '/simple/uniswap')
   .then(res => res.json())
   .then(json => uniswap_data = json)
 
-  fetch(BACKEND_URL + '/charts/uniswap')
+  await fetch(BACKEND_URL + '/charts/uniswap')
   .then(res => res.json())
   .then(json => uniswap_charts = json)
 
-  // loop
-  setTimeout(function(){ launchUniswap() }, getTimer())
 }
 
 // Program - Sushiswap
-function launchSushiswap() {
-  fetch(BACKEND_URL + '/list/sushiswap')
+async function launchSushiswap() {
+  // loop
+  setTimeout(launchSushiswap, getTimer())
+
+  await fetch(BACKEND_URL + '/list/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_list = json)
 
-  fetch(BACKEND_URL + '/top/sushiswap')
+  await fetch(BACKEND_URL + '/top/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_top = json)
 
-  fetch(BACKEND_URL + '/simple/sushiswap')
+  await fetch(BACKEND_URL + '/simple/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_data = json)
 
-  fetch(BACKEND_URL + '/charts/sushiswap')
+  await fetch(BACKEND_URL + '/charts/sushiswap')
   .then(res => res.json())
   .then(json => sushiswap_charts = json)
-
-  // loop
-  setTimeout(function(){ launchSushiswap() }, getTimer())
 }
 
 // Program - Spiritswap
-function launchSpiritswap() {
-  fetch(BACKEND_URL + '/list/spiritswap')
+async function launchSpiritswap() {
+  // loop
+  setTimeout(launchSpiritswap, getTimer())
+
+  await fetch(BACKEND_URL + '/list/spiritswap')
   .then(res => res.json())
   .then(json => spiritswap_list = json)
 
-  fetch(BACKEND_URL + '/top/spiritswap')
+  await fetch(BACKEND_URL + '/top/spiritswap')
   .then(res => res.json())
   .then(json => spiritswap_top = json)
 
-  fetch(BACKEND_URL + '/simple/spiritswap')
+  await fetch(BACKEND_URL + '/simple/spiritswap')
   .then(res => res.json())
   .then(json => spiritswap_data = json)
 
-  fetch(BACKEND_URL + '/charts/spiritswap')
+  await fetch(BACKEND_URL + '/charts/spiritswap')
   .then(res => res.json())
   .then(json => spiritswap_charts = json)
-
-  // loop
-  setTimeout(function(){ launchSpiritswap() }, getTimer())
 }
 
 // Program - Honeyswap
-function launchHoneyswap() {
-  fetch(BACKEND_URL + '/list/honeyswap')
+async function launchHoneyswap() {
+  // loop
+  setTimeout(launchHoneyswap, getTimer())
+
+  await fetch(BACKEND_URL + '/list/honeyswap')
   .then(res => res.json())
   .then(json => honeyswap_list = json)
 
-  fetch(BACKEND_URL + '/top/honeyswap')
+  await fetch(BACKEND_URL + '/top/honeyswap')
   .then(res => res.json())
   .then(json => honeyswap_top = json)
 
-  fetch(BACKEND_URL + '/simple/honeyswap')
+  await fetch(BACKEND_URL + '/simple/honeyswap')
   .then(res => res.json())
   .then(json => honeyswap_data = json)
 
-  fetch(BACKEND_URL + '/charts/honeyswap')
+  await fetch(BACKEND_URL + '/charts/honeyswap')
   .then(res => res.json())
   .then(json => honeyswap_charts = json)
-
-  // loop
-  setTimeout(function(){ launchHoneyswap() }, getTimer())
 }
 
 
@@ -357,7 +359,7 @@ function listFilter(list, listWithPrices) {
   return filtered_list
 }
 
-// useful Math.random timer - between 8 and 20 seconds
+// useful Math.random timer - between 12 and 30 seconds
 function getTimer() {
-   return Math.round((12*Math.random() + 8)*1000)
+   return Math.round((18*Math.random() + 12)*1000)
 }
