@@ -86,12 +86,10 @@ section.supported-blockchains ul li img {
 .content-illustration {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .content {
   width: 60%;
-  min-width: 340px;
   font-size: 1.2em;
   padding: 24px 5%;
   display: flex;
@@ -117,13 +115,11 @@ section.section-wallet .content a.GoTo {
   align-self: flex-start;
 }
 .content a.GoTo:hover {
-  /*background-color: #FFFA;*/
   box-shadow: 0 0 24px 12px #FFFD;
 }
 
 .illustration {
   width: 40%;
-  min-width: 340px;
 }
 .illustration img {
   width: 100%;
@@ -138,8 +134,24 @@ section.section-wallet .content a.GoTo {
   opacity: 80%;
 }
 
+@media (max-width: 840px) {
+  .content-illustration {
+    flex-flow: column;
+  }
+  .content, .illustration {
+    width: min(100%, 540px);
+  }
+  .illustration img {
+    max-height: 40vh;
+  }
+}
+
 @media (max-width: 460px) {
+  section {
+    margin: 64px auto;
+  }
   section.supported-blockchains ul li {
     margin: 6px;
+    padding: 6px 12px 6px 9px
   }
 }
