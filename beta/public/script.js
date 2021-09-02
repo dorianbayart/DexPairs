@@ -334,6 +334,8 @@ function setTop() {
     div.id = address
     let img_logo = document.createElement('img')
     img_logo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + address + '.png'
+    img_logo.width = '20'
+    img_logo.height = '20'
     img_logo.classList.add('top-logo')
     div.appendChild(img_logo)
     let div_symbol = document.createElement('div')
@@ -368,6 +370,12 @@ function setTop() {
       selectedToken = e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id
       selectToken(selectedToken)
     })
+
+    img_logo.onerror = function() {
+      this.onerror = null
+      this.src = '/img/icons/empty.png'
+      return true
+    }
   }
 }
 
@@ -429,7 +437,14 @@ function setToken(addr) {
     return
   }
   const symbol = simple[addr].s
-  document.getElementById('token_logo').src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
+
+  const tokenLogo = document.getElementById('token_logo')
+  tokenLogo.onerror = function() {
+    this.onerror = null
+    this.src = '/img/icons/empty.png'
+    return true
+  }
+  tokenLogo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
   document.getElementById('token_symbol').innerHTML = symbol
   document.getElementById('token_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)
@@ -451,7 +466,14 @@ function setBase(addr) {
     return
   }
   const symbol = simple[addr].s
-  document.getElementById('base_logo').src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
+
+  const tokenLogo = document.getElementById('base_logo')
+  tokenLogo.onerror = function() {
+    this.onerror = null
+    this.src = '/img/icons/empty.png'
+    return true
+  }
+  tokenLogo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
   document.getElementById('base_symbol').innerHTML = symbol
   document.getElementById('base_name').innerHTML = simple[addr].n
   let address = addr.slice(0, 5) + '...' + addr.slice(-5)
