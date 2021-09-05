@@ -6,7 +6,7 @@
 
 * Get and store subgraph data from different protocols on different blockchains
 * [Charts](https://dexpairs.xyz/charts)
-  * Display the price charts of any token against any other token (eg: [compare MATIC vs ETH on Polygon/Matic network](https://dexpairs.xyz/charts?dex=SUSHISWAP&token=WMATIC&base=WETH&interval=15m))
+  * Display the price charts of any token against any other token (eg: [compare MATIC vs ETH on Polygon/Matic network](https://dexpairs.xyz/charts?dex=SUSHISWAP&token=WMATIC&base=WETH&interval=1d&timeframe=1m))
 * [Wallet](https://dexpairs.xyz/wallet)
   * Cross-chain transactions and tokens explorer
   * Search tokens in transactions on different protocols
