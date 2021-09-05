@@ -18,9 +18,9 @@
 
 ## Supported protocols and blockchains
 
-* [x] [Uniswap - Ethereum](https://dexpairs.xyz/charts?dex=UNISWAP)
+* [x] [Uniswap (v2 + v3) - Ethereum](https://dexpairs.xyz/charts?dex=UNISWAP)
 * [x] [SushiSwap - Polygon/Matic](https://dexpairs.xyz/charts?dex=SUSHISWAP)
-* [x] [PancakeSwap - Binance Smart Chain](https://dexpairs.xyz/charts?dex=PANCAKESWAP)
+* [x] [PancakeSwap v2 - Binance Smart Chain](https://dexpairs.xyz/charts?dex=PANCAKESWAP)
 * [x] [SpiritSwap - Fantom](https://dexpairs.xyz/charts?dex=SPIRITSWAP)
 * [x] [HoneySwap - xDai](https://dexpairs.xyz/charts?dex=HONEYSWAP)
 
