@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="./public/design.css">
   <link rel="stylesheet" href="./public/responsive.css">
 
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
@@ -107,6 +108,10 @@
 
   <div id='top' class='flex-row'>
   </div>
+
+  <div id='favorites' class='flex-row empty'>
+  </div>
+
   <div id='main'>
     <div class="flex-column left-menu">
       <input type='text' id='search_field' placeholder='Search a token' title='Search by symbol, name or contract addres'>
@@ -166,6 +171,7 @@
         </div>
       </div>
       <div id='chart'>
+        <div id='token_favorite' class='star_favorite' title='Add to favorites'></div>
         <div class='interval-container'>
           <div id="interval-title">Interval:</div>
           <div id='interval'>

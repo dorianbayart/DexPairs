@@ -1,10 +1,12 @@
 'use strict'
 
+let chartsForage, favoritesForage
 let getListTimer, getTopTimer, getSimpleTimer
 let list = {}
 let search = ''
 let filteredList = {}
 let topTokens = {}
+let favorites = {}
 let simple = {}
 let selectedToken = ''
 let selectedBase = ''
@@ -379,6 +381,125 @@ function setTop() {
   }
 }
 
+// set favorites tokens
+function setFavorites() {
+  saveSessionVariables()
+  setFavoriteIcon()
+
+  let favHTML = document.getElementById('favorites')
+  favHTML.innerHTML = null
+
+  if(Object.keys(favorites).length < 1) {
+    favHTML.classList.toggle('empty', true)
+    return
+  }
+
+  favHTML.classList.remove('empty')
+
+  Object.keys(favorites).forEach((favId, i) => {
+    const fav = favorites[favId]
+
+    let div_column = document.createElement('div')
+    div_column.classList.add('favorite-column')
+    favHTML.appendChild(div_column)
+
+    let div = document.createElement('div')
+    div.classList.add('favorite-token')
+    div.id = favId
+    let img_logo = document.createElement('img')
+    img_logo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + fav.chain.toLowerCase() + '/' + fav.address + '.png'
+    img_logo.width = '20'
+    img_logo.height = '20'
+    img_logo.classList.add('favorite-logo')
+    div.appendChild(img_logo)
+
+    let dash = document.createElement('span')
+    dash.classList.add('favorite-dash')
+    dash.innerHTML = '-'
+    div.appendChild(dash)
+    /*let div_symbol = document.createElement('div')
+    div_symbol.innerHTML = fav.symbol
+    div_symbol.classList.add('top-symbol')
+    div.appendChild(div_symbol)*/
+    img_logo = document.createElement('img')
+    img_logo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + fav.chain.toLowerCase() + '/' + fav.base + '.png'
+    img_logo.width = '20'
+    img_logo.height = '20'
+    img_logo.classList.add('favorite-logo')
+    div.appendChild(img_logo)
+    /*div_symbol = document.createElement('div')
+    div_symbol.innerHTML = fav.baseSymbol
+    div_symbol.classList.add('top-symbol')
+    div.appendChild(div_symbol)*/
+    let div_price = document.createElement('div')
+    div_price.innerHTML = precise(fav.price)
+    div_price.classList.add('favorite-price')
+    div.appendChild(div_price)
+    let div_percentage = document.createElement('div')
+    div_percentage.classList.add('favorite-percentage')
+    div_percentage.classList.add('color-transition')
+    div.appendChild(div_percentage)
+    let container_chart = document.createElement('div')
+    container_chart.classList.add('favorite-chart')
+    div.appendChild(container_chart)
+    let canvas_chart = document.createElement('canvas')
+    canvas_chart.id = 'chart_' + favId
+    container_chart.appendChild(canvas_chart)
+
+    const miniChart = extract24hChart(fav.chart)
+    const percentage = getPercentage24h(miniChart)
+    div_percentage.innerHTML = percentage + '%'
+    div_percentage.classList.add(percentage >= 0 ? 'green' : 'red')
+
+    div_column.appendChild(div)
+
+    setTopMiniChart(favId, miniChart)
+
+    div.addEventListener("click", function(e) {
+      let id = e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id
+      setFromFavorite(id)
+    })
+
+    img_logo.onerror = function() {
+      this.onerror = null
+      this.src = '/img/icons/empty.png'
+      return true
+    }
+  })
+}
+
+function setFromFavorite(id) {
+  if(!id) {
+    return;
+  }
+
+  const chain = id.split('-')[0]
+  selectedToken = id.split('-')[1]
+  setToken(selectedToken)
+  selectedBase = id.split('-')[2]
+  setBase(selectedBase)
+  let previousDex = dex
+  dex = Object.keys(dexList).find(dex => dexList[dex].chain_enum === chain)
+  let dexSelector = document.getElementById('dex-selector')
+  dexSelector.querySelectorAll('option').forEach((option) => {
+    option.selected = dexList[option.value].chain_enum === chain
+  })
+  const img = document.getElementById('dex-selection-img')
+  img.src = NETWORK[dexList[dex].chain_enum].img
+  img.alt = dexList[dex].chain + ' Logo'
+
+  if(dex !== previousDex) {
+    clearTimeout(getListTimer)
+    clearTimeout(getSimpleTimer)
+    clearTimeout(getTopTimer)
+    getList()
+    getSimple()
+    getTop()
+  } else {
+    getCharts()
+  }
+}
+
 function setTopMiniChart(addr, tokenChart) {
   const timeData = tokenChart.map(coords => new Date(coords.t))
   const tokenData = tokenChart.map(coords => coords.p)
@@ -433,7 +554,7 @@ function setTopMiniChart(addr, tokenChart) {
 
 // set information of the main token
 function setToken(addr) {
-  if(Object.keys(simple).length < 1) {
+  if(Object.keys(simple).length < 1 || !simple[addr]) {
     return
   }
   const symbol = simple[addr].s
@@ -462,7 +583,7 @@ function setToken(addr) {
 
 // set information of the base token
 function setBase(addr) {
-  if(Object.keys(simple).length < 1) {
+  if(Object.keys(simple).length < 1 || !simple[addr]) {
     return
   }
   const symbol = simple[addr].s
@@ -572,6 +693,14 @@ document.getElementById('base_select').addEventListener(
     getCharts()
     setSwapperToken()
     setSwapperBase()
+  }
+)
+
+
+// OnClick on Favorite => Put this token in favorite list
+document.getElementById('token_favorite').addEventListener(
+  "click", function(e) {
+    toggleFavorite(selectedToken, selectedBase)
   }
 )
 
@@ -707,6 +836,17 @@ getTop()
 
 
 function initializeHTML() {
+  /* Initialize LocalForage */
+  localforage.config({
+    size: 15000000 // 15 MB
+  })
+  chartsForage = localforage.createInstance({
+    name: "charts"
+  })
+  favoritesForage = localforage.createInstance({
+    name: "favorites"
+  })
+
   // default tokens
   selectedToken = dexList[dex].tokens.token
   selectedBase = dexList[dex].tokens.base
@@ -728,6 +868,15 @@ function initializeHTML() {
   if(sessionStorage.getItem('timeframe')) {
     timeframe = sessionStorage.getItem('timeframe')
   }
+  favoritesForage.getItem('favorites')
+    .then((favs) => {
+      favorites = favs
+      setFavorites()
+    })
+    .catch(() => {
+      favorites = {}
+    })
+
 
   if(sessionStorage.getItem('list')) {
     list = JSON.parse(sessionStorage.getItem('list'))
@@ -767,7 +916,7 @@ function initializeHTML() {
     option.innerHTML += dexList[item].chain + ' - ' + dexList[item].name
     option.value = item
     option.selected = dexList[item].name.toUpperCase() === dex
-  });
+  })
 
   const img = document.getElementById('dex-selection-img')
   img.src = NETWORK[dexList[dex].chain_enum].img
@@ -785,7 +934,12 @@ function saveSessionVariables() {
   sessionStorage.setItem('selectedBase', selectedBase)
   sessionStorage.setItem('interval', interval)
   sessionStorage.setItem('timeframe', timeframe)
+  favoritesForage.setItem('favorites', favorites)
+  favoritesForage.setItem('favorites', favorites)
+    .then(() => {})
+    .catch(() => {})
 
+  console.log("Variables saved !", favorites)
   updateURLParams()
 }
 
@@ -805,6 +959,8 @@ function setSourceDataText() {
 
 function updateCharts() {
   saveSessionVariables()
+
+  setFavoriteIcon()
 
   let tokenChart = null, baseChart = null, scaleUnit = 'day'
   switch (interval) {
@@ -912,6 +1068,62 @@ function updateCharts() {
 }
 
 
+// Add or Remove from Favorites
+function toggleFavorite(selected, base) {
+  const chain = dexList[dex].chain_enum
+  const symbol = simple[selected].s
+  const baseSymbol = simple[base].s
+  const id = chain + '-' + selected + '-' + base
+  if(!favorites[id]) {
+    if(Object.keys(favorites).length < 6) {
+      let tokenChart = tokenCharts.chart_often
+      let baseChart = baseCharts.chart_often
+
+      let fav = {
+        address: selected,
+        symbol: symbol,
+        chain: chain,
+        base: base,
+        baseSymbol: baseSymbol,
+        price: simple[selected].p / simple[base].p,
+        chart: tokenCharts.chart_often.map(coords => {
+          const baseCoords = baseChart.find(base => base.t === coords.t)
+          if(baseCoords) {
+            return { t: coords.t, p: coords.p / baseCoords.p }
+          }
+          const price = estimatePriceInterpolation(baseChart, coords.t)
+          return { t: coords.t, p: price ? coords.p / price : null }
+        })
+      }
+      favorites[id] = fav
+    }
+  } else {
+    removeFromFavorite(id)
+  }
+
+  setFavorites()
+}
+
+function removeFromFavorite(id) {
+  delete favorites[id]
+
+  setFavorites()
+}
+
+// Add or Remove class on the Favorite icon
+function setFavoriteIcon() {
+  const icon = document.getElementById('token_favorite')
+  const id = dexList[dex].chain_enum + '-' + selectedToken + '-' + selectedBase
+  if(Object.keys(favorites).includes(id)) {
+    icon.classList.toggle('active', true)
+    icon.title = 'Remove from favorites'
+  } else {
+    icon.classList.remove('active')
+    icon.title = 'Add to favorites'
+  }
+}
+
+
 // useful
 // Estimate a Price at a time T - find 2 points and calculate a linear interpolation
 function estimatePriceInterpolation(chart, t) {
@@ -934,12 +1146,14 @@ function updateURLParams() {
   params.set('interval', interval)
   params.set('timeframe', timeframe)
 
-  const fullTitle = DOMAIN_NAME + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p)
-  document.title = fullTitle
-  document.querySelector('meta[property="og:title"]').setAttribute("content", fullTitle)
-  document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href)
+  if(simple[selectedToken]) {
+    const fullTitle = DOMAIN_NAME + ' | ' + simple[selectedToken].s + ' | $' + precise(simple[selectedToken].p)
+    document.title = fullTitle
+    document.querySelector('meta[property="og:title"]').setAttribute("content", fullTitle)
+    document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href)
 
-  window.history.replaceState(null, fullTitle, window.location.href.split("?")[0] + '?' + params.toString())
+    window.history.replaceState(null, fullTitle, window.location.href.split("?")[0] + '?' + params.toString())
+  }
 }
 
 

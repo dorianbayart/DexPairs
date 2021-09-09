@@ -43,11 +43,17 @@
   outline: none;
 }
 
-#top {
+#top, #favorites {
   margin: auto;
   max-width: 1024px;
   border-radius: 12px;
   padding: 4px;
+}
+#favorites {
+  margin-top: 24px;
+}
+#favorites.empty {
+  padding: 0;
 }
 #top::before {
   content: "Top tokens by USD volume";
@@ -57,16 +63,27 @@
   margin-left: 8px;
   margin-top: 2px;
 }
-#top::after {
+#favorites::before {
+  content: 'Favorites';
+  display: block;
+  font-size: 0.85em;
+  font-weight: lighter;
+  margin-left: 8px;
+  margin-top: 2px;
+}
+#favorites.empty::before {
+  content: '';
+}
+#top::after, #favorites::after {
   content: "";
   clear: both;
   display: table;
 }
-.top-column {
+.top-column, .favorite-column {
   float: left;
   width: 33.3%;
 }
-.top-token {
+.top-token, .favorite-token {
   margin: 4px;
 
   border: 1px solid #CCC;
@@ -76,25 +93,58 @@
   display: flex;
   align-items: center;
 }
-.top-token:hover {
+.top-token:hover, .favorite-token:hover {
   box-shadow: 1px 1px 12px #BBB;
 }
-.top-logo {
+/*.top-logo, .favorite-logo {
+  display: inline-flex;
+  height: 20px;
+  margin-right: 6px;
+}
+.top-symbol, .favorite-symbol {
+  display: inline-flex;
+  width: 40%;
+}
+.top-price, .top-percentage,
+.favorite-price, .favorite-percentage {
+  display: inline-flex;
+  width: 25%;
+}
+.top-chart, .favorite-chart {
+  width: 48px;
+  height: 32px;
+}
+.favorite-dash {
+  margin-right: 6px;
+}*/
+
+
+.top-logo, .favorite-logo {
   display: inline-flex;
   height: 20px;
   margin-right: 6px;
 }
 .top-symbol {
   display: inline-flex;
-  width: 40%;
+  flex: auto;
 }
-.top-price, .top-percentage {
+.top-price, .top-percentage,
+.favorite-price, .favorite-percentage {
   display: inline-flex;
-  width: 25%;
+  flex: auto;
+  justify-content: flex-end;
+  flex-basis: 20%;
 }
-.top-chart {
+.top-symbol, .favorite-price {
+  flex-grow: 2;
+}
+.top-chart, .favorite-chart {
+  margin-left: 8px;
   width: 48px;
   height: 32px;
+}
+.favorite-dash {
+  margin-right: 6px;
 }
 
 
@@ -192,6 +242,58 @@
 #token_price, #base_price {
   text-overflow: ellipsis;
   overflow-wrap: anywhere;
+}
+
+.star_favorite {
+  float: right;
+  width: 24px;
+  height: 24px;
+  background-color: #CCC;
+  border-radius: 50%;
+  outline: 1px solid #CCC;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  opacity: .75;
+}
+.star_favorite::after {
+  display: inline-block;
+  content: '';
+  background-color: white;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0 1px;
+}
+.star_favorite:hover {
+  animation: scaleIn 1000ms infinite cubic-bezier(.36, .11, .89, .32);
+  background-color: #FFB500EE;
+  outline: none;
+}
+.star_favorite.active {
+  animation: none;
+  background-color: #FFFD;
+}
+.star_favorite.active::after {
+  transition: 400ms all ease-in-out;
+  background-color: #FFB500EE;
+}
+.star_favorite.active:hover {
+  outline: 1px solid #FF7878;
+}
+.star_favorite.active:hover::after {
+  background-color: #CCC;
+  transform: rotateY(180deg);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2, 2);
+    opacity: 0;
+  }
 }
 
 button#base_change {

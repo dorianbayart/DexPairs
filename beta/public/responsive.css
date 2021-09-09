@@ -18,7 +18,10 @@
   font-size: 0.85em;
   min-height: 96px;
 }
-.top-token {
+#favorites {
+  font-size: 0.85em;
+}
+.top-token, .favorite-token {
   padding: 0.25em 1em;
 }
 #search_field {
@@ -66,10 +69,13 @@
     min-height: 145px;
     margin: auto 0.5em;
   }
-  .top-column {
+  #favorites {
+    margin: 24px 0.5em 0;
+  }
+  .top-column, .favorite-column {
     width: 50%;
   }
-  .top-token {
+  .top-token, .favorite-token {
     border-radius: 8px;
   }
 
@@ -124,11 +130,14 @@
   .dex-selection-img-container {
     height: 20px;
   }
-  #top {
+  #top{
     flex-wrap: wrap;
     min-height: 280px;
   }
-  .top-column {
+  #favorites{
+    flex-wrap: wrap;
+  }
+  .top-column, .favorite-column {
     width: 100%;
   }
   #search_field {
