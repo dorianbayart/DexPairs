@@ -250,7 +250,6 @@
   height: 24px;
   background-color: #CCC;
   border-radius: 50%;
-  outline: 1px solid #CCC;
   cursor: pointer;
   transition: all 150ms ease-in-out;
   opacity: .75;
@@ -267,7 +266,6 @@
 .star_favorite:hover {
   animation: scaleIn 1000ms infinite cubic-bezier(.36, .11, .89, .32);
   background-color: #FFB500EE;
-  outline: none;
 }
 .star_favorite.active {
   animation: none;
@@ -278,7 +276,7 @@
   background-color: #FFB500EE;
 }
 .star_favorite.active:hover {
-  outline: 1px solid #FF7878;
+  box-shadow: 0 0 0 1px #FF7878;
 }
 .star_favorite.active:hover::after {
   background-color: #CCC;
