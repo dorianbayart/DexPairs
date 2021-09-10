@@ -396,7 +396,7 @@ function setFavorites() {
 
   favHTML.classList.remove('empty')
 
-  Object.keys(favorites).forEach((favId, i) => {
+  Object.keys(favorites).forEach((favId) => {
     const fav = favorites[favId]
 
     let div_column = document.createElement('div')
@@ -699,7 +699,7 @@ document.getElementById('base_select').addEventListener(
 
 // OnClick on Favorite => Put this token in favorite list
 document.getElementById('token_favorite').addEventListener(
-  "click", function(e) {
+  "click", function() {
     toggleFavorite(selectedToken, selectedBase)
   }
 )
@@ -1075,7 +1075,7 @@ function toggleFavorite(selected, base) {
   const id = chain + '-' + selected + '-' + base
   if(!favorites[id]) {
     if(Object.keys(favorites).length < 6) {
-      let tokenChart = tokenCharts.chart_often
+      // let tokenChart = tokenCharts.chart_often
       let baseChart = baseCharts.chart_often
 
       let fav = {
