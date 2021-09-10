@@ -572,7 +572,7 @@ function setToken(addr) {
   let a = document.createElement('a')
   a.href = dexList[dex].explorer + addr
   a.target = '_blank'
-  a.innerHTML = address
+  a.textContent = address
   a.rel = 'noopener'
   document.getElementById('token_address').innerHTML = null
   document.getElementById('token_address').appendChild(a)
@@ -601,7 +601,7 @@ function setBase(addr) {
   let a = document.createElement('a')
   a.href = dexList[dex].explorer + addr
   a.target = '_blank'
-  a.innerHTML = address
+  a.textContent = address
   a.rel = 'noopener'
   document.getElementById('base_address').innerHTML = null
   document.getElementById('base_address').appendChild(a)
