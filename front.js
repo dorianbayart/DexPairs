@@ -193,7 +193,6 @@ const limiter = new rateLimit({
 
 
 /* server */
-console.log(process.env)
 const port = process.env.PORT || 3001
 const app = express()
 app.use(compression())
