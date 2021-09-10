@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 const compression = require('compression')
 const fetch = require('node-fetch')
+const rateLimit = require('express-rate-limit')
 
 
 
@@ -185,10 +186,18 @@ setTimeout(function(){ launch() }, 9000)
 
 
 
+const limiter = new rateLimit({
+  windowMs: 10*1000, // 10 seconds
+  max: 40
+})
+
+
 /* server */
+console.log(process.env)
 const port = process.env.PORT || 3001
 const app = express()
 app.use(compression())
+app.use(limiter)
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
 app.get('/charts', (req, res) => res.sendFile(path.join(__dirname, '/charts.html')))
