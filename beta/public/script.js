@@ -939,7 +939,6 @@ function saveSessionVariables() {
     .then(() => {})
     .catch(() => {})
 
-  console.log("Variables saved !", favorites)
   updateURLParams()
 }
 

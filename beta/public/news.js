@@ -1,3 +1,5 @@
+'use strict'
+
 const t = (entry, tname) => entry.getElementsByTagName(tname)[0]
 const date = entry => new Date(t(entry, 'published').textContent).toLocaleString('en-US')
 const DOMAIN_NAME = 'DexPairs.xyz'
