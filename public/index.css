@@ -3,7 +3,7 @@
   transition: none;
 }
 
-#body-background {
+.body-background {
   background-image: url('/img/background-multichain.svg');
 }
 

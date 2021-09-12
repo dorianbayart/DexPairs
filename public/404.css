@@ -4,6 +4,7 @@ body {
   justify-content: center;
   min-height: 100vh;
 }
+
 .body-background {
   background-image: url('/img/background-multichain.svg');
   opacity: 0.2;
@@ -14,13 +15,12 @@ body {
 }
 
 h1 {
+  background: linear-gradient(135deg, purple, lightseagreen);
+  background-clip: text;
+  -webkit-background-clip: text;
+  display: inline-block;
   font-size: max(10vh, 5em);
   font-weight: bolder;
-
-  display: inline-block;
-  background: linear-gradient(135deg, purple, lightseagreen);
-  -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: #0001 3px 3px 3px;
 }

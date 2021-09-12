@@ -1,3 +1,5 @@
+'use strict'
+
 const COLOR_THEMES = {
 	LIGHT_BLUE: {
 		background_html: '#FFF',
@@ -247,7 +249,7 @@ const setGas = (network) => {
 // get simple data prices
 // param: network, callback function
 function getSimpleData(network, callback) {
-	xmlhttp = new XMLHttpRequest()
+	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			const simple = JSON.parse(this.responseText)
@@ -271,7 +273,7 @@ function getSimpleData(network, callback) {
 // get charts by address and network
 // params: address, network, callback function
 function getChartsByAddress(address, network, callback) {
-	xmlhttp = new XMLHttpRequest()
+	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			const charts = JSON.parse(this.responseText)

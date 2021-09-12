@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="./public/design.css">
   <link rel="stylesheet" href="./public/responsive.css">
 
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.4.1/chart.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
@@ -48,8 +49,8 @@
       </a>
     </header>
 
-    <div id='menu'>
-      <div id='menu-charts' class='menu-item active'>
+    <div class='menu'>
+      <div class='menu-item menu-charts active'>
         <a href="./charts" aria-label="Charts">
           <h2>
             <img src="/img/icons/bar-chart-2.svg" alt="Chart Logo" width="24px" height="24px">
@@ -57,7 +58,7 @@
           </h2>
         </a>
       </div>
-      <div id='menu-wallet' class='menu-item'>
+      <div class='menu-item menu-wallet'>
         <a href="./wallet" aria-label="Wallet">
           <h2>
             <img src="/img/icons/briefcase.svg" alt="Wallet Logo" width="24px" height="24px">
@@ -65,7 +66,7 @@
           </h2>
         </a>
       </div>
-      <div id='menu-news' class='menu-item'>
+      <div class='menu-item menu-news'>
         <a href="./news" aria-label="News">
           <h2>
             <img src="/img/icons/news_feed.svg" alt="News Feed Logo" width="24px" height="24px">
@@ -104,13 +105,17 @@
 
   <div id='top' class='flex-row'>
   </div>
+
+  <div id='favorites' class='flex-row empty'>
+  </div>
+
   <div id='main'>
     <div class="flex-column left-menu">
       <input type='text' id='search_field' placeholder='Search a token' title='Search by symbol, name or contract addres'>
       <div id='order-list'>
 
       </div>
-      <div id='list'></div>
+      <div id='list' class='list'></div>
     </div>
     <div class='flex-column main-chart'>
       <div class='flex-pair'>
@@ -163,6 +168,7 @@
         </div>
       </div>
       <div id='chart'>
+        <div id='token_favorite' class='star_favorite' title='Add to favorites'></div>
         <div class='interval-container'>
           <div id="interval-title">Interval:</div>
           <div id='interval'>
@@ -216,7 +222,7 @@
   </footer>
 
 
-  <div id="body-background"></div>
+  <div id='body-background' class='body-background'></div>
 
 
 </body>

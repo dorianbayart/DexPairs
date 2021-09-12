@@ -1,4 +1,4 @@
-#body-background {
+.body-background {
   background-size: 30%;
 }
 #dex-selector {
@@ -18,19 +18,22 @@
   font-size: 0.85em;
   min-height: 96px;
 }
-.top-token {
+#favorites {
+  font-size: 0.85em;
+}
+.top-token, .favorite-token {
   padding: 0.25em 1em;
 }
 #search_field {
   margin: 0.5em 1em;
   padding: 1em;
 }
-#list {
+.list {
   height: 420px;
   margin: 0.5em 1em;
   padding: 1em;
 }
-#list li {
+.list li {
   padding: 6px 12px;
 }
 #token, #base {
@@ -53,7 +56,7 @@
 
 
 @media (max-width: 800px) {
-  #body-background {
+  .body-background {
     background-size: 40%;
   }
   #dex-selector {
@@ -66,10 +69,13 @@
     min-height: 145px;
     margin: auto 0.5em;
   }
-  .top-column {
+  #favorites {
+    margin: 24px 0.5em 0;
+  }
+  .top-column, .favorite-column {
     width: 50%;
   }
-  .top-token {
+  .top-token, .favorite-token {
     border-radius: 8px;
   }
 
@@ -85,12 +91,12 @@
     margin: 0.25em 0.5em;
     padding: 0.5em 1em;
   }
-  #list {
+  .list {
     margin: 0.25em 0.5em;
     padding: 0.5em;
     height: 96px;
   }
-  #list li {
+  .list li {
     display: inline-flex;
     padding: 8px;
   }
@@ -115,7 +121,7 @@
 }
 
 @media (max-width: 460px) {
-  #body-background {
+  .body-background {
     background-size: 50%;
   }
   #dex-selector {
@@ -124,23 +130,26 @@
   .dex-selection-img-container {
     height: 20px;
   }
-  #top {
+  #top{
     flex-wrap: wrap;
     min-height: 280px;
   }
-  .top-column {
+  #favorites{
+    flex-wrap: wrap;
+  }
+  .top-column, .favorite-column {
     width: 100%;
   }
   #search_field {
     margin: 0.1em 0.25em;
     padding: 0.25em 1em;
   }
-  #list {
+  .list {
     margin: 0.1em 0.25em;
     padding: 0.25em;
     height: 80px;
   }
-  #list li {
+  .list li {
     padding: 8px;
   }
   #token, #base {
