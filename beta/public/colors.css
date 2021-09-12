@@ -1,33 +1,33 @@
 
 /* Common */
-#menu .menu-item, input, select, button {
-  color: #000D;
+.menu .menu-item, input, select, button {
   background-color: #FFFD;
+  color: #000D;
 }
 /* Gas */
 .gas-list li {
-  color: #000D;
   background-color: #FFFD;
+  color: #000D;
 }
 /* Charts */
-.top-token, .favorite-token, #list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart {
-  color: #000D;
+.top-token, .favorite-token, .list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart {
   background-color: #FFFD;
+  color: #000D;
 }
 /* Wallet */
-#global.wallet-information, #wallet ul li, #connect-wallet {
-  color: #000D;
+.wallet-information, #wallet ul li, #connect-wallet {
   background-color: #FFFD;
+  color: #000D;
 }
 /* News */
 #main > h1, article.entry {
-  color: #000D;
   background-color: #FFFD;
+  color: #000D;
 }
 /* 404 */
 #body-404 a {
-  color: #000D;
   background-color: #FFFD;
+  color: #000D;
 }
 
 #top, #favorites, #top-title, #wallet .loading-message, .wallet-menu, #wallet ul, .gas-container {
@@ -53,8 +53,8 @@
 }
 
 .shadow-white {
-  box-shadow: 0 0 16px 12px white;
   background-color: #FFFD;
+  box-shadow: 0 0 16px 12px white;
 }
 
 .color-transition {

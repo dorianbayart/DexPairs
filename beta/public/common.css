@@ -3,7 +3,7 @@
   font-family: system-ui, Sans-Serif, Arial;
   transition: all 400ms ease-in-out;
 }
-*.unselectable {
+.unselectable {
    -moz-user-select: -moz-none;
    -khtml-user-select: none;
    -webkit-user-select: none;
@@ -12,20 +12,20 @@
 }
 
 body {
-  max-width: 1400px;
   margin: 0 auto;
+  max-width: 1400px;
   padding: 0;
 }
-#body-background {
+.body-background {
+background-position: center;
+background-repeat: no-repeat;
+background-size: 60%;
+  bottom: 0;
+  left: 0;
     opacity: 0.4;
     position: fixed;
-    top: 0;
-    bottom: 0;
     right: 0;
-    left: 0;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 60%;
+    top: 0;
     z-index: -1;
 }
 
@@ -44,7 +44,7 @@ a, a:hover, a:visited, a:active, a:focus {
 }
 
 @media (max-width: 1200px) {
-  #body-background {
+  .body-background {
     background-size: 75%;
   }
 }
@@ -53,7 +53,7 @@ a, a:hover, a:visited, a:active, a:focus {
   html {
     font-size: 0.9em;
   }
-  #body-background {
+  .body-background {
       background-size: 85%;
   }
 }
@@ -62,7 +62,7 @@ a, a:hover, a:visited, a:active, a:focus {
   html {
     font-size: 0.8em;
   }
-  #body-background {
+  .body-background {
       background-size: 95%;
   }
 }

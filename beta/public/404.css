@@ -1,10 +1,11 @@
 body {
-  min-height: 100vh;
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
+  min-height: 100vh;
 }
-#body-background {
+
+.body-background {
   background-image: url('/img/background-multichain.svg');
   opacity: 0.2;
 }
@@ -14,13 +15,12 @@ body {
 }
 
 h1 {
+  background: linear-gradient(135deg, purple, lightseagreen);
+  background-clip: text;
+  -webkit-background-clip: text;
+  display: inline-block;
   font-size: max(10vh, 5em);
   font-weight: bolder;
-
-  display: inline-block;
-  background: linear-gradient(135deg, purple, lightseagreen);
-  -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: #0001 3px 3px 3px;
 }
@@ -28,13 +28,13 @@ h1 {
 h2 {
   font-size: max(3vh, 1.4em);
   font-weight: lighter;
-  max-width: min(480px, 85%);
   margin: 0 auto 48px;
+  max-width: min(480px, 85%);
 }
 
 a {
-  font-size: 1.1em;
-  padding: 9px 12px 6px;
   border-radius: 8px;
   box-shadow: 0 0 24px #888;
+  font-size: 1.1em;
+  padding: 9px 12px 6px;
 }

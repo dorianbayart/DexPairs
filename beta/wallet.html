@@ -54,8 +54,8 @@
       </a>
     </header>
 
-    <div id='menu'>
-      <div id='menu-charts' class='menu-item'>
+    <div class='menu'>
+      <div class='menu-item menu-charts'>
         <a href="./charts" aria-label="Charts">
           <h2>
             <img src="/img/icons/bar-chart-2.svg" alt="Chart Logo" width="24px" height="24px">
@@ -63,7 +63,7 @@
           </h2>
         </a>
       </div>
-      <div id='menu-wallet' class='menu-item active'>
+      <div class='menu-item menu-wallet active'>
         <a href="./wallet" aria-label="Wallet">
           <h2>
             <img src="/img/icons/briefcase.svg" alt="Wallet Logo" width="24px" height="24px">
@@ -71,7 +71,7 @@
           </h2>
         </a>
       </div>
-      <div id='menu-news' class='menu-item'>
+      <div class='menu-item menu-news'>
         <a href="./news" aria-label="News">
           <h2>
             <img src="/img/icons/news_feed.svg" alt="News Feed Logo" width="24px" height="24px">
@@ -113,11 +113,11 @@
     <a href="./wallet?address=0x0255c9D3850cacA1152AEB20425C264787661692" id="demo-wallet" class="shadow-white">Track a demo wallet</a>
   </div>
 
-  <div id="global" class="wallet-information none">
+  <div id='global' class="global wallet-information none">
     <div class="wallet-chart">
       <div class="wallet-chart-description">Based on Ethereum price evolution</div>
-      <canvas id="wallet-chart"></canvas>
-      <div id="wallet-date-tooltip"></div>
+      <canvas id="wallet-chart" class='canvas-wallet-chart'></canvas>
+      <div id="wallet-date-tooltip" class='wallet-date-tooltip'></div>
     </div>
     <div class="wallet-values">
       <h3 class="wallet-title">Wallet value</h3>
@@ -134,24 +134,24 @@
 
 
   <div id="wallet-options" class="wallet-options none">
-    <div id="menu-tokens" class="wallet-menu">
+    <div id="menu-tokens" class="wallet-menu menu-tokens">
       Tokens
     </div>
-    <div id="menu-nfts" class="wallet-menu">
+    <div id="menu-nfts" class="wallet-menu menu-nfts">
       NFTs
     </div>
-    <div id="hide-small-balances-container">
-      <img id="hide-small-balances-icon" src="/img/icons/check-square.svg" alt="Hide Small Balance Logo"/>
+    <div id="hide-small-balances-container" class='hide-small-balances-container'>
+      <img id="hide-small-balances-icon" class='hide-small-balances-icon' src="/img/icons/check-square.svg" alt="Hide Small Balance Logo"/>
       <span class='unselectable'>Hide small balances</span>
     </div>
-    <div id="hide-no-image-container">
-      <img id="hide-no-image-icon" src="/img/icons/check-square.svg" alt="Hide Small Balance Logo"/>
+    <div id="hide-no-image-container" class='hide-no-image-container'>
+      <img id="hide-no-image-icon" class='hide-no-image-icon' src="/img/icons/check-square.svg" alt="Hide Small Balance Logo"/>
       <span class='unselectable'>Hide NFT without images</span>
     </div>
   </div>
 
 
-  <div id="wallet">
+  <div id='wallet' class='wallet'>
   </div>
 
 
@@ -173,7 +173,7 @@
   </footer>
 
 
-  <div id="body-background"></div>
+  <div class='body-background'></div>
 
 
 </body>
