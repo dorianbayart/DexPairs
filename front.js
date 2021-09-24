@@ -38,11 +38,11 @@ let uniswap_top = {}
 let uniswap_data = {}
 let uniswap_charts = {}
 
-// Sushiswap data - Polygon/Matic
-let sushiswap_list = {}
-let sushiswap_top = {}
-let sushiswap_data = {}
-let sushiswap_charts = {}
+// Quickswap data - Polygon/Matic
+let quickswap_list = {}
+let quickswap_top = {}
+let quickswap_data = {}
+let quickswap_charts = {}
 
 // Spiritswap data - Fantom/Opera
 let spiritswap_list = {}
@@ -105,26 +105,26 @@ async function launchUniswap() {
 
 }
 
-// Program - Sushiswap
-async function launchSushiswap() {
+// Program - Quickswap
+async function launchQuickswap() {
 	// loop
-	setTimeout(launchSushiswap, getTimer())
+	setTimeout(launchQuickswap, getTimer())
 
-	await fetch(BACKEND_URL + '/list/sushiswap')
+	await fetch(BACKEND_URL + '/list/quickswap')
 		.then(res => res.json())
-		.then(json => sushiswap_list = json)
+		.then(json => quickswap_list = json)
 
-	await fetch(BACKEND_URL + '/top/sushiswap')
+	await fetch(BACKEND_URL + '/top/quickswap')
 		.then(res => res.json())
-		.then(json => sushiswap_top = json)
+		.then(json => quickswap_top = json)
 
-	await fetch(BACKEND_URL + '/simple/sushiswap')
+	await fetch(BACKEND_URL + '/simple/quickswap')
 		.then(res => res.json())
-		.then(json => sushiswap_data = json)
+		.then(json => quickswap_data = json)
 
-	await fetch(BACKEND_URL + '/charts/sushiswap')
+	await fetch(BACKEND_URL + '/charts/quickswap')
 		.then(res => res.json())
-		.then(json => sushiswap_charts = json)
+		.then(json => quickswap_charts = json)
 }
 
 // Program - Spiritswap
@@ -176,7 +176,7 @@ async function launchHoneyswap() {
 
 /* MAIN */
 setTimeout(function(){ launchUniswap() }, 5000)
-setTimeout(function(){ launchSushiswap() }, 6000)
+setTimeout(function(){ launchQuickswap() }, 6000)
 setTimeout(function(){ launchSpiritswap() }, 7000)
 setTimeout(function(){ launchHoneyswap() }, 8000)
 setTimeout(function(){ launch() }, 9000)
@@ -266,11 +266,11 @@ app.get('(/uniswap)?/charts/:token/:base', (req, res) => {
 	res.json(pair)
 })
 
-// Sushiswap URLs
-app.get('/sushiswap/token/:token', (req, res) => {
+// Quickswap URLs
+app.get('/quickswap/token/:token', (req, res) => {
 	if(
-		Object.keys(sushiswap_data).includes(req.params.token) ||
-    Object.keys(sushiswap_data).findIndex(address => sushiswap_data[address].s === req.params.token) !== -1
+		Object.keys(quickswap_data).includes(req.params.token) ||
+    Object.keys(quickswap_data).findIndex(address => quickswap_data[address].s === req.params.token) !== -1
 	) {
 		res.sendFile(path.join(__dirname, '/index.html'))
 	} else {
@@ -280,16 +280,16 @@ app.get('/sushiswap/token/:token', (req, res) => {
 	}
 })
 
-app.get('/sushiswap/list', (req, res) => res.json(listFilter(sushiswap_list, sushiswap_data)))
-app.get('/sushiswap/top', (req, res) => res.json(sushiswap_top))
-app.get('/sushiswap/simple', (req, res) => res.json(listFilter(sushiswap_data, sushiswap_data)))
-app.get('/sushiswap/charts/:token', (req, res) => {
-	res.json(sushiswap_charts[req.params.token])
+app.get('/quickswap/list', (req, res) => res.json(listFilter(quickswap_list, quickswap_data)))
+app.get('/quickswap/top', (req, res) => res.json(quickswap_top))
+app.get('/quickswap/simple', (req, res) => res.json(listFilter(quickswap_data, quickswap_data)))
+app.get('/quickswap/charts/:token', (req, res) => {
+	res.json(quickswap_charts[req.params.token])
 })
-app.get('/sushiswap/charts/:token/:base', (req, res) => {
+app.get('/quickswap/charts/:token/:base', (req, res) => {
 	let pair = {}
-	pair[req.params.token] = sushiswap_charts[req.params.token]
-	pair[req.params.base] = sushiswap_charts[req.params.base]
+	pair[req.params.token] = quickswap_charts[req.params.token]
+	pair[req.params.base] = quickswap_charts[req.params.base]
 	res.json(pair)
 })
 

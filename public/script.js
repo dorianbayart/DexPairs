@@ -28,13 +28,13 @@ let dexList = {
 			base: '0xdac17f958d2ee523a2206206994597c13d831ec7'
 		}
 	},
-	SUSHISWAP: {
-		name: 'SushiSwap',
+	QUICKSWAP: {
+		name: 'QuickSwap',
 		chain: 'Polygon/Matic',
 		chain_enum: 'POLYGON',
 		url: 'https://sushi.com/',
 		url_swap: 'https://app.sushi.com/swap',
-		url_data: server + '/sushiswap',
+		url_data: server + '/quickswap',
 		explorer: 'https://polygonscan.com/token/',
 		tokens: {
 			token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',

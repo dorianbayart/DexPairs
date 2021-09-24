@@ -63,13 +63,13 @@ const NETWORK = {
 		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/sushiswap',
+		url_data: server + '/quickswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'MATIC',
 		tokenName: 'Matic',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-		subgraph_url: 'https://thegraph.com/explorer/subgraph/sushiswap/matic-exchange'
+		subgraph_url: 'https://thegraph.com/explorer/subgraph/quickswap/matic-exchange'
 	},
 	BSC : {
 		order: 3,

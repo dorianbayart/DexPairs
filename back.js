@@ -59,12 +59,12 @@ let tokens_data = {}
 let tokens_charts = {}
 let pancakeswap_volume = {}
 
-// Sushiswap data - Polygon/Matic
-let sushiswap_list = {}
-let sushiswap_top = {}
-let sushiswap_data = {}
-let sushiswap_charts = {}
-let sushiswap_volume = {}
+// Quickswap data - Polygon/Matic
+let quickswap_list = {}
+let quickswap_top = {}
+let quickswap_data = {}
+let quickswap_charts = {}
+let quickswap_volume = {}
 
 // Spiritswap data - Fantom/Opera
 let spiritswap_list = {}
@@ -171,16 +171,16 @@ async function getUniswapV2TopTokens() {
 	return await get('https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2', uniswapV2_request)
 }
 
-// Get Sushiswap's top
-const sushiswap_request = `
+// Get Quickswap's top
+const quickswap_request = `
 query
 {
-  tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { liquidity_gt: "10" } ) {
+  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
     id
     name
     symbol
     derivedETH,
-    volumeUSD
+    tradeVolumeUSD
   }
   bundle(id: "1" ) {
     ethPrice
@@ -188,9 +188,9 @@ query
 }
 `
 
-// Use TheGraph API - https://thegraph.com/explorer/subgraph/sushiswap/matic-exchange
-async function getSushiswapTopTokens() {
-	return await get('https://api.thegraph.com/subgraphs/name/sushiswap/matic-exchange', sushiswap_request)
+// Use TheGraph API - https://thegraph.com/legacy-explorer/subgraph/henrydapp/quickswap
+async function getQuickswapTopTokens() {
+	return await get('https://api.thegraph.com/subgraphs/name/henrydapp/quickswap', quickswap_request)
 }
 
 // Get Spiritswap's top
@@ -681,54 +681,54 @@ async function launchUniswap() {
 }
 
 
-// Program - Sushiswap
-async function launchSushiswap() {
+// Program - Quickswap
+async function launchQuickswap() {
 	// loop
-	setTimeout(launchSushiswap, REALTIME) // every few seconds
+	setTimeout(launchQuickswap, REALTIME) // every few seconds
 
-	let sushiswap_data_file = {}
-	let sushiswap_charts_file = {}
-	let sushiswap_volume_file = {}
+	let quickswap_data_file = {}
+	let quickswap_charts_file = {}
+	let quickswap_volume_file = {}
 
 	try {
-		sushiswap_data_file = readFileSync(path.join(dir_home, 'sushiswap-simple.json'), 'utf8')
-		sushiswap_data = JSON.parse(sushiswap_data_file.toString())
-		let pathFile = path.join(dir_home, 'save_sushiswap-simple.json')
-		writeFileSync(pathFile, JSON.stringify( sushiswap_data ), 'utf8')
+		quickswap_data_file = readFileSync(path.join(dir_home, 'quickswap-simple.json'), 'utf8')
+		quickswap_data = JSON.parse(quickswap_data_file.toString())
+		let pathFile = path.join(dir_home, 'save_quickswap-simple.json')
+		writeFileSync(pathFile, JSON.stringify( quickswap_data ), 'utf8')
 	} catch(error) {
-		console.log('sushiswap-simple.json', error)
-		sushiswap_data_file = readFileSync(path.join(dir_home, 'save_sushiswap-simple.json'), 'utf8')
-		sushiswap_data = JSON.parse(sushiswap_data_file.toString())
+		console.log('quickswap-simple.json', error)
+		quickswap_data_file = readFileSync(path.join(dir_home, 'save_quickswap-simple.json'), 'utf8')
+		quickswap_data = JSON.parse(quickswap_data_file.toString())
 	}
 
 	try {
-		sushiswap_charts_file = readFileSync(path.join(dir_home, 'sushiswap-charts.json'), 'utf8')
-		sushiswap_charts = JSON.parse(sushiswap_charts_file.toString())
-		let pathFile = path.join(dir_home, 'save_sushiswap-charts.json')
-		writeFileSync(pathFile, JSON.stringify( sushiswap_charts ), 'utf8')
+		quickswap_charts_file = readFileSync(path.join(dir_home, 'quickswap-charts.json'), 'utf8')
+		quickswap_charts = JSON.parse(quickswap_charts_file.toString())
+		let pathFile = path.join(dir_home, 'save_quickswap-charts.json')
+		writeFileSync(pathFile, JSON.stringify( quickswap_charts ), 'utf8')
 	} catch(error) {
-		console.log('sushiswap-charts.json', error)
-		sushiswap_charts_file = readFileSync(path.join(dir_home, 'save_sushiswap-charts.json'), 'utf8')
-		sushiswap_charts = JSON.parse(sushiswap_charts_file.toString())
+		console.log('quickswap-charts.json', error)
+		quickswap_charts_file = readFileSync(path.join(dir_home, 'save_quickswap-charts.json'), 'utf8')
+		quickswap_charts = JSON.parse(quickswap_charts_file.toString())
 	}
 
 	try {
-		sushiswap_volume_file = readFileSync(path.join(dir_home, 'sushiswap-volume.json'), 'utf8')
-		sushiswap_volume = JSON.parse(sushiswap_volume_file.toString())
-		let pathFile = path.join(dir_home, 'save_sushiswap-volume.json')
-		writeFileSync(pathFile, JSON.stringify( sushiswap_volume ), 'utf8')
+		quickswap_volume_file = readFileSync(path.join(dir_home, 'quickswap-volume.json'), 'utf8')
+		quickswap_volume = JSON.parse(quickswap_volume_file.toString())
+		let pathFile = path.join(dir_home, 'save_quickswap-volume.json')
+		writeFileSync(pathFile, JSON.stringify( quickswap_volume ), 'utf8')
 	} catch(error) {
-		console.log('sushiswap-volume.json', error)
-		sushiswap_volume_file = readFileSync(path.join(dir_home, 'save_sushiswap-volume.json'), 'utf8')
-		sushiswap_volume = JSON.parse(sushiswap_volume_file.toString())
+		console.log('quickswap-volume.json', error)
+		quickswap_volume_file = readFileSync(path.join(dir_home, 'save_quickswap-volume.json'), 'utf8')
+		quickswap_volume = JSON.parse(quickswap_volume_file.toString())
 	}
 
 
-	sushiswap_list = {}
+	quickswap_list = {}
 
 
-	// get data from Sushiswap
-	const top = await getSushiswapTopTokens()
+	// get data from Quickswap
+	const top = await getQuickswapTopTokens()
 
 
 
@@ -746,30 +746,30 @@ async function launchSushiswap() {
 		const price = price_ETH * eth_price
 		const volumeUSD = token.volumeUSD
 
-		// create Sushiswap list
-		sushiswap_list[address] = symbol
+		// create Quickswap list
+		quickswap_list[address] = symbol
 
 
-		// update Sushiswap simple data
-		sushiswap_data[address] = {
+		// update Quickswap simple data
+		quickswap_data[address] = {
 			s: symbol,
 			n: name,
 			p: price,
 			t: time
 		}
 
-		// update Sushiswap charts
+		// update Quickswap charts
 		//
-		if(sushiswap_charts[address]) {
-			if(time - sushiswap_charts[address].chart_often[sushiswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
-				sushiswap_charts[address].chart_often.push({
+		if(quickswap_charts[address]) {
+			if(time - quickswap_charts[address].chart_often[quickswap_charts[address].chart_often.length-1]['t'] > OFTEN) {
+				quickswap_charts[address].chart_often.push({
 					t: time,
 					p: price,
 				})
-				sushiswap_charts[address].chart_often = sushiswap_charts[address].chart_often.slice(-HISTORY_SIZE)
+				quickswap_charts[address].chart_often = quickswap_charts[address].chart_often.slice(-HISTORY_SIZE)
 			}
 		} else {
-			sushiswap_charts[address] = {
+			quickswap_charts[address] = {
 				s: symbol,
 				n: name,
 				chart_often: [{
@@ -778,58 +778,58 @@ async function launchSushiswap() {
 				}]
 			}
 		}
-		if(sushiswap_volume[address]) {
-			if(time - sushiswap_volume[address][sushiswap_volume[address].length-1]['t'] > OFTEN) {
-				sushiswap_volume[address].push({
+		if(quickswap_volume[address]) {
+			if(time - quickswap_volume[address][quickswap_volume[address].length-1]['t'] > OFTEN) {
+				quickswap_volume[address].push({
 					t: time,
 					v: volumeUSD,
 				})
-				sushiswap_volume[address] = sushiswap_volume[address].slice(-VOLUME_SIZE)
+				quickswap_volume[address] = quickswap_volume[address].slice(-VOLUME_SIZE)
 			}
 		} else {
-			sushiswap_volume[address] = [{
+			quickswap_volume[address] = [{
 				t: time,
 				v: volumeUSD,
 			}]
 		}
-		if(sushiswap_charts[address].chart_4h) {
-			if((time - sushiswap_charts[address].chart_4h[sushiswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
-				sushiswap_charts[address].chart_4h.push({
+		if(quickswap_charts[address].chart_4h) {
+			if((time - quickswap_charts[address].chart_4h[quickswap_charts[address].chart_4h.length-1]['t']) > HOURS) {
+				quickswap_charts[address].chart_4h.push({
 					t: time,
 					p: price,
 				})
-				sushiswap_charts[address].chart_4h = sushiswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
+				quickswap_charts[address].chart_4h = quickswap_charts[address].chart_4h.slice(-HISTORY_SIZE)
 			}
 		} else {
-			sushiswap_charts[address].chart_4h = [{
+			quickswap_charts[address].chart_4h = [{
 				t: time,
 				p: price,
 			}]
 		}
-		if(sushiswap_charts[address].chart_1d) {
-			if((time - sushiswap_charts[address].chart_1d[sushiswap_charts[address].chart_1d.length-1]['t']) > DAY) {
-				sushiswap_charts[address].chart_1d.push({
+		if(quickswap_charts[address].chart_1d) {
+			if((time - quickswap_charts[address].chart_1d[quickswap_charts[address].chart_1d.length-1]['t']) > DAY) {
+				quickswap_charts[address].chart_1d.push({
 					t: time,
 					p: price,
 				})
-				sushiswap_charts[address].chart_1d = sushiswap_charts[address].chart_1d.slice(-HISTORY_SIZE)
+				quickswap_charts[address].chart_1d = quickswap_charts[address].chart_1d.slice(-HISTORY_SIZE)
 			}
 		} else {
-			sushiswap_charts[address].chart_1d = [{
+			quickswap_charts[address].chart_1d = [{
 				t: time,
 				p: price
 			}]
 		}
-		if(sushiswap_charts[address].chart_1w) {
-			if((time - sushiswap_charts[address].chart_1w[sushiswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
-				sushiswap_charts[address].chart_1w.push({
+		if(quickswap_charts[address].chart_1w) {
+			if((time - quickswap_charts[address].chart_1w[quickswap_charts[address].chart_1w.length-1]['t']) > WEEK) {
+				quickswap_charts[address].chart_1w.push({
 					t: time,
 					p: price,
 				})
-				sushiswap_charts[address].chart_1w = sushiswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
+				quickswap_charts[address].chart_1w = quickswap_charts[address].chart_1w.slice(-HISTORY_SIZE)
 			}
 		} else {
-			sushiswap_charts[address].chart_1w = [{
+			quickswap_charts[address].chart_1w = [{
 				t: time,
 				p: price,
 			}]
@@ -837,24 +837,24 @@ async function launchSushiswap() {
 	})
 
 	// Sort tokens depending on volume
-	sushiswap_list = sortTokensByVolume(sushiswap_list, sushiswap_volume)
+	quickswap_list = sortTokensByVolume(quickswap_list, quickswap_volume)
 
-	// build Top 10 list of Sushiswap
-	sushiswap_top = {}
+	// build Top 10 list of Quickswap
+	quickswap_top = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
-			const address = Object.keys(sushiswap_list)[i]
-			const symbol = sushiswap_list[address]
-			const name = sushiswap_data[address].n
-			const price = sushiswap_data[address].p
-			const volume = sushiswap_volume[address][sushiswap_volume[address].length-1].v - sushiswap_volume[address][0].v
+			const address = Object.keys(quickswap_list)[i]
+			const symbol = quickswap_list[address]
+			const name = quickswap_data[address].n
+			const price = quickswap_data[address].p
+			const volume = quickswap_volume[address][quickswap_volume[address].length-1].v - quickswap_volume[address][0].v
 
-			sushiswap_top[address] = {
+			quickswap_top[address] = {
 				s: symbol,
 				n: name,
 				p: price,
 				v: volume,
-				chart: sushiswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
+				chart: quickswap_charts[address].chart_often.slice(-HISTORY_SIZE_24H)
 			}
 		}
 	}
@@ -862,33 +862,33 @@ async function launchSushiswap() {
 
 	/* Store files */
 
-	// Update the Sushiswap list
-	let pathFile = path.join(dir_home, 'sushiswap.json')
-	writeFile( pathFile, JSON.stringify( sushiswap_list ), 'utf8', (err) => {
+	// Update the Quickswap list
+	let pathFile = path.join(dir_home, 'quickswap.json')
+	writeFile( pathFile, JSON.stringify( quickswap_list ), 'utf8', (err) => {
 		if (err) throw err
 	})
 
-	// Update the Sushiswap Top 10
-	pathFile = path.join(dir_home, 'sushiswap-top.json')
-	writeFile( pathFile, JSON.stringify( sushiswap_top ), 'utf8', (err) => {
+	// Update the Quickswap Top 10
+	pathFile = path.join(dir_home, 'quickswap-top.json')
+	writeFile( pathFile, JSON.stringify( quickswap_top ), 'utf8', (err) => {
 		if (err) throw err
 	})
 
-	// Update the Sushiswap simple data
-	pathFile = path.join(dir_home, 'sushiswap-simple.json')
-	writeFile( pathFile, JSON.stringify( sushiswap_data ), 'utf8', (err) => {
+	// Update the Quickswap simple data
+	pathFile = path.join(dir_home, 'quickswap-simple.json')
+	writeFile( pathFile, JSON.stringify( quickswap_data ), 'utf8', (err) => {
 		if (err) throw err
 	})
 
-	// Update the Sushiswap charts
-	pathFile = path.join(dir_home, 'sushiswap-charts.json')
-	writeFile( pathFile, JSON.stringify( sushiswap_charts ), 'utf8', (err) => {
+	// Update the Quickswap charts
+	pathFile = path.join(dir_home, 'quickswap-charts.json')
+	writeFile( pathFile, JSON.stringify( quickswap_charts ), 'utf8', (err) => {
 		if (err) throw err
 	})
 
-	// Update the Sushiswap volumeUSD
-	pathFile = path.join(dir_home, 'sushiswap-volume.json')
-	writeFile( pathFile, JSON.stringify( sushiswap_volume ), 'utf8', (err) => {
+	// Update the Quickswap volumeUSD
+	pathFile = path.join(dir_home, 'quickswap-volume.json')
+	writeFile( pathFile, JSON.stringify( quickswap_volume ), 'utf8', (err) => {
 		if (err) throw err
 	})
 
@@ -1336,7 +1336,7 @@ async function launchHoneyswap() {
 
 /* MAIN */
 setTimeout(launchUniswap, 2000)
-setTimeout(launchSushiswap, 5000)
+setTimeout(launchQuickswap, 5000)
 setTimeout(launchSpiritswap, 8000)
 setTimeout(launchHoneyswap, 11000)
 setTimeout(launch, 14000)
@@ -1376,11 +1376,11 @@ app.get('/list/uniswap', (req, res) => res.json(uniswap_list))
 app.get('/top/uniswap', (req, res) => res.json(uniswap_top))
 app.get('/simple/uniswap', (req, res) => res.json(uniswap_data))
 app.get('/charts/uniswap', (req, res) => res.json(uniswap_charts))
-// Sushiswap URLs
-app.get('/list/sushiswap', (req, res) => res.json(sushiswap_list))
-app.get('/top/sushiswap', (req, res) => res.json(sushiswap_top))
-app.get('/simple/sushiswap', (req, res) => res.json(sushiswap_data))
-app.get('/charts/sushiswap', (req, res) => res.json(sushiswap_charts))
+// Quickswap URLs
+app.get('/list/quickswap', (req, res) => res.json(quickswap_list))
+app.get('/top/quickswap', (req, res) => res.json(quickswap_top))
+app.get('/simple/quickswap', (req, res) => res.json(quickswap_data))
+app.get('/charts/quickswap', (req, res) => res.json(quickswap_charts))
 // Spiritswap URLs
 app.get('/list/spiritswap', (req, res) => res.json(spiritswap_list))
 app.get('/top/spiritswap', (req, res) => res.json(spiritswap_top))
