@@ -299,7 +299,7 @@ async function launch() {
 	const tokens = top.data ? top.data.tokens : []
 
 	const bnb_price = top.data ? top.data.bundle.bnbPrice : 0
-
+	if(bnb_price === 0) return
 
 	tokens.forEach(token => {
 		const address = token.id
@@ -522,6 +522,7 @@ async function launchUniswap() {
 	const tokens = tokensV3.concat(filteredv2)
 
 	const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
+	if(eth_price === 0) return
 
 	tokens.forEach(token => {
 		const address = token.id
@@ -735,6 +736,7 @@ async function launchSushiswap() {
 	const tokens = top.data ? top.data.tokens : []
 
 	const eth_price = top.data ? top.data.bundle.ethPrice : 0
+	if(eth_price === 0) return
 
 	tokens.forEach(token => {
 		const address = token.id
@@ -952,6 +954,7 @@ async function launchSpiritswap() {
 	const tokens = top.data ? top.data.tokens : []
 
 	const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
+	if(ftm_price === 0) return
 
 	tokens.forEach(token => {
 		const address = token.id
@@ -1170,6 +1173,7 @@ async function launchHoneyswap() {
 	const tokens = top.data ? top.data.tokens : []
 
 	const eth_price = top.data ? top.data.bundle.ethPrice : 0
+	if(eth_price === 0) return
 
 	tokens.forEach(token => {
 		const address = token.id
