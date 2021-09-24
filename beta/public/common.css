@@ -1,14 +1,15 @@
 * {
   box-sizing: border-box;
-  font-family: system-ui, Sans-Serif, Arial;
+  font-family: system-ui, sans-serif, Arial;
   transition: all 400ms ease-in-out;
 }
+
 .unselectable {
-   -moz-user-select: -moz-none;
-   -khtml-user-select: none;
-   -webkit-user-select: none;
-   -ms-user-select: none;
-   user-select: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body {
@@ -16,27 +17,35 @@ body {
   max-width: 1400px;
   padding: 0;
 }
+
 .body-background {
-background-position: center;
-background-repeat: no-repeat;
-background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 60%;
   bottom: 0;
   left: 0;
-    opacity: 0.4;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: -1;
+  opacity: .4;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: -1;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-size: inherit;
   font-weight: normal;
   margin: 0;
 }
-a, a:hover, a:visited, a:active, a:focus {
+
+a,
+a:hover,
+a:visited,
+a:active,
+a:focus {
   text-decoration: none;
-  color: #000;
+  color: #000000;
 }
 
 .flex-auto {
@@ -51,18 +60,20 @@ a, a:hover, a:visited, a:active, a:focus {
 
 @media (max-width: 800px) {
   html {
-    font-size: 0.9em;
+    font-size: .9em;
   }
+
   .body-background {
-      background-size: 85%;
+    background-size: 85%;
   }
 }
 
 @media (max-width: 460px) {
   html {
-    font-size: 0.8em;
+    font-size: .8em;
   }
+
   .body-background {
-      background-size: 95%;
+    background-size: 95%;
   }
 }

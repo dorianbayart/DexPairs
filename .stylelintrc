@@ -1,0 +1,24 @@
+{
+  "plugins": [
+    "stylelint-order"
+  ],
+  "rules": {
+    "color-hex-length": "long",
+    "color-no-invalid-hex": true,
+    "declaration-colon-newline-after": null,
+    "font-family-name-quotes": null,
+    "max-empty-lines": 3,
+    "max-nesting-depth": 2,
+    "number-leading-zero": "never",
+    "string-quotes": "single",
+    "value-list-comma-newline-after": null,
+    "order/order": [
+      "custom-properties",
+      "declarations"
+    ],
+    "order/properties-order": [
+      "width",
+      "height"
+    ]
+  }
+}

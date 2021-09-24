@@ -2,9 +2,11 @@
   0% {
     transform: rotate(0deg);
   }
+
   33% {
     transform: rotate(360deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -15,11 +17,13 @@
   margin-left: 24px;
   margin-bottom: 1em;
 }
+
 .gas .gas-title {
-  font-size: 0.75em;
+  font-size: .75em;
   font-weight: lighter;
   margin-left: 8px;
 }
+
 .gas-container {
   display: inline-flex;
   justify-content: center;
@@ -29,19 +33,23 @@
   padding: 1px 1px 1px 6px;
   flex-wrap: wrap;
 }
+
 .gas-container .gas-icon {
   display: flex;
   margin-left: 3px;
   margin-right: 6px;
 }
+
 .gas-container .realtime-icon {
   display: flex;
   margin-left: 6px;
   margin-right: 3px;
 }
+
 .gas-container .realtime-icon img {
   transition: all 250ms ease-in-out;
 }
+
 .gas-container .realtime-icon.active img {
   animation-name: spin;
   animation-duration: 3s;
@@ -49,15 +57,18 @@
   animation-timing-function: ease-in-out;
   transform-origin: 50% 50%;
 }
+
 .gas-container .realtime-icon:hover img {
   transform: rotate(180deg);
 }
+
 ul.gas-list {
   margin: 0;
   padding: 0;
   display: inline-flex;
   list-style: none;
 }
+
 .gas-list li {
   border-radius: 8px;
   padding: 3px;
@@ -67,18 +78,22 @@ ul.gas-list {
   min-width: 32px;
   min-height: 20px;
 }
+
 .gas-list li span {
   height: 14px;
 }
+
 .gas-list li span.gas-network {
   display: flex;
   padding: 1px 3px;
 }
+
 .gas-list li span.gas-value {
   padding: 1px 3px;
   font-size: 12px;
   line-height: 12px;
 }
+
 .gas-list li img {
   max-width: 2em;
   width: auto;
