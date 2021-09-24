@@ -32,8 +32,8 @@ let dexList = {
 		name: 'QuickSwap',
 		chain: 'Polygon/Matic',
 		chain_enum: 'POLYGON',
-		url: 'https://sushi.com/',
-		url_swap: 'https://app.sushi.com/swap',
+		url: 'https://quickswap.exchange/',
+		url_swap: 'https://quickswap.exchange/#/swap',
 		url_data: server + '/quickswap',
 		explorer: 'https://polygonscan.com/token/',
 		tokens: {
@@ -851,7 +851,7 @@ function initializeHTML() {
 	selectedToken = dexList[dex].tokens.token
 	selectedBase = dexList[dex].tokens.base
 
-	if(sessionStorage.getItem('dex')) {
+	if(sessionStorage.getItem('dex') && dexList[sessionStorage.getItem('dex')]) {
 		dex = sessionStorage.getItem('dex')
 		selectedToken = dexList[dex].tokens.token
 		selectedBase = dexList[dex].tokens.base

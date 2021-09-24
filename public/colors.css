@@ -1,42 +1,68 @@
 
 /* Common */
-.menu .menu-item, input, select, button {
-  background-color: #FFFD;
-  color: #000D;
-}
-/* Gas */
-.gas-list li {
-  background-color: #FFFD;
-  color: #000D;
-}
-/* Charts */
-.top-token, .favorite-token, .list, #token, #base, #base_change, #base_change img, #swapper_switch, #chart {
-  background-color: #FFFD;
-  color: #000D;
-}
-/* Wallet */
-.wallet-information, #wallet ul li, #connect-wallet {
-  background-color: #FFFD;
-  color: #000D;
-}
-/* News */
-#main > h1, article.entry {
-  background-color: #FFFD;
-  color: #000D;
-}
-/* 404 */
-#body-404 a {
-  background-color: #FFFD;
-  color: #000D;
+.menu .menu-item,
+input,
+select,
+button {
+  background-color: #ffffffdd;
+  color: #000000dd;
 }
 
-#top, #favorites, #top-title, #wallet .loading-message, .wallet-menu, #wallet ul, .gas-container {
-  background-color: #0002;
+/* Gas */
+.gas-list li {
+  background-color: #ffffffdd;
+  color: #000000dd;
+}
+
+/* Charts */
+.top-token,
+.favorite-token,
+.list,
+#token,
+#base,
+#base_change,
+#base_change img,
+#swapper_switch,
+#chart {
+  background-color: #ffffffdd;
+  color: #000000dd;
+}
+
+/* Wallet */
+.wallet-information,
+#wallet ul li,
+#connect-wallet {
+  background-color: #ffffffdd;
+  color: #000000dd;
+}
+
+/* News */
+.main > h1,
+article.entry {
+  background-color: #ffffffdd;
+  color: #000000dd;
+}
+
+/* 404 */
+#body-404 a {
+  background-color: #ffffffdd;
+  color: #000000dd;
+}
+
+#top,
+#favorites,
+#top-title,
+#wallet .loading-message,
+.wallet-menu,
+#wallet ul,
+.gas-container {
+  background-color: #00000022;
 }
 
 .green {
   color: mediumseagreen;
 }
+
 .red {
   color: tomato;
 }
@@ -45,15 +71,17 @@
   border-bottom: 1px solid lightgrey;
   padding-bottom: 1em;
 }
+
 .border-info {
   border-color: mediumslateblue;
 }
+
 .border-error {
   border-color: palevioletred;
 }
 
 .shadow-white {
-  background-color: #FFFD;
+  background-color: #ffffffdd;
   box-shadow: 0 0 16px 12px white;
 }
 

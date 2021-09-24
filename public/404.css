@@ -6,8 +6,8 @@ body {
 }
 
 .body-background {
+  opacity: .2;
   background-image: url('/img/background-multichain.svg');
-  opacity: 0.2;
 }
 
 .centered-container {
@@ -16,13 +16,13 @@ body {
 
 h1 {
   background: linear-gradient(135deg, purple, lightseagreen);
-  background-clip: text;
   -webkit-background-clip: text;
+  background-clip: text;
   display: inline-block;
   font-size: max(10vh, 5em);
   font-weight: bolder;
   -webkit-text-fill-color: transparent;
-  text-shadow: #0001 3px 3px 3px;
+  text-shadow: #00000011 3px 3px 3px;
 }
 
 h2 {
@@ -34,7 +34,7 @@ h2 {
 
 a {
   border-radius: 8px;
-  box-shadow: 0 0 24px #888;
+  box-shadow: 0 0 24px #888888;
   font-size: 1.1em;
   padding: 9px 12px 6px;
 }

@@ -3,57 +3,61 @@ body {
   flex-flow: column;
   min-height: 100vh;
 }
+
 .body-background {
   background-image: url('/img/background-multichain.svg');
 }
 
-#main {
+.main {
   flex: auto;
-  width: 100%;
-  max-width: 800px;
   margin: 24px auto;
+  max-width: 800px;
+  width: 100%;
 }
 
-#main > h1 {
-  display: inline-block;
-  padding: 12px;
+.main .main-title {
   border-radius: 12px;
+  display: inline-block;
   font-size: 1.6em;
   font-weight: lighter;
+  padding: 12px;
 }
 
-button#back-button {
+button.back-button {
+  border: 1px solid #cccccc;
+  border-radius: 12px;
   cursor: pointer;
   margin-top: 24px;
   padding: 6px 12px;
-  border: 1px solid #CCC;
-  border-radius: 12px;
   transition: all 250ms ease-in-out;
 }
-button#back-button:hover {
-  box-shadow: 0 0 12px #888E;
+
+button.back-button:hover {
+  box-shadow: 0 0 12px #888888ee;
 }
 
-#items {
-  min-height: 25vh;
+.items {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  min-height: 25vh;
 }
 
 article {
-  border: 1px solid #CCC;
+  border: 1px solid #cccccc;
   border-radius: 12px;
-  padding: 1em;
   margin: 1em auto;
+  padding: 1em;
   width: 100%;
 }
+
 article.condensed {
   cursor: pointer;
   transition: all 250ms ease-in-out;
 }
+
 article.condensed:hover {
-  box-shadow: 0 0 12px #888E;
+  box-shadow: 0 0 12px #888888ee;
 }
 
 article h1 {
@@ -62,63 +66,72 @@ article h1 {
   text-decoration-line: underline;
   text-align: center;
 }
+
 article.condensed h1 {
   font-size: 1.2em;
   padding: 6px 0 0;
   text-decoration: none;
 }
+
 article h2 {
   font-size: 1.2em;
   padding: 3px 0;
 }
+
 article h3 {
   font-size: 1.1em;
 }
 
 .timestamp {
-  font-size: 0.8em;
+  font-size: .8em;
 }
 
 .content {
+  line-height: 1.25em;
   text-align: justify;
   text-indent: 12px;
-  line-height: 1.25em;
 }
+
 .content a {
   text-decoration-line: underline;
 }
+
 .chapter-title {
   font-style: italic;
   margin: 6px auto;
 }
+
 ul.tags {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: inline-flex;
-}
-ul.tags li {
-  border: 1px solid #CCC;
-  border-radius: 8px;
-  padding: 3px 6px;
-  margin: 24px 6px 0 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-#link-to-feed {
+ul.tags li {
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  margin: 24px 6px 0 0;
+  padding: 3px 6px;
+}
+
+.link-to-feed {
   text-align: center;
 }
-#link-to-feed a {
-  display: inline-flex;
+
+.link-to-feed a {
   align-items: center;
-  font-size: 0.9em;
+  display: inline-flex;
+  font-size: .9em;
 }
-#link-to-feed a img {
-  height: 0.9em;
+
+.link-to-feed a img {
+  height: .9em;
   margin-right: 6px;
 }
 
 @media (max-width: 800px) {
-  #main {
+  .main {
     max-width: calc(100% - 24px);
   }
 }

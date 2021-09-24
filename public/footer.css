@@ -4,14 +4,14 @@
 }
 
 .footer a:hover {
-  opacity: 0.75;
+  opacity: .75;
 }
 
 .link-with-img {
   display: inline-flex;
   align-items: flex-end;
-  padding: 0.25em;
-  margin: 0.75em;
+  padding: .25em;
+  margin: .75em;
 }
 
 .link-with-img img {
