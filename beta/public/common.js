@@ -297,6 +297,18 @@ function getChartsByAddress(address, network, callback) {
 }
 
 
+// get charts by address and network
+// params: address, network, callback function
+async function getChartsByAddresses(tokenA, tokenB, network) {
+	return new Promise((resolve, reject) => {
+		fetch(NETWORK[network].url_data + '/charts/' + tokenA + '/' + tokenB)
+			.then((response) => response.json())
+			.then(resolve)
+			.catch(reject)
+	})
+}
+
+
 
 document.getElementById('gas-realtime-button').addEventListener('click', (e) => {
 	gasIsRealtime = !gasIsRealtime
