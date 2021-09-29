@@ -1,7 +1,7 @@
 'use strict'
 
 let chartsForage, favoritesForage
-let getListTimer, getTopTimer, getSimpleTimer
+let getListTimer, getTopTimer, getSimpleTimer, getFavoritesTimer
 let list = {}
 let search = ''
 let filteredList = {}
@@ -123,8 +123,7 @@ function getList() {
 
 
 
-// get simple data from server
-// + update main/base tokens with default ones (WBNB/BUSD)
+// get top tokens from server
 function getTop() {
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
@@ -378,6 +377,39 @@ function setTop() {
 			this.src = '/img/icons/empty.png'
 			return true
 		}
+	}
+}
+
+
+async function updateFavorites() {
+	getFavoritesTimer = setTimeout(updateFavorites, 8000)
+
+	if(Object.keys(favorites).length < 1) {
+		return
+	}
+
+	const favId = Object.keys(favorites).sort((favA, favB) => favorites[favA].updatedAt - favorites[favB].updatedAt)[0]
+	const fav = favorites[favId]
+
+	if((Date.now() - fav.updatedAt)/1000 > 80) {
+		const charts = await getChartsByAddresses(fav.address, fav.base, fav.chain)
+
+		const lastPriceA = charts[fav.address].chart_often.slice(-1)[0].p
+		const lastPriceB = charts[fav.base].chart_often.slice(-1)[0].p
+
+		fav.price = lastPriceA / lastPriceB
+		fav.chart = charts[fav.address].chart_often.map(coords => {
+			const baseCoords = charts[fav.base].chart_often.find(base => base.t === coords.t)
+			if(baseCoords) {
+				return { t: coords.t, p: coords.p / baseCoords.p }
+			}
+			const price = estimatePriceInterpolation(charts[fav.base].chart_often, coords.t)
+			return { t: coords.t, p: price ? coords.p / price : null }
+		})
+		fav.updatedAt = Date.now()
+		favorites[favId] = fav
+
+		setFavorites()
 	}
 }
 
@@ -831,6 +863,8 @@ getList()
 getSimple()
 getTop()
 
+updateFavorites()
+
 
 
 
@@ -934,7 +968,7 @@ function saveSessionVariables() {
 	sessionStorage.setItem('selectedBase', selectedBase)
 	sessionStorage.setItem('interval', interval)
 	sessionStorage.setItem('timeframe', timeframe)
-	favoritesForage.setItem('favorites', favorites)
+
 	favoritesForage.setItem('favorites', favorites)
 		.then(() => {})
 		.catch(() => {})
@@ -1092,7 +1126,8 @@ function toggleFavorite(selected, base) {
 					}
 					const price = estimatePriceInterpolation(baseChart, coords.t)
 					return { t: coords.t, p: price ? coords.p / price : null }
-				})
+				}),
+				updatedAt: 0
 			}
 			favorites[id] = fav
 		}
