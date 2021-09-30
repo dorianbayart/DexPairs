@@ -20,7 +20,9 @@ const displayNews = (urlTitle) => {
 		if(window.history.replaceState) {
 			window.history.replaceState(null, DOMAIN_NAME + ' | News | ' + article.title.innerHTML, window.location.href.split('?')[0] + '?title=' + urlTitle)
 		}
+		document.querySelector('title').innerHTML = DOMAIN_NAME + ' | News | ' + article.title.innerHTML
 		document.querySelector('meta[property="og:title"]').setAttribute('content', DOMAIN_NAME + ' | News | ' + article.title.innerHTML)
+		document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href)
 
 		const html = `<article class="entry">
           <div class="timestamp">${article.timestamp}</div>
@@ -34,12 +36,14 @@ const displayNews = (urlTitle) => {
 		if(window.history.replaceState) {
 			window.history.replaceState(null, DOMAIN_NAME + ' | News', window.location.href.split('?')[0])
 		}
+		document.querySelector('title').innerHTML = DOMAIN_NAME + ' | News'
 		document.querySelector('meta[property="og:title"]').setAttribute('content', DOMAIN_NAME + ' | News')
+		document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href)
 
-		const html = feed.map(entry => `<article id="${entry.id}" class="entry condensed">
+		const html = feed.map(entry => `<a href="news/${entry.id.split(':')[2]}.html" id="${entry.id}" class="entry condensed">
           <div class="timestamp">${entry.timestamp}</div>
           <h1 class="entry-title">${entry.title.innerHTML}</h1>
-        </article>`)
+        </a>`)
 		document.getElementById('items').innerHTML = html.join('')
 
 		Array.from(document.getElementById('items').getElementsByTagName('article')).forEach(

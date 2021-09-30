@@ -23,7 +23,7 @@ body {
   padding: 12px;
 }
 
-button.back-button {
+.back-button {
   border: 1px solid #cccccc;
   border-radius: 12px;
   cursor: pointer;
@@ -32,7 +32,7 @@ button.back-button {
   transition: all 250ms ease-in-out;
 }
 
-button.back-button:hover {
+.back-button:hover {
   box-shadow: 0 0 12px #888888ee;
 }
 
@@ -43,7 +43,7 @@ button.back-button:hover {
   min-height: 25vh;
 }
 
-article {
+.entry {
   border: 1px solid #cccccc;
   border-radius: 12px;
   margin: 1em auto;
@@ -51,34 +51,35 @@ article {
   width: 100%;
 }
 
-article.condensed {
+.entry.condensed {
   cursor: pointer;
   transition: all 250ms ease-in-out;
 }
 
-article.condensed:hover {
+.entry.condensed:hover {
   box-shadow: 0 0 12px #888888ee;
 }
 
-article h1 {
+.entry h1 {
   font-size: 1.4em;
   padding: 6px 0;
   text-decoration-line: underline;
+  text-decoration-thickness: 1px;
   text-align: center;
 }
 
-article.condensed h1 {
+.entry.condensed h1 {
   font-size: 1.2em;
   padding: 6px 0 0;
   text-decoration: none;
 }
 
-article h2 {
+.entry h2 {
   font-size: 1.2em;
   padding: 3px 0;
 }
 
-article h3 {
+.entry h3 {
   font-size: 1.1em;
 }
 
@@ -89,7 +90,7 @@ article h3 {
 .content {
   line-height: 1.25em;
   text-align: justify;
-  text-indent: 12px;
+  /*text-indent: 12px;*/
 }
 
 .content a {
@@ -109,10 +110,12 @@ ul.tags {
 }
 
 ul.tags li {
+  font-size: .8em;
   border: 1px solid #cccccc;
-  border-radius: 8px;
+  border-radius: 24px;
   margin: 24px 6px 0 0;
-  padding: 3px 6px;
+  padding: 6px 12px;
+  text-transform: capitalize;
 }
 
 .link-to-feed {
@@ -134,4 +137,16 @@ ul.tags li {
   .main {
     max-width: calc(100% - 24px);
   }
+}
+
+
+/* utils */
+
+.flex-align {
+  display: inline-flex;
+  align-items: center;
+}
+
+.margin-right {
+  margin-right: 6px;
 }

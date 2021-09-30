@@ -5,10 +5,10 @@
   <title>DexPairs.xyz - News</title>
   <subtitle>List new functionnalities and important news about DexPairs.xyz</subtitle>
 
-  <link href="./feed.atom" rel="self" type="application/atom+xml" />
-  <!--<link href="https://dexpairs.xyz/news" rel="alternate" type="text/html" />-->
+  <link href="/feed.atom" rel="self" type="application/atom+xml" />
+  <link href="https://dexpairs.xyz/news" rel="alternate" type="text/html" />
 
-  <updated>2021-08-04T15:00:00Z</updated>
+  <updated>2021-10-01T00:00:00Z</updated>
 
   <author>
     <name>Dorian Bayart</name>
@@ -21,6 +21,40 @@
   <!-- Entries -->
   <!-- ....... -->
 
+
+  <entry xml:lang="en">
+    <id>tag:dexpairs.xyz,2021-09-30:favorite-charts</id>
+    <link rel="alternate" type="text/html" href="/news/favorite-charts"/>
+    <title>Keep an eye on your favorite charts</title>
+    <published>2021-09-30T20:00:00Z</published>
+    <updated>2021-09-30T20:00:00Z</updated>
+    <content type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <h2 class="chapter-title flex-align">
+          <img class='margin-right' src='/img/news/fav-star_printscreen.png' width='24' height='24' alt='Favorite star image'/>
+          Save up to 6 favorite charts
+        </h2>
+        <div class="content">
+          <p>
+            Click on the star at the top-right corner of a chart to save it in your Favorites. Then click on a favorite to see it in full size.<br />
+            The favorites list is currently limited to a maximum of 6 charts.
+          </p>
+        </div>
+        <h2 class="chapter-title">Different charts, different blockchains, one page</h2>
+        <div class="content">
+          <p>
+            With the favorites list, you can keep an eye on different charts over different blockchains.<br />
+            Monitor Pancake/BNB on BSC, AAVE/COMP on Ethereum and WFTM/Spirit on Fantom, all on the same page!
+          </p>
+        </div>
+        <ul class="tags">
+          <li>favorites</li>
+          <li>charts</li>
+          <li>feature</li>
+        </ul>
+      </div>
+    </content>
+  </entry>
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-17:secret-beta-features</id>
@@ -65,7 +99,7 @@
         <h2 class="chapter-title">Explore ERC-721 transactions</h2>
         <div class="content">
           <p>
-            <a href="./wallet">The Wallet tracker</a> can now explore ERC-721 transactions in order to find tokens.<br />
+            <a href="/wallet">The Wallet tracker</a> can now explore ERC-721 transactions in order to find tokens.<br />
             ERC-721 tokens are also well known as ... NFTs !<br />
             Yes, your <a href="https://ethereum.org/en/nft/" target="_blank" rel="external">Non-Fungible Tokens</a> are now displayed in the wallet !
           </p>

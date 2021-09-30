@@ -204,6 +204,7 @@ app.get('/news', (req, res) => res.sendFile(path.join(__dirname, '/news.html')))
 app.get('/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/feed.atom')))
 app.use('/img', express.static('img'))
 app.use('/public', express.static('public'))
+app.use('/news/', express.static('news/'))
 
 app.get('/beta/', (req, res) => res.sendFile(path.join(__dirname, '/beta/index.html')))
 app.get('/beta/charts', (req, res) => res.sendFile(path.join(__dirname, '/beta/charts.html')))
