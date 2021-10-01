@@ -136,6 +136,7 @@ ul.tags li {
 @media (max-width: 800px) {
   .main {
     max-width: calc(100% - 24px);
+    font-size: .8em;
   }
 }
 
