@@ -40,7 +40,7 @@ const displayNews = (urlTitle) => {
 		document.querySelector('meta[property="og:title"]').setAttribute('content', DOMAIN_NAME + ' | News')
 		document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href)
 
-		const html = feed.map(entry => `<a href="news/${entry.id.split(':')[2]}.html" id="${entry.id}" class="entry condensed">
+		const html = feed.map(entry => `<a href="news/${entry.id.split(':')[2]}" id="${entry.id}" class="entry condensed">
           <div class="timestamp">${entry.timestamp}</div>
           <h1 class="entry-title">${entry.title.innerHTML}</h1>
         </a>`)

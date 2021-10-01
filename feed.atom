@@ -58,7 +58,7 @@
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-17:secret-beta-features</id>
-    <link rel="alternate" type="text/html" href="./news?title=secret-beta-features"/>
+    <link rel="alternate" type="text/html" href="/news/secret-beta-features"/>
     <title>A secret beta version for secret features</title>
     <published>2021-08-17T11:00:00Z</published>
     <updated>2021-08-17T11:00:00Z</updated>
@@ -90,7 +90,7 @@
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-10:welcome-nfts</id>
-    <link rel="alternate" type="text/html" href="./news?title=welcome-nfts"/>
+    <link rel="alternate" type="text/html" href="/news/welcome-nfts"/>
     <title>Welcome NFTs !</title>
     <published>2021-08-10T01:00:00Z</published>
     <updated>2021-08-10T01:00:00Z</updated>
@@ -123,7 +123,7 @@
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-07:protocols-full-support-aave-v2</id>
-    <link rel="alternate" type="text/html" href="./news?title=protocols-support-aave-v2"/>
+    <link rel="alternate" type="text/html" href="/news/protocols-support-aave-v2"/>
     <title>Full support of Aave v2 protocol</title>
     <published>2021-08-07T21:00:00Z</published>
     <updated>2021-08-07T21:00:00Z</updated>
@@ -157,7 +157,7 @@
 
   <entry xml:lang="en">
     <id>tag:dexpairs.xyz,2021-08-04:atom-feed-creation</id>
-    <link rel="alternate" type="text/html" href="./news?title=atom-feed-creation"/>
+    <link rel="alternate" type="text/html" href="/news/atom-feed-creation"/>
     <title>Creation of an Atom feed</title>
     <published>2021-08-04T15:00:00Z</published>
     <updated>2021-08-04T21:00:00Z</updated>
