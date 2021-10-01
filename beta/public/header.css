@@ -16,7 +16,6 @@
 }
 
 header {
-  font-size: 3rem;
   padding: 12px 24px;
   transition: all 1s ease-in-out;
 }
@@ -121,6 +120,7 @@ header .version .low {
 
   .menu .menu-item h2 {
     padding: 6px 9px 3px;
+    font-size: 20px;
   }
 }
 
