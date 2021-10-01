@@ -57,7 +57,7 @@ const displayNews = (urlTitle) => {
 	}
 }
 
-fetch('./feed.atom')
+fetch('/feed.atom')
 	.then(response => response.text())
 	.then(xml => {
 		const parser = new DOMParser()
