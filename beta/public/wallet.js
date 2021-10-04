@@ -350,7 +350,7 @@ async function searchTokens(network) {
 				}
 			}
 
-			tokentx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach((t, i) => t.done = true)
+			tokentx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
 		} catch(error) {
 			//console.log(network, transaction.contractAddress, error)
 		}

@@ -5,18 +5,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-  <title>DexPairs.xyz | Title</title>
-  <meta name="description" content="Description" />
+  <title>DexPairs.xyz | Donate</title>
+  <meta name="description" content="Support DexPairs.xyz with a donation" />
   <meta name="author" content="Dorian Bayart" />
-  <meta name="keywords" content="atom, feed, dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, bsc, fantom, xdai, wallet, defi, dex, uniswap, quickswap, pancakeswap, spiritswap, honeyswap, nft, gallery" />
+  <meta name="keywords" content="atom, feed, dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, bsc, fantom, xdai, wallet, defi, dex, uniswap, quickswap, pancakeswap, spiritswap, honeyswap, nft, gallery, donation" />
 
   <link rel="shortcut icon" type="image/png" href="/img/background-multichain-min.png" />
-  <link href="/news" rel="canonical" />
+  <link href="/donate" rel="canonical" />
 
-  <meta property="og:title" content="DexPairs.xyz | Title" />
+  <meta property="og:title" content="DexPairs.xyz | Donate" />
   <meta property="og:type" content="website" />
-  <meta property="og:description" content="News Page | Description" />
-  <meta property="og:url" content="/news" />
+  <meta property="og:description" content="Support DexPairs.xyz with a donation" />
+  <meta property="og:url" content="/donate" />
   <meta property="og:image" content="/img/background-multichain-min.png" />
   <meta property="og:site_name" content="DexPairs" />
 
@@ -29,14 +29,15 @@
   <link rel="stylesheet" href="/public/common.css">
   <link rel="stylesheet" href="/public/header.css">
   <link rel="stylesheet" href="/public/footer.css">
-  <link rel="stylesheet" href="/public/news.css">
+  <link rel="stylesheet" href="/public/donate.css">
 
+  <script defer src="/public/donate.js"></script>
 </head>
 
 <body>
   <div id='header'>
     <header>
-      <a id='title' href="/" aria-label="Homepage">
+      <a id='title' href="./" aria-label="Homepage">
         <h1>
           DexPairs
         </h1>
@@ -45,7 +46,7 @@
 
     <div class='menu'>
       <div class='menu-item menu-charts'>
-        <a href="/charts" aria-label="Charts">
+        <a href="./charts" aria-label="Charts">
           <h2>
             <img src="/img/icons/bar-chart-2.svg" alt="Chart Logo" width="24px" height="24px">
             Charts
@@ -53,14 +54,14 @@
         </a>
       </div>
       <div class='menu-item menu-wallet'>
-        <a href="/wallet" aria-label="Wallet">
+        <a href="./wallet" aria-label="Wallet">
           <h2>
             <img src="/img/icons/briefcase.svg" alt="Wallet Logo" width="24px" height="24px">
             Wallet
           </h2>
         </a>
       </div>
-      <div class='menu-item menu-news active'>
+      <div class='menu-item menu-news'>
         <a href="/news" aria-label="News">
           <h2>
             <img src="/img/icons/news_feed.svg" alt="News Feed Logo" width="24px" height="24px">
@@ -73,22 +74,51 @@
 
 
   <div id='main' class='main'>
-    <h3 class='main-title'>Read the latest news</h1>
+    <h1 class='main-title'>Donate</h1>
 
-    <div id="items" class="items">
-      <a href='/news' class="back-button">Back to News</a>
-      <article class="entry">
+    <div class='description'>
+      <p>
+        Use the address below to donate to DexPairs.xyz from your wallet.
+      </p>
+    </div>
 
-      </article>
+    <div class='qrcode-container'>
+      <img class='qrcode' src='https://chart.googleapis.com/chart?chs=192x192&cht=qr&chl=0x0255c9D3850cacA1152AEB20425C264787661692' alt='QRCode of the Wallet' width='192' height='192'>
+    </div>
+    <div class='wallet-address'>
+      0x0255c9D3850cacA1152AEB20425C264787661692
+    </div>
+    <div id='click-to-copy' class='click-to-copy unselectable'>
+      <span class='click-to-copy-content inline-flex'>
+        <span id='click-to-copy-description'>Click here to copy wallet address</span>
+        <img id='copy-icon' class='copy-icon' src='/img/icons/copy.svg' alt='Copy icon' width='14' height='14'>
+      </span>
+    </div>
+    <div class='description'>
+      <p>
+        Supported networks:
+      </p>
+      <ul class='network-list'>
+        <li>
+          <img class='network-item-img' alt='Ethereum logo' title='Ethereum (ERC-20)' src='/img/ethereum-icon.svg' width='32' height='32' />
+        </li>
+        <li>
+          <img class='network-item-img' alt='Polygon logo' title='Polygon / Matic' src='/img/polygon-icon.svg' width='32' height='32' />
+        </li>
+        <li>
+          <img class='network-item-img' alt='BSC logo' title='Binance Smart Chain (BEP-20)' src='/img/bsc-icon.svg' width='32' height='32' />
+        </li>
+        <li>
+          <img class='network-item-img' alt='Fantom logo' title='Fantom / Opera' src='/img/fantom-icon.svg' width='32' height='32' />
+        </li>
+        <li>
+          <img class='network-item-img' alt='xDai logo' title='xDai' src='/img/xdai-icon.svg' width='32' height='32' />
+        </li>
+      </ul>
     </div>
   </div>
 
-  <div class='link-to-feed'>
-    <a href="/feed.atom" rel="alternate" type="application/atom+xml" target="_blank">
-      <img src="/img/icons/news_feed.svg" alt="News Feed Logo">
-      Subscribe to Feed.atom
-    </a>
-  </div>
+
 
 
   <footer class="footer">

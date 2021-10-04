@@ -44,6 +44,12 @@ a.entry,
   color: #000000dd;
 }
 
+/* Donate */
+.click-to-copy {
+  background-color: #ffffffdd;
+  color: #000000dd;
+}
+
 /* 404 */
 #body-404 a {
   background-color: #ffffffdd;

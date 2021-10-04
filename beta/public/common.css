@@ -52,6 +52,11 @@ a:focus {
   flex: auto;
 }
 
+.inline-flex {
+  display: inline-flex;
+  align-items: center;
+}
+
 @media (max-width: 1200px) {
   .body-background {
     background-size: 75%;

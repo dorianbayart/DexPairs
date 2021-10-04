@@ -1,6 +1,9 @@
 .footer {
-  margin: auto;
+  margin: 24px 1em 0;
   text-align: center;
+  padding: 12px;
+  outline: 1px solid #CCCCCCCC;
+  border-radius: 12px 12px 0 0;
 }
 
 .footer a:hover {
@@ -9,12 +12,45 @@
 
 .link-with-img {
   display: inline-flex;
-  align-items: flex-end;
-  padding: .25em;
-  margin: .75em;
+  align-items: center;
+  padding: 3px;
+  margin: 6px 12px;
 }
 
 .link-with-img img {
   margin-right: 8px;
+  width: auto;
   height: 20px;
+}
+
+
+@media (max-width: 800px) {
+  .footer {
+    margin: 24px .5em 0;
+  }
+
+  .link-with-img {
+    margin: 6px 12px;
+  }
+
+  .link-with-img img {
+    margin-right: 6px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 460px) {
+  .footer {
+    margin: 24px .25em 0;
+    padding: 12px 6px 6px;
+  }
+
+  .link-with-img {
+    margin: 3px;
+  }
+
+  .link-with-img img {
+    margin-right: 4px;
+    height: 15px;
+  }
 }

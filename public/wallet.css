@@ -2,7 +2,7 @@
 body {
   display: flex;
   flex-flow: column;
-  min-height: 90vh;
+  min-height: 100vh;
 }
 
 .body-background {
