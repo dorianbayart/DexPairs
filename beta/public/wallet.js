@@ -317,7 +317,7 @@ async function readNFTMetadata(id, indexId, tokenURI) {
 
 
 async function searchTokens(network) {
-	let tx = tokentx[network].filter(t => !t.done)
+	let tx = tokentx[network].filter(t => t && !t.done)
 	const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + network))
 
 	if(!tx || typeof tx === 'string') {
@@ -336,9 +336,9 @@ async function searchTokens(network) {
 		try {
 			const balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
 			const price = getPriceByAddressNetwork(transaction.contractAddress, network)
+			const id = getId(transaction.contractAddress, network)
 
-			if(balance > 0) {
-				const id = getId(transaction.contractAddress, network)
+			if(balance > 0 || (wallet[id] && wallet[id].value > 0)) {
 				wallet[id] = {
 					network: network,
 					contract: transaction.contractAddress,
@@ -350,7 +350,7 @@ async function searchTokens(network) {
 				}
 			}
 
-			tokentx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
+			tokentx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
 		} catch(error) {
 			//console.log(network, transaction.contractAddress, error)
 		}
@@ -365,7 +365,7 @@ async function searchTokens(network) {
 }
 
 async function searchNFTs(network) {
-	let tx = erc721tx[network].filter(t => !t.done)
+	let tx = erc721tx[network].filter(t => t && !t.done)
 	const latestBlock = parseInt(sessionStorage.getItem('latest-erc721-block-' + network))
 
 	if(!tx || typeof tx === 'string') {
@@ -382,9 +382,9 @@ async function searchNFTs(network) {
 		const transaction = tx[0]
 		try {
 			const balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
+			const id = getId(transaction.contractAddress, network)
 
-			if(balance > 0) {
-				const id = getId(transaction.contractAddress, network)
+			if(balance > 0 || (wallet_NFT[id] && wallet_NFT[id].number > 0)) {
 				wallet_NFT[id] = {
 					network: network,
 					contract: transaction.contractAddress,
@@ -396,7 +396,7 @@ async function searchNFTs(network) {
 				}
 			}
 
-			erc721tx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach((t, i) => t.done = true)
+			erc721tx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach((t, i) => t.done = true)
 		} catch(error) {
 			// console.log(network, transaction.contractAddress, error)
 		}
