@@ -278,6 +278,7 @@ body {
   flex: .25;
   font-size: larger;
   padding-right: 1em;
+  justify-content: flex-end;
 }
 #wallet ul li span.balance {
   font-size: .75em;
