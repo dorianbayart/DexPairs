@@ -247,6 +247,8 @@ body {
   display: flex;
   flex-flow: column;
   flex: 1;
+}
+#wallet ul li span.txNameSymbol {
   max-width: 40%;
 }
 #wallet ul li span.nonceTimestamp {

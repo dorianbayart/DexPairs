@@ -975,6 +975,7 @@ function displayTransactions() {
 
 		let spanNameSymbol = document.createElement('span')
 		spanNameSymbol.classList.add('nameSymbol')
+		spanNameSymbol.classList.add('txNameSymbol')
 		li.appendChild(spanNameSymbol)
 
 		let spanSymbol = document.createElement('span')
