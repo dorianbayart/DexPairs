@@ -206,7 +206,7 @@ function getTokenTx(network, callback) {
 				callback(network)
 			}
 
-			if(data.result.length > 0) {
+			if(data.result && data.result.length > 0) {
 				sessionStorage.setItem('latest-fetched-block-' + network, data.result[data.result.length - 1].blockNumber)
 			}
 
@@ -920,33 +920,9 @@ function displayTransactions() {
 
 	document.getElementById('wallet').innerHTML = null
 
-	let transactions = []
-	Object.keys(NETWORK).forEach((network) => {
-		if(tokentx && tokentx[network]) {
-			tokentx[network].forEach((item) => {
-				transactions.push({ ...item, network: network })
-			})
-		}
-		if(erc721tx && erc721tx[network]) {
-			erc721tx[network].forEach((item) => {
-				transactions.push({ ...item, network: network })
-			})
-		}
-	})
-
-	transactions = transactions.sort(sortTransactions)
+	const transactions = buildTxArray()
 
 	console.log(transactions)
-
-	/*if(listLi.length === 0 || listLi.length !== transactions.length) {
-		document.getElementById('wallet').innerHTML = null
-		if(transactions.length > 0) {
-			let ul = document.createElement('ul')
-			ul.id = 'wallet-ul'
-			document.getElementById('wallet').appendChild(ul)
-		}
-		listLi = []
-	}*/
 
 	document.getElementById('wallet').innerHTML = null
 	if(transactions.length > 0) {
@@ -1363,6 +1339,33 @@ const getNFTContract = (contractAddress, network) => {
 	default:
 		return
 	}
+}
+
+/* Utils - Build transactions array */
+const buildTxArray = () => {
+	let transactions = []
+	Object.keys(NETWORK).forEach((network) => {
+		if(tokentx && tokentx[network]) {
+			tokentx[network].forEach((item) => {
+				const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+				if(transactions.findIndex(tx => tx.id === id) < 0) {
+					transactions.push({ ...item, network: network, id: id })
+				}
+			})
+		}
+		if(erc721tx && erc721tx[network]) {
+			erc721tx[network].forEach((item) => {
+				const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+				if(transactions.findIndex(tx => tx.id === id) < 0) {
+					transactions.push({ ...item, network: network, id: id })
+				}
+			})
+		}
+	})
+
+	transactions = transactions.sort(sortTransactions)
+
+	return transactions
 }
 
 /* Utils - sort the wallet */
