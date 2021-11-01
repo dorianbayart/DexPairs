@@ -53,6 +53,7 @@ img.qrcode {
 }
 
 .click-to-copy {
+  width: -moz-fit-content;
   width: fit-content;
   font-size: .85em;
   font-weight: 500;
