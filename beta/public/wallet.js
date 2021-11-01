@@ -607,7 +607,7 @@ function displayWallet(force = false) {
 		}
 		updateGlobalPrice()
 		updateGlobalChart()
-	}, force ? 20 : 100)
+	}, force ? 50 : 400)
 }
 
 // Display Wallet Tokens
