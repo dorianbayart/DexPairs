@@ -1,6 +1,6 @@
 
 #input-wallet {
-  width: 33%;
+  width: 40%;
 }
 
 #input-wallet-container.margin-top #input-wallet {
@@ -155,6 +155,14 @@
 
   #wallet ul li.expanded {
     height: min(192px, 18vh);
+  }
+
+  #wallet ul li span.network {
+    min-width: 24px;
+  }
+  
+  #wallet ul li span.network img.network {
+    width: 18px;
   }
 
   #wallet ul li.nft span.nameSymbol {

@@ -393,7 +393,9 @@ async function updateFavorites() {
 
 	if((Date.now() - fav.updatedAt)/1000 > 80) {
 		const charts = await getChartsByAddresses(fav.address, fav.base, fav.chain)
-
+		if(!charts[fav.address] || !charts[fav.base]) {
+			return
+		}
 		const lastPriceA = charts[fav.address].chart_often.slice(-1)[0].p
 		const lastPriceB = charts[fav.base].chart_often.slice(-1)[0].p
 

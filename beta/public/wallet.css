@@ -7,6 +7,7 @@ body {
 
 .body-background {
   background-image: url('/img/background-multichain.svg');
+  opacity: .1;
 }
 
 #input-wallet-container {
@@ -53,7 +54,7 @@ body {
 }
 
 #demo-wallet {
-  border: 1px solid white;
+  border: 1px solid #dddddd;
   border-radius: 8px;
   margin: .5em;
   font-size: .9em;
@@ -64,11 +65,11 @@ body {
 }
 
 #demo-wallet:hover {
-  border: 1px solid #cccccc;
+  border: 1px solid #888888;
 }
 
 #input-wallet {
-  border: 1px solid #ffffff;
+  border: 1px solid #dddddd;
   border-radius: 12px;
   margin: .5em 1em;
   padding: 1em;
@@ -80,7 +81,7 @@ body {
 
 #input-wallet:hover,
 #input-wallet:focus {
-  border: 1px solid #cccccc;
+  border: 1px solid #888888;
   outline: none;
 }
 
@@ -219,6 +220,14 @@ body {
   height: 128px;
 }
 
+#wallet ul div.date {
+  margin: 1em .5em .25em .5em;
+  font-size: larger;
+  letter-spacing: 1px;
+  color: #5B5EA6;
+  /*text-shadow: 0 0 8px blue;*/
+}
+
 #wallet ul li span {
   display: inline-block;
 }
@@ -233,13 +242,18 @@ body {
   height: 100%;
 }
 
-#wallet ul li span.nameSymbol {
+#wallet ul li span.nameSymbol,
+#wallet ul li span.nonceTimestamp {
   display: flex;
   flex-flow: column;
   flex: auto;
 }
+#wallet ul li span.nonceTimestamp {
+  width: 15%;
+}
 
-#wallet ul li span.name {
+#wallet ul li span.name,
+#wallet ul li span.timestamp {
   font-size: .75em;
 }
 
@@ -257,6 +271,10 @@ body {
   flex-flow: column;
 }
 
+#wallet ul li span.txBalance {
+  font-size: larger;
+  padding-right: 1em;
+}
 #wallet ul li span.balance {
   font-size: .75em;
 }

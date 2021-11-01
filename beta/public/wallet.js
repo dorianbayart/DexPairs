@@ -11,6 +11,12 @@ let timerGetTokenTx = {}
 let timerGetERC721Tx = {}
 let timerPopulateNFTs = {}
 let timerGetNetworkBalance = {}
+let timerGetTransactions = {}
+
+let timerBuildWallet = null
+let timerFetchTokenTx = {}
+let timerFetchErc721Tx = {}
+
 let walletOptions = {
 	menu: {
 		tokens: {
@@ -149,16 +155,25 @@ function configureWallet(inputAddress) {
 	Object.keys(NETWORK).forEach((network) => {
 		sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
 		sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
+		sessionStorage.removeItem('latest-fetched-block-' + NETWORK[network].enum)
+		sessionStorage.removeItem('latest-fetched-erc721-block-' + NETWORK[network].enum)
 		tokentx[network] = []
 		erc721tx[network] = []
 		if(walletOptions.menu.tokens.isActive) {
 			clearTimeout(timerGetNetworkBalance[network])
 			clearTimeout(timerGetERC721Tx[network])
+			clearTimeout(timerGetTransactions[network])
 			getNetworkBalance(NETWORK[network].enum)
-			getTokenTx(NETWORK[network].enum)
+			getTokenTx(NETWORK[network].enum, searchTokens)
 		} else if(walletOptions.menu.nfts.isActive) {
 			clearTimeout(timerGetTokenTx[network])
-			getERC721Tx(NETWORK[network].enum)
+			clearTimeout(timerGetTransactions[network])
+			getERC721Tx(NETWORK[network].enum, searchNFTs)
+		} else if(walletOptions.menu.transactions.isActive) {
+			clearTimeout(timerGetTokenTx[network])
+			clearTimeout(timerGetNetworkBalance[network])
+			clearTimeout(timerGetERC721Tx[network])
+			getTransactions(NETWORK[network].enum)
 		}
 	})
 
@@ -168,52 +183,81 @@ function configureWallet(inputAddress) {
 
 
 // get token transactions list
-function getTokenTx(network) {
+function getTokenTx(network, callback) {
+	console.log('getTokenTx', network, timerGetTokenTx[network])
+
+	if(timerGetTokenTx[network]) {
+		clearTimeout(timerGetTokenTx[network])
+	}
 	if(!walletAddress) {
 		return
 	}
+
+
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			let data = JSON.parse(this.responseText)
 			tokentx[network] = tokentx[network].concat(data.result)
 
-			searchTokens(network)
+			console.log('getTokenTx', network, data.result)
+
+			if(callback) {
+				callback(network)
+			}
+
+			if(data.result.length > 0) {
+				sessionStorage.setItem('latest-fetched-block-' + network, data.result[data.result.length - 1].blockNumber)
+			}
 
 			clearTimeout(timerGetTokenTx[network])
-			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network), 100000 * (tokentx[network].length > 0 ? 1 : 3))
+			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 100000 * (tokentx[network].length > 0 ? 1 : 3))
 		} else if(this.response && this.response.includes('Max rate limit reached')) {
+			console.log('Max rate limit reached on ' + network + ', will try to fetch transactions again soon')
 			clearTimeout(timerGetTokenTx[network])
-			setTimeout(() => getTokenTx(network), 1250)
+			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 1250)
 		}
 	}
 	xmlhttp.onerror = function() {
 		console.log('getTokenTx', this)
 	}
-	const latestBlock = sessionStorage.getItem('latest-block-' + network) ? parseInt(sessionStorage.getItem('latest-block-' + network)) + 1 : 0
+	const latestBlock = sessionStorage.getItem('latest-fetched-block-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-block-' + network)) + 1 : 0
 	xmlhttp.open('GET', NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
 	xmlhttp.send()
 }
 
 // get ERC-721 (NFT) transactions list
-function getERC721Tx(network) {
+function getERC721Tx(network, callback) {
+	console.log('getERC721Tx', network, timerGetERC721Tx[network])
+
+	if(timerGetERC721Tx[network]) {
+		clearTimeout(timerGetERC721Tx[network])
+	}
 	if(!walletAddress) {
 		return
 	}
+
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if(this.response && this.response.includes('Max rate limit reached')) {
+			console.log('Max rate limit reached on ' + network + ', will try to fetch ERC721 transactions again soon')
 			clearTimeout(timerGetERC721Tx[network])
-			setTimeout(() => getERC721Tx(network), 1250)
+			timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 1250)
 			return
 		} else if (this.readyState == 4 && this.status == 200) {
 			let data = JSON.parse(this.responseText)
 			erc721tx[network] = erc721tx[network].concat(data.result)
 
-			searchNFTs(network)
+			if(callback) {
+				callback(network)
+			}
+
+			if(data.result.length > 0) {
+				sessionStorage.setItem('latest-fetched-erc721-block-' + network, data.result[data.result.length - 1].blockNumber)
+			}
 
 			clearTimeout(timerGetERC721Tx[network])
-			timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network), 100000 * (erc721tx[network].length > 0 ? 1 : 3))
+			timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 100000 * (erc721tx[network].length > 0 ? 1 : 3))
 			return
 		}
 	}
@@ -222,11 +266,27 @@ function getERC721Tx(network) {
 	}
 
 	// TODO Send transaction from only latest needed blocks !
-	const latestBlock = sessionStorage.getItem('latest-erc721-block-' + network) ? parseInt(sessionStorage.getItem('latest-erc721-block-' + network)) + 1 : 0
+	const latestBlock = sessionStorage.getItem('latest-fetched-erc721-block-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-erc721-block-' + network)) + 1 : 0
 	xmlhttp.open('GET', NETWORK[network].erc721tx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
 	xmlhttp.send()
 }
 
+async function getTransactions(network) {
+	//clearTimeout(timerGetTransactions[network])
+	//timerGetTransactions[network] = setTimeout(() => getTransactions(network), 30000 * (tokentx[network].length > 0 ? 1 : 3))
+
+	//console.log('getTransactions ', network)
+	if(!walletAddress) {
+		return
+	}
+
+	getTokenTx(network, displayWallet)
+	setTimeout(() => getERC721Tx(network, displayWallet), 5200)
+
+	// console.log(tx)
+
+	// displayWallet()
+}
 
 // Get token balance
 async function getTokenBalanceWeb3(contractAddress, network) {
@@ -855,6 +915,126 @@ function expandCollapseItem(item) {
 	}
 }
 
+function displayTransactions() {
+	let listLi = document.getElementById('wallet').querySelectorAll('li')
+
+	document.getElementById('wallet').innerHTML = null
+
+	let transactions = []
+	Object.keys(NETWORK).forEach((network) => {
+		if(tokentx && tokentx[network]) {
+			tokentx[network].forEach((item) => {
+				transactions.push({ ...item, network: network })
+			})
+		}
+		if(erc721tx && erc721tx[network]) {
+			erc721tx[network].forEach((item) => {
+				transactions.push({ ...item, network: network })
+			})
+		}
+	})
+
+	transactions = transactions.sort(sortTransactions)
+
+	console.log(transactions)
+
+	/*if(listLi.length === 0 || listLi.length !== transactions.length) {
+		document.getElementById('wallet').innerHTML = null
+		if(transactions.length > 0) {
+			let ul = document.createElement('ul')
+			ul.id = 'wallet-ul'
+			document.getElementById('wallet').appendChild(ul)
+		}
+		listLi = []
+	}*/
+
+	document.getElementById('wallet').innerHTML = null
+	if(transactions.length > 0) {
+		let ul = document.createElement('ul')
+		ul.id = 'wallet-ul'
+		document.getElementById('wallet').appendChild(ul)
+	}
+
+	let day = ''
+
+	transactions.forEach((tx) => {
+		const txDate = new Date(tx.timeStamp * 1000)
+		const txDay = txDate.toLocaleDateString()
+		if(txDay !== day) {
+			let divDate = document.createElement('div')
+			divDate.innerHTML = txDay
+			divDate.classList.add('date')
+			document.getElementById('wallet-ul').appendChild(divDate)
+			day = txDay
+		}
+
+
+		let li = document.createElement('li')
+		// li.title = ''
+		// li.id = id
+
+		let spanNetwork = document.createElement('span')
+		spanNetwork.classList.add('network')
+		spanNetwork.appendChild(createNetworkImg(tx.network))
+		li.appendChild(spanNetwork)
+
+		let spanNonceTimestamp = document.createElement('span')
+		spanNonceTimestamp.classList.add('nonceTimestamp')
+		li.appendChild(spanNonceTimestamp)
+
+		let spanNonce = document.createElement('span')
+		spanNonce.innerHTML = tx.nonce
+		spanNonce.title = 'Nonce ' + tx.nonce
+		spanNonce.classList.add('nonce')
+		spanNonceTimestamp.appendChild(spanNonce)
+		let spanTimestamp = document.createElement('span')
+		spanTimestamp.innerHTML = txDate.toLocaleTimeString()
+		spanTimestamp.classList.add('timestamp')
+		spanNonceTimestamp.appendChild(spanTimestamp)
+
+		let spanBalance = document.createElement('span')
+		spanBalance.innerHTML = (tx.to && tx.to.toLowerCase() !== walletAddress.toLowerCase() ? '-' : '+') + calculateBalance(tx.value, tx.tokenDecimal)
+		spanBalance.classList.add('txBalance')
+		li.appendChild(spanBalance)
+
+		let spanNameSymbol = document.createElement('span')
+		spanNameSymbol.classList.add('nameSymbol')
+		li.appendChild(spanNameSymbol)
+
+		let spanSymbol = document.createElement('span')
+		spanSymbol.innerHTML = tx.tokenSymbol
+		spanSymbol.classList.add('symbol')
+		spanNameSymbol.appendChild(spanSymbol)
+		let spanName = document.createElement('span')
+		spanName.innerHTML = tx.tokenName
+		spanName.classList.add('name')
+		spanNameSymbol.appendChild(spanName)
+
+		document.getElementById('wallet-ul').appendChild(li)
+	})
+
+
+	if(transactions.length > 0) {
+		// document.getElementById('global').classList.remove('none')
+		document.getElementById('connect-demo-container').classList.toggle('none', true)
+		document.getElementById('state').innerHTML = null
+		document.getElementById('input-wallet-container').classList.remove('margin-top')
+		document.getElementById('state').classList.remove('shadow-white')
+	} else {
+		// document.getElementById('global').classList.toggle('none', true)
+		document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
+		document.getElementById('connect-demo-container').classList.remove('none')
+		const stateContainer = document.getElementById('state')
+		if(walletAddress && walletAddress.length > 0) {
+			stateContainer.innerHTML = 'No transactions can be found on this address'
+			stateContainer.classList.toggle('shadow-white', true)
+		} else {
+			stateContainer.innerHTML = null
+			stateContainer.classList.remove('shadow-white')
+		}
+	}
+}
+
 // Insert a DOM element after a Reference element
 function insertAfter(refElement, element) {
 	refElement.parentNode.insertBefore(element, refElement.nextSibling)
@@ -944,6 +1124,7 @@ async function initializeHTML() {
 
 	toggleHideButtons()
 
+	setTimeout(() => { document.getElementById('global').style = '' }, 1000)
 }
 
 function toggleHideButtons() {
@@ -999,8 +1180,9 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
 	Object.keys(NETWORK).forEach((network) => {
 		clearTimeout(timerGetNetworkBalance[network])
 		clearTimeout(timerGetERC721Tx[network])
+		clearTimeout(timerGetTransactions[network])
 		getNetworkBalance(NETWORK[network].enum)
-		getTokenTx(NETWORK[network].enum)
+		getTokenTx(NETWORK[network].enum, searchTokens)
 	})
 })
 document.getElementById('menu-nfts').addEventListener('click', (e) => {
@@ -1019,7 +1201,29 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
 
 	Object.keys(NETWORK).forEach((network) => {
 		clearTimeout(timerGetTokenTx[network])
-		getERC721Tx(NETWORK[network].enum)
+		clearTimeout(timerGetTransactions[network])
+		getERC721Tx(NETWORK[network].enum, searchNFTs)
+	})
+})
+document.getElementById('menu-transactions').addEventListener('click', (e) => {
+	e.preventDefault()
+	if(walletOptions.menu.transactions.isActive) {
+		return
+	}
+	walletOptions.menu[Object.keys(walletOptions.menu).find(menu => walletOptions.menu[menu].isActive)].isActive = false
+	walletOptions.menu.transactions.isActive = true
+	sessionStorage.setItem('walletOptions', JSON.stringify(walletOptions))
+
+	window.location.hash = walletOptions.menu.transactions.hash
+
+	toggleHideButtons()
+	displayWallet(true)
+
+	Object.keys(NETWORK).forEach((network) => {
+		clearTimeout(timerGetNetworkBalance[network])
+		clearTimeout(timerGetTokenTx[network])
+		clearTimeout(timerGetERC721Tx[network])
+		getTransactions(NETWORK[network].enum)
 	})
 })
 document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
@@ -1195,6 +1399,18 @@ const sortNFTTokens = (t_a, t_b) => {
 	} catch {
 		return t_a.id.localeCompare(t_b.id)
 	}
+}
+/* Utils - sort the transactions */
+const sortTransactions = (tx_a, tx_b) => {
+	// sort by timestamp
+	if(tx_a.timeStamp > tx_b.timeStamp) return -1
+	if(tx_a.timeStamp < tx_b.timeStamp) return 1
+	//if(parseInt(tx_a.timeStamp, 10) > parseInt(tx_b.timeStamp, 10)) return -1
+	//if(parseInt(tx_a.timeStamp, 10) < parseInt(tx_b.timeStamp, 10)) return 1
+	// display outgoing tokens before incoming ones
+	if(tx_a.to && tx_a.to.toLowerCase() === walletAddress.toLowerCase()) return -1
+	return 1
+	//return tx_a.from.toLowerCase().localeCompare(walletAddress.toLowerCase())
 }
 
 /* Utils - getId from Address and Network */
