@@ -51,7 +51,7 @@ const NETWORK = {
 		tokenName: 'Ethereum',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ianlapham/uniswap-v3-testing?version=current'
 	},
 	POLYGON: {
 		order: 2,
