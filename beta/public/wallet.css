@@ -246,10 +246,12 @@ body {
 #wallet ul li span.nonceTimestamp {
   display: flex;
   flex-flow: column;
-  flex: auto;
+  flex: 1;
+  max-width: 40%;
 }
 #wallet ul li span.nonceTimestamp {
-  width: 15%;
+  display: inline-flex;
+  flex: .25;
 }
 
 #wallet ul li span.name,
@@ -272,6 +274,8 @@ body {
 }
 
 #wallet ul li span.txBalance {
+  display: inline-flex;
+  flex: .25;
   font-size: larger;
   padding-right: 1em;
 }
