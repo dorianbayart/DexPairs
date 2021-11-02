@@ -4,6 +4,12 @@ let walletForage = null
 let globalChart = null
 let walletValue = 0
 let loading = false
+let txDisplay = {
+	hasMore: false,
+	limit: 50,
+	step: 50,
+	scrollEventAdded: false
+}
 let displayWalletTimer = null
 let tokentx = {}
 let erc721tx = {}
@@ -604,6 +610,25 @@ function displayWallet(force = false) {
 			displayNFTs()
 		} else if(walletOptions.menu.transactions.isActive) {
 			displayTransactions()
+
+			if(!txDisplay.scrollEventAdded) {
+				txDisplay.scrollEventAdded = true
+				window.addEventListener('scroll', () => {
+					const {
+						scrollTop,
+						scrollHeight,
+						clientHeight
+					} = document.documentElement
+
+					if (scrollTop + clientHeight >= scrollHeight - 250 && txDisplay.hasMore) {
+						txDisplay.limit = txDisplay.limit + txDisplay.step
+						txDisplay.hasMore = false
+						displayWallet()
+					}
+				}, {
+					passive: true
+				})
+			}
 		}
 		updateGlobalPrice()
 		updateGlobalChart()
@@ -990,6 +1015,13 @@ function displayTransactions() {
 		document.getElementById('wallet-ul').appendChild(li)
 	})
 
+	if(transactions.length > txDisplay.limit) {
+		let divLoadMore = document.createElement('div')
+		divLoadMore.innerHTML = '...'
+		divLoadMore.classList.add('loadMore')
+		document.getElementById('wallet').appendChild(divLoadMore)
+	}
+
 
 	if(transactions.length > 0) {
 		// document.getElementById('global').classList.remove('none')
@@ -1364,7 +1396,8 @@ const buildTxArray = () => {
 		}
 	})
 
-	transactions = transactions.sort(sortTransactions)
+	txDisplay.hasMore = transactions.length > txDisplay.limit
+	transactions = transactions.sort(sortTransactions).slice(0, txDisplay.limit)
 
 	return transactions
 }
