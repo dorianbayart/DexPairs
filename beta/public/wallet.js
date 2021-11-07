@@ -23,6 +23,10 @@ let timerBuildWallet = null
 let timerFetchTokenTx = {}
 let timerFetchErc721Tx = {}
 
+let filters = {
+	networks: [],
+	search: ''
+}
 let walletOptions = {
 	menu: {
 		tokens: {
@@ -945,6 +949,10 @@ function displayTransactions() {
 
 	document.getElementById('wallet').innerHTML = null
 
+	if(!walletAddress) {
+		return
+	}
+
 	const transactions = buildTxArray()
 
 	console.log(transactions)
@@ -972,7 +980,7 @@ function displayTransactions() {
 
 		let li = document.createElement('li')
 		// li.title = ''
-		// li.id = id
+		li.id = tx.id
 
 		let spanNetwork = document.createElement('span')
 		spanNetwork.classList.add('network')
@@ -1052,7 +1060,7 @@ function insertAfter(refElement, element) {
 // Update & Display the total wallet value
 function updateGlobalPrice() {
 	walletValue = 0
-	Object.keys(wallet).filter(id => wallet[id].value && wallet[id].value !== '0').forEach(function (id) {
+	filteredWallet().forEach(function (id) {
 		let price = wallet[id].price
 		if(price) {
 			walletValue += Number.parseFloat(calculateValue(wallet[id].value, price, wallet[id].tokenDecimal))
@@ -1133,6 +1141,44 @@ async function initializeHTML() {
 
 	toggleHideButtons()
 
+	const networkList = document.getElementById('filter-by-network-list')
+	Object.keys(NETWORK).forEach((network) => {
+		const li = document.createElement('li')
+		li.id = 'filter-by-' + NETWORK[network].enum
+		li.classList.add('filter-by-network-item')
+		const img = createNetworkImg(network)
+		img.classList.add('filter-by-network-img')
+		li.appendChild(img)
+
+		const statusImg = document.createElement('img')
+		statusImg.classList.add('filter-by-network-status', 'checked')
+		statusImg.src = '/img/icons/check-circle.svg'
+		statusImg.width = '12'
+		statusImg.height = '12'
+		li.appendChild(statusImg)
+
+		networkList.appendChild(li)
+
+		filters.networks.push(NETWORK[network].enum)
+	})
+	networkList.addEventListener('click', e => {
+		if(!e.target) {
+			return
+		}
+		let clicked
+		if(e.target.nodeName === 'LI') {
+			clicked = e.target
+		} else if (e.target.parentNode.nodeName === 'LI') {
+			clicked = e.target.parentNode
+		}
+		if(clicked) {
+			const filter = clicked.id.split('-')[2]
+			toggleNetworkFilter(filter)
+		}
+	})
+
+	document.getElementById('filter-by-network-container').classList.remove('none')
+
 	setTimeout(() => { document.getElementById('global').style = '' }, 1000)
 }
 
@@ -1152,6 +1198,27 @@ function toggleHideButtons() {
 		document.getElementById('hide-small-balances-container').classList.toggle('none', true)
 		document.getElementById('global').classList.toggle('none', true)
 		document.getElementById('wallet').classList.remove('nft')
+	}
+}
+
+function toggleNetworkFilter(network) {
+	const li = document.getElementById('filter-by-' + network)
+	const imgStatus = li.getElementsByClassName('filter-by-network-status')[0]
+	if(filters.networks.includes(network)) {
+		imgStatus.src = '/img/icons/x-circle.svg'
+		imgStatus.classList.remove('checked')
+		imgStatus.classList.add('unchecked')
+		filters.networks.splice(filters.networks.indexOf(network), 1)
+	} else {
+		imgStatus.src = '/img/icons/check-circle.svg'
+		imgStatus.classList.remove('unchecked')
+		imgStatus.classList.add('checked')
+		filters.networks.push(network)
+	}
+	console.log(filters.networks)
+
+	if(walletAddress) {
+		displayWallet(true)
 	}
 }
 
@@ -1377,7 +1444,7 @@ const getNFTContract = (contractAddress, network) => {
 /* Utils - Build transactions array */
 const buildTxArray = () => {
 	let transactions = []
-	Object.keys(NETWORK).forEach((network) => {
+	filters.networks.forEach((network) => {
 		if(tokentx && tokentx[network]) {
 			tokentx[network].forEach((item) => {
 				const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
@@ -1445,7 +1512,7 @@ const sortTransactions = (tx_a, tx_b) => {
 	//if(parseInt(tx_a.timeStamp, 10) > parseInt(tx_b.timeStamp, 10)) return -1
 	//if(parseInt(tx_a.timeStamp, 10) < parseInt(tx_b.timeStamp, 10)) return 1
 	// display outgoing tokens before incoming ones
-	if(tx_a.to && tx_a.to.toLowerCase() === walletAddress.toLowerCase()) return -1
+	if(tx_a.to && walletAddress && tx_a.to.toLowerCase() === walletAddress.toLowerCase()) return -1
 	return 1
 	//return tx_a.from.toLowerCase().localeCompare(walletAddress.toLowerCase())
 }
@@ -1457,7 +1524,7 @@ const getId = (address, network) => {
 
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
-	let filtered = Object.keys(wallet)
+	let filtered = Object.keys(wallet).filter(key => filters.networks.includes(key.split('-')[0]))
 		.filter(id => wallet[id].value && wallet[id].value !== '0')
 	if(walletOptions.hideSmallBalance) {
 		filtered = filtered.filter(id => Math.abs(calculateValue(wallet[id].value, wallet[id].price, wallet[id].tokenDecimal)) >= 0.01 )
@@ -1467,7 +1534,7 @@ const filteredWallet = () => {
 
 /* Utils - Wallet with/without preview images */
 const filteredNFTWallet = () => {
-	let filteredNFTContracts = Object.keys(wallet_NFT)
+	let filteredNFTContracts = Object.keys(wallet_NFT).filter(key => filters.networks.includes(key.split('-')[0]))
 	if(walletOptions.hideNoImage) {
 		filteredNFTContracts = filteredNFTContracts.filter(id => wallet_NFT[id].tokens.some(token => token.tokenURI && token.image))
 	}

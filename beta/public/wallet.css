@@ -138,6 +138,53 @@ body {
   flex: auto;
 }
 
+#filter-by-network-container {
+  text-align: center;
+}
+#filter-by-network-list {
+  list-style: none;
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+}
+.filter-by-network-item {
+  display: flex;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin: 3px;
+  padding: 10px;
+  border-radius: 50%;
+  border: 1px solid #CCCCCCCC;
+  cursor: pointer;
+
+}
+.filter-by-network-item:hover {
+  border: 1px solid #888888;
+}
+.filter-by-network-img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+.filter-by-network-status {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+}
+.filter-by-network-status.checked {
+  background-color: #EE82EE;
+  filter: invert(1);
+}
+.filter-by-network-status.unchecked {
+  background-color: #00CCCC;
+  filter: invert(1);
+}
+
 #state {
   text-align: center;
   font-size: .75em;

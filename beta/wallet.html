@@ -126,7 +126,9 @@
     </div>
   </div>
 
-  <div id="wallet-select-networks">
+  <div id="filter-by-network-container" class="unselectable none">
+    <ul id="filter-by-network-list">
+    </ul>
   </div>
 
   <div id="state">
@@ -136,12 +138,15 @@
   <div id="wallet-options" class="wallet-options none">
     <div id="menu-tokens" class="wallet-menu menu-tokens">
       Tokens
+      <span id="menu-tokens-number"></span>
     </div>
     <div id="menu-nfts" class="wallet-menu menu-nfts">
       NFTs
+      <span id="menu-nfts-number"></span>
     </div>
     <div id="menu-transactions" class="wallet-menu menu-transactions">
       Transactions
+      <span id="menu-transactions-number"></span>
     </div>
     <div id="hide-small-balances-container" class='hide-small-balances-container'>
       <img id="hide-small-balances-icon" class='hide-small-balances-icon' src="/img/icons/check-square.svg" alt="Hide Small Balance Logo"/>
