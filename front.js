@@ -66,19 +66,47 @@ async function launch() {
 
 	await fetch(BACKEND_URL + '/list/pancake')
 		.then(res => res.json())
-		.then(json => tokens_list = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				tokens_list = json
+				console.log('Pancakeswap List Json is Okay')
+			} else {
+				console.error('Pancakeswap List Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/top/pancake')
 		.then(res => res.json())
-		.then(json => top_tokens = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				top_tokens = json
+				console.log('Pancakeswap Top Json is Okay')
+			} else {
+				console.error('Pancakeswap Top Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/simple/pancake')
 		.then(res => res.json())
-		.then(json => tokens_data = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				tokens_data = json
+				console.log('Pancakeswap Simple Json is Okay')
+			} else {
+				console.error('Pancakeswap Simple Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/charts/pancake')
 		.then(res => res.json())
-		.then(json => tokens_charts = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				tokens_charts = json
+				console.log('Pancakeswap Charts Json is Okay')
+			} else {
+				console.error('Pancakeswap Charts Json error: '+ JSON.stringify(json))
+			}
+		})
 }
 
 // Program - Uniswap
@@ -89,19 +117,47 @@ async function launchUniswap() {
 
 	await fetch(BACKEND_URL + '/list/uniswap')
 		.then(res => res.json())
-		.then(json => uniswap_list = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				uniswap_list = json
+				console.log('Uniswap List Json is Okay')
+			} else {
+				console.error('Uniswap List Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/top/uniswap')
 		.then(res => res.json())
-		.then(json => uniswap_top = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				uniswap_top = json
+				console.log('Uniswap Top Json is Okay')
+			} else {
+				console.error('Uniswap Top Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/simple/uniswap')
 		.then(res => res.json())
-		.then(json => uniswap_data = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				uniswap_data = json
+				console.log('Uniswap Simple Json is Okay')
+			} else {
+				console.error('Uniswap Simple Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/charts/uniswap')
 		.then(res => res.json())
-		.then(json => uniswap_charts = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				uniswap_charts = json
+				console.log('Uniswap Charts Json is Okay')
+			} else {
+				console.error('Uniswap Charts Json error: '+ JSON.stringify(json))
+			}
+		})
 
 }
 
@@ -112,19 +168,47 @@ async function launchQuickswap() {
 
 	await fetch(BACKEND_URL + '/list/quickswap')
 		.then(res => res.json())
-		.then(json => quickswap_list = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				quickswap_list = json
+				console.log('Quickswap List Json is Okay')
+			} else {
+				console.error('Quickswap List Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/top/quickswap')
 		.then(res => res.json())
-		.then(json => quickswap_top = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				quickswap_top = json
+				console.log('Quickswap Top Json is Okay')
+			} else {
+				console.error('Quickswap Top Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/simple/quickswap')
 		.then(res => res.json())
-		.then(json => quickswap_data = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				quickswap_data = json
+				console.log('Quickswap Simple Json is Okay')
+			} else {
+				console.error('Quickswap Simple Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/charts/quickswap')
 		.then(res => res.json())
-		.then(json => quickswap_charts = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				quickswap_charts = json
+				console.log('Quickswap Charts Json is Okay')
+			} else {
+				console.error('Quickswap Charts Json error: '+ JSON.stringify(json))
+			}
+		})
 }
 
 // Program - Spiritswap
@@ -134,19 +218,47 @@ async function launchSpiritswap() {
 
 	await fetch(BACKEND_URL + '/list/spiritswap')
 		.then(res => res.json())
-		.then(json => spiritswap_list = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				spiritswap_list = json
+				console.log('Spiritswap List Json is Okay')
+			} else {
+				console.error('Spiritswap List Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/top/spiritswap')
 		.then(res => res.json())
-		.then(json => spiritswap_top = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				spiritswap_top = json
+				console.log('Spiritswap Top Json is Okay')
+			} else {
+				console.error('Spiritswap Top Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/simple/spiritswap')
 		.then(res => res.json())
-		.then(json => spiritswap_data = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				spiritswap_data = json
+				console.log('Spiritswap Simple Json is Okay')
+			} else {
+				console.error('Spiritswap Simple Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/charts/spiritswap')
 		.then(res => res.json())
-		.then(json => spiritswap_charts = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				spiritswap_charts = json
+				console.log('Spiritswap Charts Json is Okay')
+			} else {
+				console.error('Spiritswap Charts Json error: '+ JSON.stringify(json))
+			}
+		})
 }
 
 // Program - Honeyswap
@@ -156,19 +268,47 @@ async function launchHoneyswap() {
 
 	await fetch(BACKEND_URL + '/list/honeyswap')
 		.then(res => res.json())
-		.then(json => honeyswap_list = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				honeyswap_list = json
+				console.log('Honeyswap List Json is Okay')
+			} else {
+				console.error('Honeyswap List Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/top/honeyswap')
 		.then(res => res.json())
-		.then(json => honeyswap_top = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				honeyswap_top = json
+				console.log('Honeyswap Top Json is Okay')
+			} else {
+				console.error('Honeyswap Top Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/simple/honeyswap')
 		.then(res => res.json())
-		.then(json => honeyswap_data = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				honeyswap_data = json
+				console.log('Honeyswap Simple Json is Okay')
+			} else {
+				console.error('Honeyswap Simple Json error: '+ JSON.stringify(json))
+			}
+		})
 
 	await fetch(BACKEND_URL + '/charts/honeyswap')
 		.then(res => res.json())
-		.then(json => honeyswap_charts = json)
+		.then(json => {
+			if(Object.keys(json).length > 0) {
+				honeyswap_charts = json
+				console.log('Honeyswap Charts Json is Okay')
+			} else {
+				console.error('Honeyswap Charts Json error: '+ JSON.stringify(json))
+			}
+		})
 }
 
 
@@ -368,7 +508,7 @@ function listFilter(list, listWithPrices) {
 	return filtered_list
 }
 
-// useful Math.random timer - between 12 and 30 seconds
+// useful Math.random timer - between 8 and 30 seconds
 function getTimer() {
-	return Math.round((18*Math.random() + 12)*1000)
+	return Math.round((22*Math.random() + 8)*1000)
 }
