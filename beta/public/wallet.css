@@ -430,6 +430,11 @@ body {
   max-height: 400px;
 }
 
+/* Transactions */
+#wallet ul li.transaction.expanded {
+  height: 92px;
+}
+
 /* helper */
 .none {
   max-height: 0;

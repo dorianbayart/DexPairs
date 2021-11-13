@@ -376,6 +376,10 @@ async function readNFTMetadata(id, indexId, tokenURI) {
 					url = data.image
 				}
 
+				if(!url.includes('/')) {
+					url = 'https://ipfs.io/ipfs/' + url
+				}
+
 				wallet_NFT[id].tokens.find(token => token.id === indexId).image = url
 			})
 			.catch(error => {
@@ -720,7 +724,7 @@ function displayTokens() {
 
 			document.getElementById('wallet-ul').appendChild(li)
 
-			li.addEventListener('click', function(e) {
+			/*li.addEventListener('click', function(e) {
 				let item = e.target
 
 				while(item.id.length < 1 || item.id.includes('chart')) {
@@ -733,7 +737,7 @@ function displayTokens() {
 				} else {
 					//item.classList.toggle('expanded', true)
 				}
-			})
+			})*/
 
 		}
 
@@ -888,22 +892,22 @@ function displayNFTs() {
 					aTokenURI.classList.add('tokenURI')
 					li.appendChild(aTokenURI)
 
-					aTokenURI.addEventListener('click', function(e) {
+					/*aTokenURI.addEventListener('click', function(e) {
 						let item = e.target
 						while(item.id.length < 1) {
 							item = item.parentNode
 						}
 						expandCollapseItem(item)
-					})
+					})*/
 				}
 
-				li.addEventListener('click', function(e) {
+				/*li.addEventListener('click', function(e) {
 					let item = e.target
 					while(item.id.length < 1 || item.id.includes('chart')) {
 						item = item.parentNode
 					}
 					expandCollapseItem(item)
-				})
+				})*/
 
 				document.getElementById('wallet-ul').appendChild(li)
 
@@ -981,6 +985,7 @@ function displayTransactions() {
 		let li = document.createElement('li')
 		// li.title = ''
 		li.id = tx.id
+		li.classList.add('transaction')
 
 		let spanNetwork = document.createElement('span')
 		spanNetwork.classList.add('network')
@@ -1180,6 +1185,24 @@ async function initializeHTML() {
 	document.getElementById('filter-by-network-container').classList.remove('none')
 
 	setTimeout(() => { document.getElementById('global').style = '' }, 1000)
+
+	configureWalletEvents()
+}
+
+function configureWalletEvents() {
+	document.getElementById('wallet').addEventListener('click', e => {
+		e.preventDefault()
+		let target = e.target
+		if(target.id === 'wallet' || target.id === 'wallet-ul') {
+			return
+		}
+
+		while(target.nodeName !== 'LI') {
+			target = target.parentNode
+		}
+
+		expandCollapseItem(target)
+	})
 }
 
 function toggleHideButtons() {
@@ -1215,7 +1238,6 @@ function toggleNetworkFilter(network) {
 		imgStatus.classList.add('checked')
 		filters.networks.push(network)
 	}
-	console.log(filters.networks)
 
 	if(walletAddress) {
 		displayWallet(true)
@@ -1444,27 +1466,32 @@ const getNFTContract = (contractAddress, network) => {
 /* Utils - Build transactions array */
 const buildTxArray = () => {
 	let transactions = []
-	filters.networks.forEach((network) => {
-		if(tokentx && tokentx[network]) {
-			tokentx[network].forEach((item) => {
-				const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
-				if(transactions.findIndex(tx => tx.id === id) < 0) {
-					transactions.push({ ...item, network: network, id: id })
-				}
-			})
-		}
-		if(erc721tx && erc721tx[network]) {
-			erc721tx[network].forEach((item) => {
-				const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
-				if(transactions.findIndex(tx => tx.id === id) < 0) {
-					transactions.push({ ...item, network: network, id: id })
-				}
-			})
-		}
-	})
 
-	txDisplay.hasMore = transactions.length > txDisplay.limit
-	transactions = transactions.sort(sortTransactions).slice(0, txDisplay.limit)
+	try {
+		filters.networks.forEach((network) => {
+			if(tokentx && tokentx[network]) {
+				tokentx[network].forEach((item) => {
+					const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+					if(transactions.findIndex(tx => tx.id === id) < 0) {
+						transactions.push({ ...item, network: network, id: id })
+					}
+				})
+			}
+			if(erc721tx && erc721tx[network]) {
+				erc721tx[network].forEach((item) => {
+					const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+					if(transactions.findIndex(tx => tx.id === id) < 0) {
+						transactions.push({ ...item, network: network, id: id })
+					}
+				})
+			}
+		})
+
+		txDisplay.hasMore = transactions.length > txDisplay.limit
+		transactions = transactions.sort(sortTransactions).slice(0, txDisplay.limit)
+	} catch(e) {
+		console.error(e)
+	}
 
 	return transactions
 }
