@@ -228,8 +228,6 @@ async function getHoneyswapTopTokens() {
 
 // Program - Pancake
 async function launch() {
-	// loop
-	setTimeout(launch, REALTIME) // every few seconds
 
 	let tokens_data_file = {}
 	let tokens_charts_file = {}
@@ -479,8 +477,6 @@ async function launch() {
 
 // Program - Uniswap
 async function launchUniswap() {
-	// loop
-	setTimeout(launchUniswap, REALTIME) // every few seconds
 
 	let uniswap_data_file = {}
 	let uniswap_charts_file = {}
@@ -727,8 +723,6 @@ async function launchUniswap() {
 
 // Program - Quickswap
 async function launchQuickswap() {
-	// loop
-	setTimeout(launchQuickswap, REALTIME) // every few seconds
 
 	let quickswap_data_file = {}
 	let quickswap_charts_file = {}
@@ -941,8 +935,6 @@ async function launchQuickswap() {
 
 // Program - Spiritswap
 async function launchSpiritswap() {
-	// loop
-	setTimeout(launchSpiritswap, REALTIME) // every few seconds
 
 	let spiritswap_data_file = {}
 	let spiritswap_charts_file = {}
@@ -1160,8 +1152,6 @@ async function launchSpiritswap() {
 
 // Program - Honeyswap
 async function launchHoneyswap() {
-	// loop
-	setTimeout(launchHoneyswap, REALTIME) // every few seconds
 
 	let honeyswap_data_file = {}
 	let honeyswap_charts_file = {}
@@ -1379,13 +1369,18 @@ async function launchHoneyswap() {
 
 
 /* MAIN */
-setTimeout(launchUniswap, 2000)
-setTimeout(launchQuickswap, 5000)
-setTimeout(launchSpiritswap, 8000)
-setTimeout(launchHoneyswap, 11000)
-setTimeout(launch, 14000)
+async function main() {
+	await launchUniswap()
+	await launchQuickswap()
+	await launchSpiritswap()
+	await launchHoneyswap()
+	await launch()
+
+	setTimeout(main, REALTIME)
+}
 
 
+main()
 
 
 
