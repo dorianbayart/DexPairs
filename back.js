@@ -45,13 +45,6 @@ const TOP_SIZE = 6
 /* DexPairs */
 
 
-// Uniswap data - Ehtereum
-let uniswap_list = {}
-let uniswap_top = {}
-let uniswap_data = {}
-let uniswap_charts = {}
-let uniswap_volume = {}
-
 // Pancake data - BinanceSmartChain
 let tokens_list = {}
 let top_tokens = {}
@@ -471,6 +464,11 @@ async function launchUniswap() {
 	let uniswap_charts_file = {}
 	let uniswap_volume_file = {}
 
+	let uniswap_list = {}
+	let uniswap_data = {}
+	let uniswap_charts = {}
+	let uniswap_volume = {}
+
 	try {
 		uniswap_data_file = readFileSync(path.join(dir_home, 'uniswap-simple.json'), 'utf8')
 		uniswap_data = JSON.parse(uniswap_data_file.toString())
@@ -478,8 +476,12 @@ async function launchUniswap() {
 		writeFileSync(pathFile, JSON.stringify( uniswap_data ), 'utf8')
 	} catch(error) {
 		console.log('uniswap-simple.json', error)
-		uniswap_data_file = readFileSync(path.join(dir_home, 'save_uniswap-simple.json'), 'utf8')
-		uniswap_data = JSON.parse(uniswap_data_file.toString())
+		try {
+			uniswap_data_file = readFileSync(path.join(dir_home, 'save_uniswap-simple.json'), 'utf8')
+			uniswap_data = JSON.parse(uniswap_data_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -489,8 +491,12 @@ async function launchUniswap() {
 		writeFileSync(pathFile, JSON.stringify( uniswap_charts ), 'utf8')
 	} catch(error) {
 		console.log('uniswap-charts.json', error)
-		uniswap_charts_file = readFileSync(path.join(dir_home, 'save_uniswap-charts.json'), 'utf8')
-		uniswap_charts = JSON.parse(uniswap_charts_file.toString())
+		try {
+			uniswap_charts_file = readFileSync(path.join(dir_home, 'save_uniswap-charts.json'), 'utf8')
+			uniswap_charts = JSON.parse(uniswap_charts_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -500,12 +506,18 @@ async function launchUniswap() {
 		writeFileSync(pathFile, JSON.stringify( uniswap_volume ), 'utf8')
 	} catch(error) {
 		console.log('uniswap-volume.json', error)
-		uniswap_volume_file = readFileSync(path.join(dir_home, 'save_uniswap-volume.json'), 'utf8')
-		uniswap_volume = JSON.parse(uniswap_volume_file.toString())
+		try {
+			uniswap_volume_file = readFileSync(path.join(dir_home, 'save_uniswap-volume.json'), 'utf8')
+			uniswap_volume = JSON.parse(uniswap_volume_file.toString())
+		} catch {
+			return
+		}
 	}
 
+	if(Object.keys(uniswap_data).length < 1 || Object.keys(uniswap_charts).length < 1 || Object.keys(uniswap_volume).length < 1) {
+		return
+	}
 
-	uniswap_list = {}
 
 	// get data from Uniswap
 	const top = await getUniswapV3TopTokens()
@@ -626,7 +638,7 @@ async function launchUniswap() {
 	uniswap_list = sortTokensByVolume(uniswap_list, uniswap_volume)
 
 	// build Top 10 list of Uniswap
-	uniswap_top = {}
+	let uniswap_top = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
 			const address = Object.keys(uniswap_list)[i]
@@ -649,34 +661,44 @@ async function launchUniswap() {
 	/* Store files */
 
 	// Update the Uniswap list
-	let pathFile = path.join(dir_home, 'uniswap.json')
-	writeFile( pathFile, JSON.stringify( uniswap_list ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(uniswap_list).length > 0) {
+		let pathFile = path.join(dir_home, 'uniswap.json')
+		writeFile( pathFile, JSON.stringify( uniswap_list ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Uniswap Top 10
-	pathFile = path.join(dir_home, 'uniswap-top.json')
-	writeFile( pathFile, JSON.stringify( uniswap_top ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(uniswap_top).length > 0) {
+		let pathFile = path.join(dir_home, 'uniswap-top.json')
+		writeFile( pathFile, JSON.stringify( uniswap_top ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Uniswap simple data
-	pathFile = path.join(dir_home, 'uniswap-simple.json')
-	writeFile( pathFile, JSON.stringify( uniswap_data ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(uniswap_data).length > 0) {
+		let pathFile = path.join(dir_home, 'uniswap-simple.json')
+		writeFile( pathFile, JSON.stringify( uniswap_data ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Uniswap charts
-	pathFile = path.join(dir_home, 'uniswap-charts.json')
-	writeFile( pathFile, JSON.stringify( uniswap_charts ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(uniswap_charts).length > 0) {
+		let pathFile = path.join(dir_home, 'uniswap-charts.json')
+		writeFile( pathFile, JSON.stringify( uniswap_charts ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Uniswap volumeUSD
-	pathFile = path.join(dir_home, 'uniswap-volume.json')
-	writeFile( pathFile, JSON.stringify( uniswap_volume ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(uniswap_volume).length > 0) {
+		let pathFile = path.join(dir_home, 'uniswap-volume.json')
+		writeFile( pathFile, JSON.stringify( uniswap_volume ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 }
 
@@ -1372,10 +1394,22 @@ app.get('/top/pancake', (req, res) => res.json(top_tokens))
 app.get('/simple/pancake', (req, res) => res.json(tokens_data))
 app.get('/charts/pancake', (req, res) => res.json(tokens_charts))
 // Uniswap URLs
-app.get('/list/uniswap', (req, res) => res.json(uniswap_list))
-app.get('/top/uniswap', (req, res) => res.json(uniswap_top))
-app.get('/simple/uniswap', (req, res) => res.json(uniswap_data))
-app.get('/charts/uniswap', (req, res) => res.json(uniswap_charts))
+app.get('/list/uniswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'uniswap.json'))
+})
+app.get('/top/uniswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'uniswap-top.json'))
+})
+app.get('/simple/uniswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'uniswap-simple.json'))
+})
+app.get('/charts/uniswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'uniswap-charts.json'))
+})
 // Quickswap URLs
 app.get('/list/quickswap', (req, res) => res.json(quickswap_list))
 app.get('/top/quickswap', (req, res) => res.json(quickswap_top))
