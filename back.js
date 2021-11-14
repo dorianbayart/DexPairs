@@ -45,13 +45,6 @@ const TOP_SIZE = 6
 /* DexPairs */
 
 
-// Pancake data - BinanceSmartChain
-let tokens_list = {}
-let top_tokens = {}
-let tokens_data = {}
-let tokens_charts = {}
-let pancakeswap_volume = {}
-
 // Quickswap data - Polygon/Matic
 let quickswap_list = {}
 let quickswap_top = {}
@@ -242,6 +235,11 @@ async function launch() {
 	let tokens_charts_file = {}
 	let pancakeswap_volume_file = {}
 
+	let tokens_list = {}
+	let tokens_data = {}
+	let tokens_charts = {}
+	let pancakeswap_volume = {}
+
 	try {
 		tokens_data_file = readFileSync(path.join(dir_home, 'pancake-simple.json'), 'utf8')
 		tokens_data = JSON.parse(tokens_data_file.toString())
@@ -249,8 +247,12 @@ async function launch() {
 		writeFileSync(pathFile, JSON.stringify( tokens_data ), 'utf8')
 	} catch(error) {
 		console.log('pancake-simple.json', error)
-		tokens_data_file = readFileSync(path.join(dir_home, 'save_pancake-simple.json'), 'utf8')
-		tokens_data = JSON.parse(tokens_data_file.toString())
+		try {
+			tokens_data_file = readFileSync(path.join(dir_home, 'save_pancake-simple.json'), 'utf8')
+			tokens_data = JSON.parse(tokens_data_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -260,8 +262,12 @@ async function launch() {
 		writeFileSync(pathFile, JSON.stringify( tokens_charts ), 'utf8')
 	} catch(error) {
 		console.log('pancake-charts.json', error)
-		tokens_charts_file = readFileSync(path.join(dir_home, 'save_pancake-charts.json'), 'utf8')
-		tokens_charts = JSON.parse(tokens_charts_file.toString())
+		try {
+			tokens_charts_file = readFileSync(path.join(dir_home, 'save_pancake-charts.json'), 'utf8')
+			tokens_charts = JSON.parse(tokens_charts_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -271,12 +277,18 @@ async function launch() {
 		writeFileSync(pathFile, JSON.stringify( pancakeswap_volume ), 'utf8')
 	} catch(error) {
 		console.log('pancake-volume.json', error)
-		pancakeswap_volume_file = readFileSync(path.join(dir_home, 'save_pancake-volume.json'), 'utf8')
-		pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
+		try {
+			pancakeswap_volume_file = readFileSync(path.join(dir_home, 'save_pancake-volume.json'), 'utf8')
+			pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
+		} catch {
+			return
+		}
 	}
 
+	if(Object.keys(tokens_data).length < 1 || Object.keys(tokens_charts).length < 1 || Object.keys(pancakeswap_volume).length < 1) {
+		return
+	}
 
-	tokens_list = {}
 
 	// get data from PancakeSwap
 	let top = {}
@@ -397,7 +409,7 @@ async function launch() {
 	tokens_list = sortTokensByVolume(tokens_list, pancakeswap_volume)
 
 	// build Top 10 list
-	top_tokens = {}
+	let top_tokens = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
 			const address = Object.keys(tokens_list)[i]
@@ -423,34 +435,44 @@ async function launch() {
 	/* Store files */
 
 	// Update the tokens list
-	let pathFile = path.join(dir_home, 'pancake.json')
-	writeFile( pathFile, JSON.stringify( tokens_list ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(tokens_list).length > 0) {
+		let pathFile = path.join(dir_home, 'pancake.json')
+		writeFile( pathFile, JSON.stringify( tokens_list ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Top 10 tokens list
-	pathFile = path.join(dir_home, 'pancake-top.json')
-	writeFile( pathFile, JSON.stringify( top_tokens ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(top_tokens).length > 0) {
+		let pathFile = path.join(dir_home, 'pancake-top.json')
+		writeFile( pathFile, JSON.stringify( top_tokens ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the tokens simple data
-	pathFile = path.join(dir_home, 'pancake-simple.json')
-	writeFile( pathFile, JSON.stringify( tokens_data ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(tokens_data).length > 0) {
+		let pathFile = path.join(dir_home, 'pancake-simple.json')
+		writeFile( pathFile, JSON.stringify( tokens_data ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the tokens charts
-	pathFile = path.join(dir_home, 'pancake-charts.json')
-	writeFile( pathFile, JSON.stringify( tokens_charts ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(tokens_charts).length > 0) {
+		let pathFile = path.join(dir_home, 'pancake-charts.json')
+		writeFile( pathFile, JSON.stringify( tokens_charts ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Pancakeswap volumeUSD
-	pathFile = path.join(dir_home, 'pancake-volume.json')
-	writeFile( pathFile, JSON.stringify( pancakeswap_volume ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(pancakeswap_volume).length > 0) {
+		let pathFile = path.join(dir_home, 'pancake-volume.json')
+		writeFile( pathFile, JSON.stringify( pancakeswap_volume ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 }
 
@@ -1389,10 +1411,22 @@ const port = process.env.PORT || 3000
 const app = express()
 
 // Pancake URLs
-app.get('/list/pancake', (req, res) => res.json(tokens_list))
-app.get('/top/pancake', (req, res) => res.json(top_tokens))
-app.get('/simple/pancake', (req, res) => res.json(tokens_data))
-app.get('/charts/pancake', (req, res) => res.json(tokens_charts))
+app.get('/list/pancake', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'pancake.json'))
+})
+app.get('/top/pancake', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'pancake-top.json'))
+})
+app.get('/simple/pancake', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'pancake-simple.json'))
+})
+app.get('/charts/pancake', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'pancake-charts.json'))
+})
 // Uniswap URLs
 app.get('/list/uniswap', (req, res) => {
 	res.header('Content-Type','application/json')
