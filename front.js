@@ -508,7 +508,7 @@ function listFilter(list, listWithPrices) {
 	return filtered_list
 }
 
-// useful Math.random timer - between 8 and 30 seconds
+// useful Math.random timer - between 15 and 30 seconds
 function getTimer() {
-	return Math.round((22*Math.random() + 8)*1000)
+	return Math.round((15*Math.random() + 15)*1000)
 }
