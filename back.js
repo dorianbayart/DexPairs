@@ -144,9 +144,9 @@ query
 }
 `
 
-// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/ianlapham/uniswap-v3-testing?version=current
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3
 async function getUniswapV3TopTokens() {
-	return await get('https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v3-testing', uniswapV3_request)
+	return await get('https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3', uniswapV3_request)
 }
 
 // Get Uniswap v2 top
