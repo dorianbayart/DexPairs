@@ -1471,17 +1471,21 @@ const buildTxArray = () => {
 		filters.networks.forEach((network) => {
 			if(tokentx && tokentx[network]) {
 				tokentx[network].forEach((item) => {
-					const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
-					if(transactions.findIndex(tx => tx.id === id) < 0) {
-						transactions.push({ ...item, network: network, id: id })
+					if(item) {
+						const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+						if(transactions.findIndex(tx => tx.id === id) < 0) {
+							transactions.push({ ...item, network: network, id: id })
+						}
 					}
 				})
 			}
 			if(erc721tx && erc721tx[network]) {
 				erc721tx[network].forEach((item) => {
-					const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
-					if(transactions.findIndex(tx => tx.id === id) < 0) {
-						transactions.push({ ...item, network: network, id: id })
+					if(item) {
+						const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+						if(transactions.findIndex(tx => tx.id === id) < 0) {
+							transactions.push({ ...item, network: network, id: id })
+						}
 					}
 				})
 			}
