@@ -3,6 +3,7 @@ module.exports = {
 		name: 'DexPairs_Back',
 		script: 'back.js',
 		exp_backoff_restart_delay: 100,
+		cron_restart: '*/55 * * * *',
 		env_production: {
 			NODE_ENV: 'production',
 			PORT: 3000,
