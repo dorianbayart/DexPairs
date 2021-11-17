@@ -2,7 +2,7 @@
   margin: 24px 1em 0;
   text-align: center;
   padding: 12px;
-  outline: 1px solid #CCCCCCCC;
+  box-shadow: 0 0 0 1px #CCCCCCCC;
   border-radius: 12px 12px 0 0;
 }
 
