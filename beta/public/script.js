@@ -1087,11 +1087,11 @@ function updateCharts() {
 	if(myChart) {
 		//myChart.data.labels = timeData
 		myChart.data.datasets[0].label = simple[selectedToken].s + ' / ' + simple[selectedBase].s
-		myChart.data.datasets[0].data = tokenData.map(y => {return {x: timeData[tokenData.findIndex(d => d === y)], y: y}})
+		myChart.data.datasets[0].data = timeData.map(x => {return {x: x, y: tokenData[timeData.findIndex(t => t === x)]}})
 		// myChart.data.datasets[1].label = 'Interpolated'
 		// myChart.data.datasets[1].data = tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}})
 		myChart.data.datasets[1].label = 'Moving Average ' + movingAverageSize
-		myChart.data.datasets[1].data = tokenDataMA.map(y => {return {x: timeDataMA[tokenDataMA.findIndex(d => d === y)], y: y}})
+		myChart.data.datasets[1].data = timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}})
 		myChart.options.scales.x.time.unit = scaleUnit
 		myChart.options.scales.y.title.text = simple[selectedBase].s
 		myChart.update()
@@ -1102,7 +1102,7 @@ function updateCharts() {
 				//labels: timeData,
 				datasets: [{
 					label: simple[selectedToken].s + ' / ' + simple[selectedBase].s,
-					data: tokenData.map(y => {return {x: timeData[tokenData.findIndex(d => d === y)], y: y}}),
+					data: timeData.map(x => {return {x: x, y: tokenData[timeData.findIndex(t => t === x)]}}),
 					backgroundColor: '#0000FF88',
 					borderColor: '#0000FF88',
 					radius: 1,
@@ -1110,7 +1110,7 @@ function updateCharts() {
 					showLine: true
 				}, /*{
 					label: 'Interpolated',
-					data: tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}}),
+					data: timeDataInterpolated.map(x => {return {x: x, y: tokenDataInterpolated[timeDataInterpolated.findIndex(t => t === x)]}}),
 					backgroundColor: '#00FF0088',
 					borderColor: '#00FF0088',
 					radius: 1,
@@ -1118,7 +1118,7 @@ function updateCharts() {
 					showLine: true
 				},*/ {
 					label: 'Moving Average ' + movingAverageSize,
-					data: tokenDataMA.map(y => {return {x: timeDataMA[tokenDataMA.findIndex(d => d === y)], y: y}}),
+					data: timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}}),
 					backgroundColor: '#FF000088',
 					borderColor: '#FF000088',
 					radius: 0,
