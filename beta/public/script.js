@@ -94,6 +94,7 @@ const TIMEFRAME_ALL = 'all'
 const LIST_INITIAL_SIZE = 100
 let interval = INTERVAL_4H
 let timeframe = TIMEFRAME_1W
+let movingAverageSize = 9
 
 
 // get tokens list
@@ -1074,7 +1075,7 @@ function updateCharts() {
 
 
 	let timeDataMA = [], tokenDataMA = []
-	let size = 6
+	let size = movingAverageSize
 	for (let i = size - 1; i < timeDataInterpolated.length; i++) {
 		timeDataMA[i - size + 1] = timeDataInterpolated[i]
 		tokenDataMA[i - size + 1] = tokenDataInterpolated.slice(i - size + 1, i + 1).reduce((total, currentValue) => total + currentValue, 0) / size
@@ -1089,7 +1090,7 @@ function updateCharts() {
 		myChart.data.datasets[0].data = tokenData.map(y => {return {x: timeData[tokenData.findIndex(d => d === y)], y: y}})
 		// myChart.data.datasets[1].label = 'Interpolated'
 		// myChart.data.datasets[1].data = tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}})
-		myChart.data.datasets[1].label = 'Moving Average 6'
+		myChart.data.datasets[1].label = 'Moving Average ' + movingAverageSize
 		myChart.data.datasets[1].data = tokenDataMA.map(y => {return {x: timeDataMA[tokenDataMA.findIndex(d => d === y)], y: y}})
 		myChart.options.scales.x.time.unit = scaleUnit
 		myChart.options.scales.y.title.text = simple[selectedBase].s
@@ -1116,7 +1117,7 @@ function updateCharts() {
 					tension: 0.3,
 					showLine: true
 				},*/ {
-					label: 'Moving Average 6',
+					label: 'Moving Average ' + movingAverageSize,
 					data: tokenDataMA.map(y => {return {x: timeDataMA[tokenDataMA.findIndex(d => d === y)], y: y}}),
 					backgroundColor: '#FF000088',
 					borderColor: '#FF000088',
