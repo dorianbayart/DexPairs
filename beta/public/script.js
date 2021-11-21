@@ -1104,7 +1104,7 @@ function updateCharts() {
 					data: tokenData.map(y => {return {x: timeData[tokenData.findIndex(d => d === y)], y: y}}),
 					backgroundColor: '#0000FF88',
 					borderColor: '#0000FF88',
-					radius: 2,
+					radius: 1,
 					tension: 0,
 					showLine: true
 				}, /*{
@@ -1112,7 +1112,7 @@ function updateCharts() {
 					data: tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}}),
 					backgroundColor: '#00FF0088',
 					borderColor: '#00FF0088',
-					radius: 2,
+					radius: 1,
 					tension: 0.3,
 					showLine: true
 				},*/ {
@@ -1120,7 +1120,7 @@ function updateCharts() {
 					data: tokenDataMA.map(y => {return {x: timeDataMA[tokenDataMA.findIndex(d => d === y)], y: y}}),
 					backgroundColor: '#FF000088',
 					borderColor: '#FF000088',
-					radius: 2,
+					radius: 0,
 					tension: 0.3,
 					showLine: true
 				}]
