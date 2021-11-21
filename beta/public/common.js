@@ -33,6 +33,11 @@ const TIME_1W = 1000*60*60*24*7
 const TIME_1M = 1000*60*60*24*30
 const TIME_1Y = 1000*60*60*24*365
 
+const OFTEN = 900000 // 15 minutes
+const HOURS = 14400000 // 4 hours
+const DAY = 86400000 // 1 day
+const WEEK = 604800000 // 1 week
+
 
 const NETWORK = {
 	ETHEREUM: {

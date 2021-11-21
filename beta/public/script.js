@@ -998,50 +998,58 @@ function updateCharts() {
 	setFavoriteIcon()
 
 	let tokenChart = null, baseChart = null, scaleUnit = 'day'
+	let intervalMS = 0, timeframeMS = 0
 	switch (interval) {
 	case INTERVAL_15M:
 		tokenChart = tokenCharts.chart_often
 		baseChart = baseCharts.chart_often
 		scaleUnit = 'hour'
+		intervalMS = OFTEN
 		break
 	case INTERVAL_1D:
 		tokenChart = tokenCharts.chart_1d
 		baseChart = baseCharts.chart_1d
 		scaleUnit = 'day'
+		intervalMS = DAY
 		break
 	case INTERVAL_1W:
 		tokenChart = tokenCharts.chart_1w
 		baseChart = baseCharts.chart_1w
 		scaleUnit = 'month'
+		intervalMS = WEEK
 		break
 	case INTERVAL_4H:
 	default:
 		tokenChart = tokenCharts.chart_4h
 		baseChart = baseCharts.chart_4h
 		scaleUnit = 'day'
+		intervalMS = HOURS
 		break
 	}
 	switch(timeframe) {
 	case TIMEFRAME_24H:
-		tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_24H)
-		baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_24H)
+		timeframeMS = TIME_24H
 		break
 	case TIMEFRAME_1M:
-		tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_1M)
-		baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_1M)
+		timeframeMS = TIME_1M
 		break
 	case TIMEFRAME_1Y:
-		tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_1Y)
-		baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_1Y)
+		timeframeMS = TIME_1Y
 		break
 	case TIMEFRAME_ALL:
+		timeframeMS = TIME_1Y
 		break
 	case TIMEFRAME_1W:
 	default:
-		tokenChart = tokenChart.filter(dot => Date.now() - dot.t < TIME_1W)
-		baseChart = baseChart.filter(dot => Date.now() - dot.t < TIME_1W)
+		timeframeMS = TIME_1W
 		break
 	}
+
+
+
+
+	tokenChart = tokenChart.filter(dot => Date.now() - dot.t < timeframeMS + intervalMS)
+	baseChart = baseChart.filter(dot => Date.now() - dot.t < timeframeMS + intervalMS)
 
 	let timeData = tokenChart.map(coords => new Date(coords.t))
 	let tokenData = tokenChart.map(coords => {
@@ -1053,26 +1061,68 @@ function updateCharts() {
 		return price ? coords.p / price : null
 	})
 
+
+	let timeDataInterpolated = []
+	for (let i = 0; intervalMS * i < Date.now() - tokenChart[0].t; i++) {
+		timeDataInterpolated.unshift(new Date(tokenChart[tokenChart.length-1].t - intervalMS * i))
+	}
+	let tokenDataInterpolated = timeDataInterpolated.map(time => {
+		const priceToken = estimatePriceInterpolation(tokenChart, time)
+		const priceBase = estimatePriceInterpolation(baseChart, time)
+		return priceToken / priceBase
+	})
+
+
+	let timeDataMA = [], tokenDataMA = []
+	let size = 6
+	for (let i = size - 1; i < timeDataInterpolated.length; i++) {
+		timeDataMA[i - size + 1] = timeDataInterpolated[i]
+		tokenDataMA[i - size + 1] = tokenDataInterpolated.slice(i - size + 1, i + 1).reduce((total, currentValue) => total + currentValue, 0) / size
+	}
+
+
+
 	let ctx = document.getElementById('myChart').getContext('2d')
 	if(myChart) {
-		myChart.data.labels = timeData
+		//myChart.data.labels = timeData
 		myChart.data.datasets[0].label = simple[selectedToken].s + ' / ' + simple[selectedBase].s
-		myChart.data.datasets[0].data = tokenData
+		myChart.data.datasets[0].data = tokenData.map(y => {return {x: timeData[tokenData.findIndex(d => d === y)], y: y}})
+		// myChart.data.datasets[1].label = 'Interpolated'
+		// myChart.data.datasets[1].data = tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}})
+		myChart.data.datasets[1].label = 'Moving Average 6'
+		myChart.data.datasets[1].data = tokenDataMA.map(y => {return {x: timeDataMA[tokenDataMA.findIndex(d => d === y)], y: y}})
 		myChart.options.scales.x.time.unit = scaleUnit
 		myChart.options.scales.y.title.text = simple[selectedBase].s
 		myChart.update()
 	} else {
 		myChart = new Chart(ctx, {
-			type: 'line',
+			type: 'scatter',
 			data: {
-				labels: timeData,
+				//labels: timeData,
 				datasets: [{
 					label: simple[selectedToken].s + ' / ' + simple[selectedBase].s,
-					data: tokenData,
+					data: tokenData.map(y => {return {x: timeData[tokenData.findIndex(d => d === y)], y: y}}),
 					backgroundColor: '#0000FF88',
 					borderColor: '#0000FF88',
-					radius: 0,
-					tension: 0.3
+					radius: 2,
+					tension: 0,
+					showLine: true
+				}, /*{
+					label: 'Interpolated',
+					data: tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}}),
+					backgroundColor: '#00FF0088',
+					borderColor: '#00FF0088',
+					radius: 2,
+					tension: 0.3,
+					showLine: true
+				},*/ {
+					label: 'Moving Average 6',
+					data: tokenDataMA.map(y => {return {x: timeDataMA[tokenDataMA.findIndex(d => d === y)], y: y}}),
+					backgroundColor: '#FF000088',
+					borderColor: '#FF000088',
+					radius: 2,
+					tension: 0.3,
+					showLine: true
 				}]
 			},
 			options: {
@@ -1163,7 +1213,7 @@ function setFavoriteIcon() {
 // useful
 // Estimate a Price at a time T - find 2 points and calculate a linear interpolation
 function estimatePriceInterpolation(chart, t) {
-	let index = chart.findIndex(coords => coords.t > t)
+	let index = chart.findIndex(coords => coords.t >= t)
 	if(index < 1) { return }
 	// y3 = (x3-x1)*(y2-y1)/(x2-x1) + y1
 	return (t-chart[index - 1].t)*(chart[index].p-chart[index - 1].p)/(chart[index].t-chart[index - 1].t) + chart[index - 1].p
