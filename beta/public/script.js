@@ -94,7 +94,7 @@ const TIMEFRAME_ALL = 'all'
 const LIST_INITIAL_SIZE = 100
 let interval = INTERVAL_4H
 let timeframe = TIMEFRAME_1W
-let movingAverageSize = 9
+let movingAverageSize = 12
 
 
 // get tokens list
@@ -1072,10 +1072,23 @@ function updateCharts() {
 		const priceBase = estimatePriceInterpolation(baseChart, time)
 		return priceToken / priceBase
 	})
-
+	
+	
+	let timeDataMA9 = [], tokenDataMA9 = []
+	let size = 9
+	for (let i = size - 1; i < timeDataInterpolated.length; i++) {
+		timeDataMA9[i - size + 1] = timeDataInterpolated[i]
+		tokenDataMA9[i - size + 1] = tokenDataInterpolated.slice(i - size + 1, i + 1).reduce((total, currentValue) => total + currentValue, 0) / size
+	}
+	let timeDataMA20 = [], tokenDataMA20 = []
+	size = 20
+	for (let i = size - 1; i < timeDataInterpolated.length; i++) {
+		timeDataMA20[i - size + 1] = timeDataInterpolated[i]
+		tokenDataMA20[i - size + 1] = tokenDataInterpolated.slice(i - size + 1, i + 1).reduce((total, currentValue) => total + currentValue, 0) / size
+	}
 
 	let timeDataMA = [], tokenDataMA = []
-	let size = movingAverageSize
+	size = movingAverageSize
 	for (let i = size - 1; i < timeDataInterpolated.length; i++) {
 		timeDataMA[i - size + 1] = timeDataInterpolated[i]
 		tokenDataMA[i - size + 1] = tokenDataInterpolated.slice(i - size + 1, i + 1).reduce((total, currentValue) => total + currentValue, 0) / size
@@ -1088,10 +1101,12 @@ function updateCharts() {
 		//myChart.data.labels = timeData
 		myChart.data.datasets[0].label = simple[selectedToken].s + ' / ' + simple[selectedBase].s
 		myChart.data.datasets[0].data = timeData.map(x => {return {x: x, y: tokenData[timeData.findIndex(t => t === x)]}})
-		// myChart.data.datasets[1].label = 'Interpolated'
-		// myChart.data.datasets[1].data = tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}})
-		myChart.data.datasets[1].label = 'Simple Moving Average ' + movingAverageSize
-		myChart.data.datasets[1].data = timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}})
+		myChart.data.datasets[1].label = 'SMA 9'
+		myChart.data.datasets[1].data = timeDataMA9.map(x => {return {x: x, y: tokenDataMA9[timeDataMA9.findIndex(t => t === x)]}})
+		myChart.data.datasets[2].label = 'SMA 20'
+		myChart.data.datasets[2].data = timeDataMA20.map(x => {return {x: x, y: tokenDataMA20[timeDataMA20.findIndex(t => t === x)]}})
+		myChart.data.datasets[3].label = 'SMA ' + movingAverageSize
+		myChart.data.datasets[3].data = timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}})
 		myChart.options.scales.x.time.unit = scaleUnit
 		myChart.options.scales.y.title.text = simple[selectedBase].s
 		myChart.update()
@@ -1105,22 +1120,30 @@ function updateCharts() {
 					data: timeData.map(x => {return {x: x, y: tokenData[timeData.findIndex(t => t === x)]}}),
 					backgroundColor: '#0000FF88',
 					borderColor: '#0000FF88',
-					radius: 1,
-					tension: 0,
-					showLine: true
-				}, /*{
-					label: 'Interpolated',
-					data: timeDataInterpolated.map(x => {return {x: x, y: tokenDataInterpolated[timeDataInterpolated.findIndex(t => t === x)]}}),
-					backgroundColor: '#00FF0088',
-					borderColor: '#00FF0088',
-					radius: 1,
+					radius: 0,
 					tension: 0.3,
 					showLine: true
-				},*/ {
-					label: 'Simple Moving Average ' + movingAverageSize,
+				}, {
+					label: 'SMA 9',
+					data: timeDataMA9.map(x => {return {x: x, y: tokenDataMA9[timeDataMA9.findIndex(t => t === x)]}}),
+					backgroundColor: '#00602A88',
+					borderColor: '#00602A88',
+					radius: 0,
+					tension: 0.3,
+					showLine: true
+				}, {
+					label: 'SMA 20',
+					data: timeDataMA20.map(x => {return {x: x, y: tokenDataMA20[timeDataMA20.findIndex(t => t === x)]}}),
+					backgroundColor: '#00FF7088',
+					borderColor: '#00FF7088',
+					radius: 0,
+					tension: 0.3,
+					showLine: true
+				}, {
+					label: 'SMA ' + movingAverageSize,
 					data: timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}}),
-					backgroundColor: '#FF000088',
-					borderColor: '#FF000088',
+					backgroundColor: '#009F4688',
+					borderColor: '#009F4688',
 					radius: 0,
 					tension: 0.3,
 					showLine: true
