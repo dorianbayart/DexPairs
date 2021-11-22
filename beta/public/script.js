@@ -1090,7 +1090,7 @@ function updateCharts() {
 		myChart.data.datasets[0].data = timeData.map(x => {return {x: x, y: tokenData[timeData.findIndex(t => t === x)]}})
 		// myChart.data.datasets[1].label = 'Interpolated'
 		// myChart.data.datasets[1].data = tokenDataInterpolated.map(y => {return {x: timeDataInterpolated[tokenDataInterpolated.findIndex(d => d === y)], y: y}})
-		myChart.data.datasets[1].label = 'Moving Average ' + movingAverageSize
+		myChart.data.datasets[1].label = 'Simple Moving Average ' + movingAverageSize
 		myChart.data.datasets[1].data = timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}})
 		myChart.options.scales.x.time.unit = scaleUnit
 		myChart.options.scales.y.title.text = simple[selectedBase].s
@@ -1117,7 +1117,7 @@ function updateCharts() {
 					tension: 0.3,
 					showLine: true
 				},*/ {
-					label: 'Moving Average ' + movingAverageSize,
+					label: 'Simple Moving Average ' + movingAverageSize,
 					data: timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}}),
 					backgroundColor: '#FF000088',
 					borderColor: '#FF000088',
