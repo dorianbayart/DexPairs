@@ -1118,7 +1118,7 @@ function updateCharts() {
 				datasets: [{
 					label: simple[selectedToken].s + ' / ' + simple[selectedBase].s,
 					data: timeData.map(x => {return {x: x, y: tokenData[timeData.findIndex(t => t === x)]}}),
-					backgroundColor: '#0000FF88',
+					backgroundColor: '#0000FF88', // blue
 					borderColor: '#0000FF88',
 					radius: 0,
 					tension: 0.3,
@@ -1126,24 +1126,24 @@ function updateCharts() {
 				}, {
 					label: 'SMA 9',
 					data: timeDataMA9.map(x => {return {x: x, y: tokenDataMA9[timeDataMA9.findIndex(t => t === x)]}}),
-					backgroundColor: '#00602A88',
-					borderColor: '#00602A88',
+					backgroundColor: '#CCCC0088', // yellow
+					borderColor: '#CCCC0088',
 					radius: 0,
 					tension: 0.3,
 					showLine: true
 				}, {
 					label: 'SMA 20',
 					data: timeDataMA20.map(x => {return {x: x, y: tokenDataMA20[timeDataMA20.findIndex(t => t === x)]}}),
-					backgroundColor: '#00FF7088',
-					borderColor: '#00FF7088',
+					backgroundColor: '#FF800088', // orange
+					borderColor: '#FF800088',
 					radius: 0,
 					tension: 0.3,
 					showLine: true
 				}, {
 					label: 'SMA ' + movingAverageSize,
 					data: timeDataMA.map(x => {return {x: x, y: tokenDataMA[timeDataMA.findIndex(t => t === x)]}}),
-					backgroundColor: '#009F4688',
-					borderColor: '#009F4688',
+					backgroundColor: '#CC00FF88', // violet
+					borderColor: '#CC00FF88',
 					radius: 0,
 					tension: 0.3,
 					showLine: true
