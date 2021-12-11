@@ -22,16 +22,21 @@ const COLOR_THEMES = {
 	}
 }
 
-/* Backend server */
+/* Backend API url */
 /* https://api.dexpairs.xyz or empty for localhost */
-const server = 'https://api.dexpairs.xyz'
 const DOMAIN_NAME = 'DexPairs.xyz'
+const SERVER_URL = window.location.href.includes(DOMAIN_NAME.toLowerCase()) ? 'https://api.dexpairs.xyz' : ''
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
 const TIME_24H = 1000*60*60*24
 const TIME_1W = 1000*60*60*24*7
 const TIME_1M = 1000*60*60*24*30
 const TIME_1Y = 1000*60*60*24*365
+
+const OFTEN = 900000 // 15 minutes
+const HOURS = 14400000 // 4 hours
+const DAY = 86400000 // 1 day
+const WEEK = 604800000 // 1 week
 
 
 const NETWORK = {
@@ -45,13 +50,13 @@ const NETWORK = {
 		tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server,
+		url_data: SERVER_URL,
 		tokenContract: '0x0',
 		tokenSymbol: 'ETH',
 		tokenName: 'Ethereum',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-		subgraph_url: 'https://thegraph.com/explorer/subgraph/uniswap/uniswap-v3'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3'
 	},
 	POLYGON: {
 		order: 2,
@@ -63,13 +68,13 @@ const NETWORK = {
 		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/quickswap',
+		url_data: SERVER_URL + '/quickswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'MATIC',
 		tokenName: 'Matic',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-		subgraph_url: 'https://thegraph.com/explorer/subgraph/quickswap/matic-exchange'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/henrydapp/quickswap'
 	},
 	BSC : {
 		order: 3,
@@ -81,13 +86,13 @@ const NETWORK = {
 		tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.bscscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/pancake',
+		url_data: SERVER_URL + '/pancake',
 		tokenContract: '0x0',
 		tokenSymbol: 'BNB',
 		tokenName: 'BNB',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-		subgraph_url: 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2'
+		subgraph_url: 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/graphql'
 	},
 	FANTOM: {
 		order: 4,
@@ -99,13 +104,13 @@ const NETWORK = {
 		tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.ftmscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/spiritswap',
+		url_data: SERVER_URL + '/spiritswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'FTM',
 		tokenName: 'Fantom',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
-		subgraph_url: 'https://thegraph.com/explorer/subgraph/layer3org/spiritswap-analytics'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/layer3org/spiritswap-analytics'
 	},
 	XDAI: {
 		order: 5,
@@ -117,13 +122,13 @@ const NETWORK = {
 		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/honeyswap',
+		url_data: SERVER_URL + '/honeyswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'XDAI',
 		tokenName: 'xDai',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-		subgraph_url: 'https://thegraph.com/explorer/subgraph/kirkins/honeyswap'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap'
 	},
 }
 

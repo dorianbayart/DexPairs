@@ -7,6 +7,7 @@ body {
 
 .body-background {
   background-image: url('/img/background-multichain.svg');
+  opacity: .1;
 }
 
 #input-wallet-container {
@@ -53,7 +54,7 @@ body {
 }
 
 #demo-wallet {
-  border: 1px solid white;
+  border: 1px solid #dddddd;
   border-radius: 8px;
   margin: .5em;
   font-size: .9em;
@@ -64,11 +65,11 @@ body {
 }
 
 #demo-wallet:hover {
-  border: 1px solid #cccccc;
+  border: 1px solid #888888;
 }
 
 #input-wallet {
-  border: 1px solid #ffffff;
+  border: 1px solid #dddddd;
   border-radius: 12px;
   margin: .5em 1em;
   padding: 1em;
@@ -80,7 +81,7 @@ body {
 
 #input-wallet:hover,
 #input-wallet:focus {
-  border: 1px solid #cccccc;
+  border: 1px solid #888888;
   outline: none;
 }
 
@@ -135,6 +136,53 @@ body {
 
 .global .global-select-networks {
   flex: auto;
+}
+
+#filter-by-network-container {
+  text-align: center;
+}
+#filter-by-network-list {
+  list-style: none;
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+}
+.filter-by-network-item {
+  display: flex;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin: 3px;
+  padding: 10px;
+  border-radius: 50%;
+  border: 1px solid #CCCCCCCC;
+  cursor: pointer;
+
+}
+.filter-by-network-item:hover {
+  border: 1px solid #888888;
+}
+.filter-by-network-img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+.filter-by-network-status {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+}
+.filter-by-network-status.checked {
+  background-color: #EE82EE;
+  filter: invert(1);
+}
+.filter-by-network-status.unchecked {
+  background-color: #00CCCC;
+  filter: invert(1);
 }
 
 #state {
@@ -219,6 +267,14 @@ body {
   height: 128px;
 }
 
+#wallet ul div.date {
+  margin: 1em .5em .25em .5em;
+  font-size: larger;
+  letter-spacing: 1px;
+  color: #5B5EA6;
+  /*text-shadow: 0 0 8px blue;*/
+}
+
 #wallet ul li span {
   display: inline-block;
 }
@@ -233,13 +289,22 @@ body {
   height: 100%;
 }
 
-#wallet ul li span.nameSymbol {
+#wallet ul li span.nameSymbol,
+#wallet ul li span.nonceTimestamp {
   display: flex;
   flex-flow: column;
-  flex: auto;
+  flex: 1;
+}
+#wallet ul li span.txNameSymbol {
+  max-width: 40%;
+}
+#wallet ul li span.nonceTimestamp {
+  display: inline-flex;
+  flex: .25;
 }
 
-#wallet ul li span.name {
+#wallet ul li span.name,
+#wallet ul li span.timestamp {
   font-size: .75em;
 }
 
@@ -257,6 +322,13 @@ body {
   flex-flow: column;
 }
 
+#wallet ul li span.txBalance {
+  display: inline-flex;
+  flex: .25;
+  font-size: larger;
+  padding-right: 1em;
+  justify-content: flex-end;
+}
 #wallet ul li span.balance {
   font-size: .75em;
 }
@@ -356,6 +428,11 @@ body {
 
 #wallet ul li.nft.expanded a.tokenURI img.preview {
   max-height: 400px;
+}
+
+/* Transactions */
+#wallet ul li.transaction.expanded {
+  height: 92px;
 }
 
 /* helper */

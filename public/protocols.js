@@ -118,12 +118,16 @@ async function getAaveEthereumUnderlyingAddresses(callback) {
 	try {
 		underlying = await callAaveEthereumUnderlyingAddresses()
 	} catch(error) {
-		setTimeout(getAaveEthereumUnderlyingAddresses, 3000)
+		console.log(error)
+		// setTimeout(getAaveEthereumUnderlyingAddresses, 30000)
 		return
 	}
 
-	setTimeout(getAaveEthereumUnderlyingAddresses, 300000)
+	// setTimeout(getAaveEthereumUnderlyingAddresses, 300000)
 
+	if(!underlying || !underlying.data) {
+		return
+	}
 	underlying.data.atokens.forEach((item, i) => {
 		underlyingAssets['ETHEREUM-' + item.id] = {
 			address: item.underlyingAssetAddress,
@@ -153,12 +157,16 @@ async function getCompoundEthereumUnderlyingAddresses(callback) {
 	try {
 		underlying = await callCompoundEthereumUnderlyingAddresses()
 	} catch(error) {
-		setTimeout(getCompoundEthereumUnderlyingAddresses, 3000)
+		console.log(error)
+		// setTimeout(getCompoundEthereumUnderlyingAddresses, 30000)
 		return
 	}
 
-	setTimeout(getCompoundEthereumUnderlyingAddresses, 300000)
+	// setTimeout(getCompoundEthereumUnderlyingAddresses, 300000)
 
+	if(!underlying || !underlying.data || !underlying.data.markets) {
+		return
+	}
 	underlying.data.markets.forEach((item, i) => {
 		underlyingAssets['ETHEREUM-' + item.id] = {
 			address: item.underlyingAddress,
@@ -175,12 +183,16 @@ async function getAavePolygonUnderlyingAddresses(callback) {
 	try {
 		underlying = await callAavePolygonUnderlyingAddresses()
 	} catch(error) {
-		setTimeout(getAavePolygonUnderlyingAddresses, 3000)
+		console.log(error)
+		// setTimeout(getAavePolygonUnderlyingAddresses, 30000)
 		return
 	}
 
-	setTimeout(getAavePolygonUnderlyingAddresses, 300000)
+	// setTimeout(getAavePolygonUnderlyingAddresses, 300000)
 
+	if(!underlying || !underlying.data) {
+		return
+	}
 	underlying.data.atokens.forEach((item, i) => {
 		underlyingAssets['POLYGON-' + item.id] = {
 			address: item.underlyingAssetAddress,
@@ -211,12 +223,16 @@ async function getVenusBscUnderlyingAddresses(callback) {
 	try {
 		underlying = await callVenusBscUnderlyingAddresses()
 	} catch(error) {
-		setTimeout(getVenusBscUnderlyingAddresses, 3000)
+		console.log(error)
+		// setTimeout(getVenusBscUnderlyingAddresses, 30000)
 		return
 	}
 
-	setTimeout(getVenusBscUnderlyingAddresses, 300000)
+	// setTimeout(getVenusBscUnderlyingAddresses, 300000)
 
+	if(!underlying || !underlying.data || !underlying.data.markets) {
+		return
+	}
 	underlying.data.markets.forEach((item, i) => {
 		underlyingAssets['BSC-' + item.id] = {
 			address: item.underlyingAddress,

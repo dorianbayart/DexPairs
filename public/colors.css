@@ -30,22 +30,15 @@ button {
 /* Wallet */
 .wallet-information,
 #wallet ul li,
-#connect-wallet {
+#connect-wallet,
+.filter-by-network-item {
   background-color: #ffffffdd;
   color: #000000dd;
 }
 
 /* News */
 .main > h1,
-article.entry,
-a.entry,
-.back-button {
-  background-color: #ffffffdd;
-  color: #000000dd;
-}
-
-/* Donate */
-.click-to-copy {
+article.entry {
   background-color: #ffffffdd;
   color: #000000dd;
 }
