@@ -22,10 +22,10 @@ const COLOR_THEMES = {
 	}
 }
 
-/* Backend server */
+/* Backend API url */
 /* https://api.dexpairs.xyz or empty for localhost */
-const server = 'https://api.dexpairs.xyz'
 const DOMAIN_NAME = 'DexPairs.xyz'
+const SERVER_URL = window.location.href.includes(DOMAIN_NAME.toLowerCase()) ? 'https://api.dexpairs.xyz' : ''
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
 const TIME_24H = 1000*60*60*24
@@ -50,7 +50,7 @@ const NETWORK = {
 		tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server,
+		url_data: SERVER_URL,
 		tokenContract: '0x0',
 		tokenSymbol: 'ETH',
 		tokenName: 'Ethereum',
@@ -68,7 +68,7 @@ const NETWORK = {
 		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/quickswap',
+		url_data: SERVER_URL + '/quickswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'MATIC',
 		tokenName: 'Matic',
@@ -86,7 +86,7 @@ const NETWORK = {
 		tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.bscscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/pancake',
+		url_data: SERVER_URL + '/pancake',
 		tokenContract: '0x0',
 		tokenSymbol: 'BNB',
 		tokenName: 'BNB',
@@ -104,7 +104,7 @@ const NETWORK = {
 		tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.ftmscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/spiritswap',
+		url_data: SERVER_URL + '/spiritswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'FTM',
 		tokenName: 'Fantom',
@@ -122,7 +122,7 @@ const NETWORK = {
 		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: server + '/honeyswap',
+		url_data: SERVER_URL + '/honeyswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'XDAI',
 		tokenName: 'xDai',

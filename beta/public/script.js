@@ -21,7 +21,7 @@ let dexList = {
 		chain_enum: 'ETHEREUM',
 		url: 'https://uniswap.org/',
 		url_swap: 'https://app.uniswap.org/#/swap',
-		url_data: server,
+		url_data: SERVER_URL,
 		explorer: 'https://etherscan.io/token/',
 		tokens: {
 			token: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -34,7 +34,7 @@ let dexList = {
 		chain_enum: 'POLYGON',
 		url: 'https://quickswap.exchange/',
 		url_swap: 'https://quickswap.exchange/#/swap',
-		url_data: server + '/quickswap',
+		url_data: SERVER_URL + '/quickswap',
 		explorer: 'https://polygonscan.com/token/',
 		tokens: {
 			token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
@@ -47,7 +47,7 @@ let dexList = {
 		chain_enum: 'BSC',
 		url: 'https://pancakeswap.finance/',
 		url_swap: 'https://exchange.pancakeswap.finance/#/swap',
-		url_data: server + '/pancake',
+		url_data: SERVER_URL + '/pancake',
 		explorer: 'https://bscscan.com/token/',
 		tokens: {
 			token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
@@ -60,7 +60,7 @@ let dexList = {
 		chain_enum: 'FANTOM',
 		url: 'https://www.spiritswap.finance/',
 		url_swap: 'https://swap.spiritswap.finance/#/swap',
-		url_data: server + '/spiritswap',
+		url_data: SERVER_URL + '/spiritswap',
 		explorer: 'https://ftmscan.com/token/',
 		tokens: {
 			token: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
@@ -73,7 +73,7 @@ let dexList = {
 		chain_enum: 'XDAI',
 		url: 'https://honeyswap.org/',
 		url_swap: 'https://app.honeyswap.org/#/swap',
-		url_data: server + '/honeyswap',
+		url_data: SERVER_URL + '/honeyswap',
 		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
 		tokens: {
 			token: '0x71850b7e9ee3f13ab46d67167341e4bdc905eef9',
