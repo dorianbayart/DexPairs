@@ -1072,8 +1072,8 @@ function updateCharts() {
 		const priceBase = estimatePriceInterpolation(baseChart, time)
 		return priceToken / priceBase
 	})
-	
-	
+
+
 	let timeDataMA9 = [], tokenDataMA9 = []
 	let size = 9
 	for (let i = size - 1; i < timeDataInterpolated.length; i++) {
@@ -1130,7 +1130,8 @@ function updateCharts() {
 					borderColor: '#CCCC0088',
 					radius: 0,
 					tension: 0.3,
-					showLine: true
+					showLine: true,
+					hidden: true
 				}, {
 					label: 'SMA 20',
 					data: timeDataMA20.map(x => {return {x: x, y: tokenDataMA20[timeDataMA20.findIndex(t => t === x)]}}),
@@ -1146,7 +1147,8 @@ function updateCharts() {
 					borderColor: '#CC00FF88',
 					radius: 0,
 					tension: 0.3,
-					showLine: true
+					showLine: true,
+					hidden: true
 				}]
 			},
 			options: {
