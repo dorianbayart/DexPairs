@@ -1,13 +1,14 @@
 {
   "name": "DexPairs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "url": "https://dexpairs.xyz/",
   "description": "Multi-Chain && Multi-Protocol wallet tracker",
   "main": "index.js",
   "scripts": {
     "start": "pm2 restart ecosystem.config.js --env production",
     "dev": "pm2 restart ecosystem.config.js --env development",
-    "stop": "pm2 stop all"
+    "stop": "pm2 stop all",
+    "deploy-production": "pm2 deploy ecosystem.config.js production"
   },
   "keywords": [
     "bsc",
@@ -31,7 +32,7 @@
     "xdai"
   ],
   "author": "Dorian Bayart",
-  "license": "CC BY-NC 4.0",
+  "license": "GNU General Public License v3.0",
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
