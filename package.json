@@ -5,7 +5,9 @@
   "description": "Multi-Chain && Multi-Protocol wallet tracker",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "pm2 restart ecosystem.config.js --env production",
+    "dev": "pm2 restart ecosystem.config.js --env development",
+    "stop": "pm2 stop all"
   },
   "keywords": [
     "bsc",
@@ -34,7 +36,8 @@
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "express-rate-limit": "^5.3.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
