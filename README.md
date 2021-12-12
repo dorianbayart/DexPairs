@@ -45,7 +45,7 @@
 
 1. Clone the repository  
 ```
-git clone https://github.com/dorianbayart/DexPairs.git DexPairs
+git clone https://github.com/dorianbayart/DexPairs.git
 ```
 
 2. Install dependencies  
