@@ -41,6 +41,33 @@
 
 
 -----
+## How To Deploy
+
+1. Clone the repository  
+```
+git clone git@github.com:dorianbayart/DexPairs.git
+```
+
+2. Install dependencies  
+```
+yarn
+```
+
+3. Start the server in Dev mode  
+```
+yarn dev
+```  
+This will start the API and the web app at [localhost:3001](http://localhost:3001)
+
+4. Stop processes  
+```
+yarn stop
+```
+
+
+
+-----
+-----
 #### Thanks
 
 [Feathericons](https://feathericons.com/) for the icons
