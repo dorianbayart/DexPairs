@@ -32,6 +32,14 @@
     "xdai"
   ],
   "author": "Dorian Bayart",
+  "funding": [
+    {
+      "url": "https://dexpairs.xyz/donate"
+    },
+    {
+      "url": "https://github.com/sponsors/dorianbayart"
+    }
+  ],
   "license": "GNU General Public License v3.0",
   "dependencies": {
     "compression": "^1.7.4",
