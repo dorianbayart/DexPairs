@@ -33,7 +33,7 @@ module.exports = {
 			ref  : 'origin/main',
 			repo : 'git@github.com:dorianbayart/DexPairs.git',
 			path : '/home/dexpairs/prod',
-			'pre-deploy-local': '',
+			'pre-deploy-local': 'npm install',
 			'post-deploy': 'yarn && pm2 startOrReload ecosystem.config.js --env production --update-env',
 			'pre-setup': 'pm2 install pm2-logrotate',
 			env_production: {
