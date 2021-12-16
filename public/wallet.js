@@ -14,6 +14,7 @@ let displayWalletTimer = null
 let tokentx = {}
 let erc721tx = {}
 let timerGetTokenTx = {}
+let timerSearchTokens = {}
 let timerGetERC721Tx = {}
 let timerPopulateNFTs = {}
 let timerGetNetworkBalance = {}
@@ -194,7 +195,6 @@ function configureWallet(inputAddress) {
 
 // get token transactions list
 function getTokenTx(network, callback) {
-	console.log('getTokenTx', network, timerGetTokenTx[network])
 
 	if(timerGetTokenTx[network]) {
 		clearTimeout(timerGetTokenTx[network])
@@ -206,11 +206,13 @@ function getTokenTx(network, callback) {
 
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
+		if(this.response && this.response.includes('Max rate limit reached')) {
+			clearTimeout(timerGetTokenTx[network])
+			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 1250)
+			return
+		} else if (this.readyState == 4 && this.status == 200) {
 			let data = JSON.parse(this.responseText)
 			tokentx[network] = tokentx[network].concat(data.result)
-
-			console.log('getTokenTx', network, data.result)
 
 			if(callback) {
 				callback(network)
@@ -222,10 +224,6 @@ function getTokenTx(network, callback) {
 
 			clearTimeout(timerGetTokenTx[network])
 			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 100000 * (tokentx[network].length > 0 ? 1 : 3))
-		} else if(this.response && this.response.includes('Max rate limit reached')) {
-			console.log('Max rate limit reached on ' + network + ', will try to fetch transactions again soon')
-			clearTimeout(timerGetTokenTx[network])
-			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 1250)
 		}
 	}
 	xmlhttp.onerror = function() {
@@ -238,7 +236,6 @@ function getTokenTx(network, callback) {
 
 // get ERC-721 (NFT) transactions list
 function getERC721Tx(network, callback) {
-	console.log('getERC721Tx', network, timerGetERC721Tx[network])
 
 	if(timerGetERC721Tx[network]) {
 		clearTimeout(timerGetERC721Tx[network])
@@ -250,7 +247,6 @@ function getERC721Tx(network, callback) {
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if(this.response && this.response.includes('Max rate limit reached')) {
-			console.log('Max rate limit reached on ' + network + ', will try to fetch ERC721 transactions again soon')
 			clearTimeout(timerGetERC721Tx[network])
 			timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 1250)
 			return
@@ -282,10 +278,7 @@ function getERC721Tx(network, callback) {
 }
 
 async function getTransactions(network) {
-	//clearTimeout(timerGetTransactions[network])
-	//timerGetTransactions[network] = setTimeout(() => getTransactions(network), 30000 * (tokentx[network].length > 0 ? 1 : 3))
 
-	//console.log('getTransactions ', network)
 	if(!walletAddress) {
 		return
 	}
@@ -293,9 +286,6 @@ async function getTransactions(network) {
 	getTokenTx(network, displayWallet)
 	setTimeout(() => getERC721Tx(network, displayWallet), 5200)
 
-	// console.log(tx)
-
-	// displayWallet()
 }
 
 // Get token balance
@@ -394,7 +384,7 @@ async function searchTokens(network) {
 	let tx = tokentx[network].filter(t => t && !t.done)
 	const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + network))
 
-	if(!tx || typeof tx === 'string') {
+	if(!tx || typeof tx === 'string' || (tx[0] && typeof tx[0] === 'string' && tx[0].includes('rate limit reached'))) {
 		return
 	}
 
@@ -431,7 +421,7 @@ async function searchTokens(network) {
 
 		sessionStorage.setItem('latest-block-' + network, transaction.blockNumber)
 
-		setTimeout(() => searchTokens(network), 50)
+		timerSearchTokens[network] = setTimeout(() => searchTokens(network), 50)
 		displayWallet()
 	} else {
 		console.log('searchTokens finished on ' + network)
@@ -640,7 +630,7 @@ function displayWallet(force = false) {
 		}
 		updateGlobalPrice()
 		updateGlobalChart()
-	}, force ? 50 : 400)
+	}, force === true ? 50 : 400)
 }
 
 // Display Wallet Tokens
@@ -1263,6 +1253,7 @@ function simpleDataTimers() {
 
 document.getElementById('menu-tokens').addEventListener('click', (e) => {
 	e.preventDefault()
+
 	if(walletOptions.menu.tokens.isActive) {
 		return
 	}
@@ -1285,6 +1276,7 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
 })
 document.getElementById('menu-nfts').addEventListener('click', (e) => {
 	e.preventDefault()
+
 	if(walletOptions.menu.nfts.isActive) {
 		return
 	}
@@ -1305,6 +1297,7 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
 })
 document.getElementById('menu-transactions').addEventListener('click', (e) => {
 	e.preventDefault()
+
 	if(walletOptions.menu.transactions.isActive) {
 		return
 	}
@@ -1320,6 +1313,7 @@ document.getElementById('menu-transactions').addEventListener('click', (e) => {
 	Object.keys(NETWORK).forEach((network) => {
 		clearTimeout(timerGetNetworkBalance[network])
 		clearTimeout(timerGetTokenTx[network])
+		clearTimeout(timerSearchTokens[network])
 		clearTimeout(timerGetERC721Tx[network])
 		getTransactions(NETWORK[network].enum)
 	})
