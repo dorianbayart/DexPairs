@@ -396,9 +396,10 @@ async function searchTokens(network) {
 
 	if(tx.length > 0) {
 		const transaction = tx[0]
+		let balance = 0
 
 		try {
-			const balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
+			balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
 			const price = getPriceByAddressNetwork(transaction.contractAddress, network)
 			const id = getId(transaction.contractAddress, network)
 
@@ -422,8 +423,12 @@ async function searchTokens(network) {
 		sessionStorage.setItem('latest-block-' + network, transaction.blockNumber)
 
 		timerSearchTokens[network] = setTimeout(() => searchTokens(network), 50)
-		displayWallet()
+		if(balance > 0) {
+			displayWallet(true)
+		}
+
 	} else {
+		displayWallet()
 		console.log('searchTokens finished on ' + network)
 	}
 }
@@ -598,6 +603,7 @@ function getNetworkBalance(network) {
 
 
 function displayWallet(force = false) {
+	// console.log('displayWallet', force)
 	clearTimeout(displayWalletTimer)
 	displayWalletTimer = setTimeout(function() {
 		if(walletOptions.menu.tokens.isActive) {
@@ -630,7 +636,7 @@ function displayWallet(force = false) {
 		}
 		updateGlobalPrice()
 		updateGlobalChart()
-	}, force === true ? 50 : 400)
+	}, force === true ? 0 : 250)
 }
 
 // Display Wallet Tokens
