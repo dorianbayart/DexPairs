@@ -46,15 +46,6 @@ const TOP_SIZE = 6
 
 
 
-// Honeyswap data - xDai
-let honeyswap_list = {}
-let honeyswap_top = {}
-let honeyswap_data = {}
-let honeyswap_charts = {}
-let honeyswap_volume = {}
-
-
-
 // Utils
 async function get(url, query = null) {
 	if(query) {
@@ -1203,6 +1194,11 @@ async function launchHoneyswap() {
 	let honeyswap_charts_file = {}
 	let honeyswap_volume_file = {}
 
+	let honeyswap_list = {}
+	let honeyswap_data = {}
+	let honeyswap_charts = {}
+	let honeyswap_volume = {}
+
 	try {
 		honeyswap_data_file = readFileSync(path.join(dir_home, 'honeyswap-simple.json'), 'utf8')
 		honeyswap_data = JSON.parse(honeyswap_data_file.toString())
@@ -1210,8 +1206,12 @@ async function launchHoneyswap() {
 		writeFileSync(pathFile, JSON.stringify( honeyswap_data ), 'utf8')
 	} catch(error) {
 		console.log('honeyswap-simple.json', error)
-		honeyswap_data_file = readFileSync(path.join(dir_home, 'save_honeyswap-simple.json'), 'utf8')
-		honeyswap_data = JSON.parse(honeyswap_data_file.toString())
+		try {
+			honeyswap_data_file = readFileSync(path.join(dir_home, 'save_honeyswap-simple.json'), 'utf8')
+			honeyswap_data = JSON.parse(honeyswap_data_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -1221,8 +1221,12 @@ async function launchHoneyswap() {
 		writeFileSync(pathFile, JSON.stringify( honeyswap_charts ), 'utf8')
 	} catch(error) {
 		console.log('honeyswap-charts.json', error)
-		honeyswap_charts_file = readFileSync(path.join(dir_home, 'save_honeyswap-charts.json'), 'utf8')
-		honeyswap_charts = JSON.parse(honeyswap_charts_file.toString())
+		try {
+			honeyswap_charts_file = readFileSync(path.join(dir_home, 'save_honeyswap-charts.json'), 'utf8')
+			honeyswap_charts = JSON.parse(honeyswap_charts_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -1232,21 +1236,22 @@ async function launchHoneyswap() {
 		writeFileSync(pathFile, JSON.stringify( honeyswap_volume ), 'utf8')
 	} catch(error) {
 		console.log('honeyswap-volume.json', error)
-		honeyswap_volume_file = readFileSync(path.join(dir_home, 'save_honeyswap-volume.json'), 'utf8')
-		honeyswap_volume = JSON.parse(honeyswap_volume_file.toString())
+		try {
+			honeyswap_volume_file = readFileSync(path.join(dir_home, 'save_honeyswap-volume.json'), 'utf8')
+			honeyswap_volume = JSON.parse(honeyswap_volume_file.toString())
+		} catch {
+			return
+		}
 	}
 
 
-	honeyswap_list = {}
-
-	// get data from Honeyswap
-	let top = {}
-	try {
-		top = await getHoneyswapTopTokens()
-	} catch(error) {
-		console.log(error)
+	if(Object.keys(honeyswap_data).length < 1 || Object.keys(honeyswap_charts).length < 1 || Object.keys(honeyswap_volume).length < 1) {
 		return
 	}
+
+
+	// get data from Honeyswap
+	const top = await getHoneyswapTopTokens()
 
 
 	const time = Date.now()
@@ -1357,7 +1362,7 @@ async function launchHoneyswap() {
 	honeyswap_list = sortTokensByVolume(honeyswap_list, honeyswap_volume)
 
 	// build Top 10 list of Honeyswap
-	honeyswap_top = {}
+	let honeyswap_top = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
 			const address = Object.keys(honeyswap_list)[i]
@@ -1379,35 +1384,47 @@ async function launchHoneyswap() {
 
 	/* Store files */
 
+	let pathFile
+
 	// Update the Honeyswap list
-	let pathFile = path.join(dir_home, 'honeyswap.json')
-	writeFile( pathFile, JSON.stringify( honeyswap_list ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(honeyswap_list).length > 0) {
+		pathFile = path.join(dir_home, 'honeyswap.json')
+		writeFile( pathFile, JSON.stringify( honeyswap_list ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Honeyswap Top 10
-	pathFile = path.join(dir_home, 'honeyswap-top.json')
-	writeFile( pathFile, JSON.stringify( honeyswap_top ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(honeyswap_top).length > 0) {
+		pathFile = path.join(dir_home, 'honeyswap-top.json')
+		writeFile( pathFile, JSON.stringify( honeyswap_top ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Honeyswap simple data
-	pathFile = path.join(dir_home, 'honeyswap-simple.json')
-	writeFile( pathFile, JSON.stringify( honeyswap_data ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(honeyswap_data).length > 0) {
+		pathFile = path.join(dir_home, 'honeyswap-simple.json')
+		writeFile( pathFile, JSON.stringify( honeyswap_data ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Honeyswap charts
-	pathFile = path.join(dir_home, 'honeyswap-charts.json')
-	writeFile( pathFile, JSON.stringify( honeyswap_charts ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(honeyswap_charts).length > 0) {
+		pathFile = path.join(dir_home, 'honeyswap-charts.json')
+		writeFile( pathFile, JSON.stringify( honeyswap_charts ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Honeyswap volumeUSD
-	pathFile = path.join(dir_home, 'honeyswap-volume.json')
-	writeFile( pathFile, JSON.stringify( honeyswap_volume ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(honeyswap_volume).length > 0) {
+		pathFile = path.join(dir_home, 'honeyswap-volume.json')
+		writeFile( pathFile, JSON.stringify( honeyswap_volume ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 }
 
@@ -1520,10 +1537,22 @@ app.get('/charts/spiritswap', (req, res) => {
 	res.sendFile(path.join(dir_home, 'spiritswap-charts.json'))
 })
 // Honeyswap URLs
-app.get('/list/honeyswap', (req, res) => res.json(honeyswap_list))
-app.get('/top/honeyswap', (req, res) => res.json(honeyswap_top))
-app.get('/simple/honeyswap', (req, res) => res.json(honeyswap_data))
-app.get('/charts/honeyswap', (req, res) => res.json(honeyswap_charts))
+app.get('/list/honeyswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'honeyswap.json'))
+})
+app.get('/top/honeyswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'honeyswap-top.json'))
+})
+app.get('/simple/honeyswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'honeyswap-simple.json'))
+})
+app.get('/charts/honeyswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'honeyswap-charts.json'))
+})
 
 app.listen(port, () => console.log(`Backend start at ${port}`))
 
