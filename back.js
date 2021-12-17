@@ -921,6 +921,7 @@ async function launchQuickswap() {
 
 	// Update the Quickswap Top 10
 	pathFile = path.join(dir_home, 'quickswap-top.json')
+	console.log('Quickswap_top', JSON.stringify( quickswap_top ))
 	writeFile( pathFile, JSON.stringify( quickswap_top ), 'utf8', (err) => {
 		if (err) throw err
 	})
