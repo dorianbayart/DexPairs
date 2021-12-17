@@ -367,7 +367,7 @@ const getPriceByAddressNetwork = (searchedAddress, network) => {
 	}
 	let prices = NETWORK[network].simple_data ? JSON.parse(NETWORK[network].simple_data) : null
 	if(prices && Object.keys(prices).length > 0) {
-		return prices[address] ? prices[address].p * debt * rate : null
+		return prices[address] && (Date.now() - prices[address].t < TIME_1W) ? prices[address].p * debt * rate : null
 	}
 	return null
 }
