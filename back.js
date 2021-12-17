@@ -1453,10 +1453,22 @@ app.get('/charts/uniswap', (req, res) => {
 	res.sendFile(path.join(dir_home, 'uniswap-charts.json'))
 })
 // Quickswap URLs
-app.get('/list/quickswap', (req, res) => res.json(quickswap_list))
-app.get('/top/quickswap', (req, res) => res.json(quickswap_top))
-app.get('/simple/quickswap', (req, res) => res.json(quickswap_data))
-app.get('/charts/quickswap', (req, res) => res.json(quickswap_charts))
+app.get('/list/quickswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'quickswap.json'))
+})
+app.get('/top/quickswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'quickswap-top.json'))
+})
+app.get('/simple/quickswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'quickswap-simple.json'))
+})
+app.get('/charts/quickswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'quickswap-charts.json'))
+})
 // Spiritswap URLs
 app.get('/list/spiritswap', (req, res) => res.json(spiritswap_list))
 app.get('/top/spiritswap', (req, res) => res.json(spiritswap_top))
