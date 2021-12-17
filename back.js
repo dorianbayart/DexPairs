@@ -891,7 +891,7 @@ async function launchQuickswap() {
 	quickswap_list = sortTokensByVolume(quickswap_list, quickswap_volume)
 
 	// build Top 10 list of Quickswap
-	quickswap_top = {}
+	let quickswap_top = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
 			const address = Object.keys(quickswap_list)[i]
