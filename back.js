@@ -45,12 +45,6 @@ const TOP_SIZE = 6
 /* DexPairs */
 
 
-// Quickswap data - Polygon/Matic
-let quickswap_list = {}
-let quickswap_top = {}
-let quickswap_data = {}
-let quickswap_charts = {}
-let quickswap_volume = {}
 
 // Spiritswap data - Fantom/Opera
 let spiritswap_list = {}
@@ -728,6 +722,11 @@ async function launchQuickswap() {
 	let quickswap_charts_file = {}
 	let quickswap_volume_file = {}
 
+	let quickswap_list = {}
+	let quickswap_data = {}
+	let quickswap_charts = {}
+	let quickswap_volume = {}
+
 	try {
 		quickswap_data_file = readFileSync(path.join(dir_home, 'quickswap-simple.json'), 'utf8')
 		quickswap_data = JSON.parse(quickswap_data_file.toString())
@@ -735,8 +734,12 @@ async function launchQuickswap() {
 		writeFileSync(pathFile, JSON.stringify( quickswap_data ), 'utf8')
 	} catch(error) {
 		console.log('quickswap-simple.json', error)
-		quickswap_data_file = readFileSync(path.join(dir_home, 'save_quickswap-simple.json'), 'utf8')
-		quickswap_data = JSON.parse(quickswap_data_file.toString())
+		try {
+			quickswap_data_file = readFileSync(path.join(dir_home, 'save_quickswap-simple.json'), 'utf8')
+			quickswap_data = JSON.parse(quickswap_data_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -746,8 +749,12 @@ async function launchQuickswap() {
 		writeFileSync(pathFile, JSON.stringify( quickswap_charts ), 'utf8')
 	} catch(error) {
 		console.log('quickswap-charts.json', error)
-		quickswap_charts_file = readFileSync(path.join(dir_home, 'save_quickswap-charts.json'), 'utf8')
-		quickswap_charts = JSON.parse(quickswap_charts_file.toString())
+		try {
+			quickswap_charts_file = readFileSync(path.join(dir_home, 'save_quickswap-charts.json'), 'utf8')
+			quickswap_charts = JSON.parse(quickswap_charts_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -757,12 +764,18 @@ async function launchQuickswap() {
 		writeFileSync(pathFile, JSON.stringify( quickswap_volume ), 'utf8')
 	} catch(error) {
 		console.log('quickswap-volume.json', error)
-		quickswap_volume_file = readFileSync(path.join(dir_home, 'save_quickswap-volume.json'), 'utf8')
-		quickswap_volume = JSON.parse(quickswap_volume_file.toString())
+		try {
+			quickswap_volume_file = readFileSync(path.join(dir_home, 'save_quickswap-volume.json'), 'utf8')
+			quickswap_volume = JSON.parse(quickswap_volume_file.toString())
+		} catch {
+			return
+		}
 	}
 
 
-	quickswap_list = {}
+	if(Object.keys(quickswap_data).length < 1 || Object.keys(quickswap_charts).length < 1 || Object.keys(quickswap_volume).length < 1) {
+		return
+	}
 
 
 	// get data from Quickswap
