@@ -46,13 +46,6 @@ const TOP_SIZE = 6
 
 
 
-// Spiritswap data - Fantom/Opera
-let spiritswap_list = {}
-let spiritswap_top = {}
-let spiritswap_data = {}
-let spiritswap_charts = {}
-let spiritswap_volume = {}
-
 // Honeyswap data - xDai
 let honeyswap_list = {}
 let honeyswap_top = {}
@@ -672,9 +665,11 @@ async function launchUniswap() {
 
 	/* Store files */
 
+	let pathFile
+
 	// Update the Uniswap list
 	if(Object.keys(uniswap_list).length > 0) {
-		let pathFile = path.join(dir_home, 'uniswap.json')
+		pathFile = path.join(dir_home, 'uniswap.json')
 		writeFile( pathFile, JSON.stringify( uniswap_list ), 'utf8', (err) => {
 			if (err) throw err
 		})
@@ -682,7 +677,7 @@ async function launchUniswap() {
 
 	// Update the Uniswap Top 10
 	if(Object.keys(uniswap_top).length > 0) {
-		let pathFile = path.join(dir_home, 'uniswap-top.json')
+		pathFile = path.join(dir_home, 'uniswap-top.json')
 		writeFile( pathFile, JSON.stringify( uniswap_top ), 'utf8', (err) => {
 			if (err) throw err
 		})
@@ -690,7 +685,7 @@ async function launchUniswap() {
 
 	// Update the Uniswap simple data
 	if(Object.keys(uniswap_data).length > 0) {
-		let pathFile = path.join(dir_home, 'uniswap-simple.json')
+		pathFile = path.join(dir_home, 'uniswap-simple.json')
 		writeFile( pathFile, JSON.stringify( uniswap_data ), 'utf8', (err) => {
 			if (err) throw err
 		})
@@ -698,7 +693,7 @@ async function launchUniswap() {
 
 	// Update the Uniswap charts
 	if(Object.keys(uniswap_charts).length > 0) {
-		let pathFile = path.join(dir_home, 'uniswap-charts.json')
+		pathFile = path.join(dir_home, 'uniswap-charts.json')
 		writeFile( pathFile, JSON.stringify( uniswap_charts ), 'utf8', (err) => {
 			if (err) throw err
 		})
@@ -706,7 +701,7 @@ async function launchUniswap() {
 
 	// Update the Uniswap volumeUSD
 	if(Object.keys(uniswap_volume).length > 0) {
-		let pathFile = path.join(dir_home, 'uniswap-volume.json')
+		pathFile = path.join(dir_home, 'uniswap-volume.json')
 		writeFile( pathFile, JSON.stringify( uniswap_volume ), 'utf8', (err) => {
 			if (err) throw err
 		})
@@ -913,36 +908,47 @@ async function launchQuickswap() {
 
 	/* Store files */
 
+	let pathFile
+
 	// Update the Quickswap list
-	let pathFile = path.join(dir_home, 'quickswap.json')
-	writeFile( pathFile, JSON.stringify( quickswap_list ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(quickswap_list).length > 0) {
+		pathFile = path.join(dir_home, 'quickswap.json')
+		writeFile( pathFile, JSON.stringify( quickswap_list ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Quickswap Top 10
-	pathFile = path.join(dir_home, 'quickswap-top.json')
-	console.log('Quickswap_top', JSON.stringify( quickswap_top ))
-	writeFile( pathFile, JSON.stringify( quickswap_top ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(quickswap_top).length > 0) {
+		pathFile = path.join(dir_home, 'quickswap-top.json')
+		writeFile( pathFile, JSON.stringify( quickswap_top ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Quickswap simple data
-	pathFile = path.join(dir_home, 'quickswap-simple.json')
-	writeFile( pathFile, JSON.stringify( quickswap_data ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(quickswap_data).length > 0) {
+		pathFile = path.join(dir_home, 'quickswap-simple.json')
+		writeFile( pathFile, JSON.stringify( quickswap_data ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Quickswap charts
-	pathFile = path.join(dir_home, 'quickswap-charts.json')
-	writeFile( pathFile, JSON.stringify( quickswap_charts ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(quickswap_charts).length > 0) {
+		pathFile = path.join(dir_home, 'quickswap-charts.json')
+		writeFile( pathFile, JSON.stringify( quickswap_charts ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Quickswap volumeUSD
-	pathFile = path.join(dir_home, 'quickswap-volume.json')
-	writeFile( pathFile, JSON.stringify( quickswap_volume ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(quickswap_volume).length > 0) {
+		pathFile = path.join(dir_home, 'quickswap-volume.json')
+		writeFile( pathFile, JSON.stringify( quickswap_volume ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 }
 
@@ -954,6 +960,11 @@ async function launchSpiritswap() {
 	let spiritswap_charts_file = {}
 	let spiritswap_volume_file = {}
 
+	let spiritswap_list = {}
+	let spiritswap_data = {}
+	let spiritswap_charts = {}
+	let spiritswap_volume = {}
+
 	try {
 		spiritswap_data_file = readFileSync(path.join(dir_home, 'spiritswap-simple.json'), 'utf8')
 		spiritswap_data = JSON.parse(spiritswap_data_file.toString())
@@ -961,8 +972,12 @@ async function launchSpiritswap() {
 		writeFileSync(pathFile, JSON.stringify( spiritswap_data ), 'utf8')
 	} catch(error) {
 		console.log('spiritswap-simple.json', error)
-		spiritswap_data_file = readFileSync(path.join(dir_home, 'save_spiritswap-simple.json'), 'utf8')
-		spiritswap_data = JSON.parse(spiritswap_data_file.toString())
+		try {
+			spiritswap_data_file = readFileSync(path.join(dir_home, 'save_spiritswap-simple.json'), 'utf8')
+			spiritswap_data = JSON.parse(spiritswap_data_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -972,8 +987,12 @@ async function launchSpiritswap() {
 		writeFileSync(pathFile, JSON.stringify( spiritswap_charts ), 'utf8')
 	} catch(error) {
 		console.log('spiritswap-charts.json', error)
-		spiritswap_charts_file = readFileSync(path.join(dir_home, 'save_spiritswap-charts.json'), 'utf8')
-		spiritswap_charts = JSON.parse(spiritswap_charts_file.toString())
+		try {
+			spiritswap_charts_file = readFileSync(path.join(dir_home, 'save_spiritswap-charts.json'), 'utf8')
+			spiritswap_charts = JSON.parse(spiritswap_charts_file.toString())
+		} catch {
+			return
+		}
 	}
 
 	try {
@@ -983,21 +1002,22 @@ async function launchSpiritswap() {
 		writeFileSync(pathFile, JSON.stringify( spiritswap_volume ), 'utf8')
 	} catch(error) {
 		console.log('spiritswap-volume.json', error)
-		spiritswap_volume_file = readFileSync(path.join(dir_home, 'save_spiritswap-volume.json'), 'utf8')
-		spiritswap_volume = JSON.parse(spiritswap_volume_file.toString())
+		try {
+			spiritswap_volume_file = readFileSync(path.join(dir_home, 'save_spiritswap-volume.json'), 'utf8')
+			spiritswap_volume = JSON.parse(spiritswap_volume_file.toString())
+		} catch {
+			return
+		}
 	}
 
 
-	spiritswap_list = {}
-
-	// get data from Spiritswap
-	let top = {}
-	try {
-		top = await getSpiritswapTopTokens()
-	} catch(error) {
-		console.log(error)
+	if(Object.keys(spiritswap_data).length < 1 || Object.keys(spiritswap_charts).length < 1 || Object.keys(spiritswap_volume).length < 1) {
 		return
 	}
+
+
+	// get data from Spiritswap
+	const top = await getSpiritswapTopTokens()
 
 
 	const time = Date.now()
@@ -1108,7 +1128,7 @@ async function launchSpiritswap() {
 	spiritswap_list = sortTokensByVolume(spiritswap_list, spiritswap_volume)
 
 	// build Top 10 list of Spiritswap
-	spiritswap_top = {}
+	let spiritswap_top = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
 			const address = Object.keys(spiritswap_list)[i]
@@ -1130,35 +1150,47 @@ async function launchSpiritswap() {
 
 	/* Store files */
 
+	let pathFile
+
 	// Update the Spiritswap list
-	let pathFile = path.join(dir_home, 'spiritswap.json')
-	writeFile( pathFile, JSON.stringify( spiritswap_list ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(spiritswap_list).length > 0) {
+		pathFile = path.join(dir_home, 'spiritswap.json')
+		writeFile( pathFile, JSON.stringify( spiritswap_list ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Spiritswap Top 10
-	pathFile = path.join(dir_home, 'spiritswap-top.json')
-	writeFile( pathFile, JSON.stringify( spiritswap_top ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(spiritswap_top).length > 0) {
+		pathFile = path.join(dir_home, 'spiritswap-top.json')
+		writeFile( pathFile, JSON.stringify( spiritswap_top ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Spiritswap simple data
-	pathFile = path.join(dir_home, 'spiritswap-simple.json')
-	writeFile( pathFile, JSON.stringify( spiritswap_data ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(spiritswap_data).length > 0) {
+		pathFile = path.join(dir_home, 'spiritswap-simple.json')
+		writeFile( pathFile, JSON.stringify( spiritswap_data ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Spiritswap charts
-	pathFile = path.join(dir_home, 'spiritswap-charts.json')
-	writeFile( pathFile, JSON.stringify( spiritswap_charts ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(spiritswap_charts).length > 0) {
+		pathFile = path.join(dir_home, 'spiritswap-charts.json')
+		writeFile( pathFile, JSON.stringify( spiritswap_charts ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 	// Update the Spiritswap volumeUSD
-	pathFile = path.join(dir_home, 'spiritswap-volume.json')
-	writeFile( pathFile, JSON.stringify( spiritswap_volume ), 'utf8', (err) => {
-		if (err) throw err
-	})
+	if(Object.keys(spiritswap_volume).length > 0) {
+		pathFile = path.join(dir_home, 'spiritswap-volume.json')
+		writeFile( pathFile, JSON.stringify( spiritswap_volume ), 'utf8', (err) => {
+			if (err) throw err
+		})
+	}
 
 }
 
@@ -1471,10 +1503,22 @@ app.get('/charts/quickswap', (req, res) => {
 	res.sendFile(path.join(dir_home, 'quickswap-charts.json'))
 })
 // Spiritswap URLs
-app.get('/list/spiritswap', (req, res) => res.json(spiritswap_list))
-app.get('/top/spiritswap', (req, res) => res.json(spiritswap_top))
-app.get('/simple/spiritswap', (req, res) => res.json(spiritswap_data))
-app.get('/charts/spiritswap', (req, res) => res.json(spiritswap_charts))
+app.get('/list/spiritswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'spiritswap.json'))
+})
+app.get('/top/spiritswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'spiritswap-top.json'))
+})
+app.get('/simple/spiritswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'spiritswap-simple.json'))
+})
+app.get('/charts/spiritswap', (req, res) => {
+	res.header('Content-Type','application/json')
+	res.sendFile(path.join(dir_home, 'spiritswap-charts.json'))
+})
 // Honeyswap URLs
 app.get('/list/honeyswap', (req, res) => res.json(honeyswap_list))
 app.get('/top/honeyswap', (req, res) => res.json(honeyswap_top))
