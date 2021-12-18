@@ -32,7 +32,7 @@ console.log(dir_home)
 
 
 const VOLUME_SIZE = 12
-const REALTIME = process.env.NODE_ENV === 'production' ? 30000 : 120000 // 30 or 120 seconds
+const REALTIME = process.env.NODE_ENV === 'production' ? 60000 : 120000 // 30 or 120 seconds
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAY = 86400000 // 1 day
@@ -1473,16 +1473,16 @@ async function main() {
 	setTimeout(launchUniswap, 1000)
 
 	// launchQuickswap()
-	setTimeout(launchQuickswap, 4000)
+	setTimeout(launchQuickswap, 6000)
 
 	// launchSpiritswap()
-	setTimeout(launchSpiritswap, 7000)
+	setTimeout(launchSpiritswap, 12000)
 
 	// launchHoneyswap()
-	setTimeout(launchHoneyswap, 10000)
+	setTimeout(launchHoneyswap, 18000)
 
 	// launch()
-	setTimeout(launch, 13000)
+	setTimeout(launch, 24000)
 
 
 }
