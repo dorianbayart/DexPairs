@@ -279,6 +279,7 @@ async function launch() {
 	const time = Date.now()
 	const tokens = top.data ? top.data.tokens : []
 
+	console.log('Pancakeswap - Bundle', JSON.stringify(top.data.bundle))
 	const bnb_price = top.data ? top.data.bundle.bnbPrice : 0
 	if(bnb_price === 0) return
 
@@ -798,6 +799,7 @@ async function launchQuickswap() {
 	const time = Date.now()
 	const tokens = top.data ? top.data.tokens : []
 
+	console.log('Quickswap - Bundle', JSON.stringify(top.data.bundle))
 	const eth_price = top.data ? top.data.bundle.ethPrice : 0
 	if(eth_price === 0) return
 
