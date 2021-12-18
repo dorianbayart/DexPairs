@@ -1467,13 +1467,24 @@ async function launchHoneyswap() {
 
 /* MAIN */
 async function main() {
-	await launchUniswap()
-	await launchQuickswap()
-	await launchSpiritswap()
-	await launchHoneyswap()
-	await launch()
-
 	setTimeout(main, REALTIME)
+
+	// launchUniswap()
+	setTimeout(launchUniswap, 1000)
+
+	// launchQuickswap()
+	setTimeout(launchQuickswap, 4000)
+
+	// launchSpiritswap()
+	setTimeout(launchSpiritswap, 7000)
+
+	// launchHoneyswap()
+	setTimeout(launchHoneyswap, 10000)
+
+	// launch()
+	setTimeout(launch, 13000)
+
+
 }
 
 
