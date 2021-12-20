@@ -510,9 +510,7 @@ function setFromFavorite(id) {
 
 	const chain = id.split('-')[0]
 	selectedToken = id.split('-')[1]
-	setToken(selectedToken)
 	selectedBase = id.split('-')[2]
-	setBase(selectedBase)
 	let previousDex = dex
 	dex = Object.keys(dexList).find(dex => dexList[dex].chain_enum === chain)
 	let dexSelector = document.getElementById('dex-selector')
@@ -531,7 +529,8 @@ function setFromFavorite(id) {
 		getSimple()
 		getTop()
 	} else {
-		getCharts()
+		setBase(selectedBase)
+		selectToken(selectedToken)
 	}
 }
 
