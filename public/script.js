@@ -249,7 +249,7 @@ function selectToken(selected) {
 	setSwapperToken()
 	setSwapperBase()
 
-	let listLi = document.getElementById('list').querySelectorAll('li')
+	let listLi = document.getElementById('list_ul').querySelectorAll('li')
 	listLi.forEach((li) => {
 		li.classList.toggle('active', li.id === selectedToken)
 	})
@@ -265,8 +265,8 @@ function updateList() {
 
 	let currentList = search.length > 0 ? filteredList : list
 
-	document.getElementById('list').innerHTML = null
-	const ul = document.createElement('ul')
+	const ul =document.getElementById('list_ul')
+	ul.innerHTML = null
 
 	const fullList = sessionStorage.getItem('full-list')
 	const length = Object.keys(currentList).length > LIST_INITIAL_SIZE && !fullList ? LIST_INITIAL_SIZE : Object.keys(currentList).length
@@ -277,18 +277,14 @@ function updateList() {
 		li.id = address
 		li.innerHTML += currentList[address]
 		li.classList.toggle('active', li.id === selectedToken)
-		li.addEventListener('click', function(e) {
-			selectToken(e.target.id)
-		})
 	}
-	document.getElementById('list').appendChild(ul)
 
 	if(!fullList && Object.keys(currentList).length > LIST_INITIAL_SIZE) {
 		let button = document.createElement('button')
 		button.innerHTML = 'Load more'
 		button.title = 'Display the full list'
 		button.classList.add('load-more')
-		document.getElementById('list').appendChild(button)
+		document.getElementById('list_ul').parentElement.appendChild(button)
 		button.addEventListener('click', function() {
 			sessionStorage.setItem('full-list', true)
 			updateList()
@@ -510,9 +506,7 @@ function setFromFavorite(id) {
 
 	const chain = id.split('-')[0]
 	selectedToken = id.split('-')[1]
-	setToken(selectedToken)
 	selectedBase = id.split('-')[2]
-	setBase(selectedBase)
 	let previousDex = dex
 	dex = Object.keys(dexList).find(dex => dexList[dex].chain_enum === chain)
 	let dexSelector = document.getElementById('dex-selector')
@@ -531,7 +525,8 @@ function setFromFavorite(id) {
 		getSimple()
 		getTop()
 	} else {
-		getCharts()
+		setBase(selectedBase)
+		selectToken(selectedToken)
 	}
 }
 
@@ -731,6 +726,13 @@ document.getElementById('base_select').addEventListener(
 	}
 )
 
+
+// Select a token from the list
+document.getElementById('list_ul').addEventListener(
+	'click', function(e) {
+		selectToken(e.target.id)
+	}
+)
 
 // OnClick on Favorite => Put this token in favorite list
 document.getElementById('token_favorite').addEventListener(
