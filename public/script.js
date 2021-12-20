@@ -292,7 +292,7 @@ function updateList() {
 		})
 	} else {
 		const button = document.getElementById('list-load-more')
-		if(button) {
+		if(button && fullList) {
 			button.remove()
 		}
 	}
