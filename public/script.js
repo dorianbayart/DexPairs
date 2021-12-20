@@ -279,8 +279,9 @@ function updateList() {
 		li.classList.toggle('active', li.id === selectedToken)
 	}
 
-	if(!fullList && Object.keys(currentList).length > LIST_INITIAL_SIZE) {
-		let button = document.createElement('button')
+	if(!fullList && !document.getElementById('list-load-more') && Object.keys(currentList).length > LIST_INITIAL_SIZE) {
+		const button = document.createElement('button')
+		button.id = 'list-load-more'
 		button.innerHTML = 'Load more'
 		button.title = 'Display the full list'
 		button.classList.add('load-more')
@@ -289,6 +290,11 @@ function updateList() {
 			sessionStorage.setItem('full-list', true)
 			updateList()
 		})
+	} else {
+		const button = document.getElementById('list-load-more')
+		if(button) {
+			button.remove()
+		}
 	}
 
 }
