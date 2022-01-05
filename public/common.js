@@ -63,7 +63,7 @@ const NETWORK = {
 		enum: 'POLYGON',
 		name: 'Polygon/Matic',
 		img: '/img/polygon-icon.svg',
-		rpc: 'https://rpc-mainnet.maticvigil.com',
+		rpc: 'https://polygon-rpc.com',
 		explorer: 'https://polygonscan.com/token/',
 		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
