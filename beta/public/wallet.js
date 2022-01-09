@@ -204,6 +204,7 @@ function getTokenTx(network, callback) {
 		return
 	}
 
+	timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 180000)
 
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
@@ -214,9 +215,6 @@ function getTokenTx(network, callback) {
 		} else if (this.readyState == 4 && this.status == 200) {
 			let data = JSON.parse(this.responseText)
 			tokentx[network] = tokentx[network].concat(data.result)
-
-			clearTimeout(timerGetTokenTx[network])
-			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 180000)
 
 			if(callback) {
 				callback(network)
@@ -245,6 +243,8 @@ function getERC721Tx(network, callback) {
 		return
 	}
 
+	timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 100000)
+
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if(this.response && this.response.includes('Max rate limit reached')) {
@@ -263,8 +263,6 @@ function getERC721Tx(network, callback) {
 				sessionStorage.setItem('latest-fetched-erc721-block-' + network, data.result[data.result.length - 1].blockNumber)
 			}
 
-			clearTimeout(timerGetERC721Tx[network])
-			timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 100000 * (erc721tx[network].length > 0 ? 1 : 3))
 			return
 		}
 	}
