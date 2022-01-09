@@ -10,6 +10,7 @@ let txDisplay = {
 	step: 50,
 	scrollEventAdded: false
 }
+let coingecko = []
 let displayWalletTimer = null
 let tokentx = {}
 let erc721tx = {}
@@ -203,6 +204,7 @@ function getTokenTx(network, callback) {
 		return
 	}
 
+	timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 180000)
 
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
@@ -221,13 +223,10 @@ function getTokenTx(network, callback) {
 			if(data.result && data.result.length > 0) {
 				sessionStorage.setItem('latest-fetched-block-' + network, data.result[data.result.length - 1].blockNumber)
 			}
-
-			clearTimeout(timerGetTokenTx[network])
-			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 100000 * (tokentx[network].length > 0 ? 1 : 3))
 		}
 	}
 	xmlhttp.onerror = function() {
-		console.log('getTokenTx', this)
+		// console.log('getTokenTx', this)
 	}
 	const latestBlock = sessionStorage.getItem('latest-fetched-block-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-block-' + network)) + 1 : 0
 	xmlhttp.open('GET', NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
@@ -243,6 +242,8 @@ function getERC721Tx(network, callback) {
 	if(!walletAddress) {
 		return
 	}
+
+	timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 100000)
 
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
@@ -262,13 +263,11 @@ function getERC721Tx(network, callback) {
 				sessionStorage.setItem('latest-fetched-erc721-block-' + network, data.result[data.result.length - 1].blockNumber)
 			}
 
-			clearTimeout(timerGetERC721Tx[network])
-			timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 100000 * (erc721tx[network].length > 0 ? 1 : 3))
 			return
 		}
 	}
 	xmlhttp.onerror = function() {
-		console.log('getERC721Tx error', network)
+		// console.log('getERC721Tx error', network)
 	}
 
 	// TODO Send transaction from only latest needed blocks !
@@ -381,8 +380,13 @@ async function readNFTMetadata(id, indexId, tokenURI) {
 
 
 async function searchTokens(network) {
+	// console.log('searchTokens', network)
 	let tx = tokentx[network].filter(t => t && !t.done)
 	const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + network))
+
+	// Launch timer to update transactions
+	clearTimeout(timerGetTokenTx[network])
+	timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, searchTokens), 30000 * (tokentx[network].length > 0 ? 1 : 3))
 
 	if(!tx || typeof tx === 'string' || (tx[0] && typeof tx[0] === 'string' && tx[0].includes('rate limit reached'))) {
 		return
@@ -391,8 +395,10 @@ async function searchTokens(network) {
 	loading = true
 
 	if(latestBlock) {
-		tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
+		//tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
 	}
+
+	// console.log('tokenLength', tx.length, network)
 
 	if(tx.length > 0) {
 		const transaction = tx[0]
@@ -400,7 +406,7 @@ async function searchTokens(network) {
 
 		try {
 			balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
-			const price = getPriceByAddressNetwork(transaction.contractAddress, network)
+			const price = await getContractAddressPrice(transaction.contractAddress, network, balance)
 			const id = getId(transaction.contractAddress, network)
 
 			if(balance > 0 || (wallet[id] && wallet[id].value > 0)) {
@@ -415,22 +421,37 @@ async function searchTokens(network) {
 				}
 			}
 
-			tokentx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
+			tokentx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
 		} catch(error) {
-			//console.log(network, transaction.contractAddress, error)
+			console.error(network, transaction.contractAddress, error)
 		}
 
 		sessionStorage.setItem('latest-block-' + network, transaction.blockNumber)
 
-		timerSearchTokens[network] = setTimeout(() => searchTokens(network), 50)
+		timerSearchTokens[network] = setTimeout(() => searchTokens(network), 75)
 		if(balance > 0) {
 			displayWallet(true)
 		}
 
 	} else {
 		displayWallet()
-		console.log('searchTokens finished on ' + network)
+		// console.log('searchTokens finished on ' + network)
+
+		// Reset status of few random tx to update them
+		tokentx[network].filter(t => t.done).forEach(t => {
+			if(Math.random() < 0.1 / Math.log2(2 + tokentx[network].length)) {
+				t.done = false
+			}
+		})
 	}
+}
+
+async function getContractAddressPrice(contractAddress, network, balance = 1) {
+	let price = getPriceByAddressNetwork(contractAddress, network)
+	if(!price && balance > 0) {
+		price = await getCoingeckoPrice(contractAddress, network)
+	}
+	return price
 }
 
 async function searchNFTs(network) {
@@ -444,7 +465,7 @@ async function searchNFTs(network) {
 	loading = true
 
 	if(latestBlock) {
-		tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
+		// tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
 	}
 
 	if(tx.length > 0) {
@@ -465,7 +486,7 @@ async function searchNFTs(network) {
 				}
 			}
 
-			erc721tx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach((t, i) => t.done = true)
+			erc721tx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach((t) => t.done = true)
 		} catch(error) {
 			// console.log(network, transaction.contractAddress, error)
 		}
@@ -561,6 +582,25 @@ async function getTokenURI(nftContract, indexId) {
 	}
 }
 
+
+async function getCoingeckoPrice(address, network) {
+	let token = coingecko[network + '-' + address]
+	if(token && Date.now() - token.updatedAt < 60000) {
+		return token.price
+	}
+
+	return fetch(SERVER_URL + '/coingecko/' + NETWORK[network].coingecko_name + '/' + address)
+		.then((response) => response.json())
+		.then((token) => {
+			coingecko[network + '-' + address] = { ...token, updatedAt: Date.now() }
+			return token.price
+		})
+		.catch(() => {
+			coingecko[network + '-' + address] = { updatedAt: Date.now() }
+			return
+		})
+}
+
 function getNetworkBalance(network) {
 	const web3 = getWeb3(network)
 	if(!web3 || !walletAddress || !web3.utils.isAddress(walletAddress)) {
@@ -593,7 +633,7 @@ function getNetworkBalance(network) {
 		timerGetNetworkBalance[network] = setTimeout(() => getNetworkBalance(network), (Math.round(Math.random() * 15) + 25) * 1000)
 
 	}, error => {
-		console.log('getNetworkBalance', network, error)
+		// console.log('getNetworkBalance', network, error)
 		clearTimeout(timerGetNetworkBalance[network])
 		timerGetNetworkBalance[network] = setTimeout(() => getNetworkBalance(network), 10000)
 	})
@@ -1511,8 +1551,12 @@ const sortWallet = (id_a, id_b) => {
 	if(NETWORK[a.network].tokenContract === a.contract) return -1
 	if(NETWORK[b.network].tokenContract === b.contract) return 1
 	// then sort by price value
-	if(a.value * a.price > b.value * b.price) return -1
-	if(a.value * a.price < b.value * b.price) return 1
+	if(a.price && b.price) {
+		if(a.value * a.price > b.value * b.price) return -1
+		if(a.value * a.price < b.value * b.price) return 1
+	}
+	if(!a.price && b.price) return 1
+	if(a.price && !b.price) return -1
 	// then sort by name
 	return a.tokenName.localeCompare(b.tokenName)
 }
