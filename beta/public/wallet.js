@@ -465,7 +465,7 @@ async function searchNFTs(network) {
 	loading = true
 
 	if(latestBlock) {
-		tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
+		// tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
 	}
 
 	if(tx.length > 0) {
@@ -486,7 +486,7 @@ async function searchNFTs(network) {
 				}
 			}
 
-			erc721tx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach((t, i) => t.done = true)
+			erc721tx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach((t) => t.done = true)
 		} catch(error) {
 			// console.log(network, transaction.contractAddress, error)
 		}
@@ -593,9 +593,9 @@ async function getCoingeckoPrice(address, network) {
 		.then((response) => response.json())
 		.then((token) => {
 			coingecko[network + '-' + address] = { ...token, updatedAt: Date.now() }
-			return coingecko[network + '-' + address].price
+			return token.price
 		})
-		.catch((err) => {
+		.catch(() => {
 			coingecko[network + '-' + address] = { updatedAt: Date.now() }
 			return
 		})
