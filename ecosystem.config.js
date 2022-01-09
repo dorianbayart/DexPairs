@@ -1,5 +1,17 @@
 module.exports = {
 	apps : [{
+		name: 'DexPairs_Cron',
+		script: 'cron.js',
+		exp_backoff_restart_delay: 100,
+		cron_restart: '*/55 * * * *',
+		env: {
+			NODE_ENV: 'development',
+		},
+		env_production: {
+			NODE_ENV: 'production',
+			PORT: 3003,
+		}
+	}, {
 		name: 'DexPairs_Back',
 		script: 'back.js',
 		exp_backoff_restart_delay: 100,
@@ -34,7 +46,7 @@ module.exports = {
 			repo : 'git@github.com:dorianbayart/DexPairs.git',
 			path : '/home/dexpairs/prod',
 			'pre-deploy-local': '',
-			'post-deploy': 'npm install && pm2 startOrReload ecosystem.config.js --env production --update-env',
+			'post-deploy': 'npm install && pm2 startOrReload ecosystem.config.js --env production --update-env && pm2 save',
 			'pre-setup': 'pm2 install pm2-logrotate',
 			env_production: {
 				NODE_ENV: 'production'

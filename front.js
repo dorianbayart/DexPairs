@@ -1,8 +1,10 @@
 const http = require('http')
+const os = require('os')
 const path = require('path')
 const express = require('express')
 const compression = require('compression')
 const fetch = require('node-fetch')
+const fs = require('fs').promises
 const rateLimit = require('express-rate-limit')
 
 
@@ -25,6 +27,7 @@ const rateLimit = require('express-rate-limit')
 */
 
 const BACKEND_URL = 'http://127.0.0.1:3000'
+const dir_home = os.homedir()
 
 // Pancake data - BSC
 let tokens_list = {}
@@ -56,6 +59,9 @@ let honeyswap_top = {}
 let honeyswap_data = {}
 let honeyswap_charts = {}
 
+
+// CoinGecko
+let coingecko = []
 
 
 
@@ -314,20 +320,36 @@ async function launchHoneyswap() {
 
 
 
+// Program - CoinGecko
+async function launchCoingecko() {
+	// loop
+	setTimeout(launchCoingecko, getTimer())
+
+	try {
+		const file = await fs.readFile(path.join(dir_home, 'coingecko.json'), 'utf8')
+		coingecko = JSON.parse(file)
+	} catch (err) {
+		console.error(err)
+	}
+}
+
+
+
+
 /* MAIN */
 setTimeout(function(){ launchUniswap() }, 5000)
 setTimeout(function(){ launchQuickswap() }, 6000)
 setTimeout(function(){ launchSpiritswap() }, 7000)
 setTimeout(function(){ launchHoneyswap() }, 8000)
-setTimeout(function(){ launch() }, 9000)
+setTimeout(function(){ launch() }, 3000)
 
-
+setTimeout(launchCoingecko, 3000)
 
 
 
 const limiter = new rateLimit({
 	windowMs: 10*1000, // 10 seconds
-	max: 40
+	max: 75
 })
 
 
@@ -353,6 +375,11 @@ app.get('/beta/wallet', (req, res) => res.sendFile(path.join(__dirname, '/beta/w
 app.get('/beta/news', (req, res) => res.sendFile(path.join(__dirname, '/beta/news.html')))
 app.get('/beta/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/beta/feed.atom')))
 app.use('/beta/public', express.static('beta/public'))
+
+// Coingecko URL
+app.get('/coingecko/:blockchain/:token', (req, res) => {
+	res.json(coingecko.find((token) => token.platforms[req.params.blockchain] && token.platforms[req.params.blockchain].toLowerCase() === req.params.token.toLowerCase()))
+})
 
 // Pancake URLs
 app.get('/pancake/token/:token', (req, res) => {

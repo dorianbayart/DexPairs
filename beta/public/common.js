@@ -56,7 +56,8 @@ const NETWORK = {
 		tokenName: 'Ethereum',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3',
+		coingecko_name: 'ethereum'
 	},
 	POLYGON: {
 		order: 2,
@@ -74,7 +75,8 @@ const NETWORK = {
 		tokenName: 'Matic',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/henrydapp/quickswap'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/henrydapp/quickswap',
+		coingecko_name: 'polygon-pos'
 	},
 	BSC : {
 		order: 3,
@@ -92,7 +94,8 @@ const NETWORK = {
 		tokenName: 'BNB',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-		subgraph_url: 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/graphql'
+		subgraph_url: 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/graphql',
+		coingecko_name: 'binance-smart-chain'
 	},
 	FANTOM: {
 		order: 4,
@@ -110,7 +113,8 @@ const NETWORK = {
 		tokenName: 'Fantom',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
-		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/layer3org/spiritswap-analytics'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/layer3org/spiritswap-analytics',
+		coingecko_name: 'fantom'
 	},
 	XDAI: {
 		order: 5,
@@ -128,7 +132,8 @@ const NETWORK = {
 		tokenName: 'xDai',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap'
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap',
+		coingecko_name: 'xdai'
 	},
 }
 
