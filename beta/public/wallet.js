@@ -635,7 +635,7 @@ function getNetworkBalance(network) {
 		timerGetNetworkBalance[network] = setTimeout(() => getNetworkBalance(network), (Math.round(Math.random() * 15) + 25) * 1000)
 
 	}, error => {
-		console.log('getNetworkBalance', network, error)
+		// console.log('getNetworkBalance', network, error)
 		clearTimeout(timerGetNetworkBalance[network])
 		timerGetNetworkBalance[network] = setTimeout(() => getNetworkBalance(network), 10000)
 	})

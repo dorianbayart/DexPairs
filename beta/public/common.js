@@ -273,7 +273,7 @@ function getSimpleData(network, callback) {
 		}
 	}
 	xmlhttp.onerror = function() {
-		console.log('getSimpleData', this)
+		// console.log('getSimpleData', this)
 	}
 	xmlhttp.open('GET', NETWORK[network].url_data + '/simple', true)
 	xmlhttp.send()
@@ -299,7 +299,7 @@ function getChartsByAddress(address, network, callback) {
 		}
 	}
 	xmlhttp.onerror = function() {
-		console.log('getChartsByAddress', this)
+		// console.log('getChartsByAddress', this)
 	}
 	xmlhttp.open('GET', NETWORK[network].url_data + '/charts/' + address, true)
 	xmlhttp.send()
