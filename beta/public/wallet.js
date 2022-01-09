@@ -226,7 +226,7 @@ function getTokenTx(network, callback) {
 		}
 	}
 	xmlhttp.onerror = function() {
-		console.log('getTokenTx', this)
+		// console.log('getTokenTx', this)
 	}
 	const latestBlock = sessionStorage.getItem('latest-fetched-block-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-block-' + network)) + 1 : 0
 	xmlhttp.open('GET', NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
@@ -267,7 +267,7 @@ function getERC721Tx(network, callback) {
 		}
 	}
 	xmlhttp.onerror = function() {
-		console.log('getERC721Tx error', network)
+		// console.log('getERC721Tx error', network)
 	}
 
 	// TODO Send transaction from only latest needed blocks !
