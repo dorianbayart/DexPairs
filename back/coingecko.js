@@ -32,6 +32,10 @@ async function buildList() {
 	await updateList()
 
 	await writeOnDisk()
+
+	if(Math.random() < 0.05) { // Sometimes backup file
+		await writeBackupOnDisk()
+	}
 }
 
 
@@ -40,7 +44,10 @@ async function getList() {
 		// get the file on disk
 		let data = await readOnDisk()
 		if(!data) {
-			return
+			data = await readBackupOnDisk()
+			if(!data) {
+				return
+			}
 		}
 
 		tokensList = data
@@ -107,7 +114,25 @@ async function readOnDisk() {
 async function writeOnDisk() {
 	console.log('Write a file')
 	try {
-		const file = await fs.writeFile(path.join(dir_home, 'coingecko.json'), JSON.stringify(tokensList))
+		await fs.writeFile(path.join(dir_home, 'coingecko.json'), JSON.stringify(tokensList))
+	} catch (err) {
+		console.error(err)
+	}
+}
+
+async function readBackupOnDisk() {
+	try {
+		const file = await fs.readFile(path.join(dir_home, 'save_coingecko.json'), 'utf8')
+		return JSON.parse(file)
+	} catch (err) {
+		console.error(err)
+	}
+}
+
+async function writeBackupOnDisk() {
+	console.log('Write a backup')
+	try {
+		await fs.writeFile(path.join(dir_home, 'save_coingecko.json'), JSON.stringify(tokensList))
 	} catch (err) {
 		console.error(err)
 	}
