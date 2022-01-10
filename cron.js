@@ -16,7 +16,7 @@ async function start() {
 
 
 async function launchCoingecko() {
-	setTimeout(launchCoingecko, process.env.NODE_ENV === 'production' ? 5000 : 20000) // 5 or 20 seconds
+	setTimeout(launchCoingecko, process.env.NODE_ENV === 'production' ? 10000 : 30000) // 10 or 30 seconds
 
 	cp.fork(backFolder + '/coingecko.js')
 }
