@@ -8,7 +8,8 @@
     "start": "pm2 restart ecosystem.config.js --env production",
     "dev": "pm2 delete all && pm2 start ecosystem.config.js --env development && pm2 save",
     "stop": "pm2 stop all",
-    "deploy-production": "pm2 deploy ecosystem.config.js production"
+    "deploy-production": "pm2 deploy ecosystem.config.js production",
+    "upgrade-interactive": "rm package-lock.json || true && yarn && yarn upgrade-interactive --latest"
   },
   "keywords": [
     "bsc",
@@ -43,16 +44,16 @@
   "license": "GNU General Public License v3.0",
   "dependencies": {
     "compression": "^1.7.4",
-    "express": "^4.17.1",
-    "express-rate-limit": "^5.3.0",
-    "node-fetch": "^2.6.1",
+    "express": "^4.17.2",
+    "express-rate-limit": "^6.0.5",
+    "node-fetch": "^3.1.0",
     "pm2": "^5.1.2",
     "yarn": "^1.22.17"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "stylelint": "^13.13.1",
-    "stylelint-config-standard": "^22.0.0",
-    "stylelint-order": "^4.1.0"
+    "eslint": "^8.6.0",
+    "stylelint": "^14.2.0",
+    "stylelint-config-standard": "^24.0.0",
+    "stylelint-order": "^5.0.0"
   }
 }
