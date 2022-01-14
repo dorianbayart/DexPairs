@@ -406,7 +406,7 @@ async function searchTokens(network) {
 
 		try {
 			balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
-			const price = await getContractAddressPrice(transaction.contractAddress, network, balance)
+			const price = await getContractAddressPrice(transaction, network, balance)
 			const id = getId(transaction.contractAddress, network)
 
 			if(balance > 0 || (wallet[id] && wallet[id].value > 0)) {
@@ -446,10 +446,18 @@ async function searchTokens(network) {
 	}
 }
 
-async function getContractAddressPrice(contractAddress, network, balance = 1) {
-	let price = getPriceByAddressNetwork(contractAddress, network)
+async function getContractAddressPrice(transaction, network, balance = 1) {
+	let price
+	// beefy.finance
+	if(transaction.tokenName.toLowerCase().startsWith('moo') && balance > 0) {
+		price = await getPriceFromBeefy(transaction.contractAddress, transaction.tokenSymbol, balance, network)
+		if(price) {
+			return price
+		}
+	}
+	price = getPriceByAddressNetwork(transaction.contractAddress, network)
 	if(!price && balance > 0) {
-		price = await getCoingeckoPrice(contractAddress, network)
+		price = await getCoingeckoPrice(transaction.contractAddress, network)
 	}
 	return price
 }
@@ -582,24 +590,6 @@ async function getTokenURI(nftContract, indexId) {
 	}
 }
 
-
-async function getCoingeckoPrice(address, network) {
-	let token = coingecko[network + '-' + address]
-	if(token && Date.now() - token.updatedAt < 60000) {
-		return token.price
-	}
-
-	return fetch(SERVER_URL + '/coingecko/' + NETWORK[network].coingecko_name + '/' + address)
-		.then((response) => response.json())
-		.then((token) => {
-			coingecko[network + '-' + address] = { ...token, updatedAt: Date.now() }
-			return token.price
-		})
-		.catch(() => {
-			coingecko[network + '-' + address] = { updatedAt: Date.now() }
-			return
-		})
-}
 
 function getNetworkBalance(network) {
 	const web3 = getWeb3(network)
