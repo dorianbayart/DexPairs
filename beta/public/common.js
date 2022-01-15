@@ -197,7 +197,7 @@ let web3_polygon = null
 let web3_fantom = null
 let web3_xdai = null
 let web3_bsc = null
-let walletAddress = ''
+let walletAddress = []
 let wallet = {}
 let wallet_NFT = {}
 

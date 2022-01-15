@@ -55,20 +55,54 @@ let walletOptions = {
 
 // defines event on search field
 document.getElementById('input-wallet').addEventListener('change', function(e) {
-	let inputAddress = e.target.value
+	let inputAddress = e.target.value.replace(/\s/g, '').split(',')
 	configureWallet(inputAddress)
 })
 
 document.getElementById('connect-wallet').addEventListener('click', function() {
 	if (window.ethereum) {
 		window.ethereum.request({ method: 'eth_requestAccounts' }).then(addresses => {
-			document.getElementById('input-wallet').value = addresses[0]
-			configureWallet(addresses[0])
+			document.getElementById('input-wallet').value = addresses
+			configureWallet(addresses)
 		})
 	} else {
 		alert('Connection is only supported through Metamask extension')
 	}
 })
+
+
+function clearAllTimers() {
+	Object.keys(timerGetTokenTx).forEach(network => {
+		Object.keys(timerGetTokenTx[network]).forEach(address => {
+			clearTimeoutIf(timerGetTokenTx, network, address)
+		})
+	})
+	Object.keys(timerSearchTokens).forEach(network => {
+		Object.keys(timerSearchTokens[network]).forEach(address => {
+			clearTimeoutIf(timerSearchTokens, network, address)
+		})
+	})
+	Object.keys(timerGetERC721Tx).forEach(network => {
+		Object.keys(timerGetERC721Tx[network]).forEach(address => {
+			clearTimeoutIf(timerGetERC721Tx, network, address)
+		})
+	})
+	Object.keys(timerPopulateNFTs).forEach(network => {
+		Object.keys(timerPopulateNFTs[network]).forEach(address => {
+			clearTimeoutIf(timerPopulateNFTs, network, address)
+		})
+	})
+	Object.keys(timerGetNetworkBalance).forEach(network => {
+		Object.keys(timerGetNetworkBalance[network]).forEach(address => {
+			clearTimeoutIf(timerGetNetworkBalance, network, address)
+		})
+	})
+	Object.keys(timerGetTransactions).forEach(network => {
+		Object.keys(timerGetTransactions[network]).forEach(address => {
+			clearTimeoutIf(timerGetTransactions, network, address)
+		})
+	})
+}
 
 // search transactions / tokens for the specified wallet address
 function configureWallet(inputAddress) {
@@ -78,14 +112,9 @@ function configureWallet(inputAddress) {
 	const connectDemoContainer = document.getElementById('connect-demo-container')
 	const walletOptionsContainer = document.getElementById('wallet-options')
 
-	Object.keys(timerGetTokenTx).forEach(network => {
-		clearTimeout(timerGetTokenTx[network])
-	})
-	Object.keys(timerGetNetworkBalance).forEach(network => {
-		clearTimeout(timerGetNetworkBalance[network])
-	})
+	clearAllTimers()
 
-	if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress) {
+	if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress.join(',')) {
 		stateContainer.innerHTML = null
 		stateContainer.classList.remove('shadow-white')
 
@@ -117,7 +146,15 @@ function configureWallet(inputAddress) {
 		return
 	}
 
-	if(!web3_ethereum.utils.isAddress(inputAddress)) {
+	let validAddresses = []
+	inputAddress.forEach((address) => {
+		if(web3_ethereum.utils.isAddress(address)) {
+			validAddresses.push(address)
+		}
+	})
+
+
+	if(validAddresses.length === 0) {
 		inputContainer.classList.toggle('margin-top', true)
 		globalInforationContainer.classList.toggle('none', true)
 
@@ -134,7 +171,7 @@ function configureWallet(inputAddress) {
 		loading = false
 		displayWallet(true)
 
-		stateContainer.innerHTML = 'This is not a valid address, checksum cannot be verified'
+		stateContainer.innerHTML = 'No valid address, checksum cannot be verified'
 		stateContainer.classList.toggle('shadow-white', true)
 		walletOptionsContainer.classList.toggle('none', true)
 
@@ -146,7 +183,7 @@ function configureWallet(inputAddress) {
 	stateContainer.classList.toggle('shadow-white', true)
 	walletOptionsContainer.classList.remove('none')
 
-	if(sessionStorage.getItem('walletAddress') === inputAddress) {
+	if(sessionStorage.getItem('walletAddress') === validAddresses.join(',')) {
 		wallet = sessionStorage.getItem('wallet') ? JSON.parse(sessionStorage.getItem('wallet')) : {}
 		displayWallet(true)
 	} else {
@@ -155,112 +192,135 @@ function configureWallet(inputAddress) {
 		wallet_NFT = {}
 	}
 
-	walletAddress = inputAddress
+	walletAddress = validAddresses
 
 	const urlParams = new URLSearchParams(window.location.search)
-	if(window.history.replaceState && (!urlParams.has('address') || urlParams.has('address') && urlParams.get('address') !== walletAddress)) {
-		document.title = DOMAIN_NAME + ' | ' + walletAddress
-		window.history.replaceState(null, document.title, window.location.href.split('?')[0] + '?address=' + walletAddress)
+	if(window.history.replaceState && (!urlParams.has('address') || urlParams.has('address') && urlParams.get('address') !== walletAddress.join(','))) {
+		document.title = DOMAIN_NAME + ' | ' + walletAddress.join(',')
+		window.history.replaceState(null, document.title, window.location.href.split('?')[0] + '?address=' + walletAddress.join(','))
 		document.querySelector('meta[property="og:title"]').setAttribute('content', document.title)
 	}
 
 	Object.keys(NETWORK).forEach((network) => {
-		sessionStorage.removeItem('latest-block-' + NETWORK[network].enum)
-		sessionStorage.removeItem('latest-erc721-block-' + NETWORK[network].enum)
-		sessionStorage.removeItem('latest-fetched-block-' + NETWORK[network].enum)
-		sessionStorage.removeItem('latest-fetched-erc721-block-' + NETWORK[network].enum)
-		tokentx[network] = []
-		erc721tx[network] = []
-		if(walletOptions.menu.tokens.isActive) {
-			clearTimeout(timerGetNetworkBalance[network])
-			clearTimeout(timerGetERC721Tx[network])
-			clearTimeout(timerGetTransactions[network])
-			getNetworkBalance(NETWORK[network].enum)
-			getTokenTx(NETWORK[network].enum, searchTokens)
-		} else if(walletOptions.menu.nfts.isActive) {
-			clearTimeout(timerGetTokenTx[network])
-			clearTimeout(timerGetTransactions[network])
-			getERC721Tx(NETWORK[network].enum, searchNFTs)
-		} else if(walletOptions.menu.transactions.isActive) {
-			clearTimeout(timerGetTokenTx[network])
-			clearTimeout(timerGetNetworkBalance[network])
-			clearTimeout(timerGetERC721Tx[network])
-			getTransactions(NETWORK[network].enum)
-		}
+		timerGetTokenTx[network] = {}
+		timerSearchTokens[network] = {}
+		timerGetERC721Tx[network] = {}
+		timerPopulateNFTs[network] = {}
+		timerGetNetworkBalance[network] = {}
+		timerGetTransactions[network] = {}
 	})
 
-	sessionStorage.setItem('walletAddress', walletAddress)
+	walletAddress.forEach((address) => {
+		tokentx[address] = {}
+		erc721tx[address] = {}
+		wallet[address] = {}
+		wallet_NFT[address] = {}
+		console.log('Configure Wallet', walletAddress, address)
+
+		Object.keys(NETWORK).forEach((network) => {
+			sessionStorage.removeItem('latest-block-' + address + '-' + NETWORK[network].enum)
+			sessionStorage.removeItem('latest-erc721-block-' + address + '-' + NETWORK[network].enum)
+			sessionStorage.removeItem('latest-fetched-block-' + address + '-' + NETWORK[network].enum)
+			sessionStorage.removeItem('latest-fetched-erc721-block-' + address + '-' + NETWORK[network].enum)
+			tokentx[address][network] = []
+			erc721tx[address][network] = []
+			if(walletOptions.menu.tokens.isActive) {
+				clearTimeoutIf(timerGetNetworkBalance, network, address)
+				clearTimeoutIf(timerGetERC721Tx, network, address)
+				clearTimeoutIf(timerGetTransactions, network, address)
+				getNetworkBalance(NETWORK[network].enum, address)
+				getTokenTx(NETWORK[network].enum, address, searchTokens)
+			} else if(walletOptions.menu.nfts.isActive) {
+				clearTimeoutIf(timerGetTokenTx, network, address)
+				clearTimeoutIf(timerGetTransactions, network, address)
+				getERC721Tx(NETWORK[network].enum, address, searchNFTs)
+			} else if(walletOptions.menu.transactions.isActive) {
+				clearTimeoutIf(timerGetTokenTx, network, address)
+				clearTimeoutIf(timerGetNetworkBalance, network, address)
+				clearTimeoutIf(timerGetERC721Tx, network, address)
+				getTransactions(NETWORK[network].enum, address)
+			}
+		})
+	})
+
+	sessionStorage.setItem('walletAddress', walletAddress.join(','))
 }
 
 
-
 // get token transactions list
-function getTokenTx(network, callback) {
+function getTokenTx(network, address, callback) {
 
-	if(timerGetTokenTx[network]) {
-		clearTimeout(timerGetTokenTx[network])
+	if(timerGetTokenTx[network] && timerGetTokenTx[network][address]) {
+		clearTimeoutIf(timerGetTokenTx, network, address)
 	}
-	if(!walletAddress) {
+	if(!address) {
+		clearAllTimers()
 		return
 	}
 
-	timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 180000)
+	timerGetTokenTx[network][address] = setTimeout(() => getTokenTx(network, address, callback), 180000)
 
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if(this.response && this.response.includes('Max rate limit reached')) {
-			clearTimeout(timerGetTokenTx[network])
-			timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, callback), 1250)
+			clearTimeoutIf(timerGetTokenTx, network, address)
+			timerGetTokenTx[network][address] = setTimeout(() => getTokenTx(network, address, callback), 2600)
+			// console.log('Max rate limit reached, Relaunch later', network, address)
 			return
 		} else if (this.readyState == 4 && this.status == 200) {
 			let data = JSON.parse(this.responseText)
-			tokentx[network] = tokentx[network].concat(data.result)
+			tokentx[address][network] = tokentx[address][network].concat(data.result)
+
+			// console.log(network, address, tokentx[address][network])
 
 			if(callback) {
-				callback(network)
+				callback(network, address)
 			}
 
 			if(data.result && data.result.length > 0) {
-				sessionStorage.setItem('latest-fetched-block-' + network, data.result[data.result.length - 1].blockNumber)
+				sessionStorage.setItem('latest-fetched-block-' + address + '-' + network, data.result[data.result.length - 1].blockNumber)
 			}
 		}
 	}
 	xmlhttp.onerror = function() {
 		// console.log('getTokenTx', this)
 	}
-	const latestBlock = sessionStorage.getItem('latest-fetched-block-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-block-' + network)) + 1 : 0
-	xmlhttp.open('GET', NETWORK[network].tokentx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
+	const latestBlock = sessionStorage.getItem('latest-fetched-block-' + address + '-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-block-' + address + '-' + network)) + 1 : 0
+	xmlhttp.open('GET', NETWORK[network].tokentx.replace('WALLET_ADDRESS', address).replace('START_BLOCK', latestBlock), true)
 	xmlhttp.send()
 }
 
 // get ERC-721 (NFT) transactions list
-function getERC721Tx(network, callback) {
+function getERC721Tx(network, address, callback) {
 
-	if(timerGetERC721Tx[network]) {
-		clearTimeout(timerGetERC721Tx[network])
+	if(timerGetERC721Tx[network] && timerGetERC721Tx[network][address]) {
+		clearTimeoutIf(timerGetERC721Tx, network, address)
 	}
-	if(!walletAddress) {
+	if(!address) {
+		clearAllTimers()
 		return
 	}
 
-	timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 100000)
+	timerGetERC721Tx[network][address] = setTimeout(() => getERC721Tx(network, address, callback), 100000)
 
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if(this.response && this.response.includes('Max rate limit reached')) {
-			clearTimeout(timerGetERC721Tx[network])
-			timerGetERC721Tx[network] = setTimeout(() => getERC721Tx(network, callback), 1250)
+			clearTimeoutIf(timerGetERC721Tx, network, address)
+			timerGetERC721Tx[network][address] = setTimeout(() => getERC721Tx(network, address, callback), 2600)
 			return
 		} else if (this.readyState == 4 && this.status == 200) {
 			let data = JSON.parse(this.responseText)
-			erc721tx[network] = erc721tx[network].concat(data.result)
+			erc721tx[address][network] = erc721tx[address][network].concat(data.result)
+
+			// console.log(network, address, erc721tx[address][network])
 
 			if(callback) {
-				callback(network)
+				callback(network, address)
 			}
 
 			if(data.result.length > 0) {
-				sessionStorage.setItem('latest-fetched-erc721-block-' + network, data.result[data.result.length - 1].blockNumber)
+				sessionStorage.setItem('latest-fetched-erc721-block-' + address + '-' + network, data.result[data.result.length - 1].blockNumber)
 			}
 
 			return
@@ -271,48 +331,47 @@ function getERC721Tx(network, callback) {
 	}
 
 	// TODO Send transaction from only latest needed blocks !
-	const latestBlock = sessionStorage.getItem('latest-fetched-erc721-block-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-erc721-block-' + network)) + 1 : 0
-	xmlhttp.open('GET', NETWORK[network].erc721tx.replace('WALLET_ADDRESS', walletAddress).replace('START_BLOCK', latestBlock), true)
+	const latestBlock = sessionStorage.getItem('latest-fetched-erc721-block-' + address + '-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-erc721-block-' + address + '-' + network)) + 1 : 0
+	xmlhttp.open('GET', NETWORK[network].erc721tx.replace('WALLET_ADDRESS', address).replace('START_BLOCK', latestBlock), true)
 	xmlhttp.send()
 }
 
-async function getTransactions(network) {
+async function getTransactions(network, address) {
 
-	if(!walletAddress) {
+	if(!address) {
 		return
 	}
 
-	getTokenTx(network, displayWallet)
-	setTimeout(() => getERC721Tx(network, displayWallet), 5200)
+	getTokenTx(network, address, displayWallet)
+	setTimeout(() => getERC721Tx(network, address, displayWallet), 5200)
 
 }
 
 // Get token balance
-async function getTokenBalanceWeb3(contractAddress, network) {
-	if(contractAddress === '0x0' || !walletAddress) return
+async function getTokenBalanceWeb3(contractAddress, address, network) {
+	if(contractAddress === '0x0' || !address) return
 
-	const id = getId(contractAddress, network)
 	// Get ERC20 Token contract instance
 	let contract = getContract(contractAddress, network)
 
 	// Call balanceOf function
-	return await contract.methods.balanceOf(walletAddress).call(async (error, value) => {
+	return await contract.methods.balanceOf(address).call(async (error, value) => {
 		return value
 	})
 }
 
-async function populateNFTContract(contractAddress, network) {
+async function populateNFTContract(contractAddress, address, network) {
 	const id = getId(contractAddress, network)
 	const nftContract = getNFTContract(contractAddress, network)
 
 	// Loop over each NFT hold on this Contract by the WalletAddress
-	for (var i = 0; i < wallet_NFT[id].number; i++) {
-		await nftContract.methods.tokenOfOwnerByIndex(walletAddress, i).call(async (error, indexId) => {
+	for (var i = 0; i < wallet_NFT[address][id].number; i++) {
+		await nftContract.methods.tokenOfOwnerByIndex(address, i).call(async (error, indexId) => {
 			if(error) { return }
-			const t = wallet_NFT[id].tokens.find(token => token.id === indexId)
+			const t = wallet_NFT[address][id].tokens.find(token => token.id === indexId)
 			if(t) {
 				if(!t.image) {
-					await readNFTMetadata(id, indexId, t.tokenURI)
+					await readNFTMetadata(address, id, indexId, t.tokenURI)
 				}
 				return
 			}
@@ -324,20 +383,20 @@ async function populateNFTContract(contractAddress, network) {
 					token.tokenURI = 'https://ipfs.io/ipfs/' + tokenURI.slice(-tokenURI.length + 7)
 				}
 
-				wallet_NFT[id].tokens.push(token)
-				await readNFTMetadata(id, indexId, token.tokenURI)
+				wallet_NFT[address][id].tokens.push(token)
+				await readNFTMetadata(address, id, indexId, token.tokenURI)
 			})
 		})
 	}
 }
 
-async function readNFTMetadata(id, indexId, tokenURI) {
+async function readNFTMetadata(address, id, indexId, tokenURI) {
 	if(tokenURI && tokenURI.includes('http')) {
 		await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(tokenURI)}`)
 			.then(res => res.json())
 			.then(json => {
 				let data = JSON.parse(json.contents)
-				wallet_NFT[id].tokens.find(token => token.id === indexId).metadata = data
+				wallet_NFT[address][id].tokens.find(token => token.id === indexId).metadata = data
 
 				let url = ''
 				if(data && data.nft) {
@@ -369,24 +428,24 @@ async function readNFTMetadata(id, indexId, tokenURI) {
 					url = 'https://ipfs.io/ipfs/' + url
 				}
 
-				wallet_NFT[id].tokens.find(token => token.id === indexId).image = url
+				wallet_NFT[address][id].tokens.find(token => token.id === indexId).image = url
 			})
 			.catch(error => {
-				wallet_NFT[id].tokens.find(token => token.id === indexId).image = tokenURI
+				wallet_NFT[address][id].tokens.find(token => token.id === indexId).image = tokenURI
 			})
 	}
 
 }
 
 
-async function searchTokens(network) {
+async function searchTokens(network, address) {
 	// console.log('searchTokens', network)
-	let tx = tokentx[network].filter(t => t && !t.done)
-	const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + network))
+	let tx = tokentx[address][network].filter(t => t && !t.done)
+	const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + address + '-' + network))
 
 	// Launch timer to update transactions
-	clearTimeout(timerGetTokenTx[network])
-	timerGetTokenTx[network] = setTimeout(() => getTokenTx(network, searchTokens), 30000 * (tokentx[network].length > 0 ? 1 : 3))
+	clearTimeoutIf(timerGetTokenTx, network, address)
+	timerGetTokenTx[network][address] = setTimeout(() => getTokenTx(network, address, searchTokens), 30000 * (tokentx[address][network].length > 0 ? 1 : 3))
 
 	if(!tx || typeof tx === 'string' || (tx[0] && typeof tx[0] === 'string' && tx[0].includes('rate limit reached'))) {
 		return
@@ -405,12 +464,12 @@ async function searchTokens(network) {
 		let balance = 0
 
 		try {
-			balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
+			balance = await getTokenBalanceWeb3(transaction.contractAddress, address, network)
 			const price = await getContractAddressPrice(transaction, network, balance)
 			const id = getId(transaction.contractAddress, network)
 
-			if(balance > 0 || (wallet[id] && wallet[id].value > 0)) {
-				wallet[id] = {
+			if(balance > 0 || (wallet[address] && wallet[address][id] && wallet[address][id].value > 0)) {
+				wallet[address][id] = {
 					network: network,
 					contract: transaction.contractAddress,
 					tokenSymbol: transaction.tokenSymbol,
@@ -421,14 +480,14 @@ async function searchTokens(network) {
 				}
 			}
 
-			tokentx[network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
+			tokentx[address][network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
 		} catch(error) {
-			console.error(network, transaction.contractAddress, error)
+			console.error(address, network, transaction.contractAddress, error)
 		}
 
-		sessionStorage.setItem('latest-block-' + network, transaction.blockNumber)
+		sessionStorage.setItem('latest-block-' + address + '-' + network, transaction.blockNumber)
 
-		timerSearchTokens[network] = setTimeout(() => searchTokens(network), 75)
+		timerSearchTokens[network][address] = setTimeout(() => searchTokens(network, address), 75)
 		if(balance > 0) {
 			displayWallet(true)
 		}
@@ -438,8 +497,8 @@ async function searchTokens(network) {
 		// console.log('searchTokens finished on ' + network)
 
 		// Reset status of few random tx to update them
-		tokentx[network].filter(t => t.done).forEach(t => {
-			if(Math.random() < 0.1 / Math.log2(2 + tokentx[network].length)) {
+		tokentx[address][network].filter(t => t.done).forEach(t => {
+			if(Math.random() < 0.1 / Math.log2(2 + tokentx[address][network].length)) {
 				t.done = false
 			}
 		})
@@ -462,9 +521,9 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 	return price
 }
 
-async function searchNFTs(network) {
-	let tx = erc721tx[network].filter(t => t && !t.done)
-	const latestBlock = parseInt(sessionStorage.getItem('latest-erc721-block-' + network))
+async function searchNFTs(network, address) {
+	let tx = erc721tx[address][network].filter(t => t && !t.done)
+	const latestBlock = parseInt(sessionStorage.getItem('latest-erc721-block-' + address + '-' + network))
 
 	if(!tx || typeof tx === 'string') {
 		return
@@ -476,14 +535,16 @@ async function searchNFTs(network) {
 		// tx = tx.filter(tx => parseInt(tx.blockNumber) >= latestBlock)
 	}
 
+	// console.log(network, address, tx)
+
 	if(tx.length > 0) {
 		const transaction = tx[0]
 		try {
-			const balance = await getTokenBalanceWeb3(transaction.contractAddress, network)
+			const balance = await getTokenBalanceWeb3(transaction.contractAddress, address, network)
 			const id = getId(transaction.contractAddress, network)
 
-			if(balance > 0 || (wallet_NFT[id] && wallet_NFT[id].number > 0)) {
-				wallet_NFT[id] = {
+			if(balance > 0 || (wallet_NFT[address] && wallet_NFT[address][id] && wallet_NFT[address][id].number > 0)) {
+				wallet_NFT[address][id] = {
 					network: network,
 					contract: transaction.contractAddress,
 					tokens: [],
@@ -494,47 +555,47 @@ async function searchNFTs(network) {
 				}
 			}
 
-			erc721tx[network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach((t) => t.done = true)
+			erc721tx[address][network].filter(t => t && transaction.contractAddress === t.contractAddress && !t.done).forEach((t) => t.done = true)
 		} catch(error) {
 			// console.log(network, transaction.contractAddress, error)
 		}
-		sessionStorage.setItem('latest-erc721-block-' + network, transaction.blockNumber)
+		sessionStorage.setItem('latest-erc721-block-' + address + '-' + network, transaction.blockNumber)
 
-		setTimeout(() => searchNFTs(network), 40)
+		setTimeout(() => searchNFTs(network, address), 40)
 	} else {
-		populateNFTs(network)
+		populateNFTs(network, address)
 	}
 }
 
-async function populateNFTs(network) {
-	const id = Object.keys(wallet_NFT).find(
+async function populateNFTs(network, address) {
+	const id = Object.keys(wallet_NFT[address]).find(
 		id =>
-			wallet_NFT[id].network === network &&
+			wallet_NFT[address][id].network === network &&
       (
-      	wallet_NFT[id].tokens.length < wallet_NFT[id].number ||
-        (wallet_NFT[id].error && wallet_NFT[id].error.errorNumber < 10) ||
-        wallet_NFT[id].tokens.some(token => token.tokenURI === undefined/* || token.error*/)
+      	wallet_NFT[address][id].tokens.length < wallet_NFT[address][id].number ||
+        (wallet_NFT[address][id].error && wallet_NFT[address][id].error.errorNumber < 10) ||
+        wallet_NFT[address][id].tokens.some(token => token.tokenURI === undefined/* || token.error*/)
       )
 	)
 
-	if(!id || !wallet_NFT[id]) {
+	if(!id || !wallet_NFT[address] || !wallet_NFT[address][id]) {
 		displayWallet()
-		console.log('populateNFTs finished on ' + network)
+		// console.log('populateNFTs finished on ' + network + ' for ' + address)
 		return
 	}
 
-	const nftContract = getNFTContract(wallet_NFT[id].contract, network)
+	const nftContract = getNFTContract(wallet_NFT[address][id].contract, network)
 
-	if(wallet_NFT[id].tokens.length < wallet_NFT[id].number) {
-		const index = wallet_NFT[id].tokens.length
+	if(wallet_NFT[address][id].tokens.length < wallet_NFT[address][id].number) {
+		const index = wallet_NFT[address][id].tokens.length
 		try {
-			const indexId = await getTokenId(walletAddress, nftContract, index)
-			wallet_NFT[id].tokens.push({ id: indexId })
+			const indexId = await getTokenId(address, nftContract, index)
+			wallet_NFT[address][id].tokens.push({ id: indexId })
 		} catch(error) {
-			// console.log(network, wallet_NFT[id].tokenName, error)
+			// console.log(network, wallet_NFT[address][id].tokenName, error)
 		}
 	} else {
-		const token = wallet_NFT[id].tokens.find(item => item.tokenURI === undefined/* || item.error*/)
+		const token = wallet_NFT[address][id].tokens.find(item => item.tokenURI === undefined/* || item.error*/)
 		const indexId = token.id
 		try {
 			let metadata = await getTokenURI(nftContract, indexId)
@@ -542,22 +603,22 @@ async function populateNFTs(network) {
 				// second try
 				metadata = await getTokenURI(nftContract, indexId)
 			}
-			Object.assign(wallet_NFT[id].tokens.find(token => token.id === indexId), metadata)
-			await readNFTMetadata(id, indexId, metadata.tokenURI)
+			Object.assign(wallet_NFT[address][id].tokens.find(token => token.id === indexId), metadata)
+			await readNFTMetadata(address, id, indexId, metadata.tokenURI)
 		} catch(error) {
 			// console.log(error)
-			Object.assign(wallet_NFT[id].tokens.find(token => token.id === indexId), error)
+			Object.assign(wallet_NFT[address][id].tokens.find(token => token.id === indexId), error)
 		}
 	}
 
 	displayWallet()
-	clearTimeout(timerPopulateNFTs[network])
-	timerPopulateNFTs[network] = setTimeout(() => populateNFTs(network), 80)
+	clearTimeoutIf(timerPopulateNFTs, network, address)
+	timerPopulateNFTs[network][address] = setTimeout(() => populateNFTs(network, address), 80)
 }
 
-async function getTokenId(walletAddress, nftContract, index) {
+async function getTokenId(address, nftContract, index) {
 	try {
-		return await nftContract.methods.tokenOfOwnerByIndex(walletAddress, index).call(async (error, indexId) => {
+		return await nftContract.methods.tokenOfOwnerByIndex(address, index).call(async (error, indexId) => {
 			return indexId
 		})
 	} catch(error) {
@@ -591,41 +652,41 @@ async function getTokenURI(nftContract, indexId) {
 }
 
 
-function getNetworkBalance(network) {
+function getNetworkBalance(network, address) {
 	const web3 = getWeb3(network)
-	if(!web3 || !walletAddress || !web3.utils.isAddress(walletAddress)) {
+	if(!web3 || !address || !web3.utils.isAddress(address)) {
 		return
 	}
 
-	const address = NETWORK[network].tokenContract
-	const id = getId(address, network)
+	const tokenContract = NETWORK[network].tokenContract
+	const id = getId(tokenContract, network)
 	let sessionWallet = JSON.parse(sessionStorage.getItem('wallet'))
-	if(sessionWallet && sessionWallet[id]) {
-		wallet[id] = sessionWallet[id]
+	if(sessionWallet && sessionWallet[address] && sessionWallet[id]) {
+		wallet[address][id] = sessionWallet[address][id]
 	} else {
-		wallet[id] = {
+		wallet[address][id] = {
 			network: network,
-			contract: address,
+			contract: tokenContract,
 			tokenSymbol: NETWORK[network].tokenSymbol,
 			tokenName: NETWORK[network].tokenName,
 			tokenDecimal: NETWORK[network].tokenDecimal
 		}
 	}
-	wallet[id].price = getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
+	wallet[address][id].price = getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
 
 
-	web3.eth.getBalance(walletAddress).then(balance => {
-		wallet[id].value = balance
+	web3.eth.getBalance(address).then(balance => {
+		wallet[address][id].value = balance
 
 		displayWallet()
 
-		clearTimeout(timerGetNetworkBalance[network])
-		timerGetNetworkBalance[network] = setTimeout(() => getNetworkBalance(network), (Math.round(Math.random() * 15) + 25) * 1000)
+		clearTimeoutIf(timerGetNetworkBalance, network, address)
+		timerGetNetworkBalance[network][address] = setTimeout(() => getNetworkBalance(network, address), (Math.round(Math.random() * 15) + 25) * 1000)
 
 	}, error => {
 		// console.log('getNetworkBalance', network, error)
-		clearTimeout(timerGetNetworkBalance[network])
-		timerGetNetworkBalance[network] = setTimeout(() => getNetworkBalance(network), 10000)
+		clearTimeoutIf(timerGetNetworkBalance, network, address)
+		timerGetNetworkBalance[network][address] = setTimeout(() => getNetworkBalance(network, address), 10000)
 	})
 
 
@@ -684,15 +745,17 @@ function displayTokens() {
 		listLi = []
 	}
 
-	tokens.forEach(function (id) {
+	// console.log(tokens, listLi)
+
+	tokens.forEach(function (token) {
+		const id = getId(token.contract, token.network, token.wallet)
 		let element = Array.from(listLi).find(el => el.id === id)
-		let price = wallet[id].price
 
 		if(element) {
 
-			element.querySelector('span.price').innerHTML = price ? '$' + precise(price) : '-'
-			element.querySelector('span.value').innerHTML = price ? displayValue(wallet[id].value, price, wallet[id].tokenDecimal) : '-'
-			element.querySelector('span.balance').innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
+			element.querySelector('span.price').innerHTML = token.price ? '$' + precise(token.price) : '-'
+			element.querySelector('span.value').innerHTML = token.price ? displayValue(token.value, token.price, token.tokenDecimal) : '-'
+			element.querySelector('span.balance').innerHTML = displayBalance(token.value, token.tokenDecimal)
 
 		} else {
 
@@ -702,7 +765,7 @@ function displayTokens() {
 
 			let spanNetwork = document.createElement('span')
 			spanNetwork.classList.add('network')
-			spanNetwork.appendChild(createNetworkImg(wallet[id].network))
+			spanNetwork.appendChild(createNetworkImg(token.network))
 			li.appendChild(spanNetwork)
 
 			let spanNameSymbol = document.createElement('span')
@@ -710,16 +773,16 @@ function displayTokens() {
 			li.appendChild(spanNameSymbol)
 
 			let spanSymbol = document.createElement('span')
-			spanSymbol.innerHTML = wallet[id].tokenSymbol
+			spanSymbol.innerHTML = token.tokenSymbol
 			spanSymbol.classList.add('symbol')
 			spanNameSymbol.appendChild(spanSymbol)
 			let spanName = document.createElement('span')
-			spanName.innerHTML = wallet[id].tokenName
+			spanName.innerHTML = token.tokenName
 			spanName.classList.add('name')
 			spanNameSymbol.appendChild(spanName)
 
 			let spanPrice = document.createElement('span')
-			spanPrice.innerHTML = price ? '$' + precise(price) : '-'
+			spanPrice.innerHTML = token.price ? '$' + precise(token.price) : '-'
 			spanPrice.classList.add('price')
 			li.appendChild(spanPrice)
 
@@ -728,17 +791,17 @@ function displayTokens() {
 			li.appendChild(spanValueBalance)
 
 			let spanValue = document.createElement('span')
-			spanValue.innerHTML = price ? displayValue(wallet[id].value, price, wallet[id].tokenDecimal) : '-'
+			spanValue.innerHTML = token.price ? displayValue(token.value, token.price, token.tokenDecimal) : '-'
 			spanValue.classList.add('value')
 			spanValueBalance.appendChild(spanValue)
 			let spanBalance = document.createElement('span')
-			spanBalance.innerHTML = displayBalance(wallet[id].value, wallet[id].tokenDecimal)
+			spanBalance.innerHTML = displayBalance(token.value, token.tokenDecimal)
 			spanBalance.classList.add('balance')
 			spanValueBalance.appendChild(spanBalance)
 
 			/*
       let spanAddress = document.createElement('span')
-      spanAddress.innerHTML = wallet[id].contract
+      spanAddress.innerHTML = wallet[address][id].contract
       spanAddress.classList.add('address')
       li.appendChild(spanAddress)
 
@@ -781,7 +844,7 @@ function displayTokens() {
 		document.getElementById('connect-demo-container').classList.remove('none')
 		const stateContainer = document.getElementById('state')
 		if(walletAddress && walletAddress.length > 0) {
-			stateContainer.innerHTML = 'No token can be found on this address'
+			stateContainer.innerHTML = 'No token can be found :('
 			stateContainer.classList.toggle('shadow-white', true)
 		} else {
 			stateContainer.innerHTML = null
@@ -795,7 +858,9 @@ function displayNFTs() {
 	let listLi = document.getElementById('wallet').querySelectorAll('li')
 	const nftContracts = filteredNFTWallet().sort(sortNFTWallet)
 
-	const nftNumber = nftContracts.reduce((prev, curr) => prev + wallet_NFT[curr].tokens.length, 0)
+	// console.log(nftContracts)
+
+	const nftNumber = nftContracts.reduce((prev, curr) => prev + curr.tokens.length, 0)
 
 	if(listLi.length === 0 || listLi.length !== nftNumber || nftNumber === filteredWallet().length) {
 		document.getElementById('wallet').innerHTML = null
@@ -807,15 +872,16 @@ function displayNFTs() {
 		listLi = []
 	}
 
-	nftContracts.forEach(function (id) {
+	nftContracts.forEach(function (nftContract) {
 
-		const nfts = wallet_NFT[id].tokens.sort(sortNFTTokens)
+		const nfts = nftContract.tokens.sort(sortNFTTokens)
 
 		nfts.forEach(function (nft) {
 			if(walletOptions.hideNoImage && !nft.image) {
 				return
 			}
-			let element = Array.from(listLi).find(el => el.id === id + '-' + wallet_NFT[id].tokenSymbol + '-' + nft.id)
+			const id = getId(nftContract.contract, nftContract.network, nftContract.wallet)
+			let element = Array.from(listLi).find(el => el.id === id + '-' + nftContract.tokenSymbol + '-' + nft.id)
 
 			/*if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
         nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
@@ -858,13 +924,13 @@ function displayNFTs() {
 				}
 			} else {
 				let li = document.createElement('li')
-				li.title = wallet_NFT[id].tokenName + ' #' + nft.id
-				li.id = id + '-' + wallet_NFT[id].tokenSymbol + '-' + nft.id
+				li.title = nftContract.tokenName + ' #' + nft.id
+				li.id = id + '-' + nftContract.tokenSymbol + '-' + nft.id
 				li.classList.add('nft')
 
 				let spanNetwork = document.createElement('span')
 				spanNetwork.classList.add('network')
-				spanNetwork.appendChild(createNetworkImg(wallet_NFT[id].network))
+				spanNetwork.appendChild(createNetworkImg(nftContract.network))
 				li.appendChild(spanNetwork)
 
 				let spanNameSymbol = document.createElement('span')
@@ -872,19 +938,19 @@ function displayNFTs() {
 				li.appendChild(spanNameSymbol)
 
 				let spanSymbol = document.createElement('span')
-				spanSymbol.innerHTML = wallet_NFT[id].tokenSymbol
+				spanSymbol.innerHTML = nftContract.tokenSymbol
 				spanSymbol.classList.add('symbol')
 				spanNameSymbol.appendChild(spanSymbol)
 				let spanName = document.createElement('span')
-				spanName.innerHTML = wallet_NFT[id].tokenName
+				spanName.innerHTML = nftContract.tokenName
 				spanName.classList.add('name')
 				spanNameSymbol.appendChild(spanName)
 
 				let aAddress = document.createElement('a')
 				let spanAddress = document.createElement('span')
-				spanAddress.innerHTML = wallet_NFT[id].contract.slice(0, 5) + '...' + wallet_NFT[id].contract.slice(-5)
+				spanAddress.innerHTML = nftContract.contract.slice(0, 5) + '...' + nftContract.contract.slice(-5)
 				spanAddress.classList.add('address')
-				aAddress.href = NETWORK[wallet_NFT[id].network].explorer + wallet_NFT[id].contract
+				aAddress.href = NETWORK[nftContract.network].explorer + nftContract.contract
 				aAddress.target = '_blank'
 				aAddress.classList.add('address')
 				aAddress.appendChild(spanAddress)
@@ -985,7 +1051,7 @@ function displayTransactions() {
 
 	const transactions = buildTxArray()
 
-	console.log(transactions)
+	// console.log(transactions)
 
 	document.getElementById('wallet').innerHTML = null
 	if(transactions.length > 0) {
@@ -1033,7 +1099,7 @@ function displayTransactions() {
 		spanNonceTimestamp.appendChild(spanTimestamp)
 
 		let spanBalance = document.createElement('span')
-		spanBalance.innerHTML = (tx.to && tx.to.toLowerCase() !== walletAddress.toLowerCase() ? '-' : '+') + calculateBalance(tx.value, tx.tokenDecimal)
+		spanBalance.innerHTML = (tx.to && tx.to.toLowerCase() !== tx.wallet.toLowerCase() ? '-' : '+') + calculateBalance(tx.value, tx.tokenDecimal)
 		spanBalance.classList.add('txBalance')
 		li.appendChild(spanBalance)
 
@@ -1074,7 +1140,7 @@ function displayTransactions() {
 		document.getElementById('connect-demo-container').classList.remove('none')
 		const stateContainer = document.getElementById('state')
 		if(walletAddress && walletAddress.length > 0) {
-			stateContainer.innerHTML = 'No transactions can be found on this address'
+			stateContainer.innerHTML = 'No transactions can be found :()'
 			stateContainer.classList.toggle('shadow-white', true)
 		} else {
 			stateContainer.innerHTML = null
@@ -1091,10 +1157,9 @@ function insertAfter(refElement, element) {
 // Update & Display the total wallet value
 function updateGlobalPrice() {
 	walletValue = 0
-	filteredWallet().forEach(function (id) {
-		let price = wallet[id].price
-		if(price) {
-			walletValue += Number.parseFloat(calculateValue(wallet[id].value, price, wallet[id].tokenDecimal))
+	filteredWallet().forEach(function (token) {
+		if(token.price) {
+			walletValue += Number.parseFloat(calculateValue(token.value, token.price, token.tokenDecimal))
 		}
 	})
 
@@ -1142,14 +1207,14 @@ async function initializeHTML() {
 	const hash = window.location.hash
 	let address = null
 	if(urlParams.has('address')) {
-		address = urlParams.get('address')
+		address = urlParams.get('address').split(',')
 	}
 	else if(sessionStorage.getItem('walletAddress')) {
-		address = sessionStorage.getItem('walletAddress')
+		address = sessionStorage.getItem('walletAddress').split(',')
 	}
 
 	if(address) {
-		document.getElementById('input-wallet').value = address
+		document.getElementById('input-wallet').value = address.join(',')
 		configureWallet(address)
 	}
 
@@ -1302,13 +1367,16 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
 	toggleHideButtons()
 	displayWallet(true)
 
-	Object.keys(NETWORK).forEach((network) => {
-		clearTimeout(timerGetNetworkBalance[network])
-		clearTimeout(timerGetERC721Tx[network])
-		clearTimeout(timerGetTransactions[network])
-		getNetworkBalance(NETWORK[network].enum)
-		getTokenTx(NETWORK[network].enum, searchTokens)
+	walletAddress.forEach((address) => {
+		Object.keys(NETWORK).forEach((network) => {
+			clearTimeoutIf(timerGetNetworkBalance, network, address)
+			clearTimeoutIf(timerGetERC721Tx, network, address)
+			clearTimeoutIf(timerGetTransactions, network, address)
+			getNetworkBalance(NETWORK[network].enum, address)
+			getTokenTx(NETWORK[network].enum, address, searchTokens)
+		})
 	})
+
 })
 document.getElementById('menu-nfts').addEventListener('click', (e) => {
 	e.preventDefault()
@@ -1325,10 +1393,12 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
 	toggleHideButtons()
 	displayWallet(true)
 
-	Object.keys(NETWORK).forEach((network) => {
-		clearTimeout(timerGetTokenTx[network])
-		clearTimeout(timerGetTransactions[network])
-		getERC721Tx(NETWORK[network].enum, searchNFTs)
+	walletAddress.forEach((address) => {
+		Object.keys(NETWORK).forEach((network) => {
+			clearTimeoutIf(timerGetTokenTx, network, address)
+			clearTimeoutIf(timerGetTransactions, network, address)
+			getERC721Tx(NETWORK[network].enum, address, searchNFTs)
+		})
 	})
 })
 document.getElementById('menu-transactions').addEventListener('click', (e) => {
@@ -1346,12 +1416,14 @@ document.getElementById('menu-transactions').addEventListener('click', (e) => {
 	toggleHideButtons()
 	displayWallet(true)
 
-	Object.keys(NETWORK).forEach((network) => {
-		clearTimeout(timerGetNetworkBalance[network])
-		clearTimeout(timerGetTokenTx[network])
-		clearTimeout(timerSearchTokens[network])
-		clearTimeout(timerGetERC721Tx[network])
-		getTransactions(NETWORK[network].enum)
+	walletAddress.forEach((address) => {
+		Object.keys(NETWORK).forEach((network) => {
+			clearTimeoutIf(timerGetNetworkBalance, network, address)
+			clearTimeoutIf(timerGetTokenTx, network, address)
+			clearTimeoutIf(timerSearchTokens, network, address)
+			clearTimeoutIf(timerGetERC721Tx, network, address)
+			getTransactions(NETWORK[network].enum, address)
+		})
 	})
 })
 document.getElementById('hide-small-balances-container').addEventListener('click', (e) => {
@@ -1373,7 +1445,7 @@ document.getElementById('hide-no-image-container').addEventListener('click', (e)
 
 
 function updateGlobalChart() {
-	if(!walletAddress || walletValue === 0) {
+	if(!walletAddress || !walletAddress[0] || walletValue === 0) {
 		if(globalChart) {
 			globalChart.destroy()
 			globalChart = null
@@ -1499,26 +1571,28 @@ const buildTxArray = () => {
 
 	try {
 		filters.networks.forEach((network) => {
-			if(tokentx && tokentx[network]) {
-				tokentx[network].forEach((item) => {
-					if(item) {
-						const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
-						if(transactions.findIndex(tx => tx.id === id) < 0) {
-							transactions.push({ ...item, network: network, id: id })
+			walletAddress.forEach((address) => {
+				if(tokentx && tokentx[address] && tokentx[address][network]) {
+					tokentx[address][network].forEach((item) => {
+						if(item) {
+							const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+							if(transactions.findIndex(tx => tx.id === id) < 0) {
+								transactions.push({ ...item, network: network, id: id, wallet: address })
+							}
 						}
-					}
-				})
-			}
-			if(erc721tx && erc721tx[network]) {
-				erc721tx[network].forEach((item) => {
-					if(item) {
-						const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
-						if(transactions.findIndex(tx => tx.id === id) < 0) {
-							transactions.push({ ...item, network: network, id: id })
+					})
+				}
+				if(erc721tx && erc721tx[address] && erc721tx[address][network]) {
+					erc721tx[address][network].forEach((item) => {
+						if(item) {
+							const id = network + '-' + item.nonce + '-' + item.tokenSymbol + '-' + item.tokenName
+							if(transactions.findIndex(tx => tx.id === id) < 0) {
+								transactions.push({ ...item, network: network, id: id, wallet: address })
+							}
 						}
-					}
-				})
-			}
+					})
+				}
+			})
 		})
 
 		txDisplay.hasMore = transactions.length > txDisplay.limit
@@ -1531,9 +1605,7 @@ const buildTxArray = () => {
 }
 
 /* Utils - sort the wallet */
-const sortWallet = (id_a, id_b) => {
-	let a = wallet[id_a]
-	let b = wallet[id_b]
+const sortWallet = (a, b) => {
 	// sort by network
 	if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
 	if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
@@ -1551,9 +1623,7 @@ const sortWallet = (id_a, id_b) => {
 	return a.tokenName.localeCompare(b.tokenName)
 }
 /* Utils - sort the NFT wallet */
-const sortNFTWallet = (id_a, id_b) => {
-	let a = wallet_NFT[id_a]
-	let b = wallet_NFT[id_b]
+const sortNFTWallet = (a, b) => {
 	// sort by network
 	if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
 	if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
@@ -1577,37 +1647,50 @@ const sortTransactions = (tx_a, tx_b) => {
 	//if(parseInt(tx_a.timeStamp, 10) > parseInt(tx_b.timeStamp, 10)) return -1
 	//if(parseInt(tx_a.timeStamp, 10) < parseInt(tx_b.timeStamp, 10)) return 1
 	// display outgoing tokens before incoming ones
-	if(tx_a.to && walletAddress && tx_a.to.toLowerCase() === walletAddress.toLowerCase()) return -1
+	if(tx_a.to && tx_a.wallet && tx_a.to.toLowerCase() === tx_a.wallet.toLowerCase()) return -1
 	return 1
-	//return tx_a.from.toLowerCase().localeCompare(walletAddress.toLowerCase())
+	//return tx_a.from.toLowerCase().localeCompare(walletAddress[0].toLowerCase())
 }
 
 /* Utils - getId from Address and Network */
-const getId = (address, network) => {
-	return network + '-' + address
+const getId = (address, network, wallet) => {
+	return wallet ? wallet + '-' + network + '-' + address : network + '-' + address
 }
 
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
-	let filtered = Object.keys(wallet).filter(key => filters.networks.includes(key.split('-')[0]))
-		.filter(id => wallet[id].value && wallet[id].value !== '0')
-	if(walletOptions.hideSmallBalance) {
-		filtered = filtered.filter(id => Math.abs(calculateValue(wallet[id].value, wallet[id].price, wallet[id].tokenDecimal)) >= 0.01 )
-	}
+	let filtered = []
+	Object.keys(wallet).forEach((address) => {
+		Object.keys(wallet[address])
+			.filter(key => filters.networks.includes(key.split('-')[0]))
+			.filter(id => wallet[address][id].value && wallet[address][id].value !== '0')
+			.forEach((id) => {
+				if(!walletOptions.hideSmallBalance || (walletOptions.hideSmallBalance &&  Math.abs(calculateValue(wallet[address][id].value, wallet[address][id].price, wallet[address][id].tokenDecimal)) >= 0.01)) {
+					filtered.push({ ...wallet[address][id], wallet: address })
+				}
+			})
+	})
 	return filtered
 }
 
 /* Utils - Wallet with/without preview images */
 const filteredNFTWallet = () => {
-	let filteredNFTContracts = Object.keys(wallet_NFT).filter(key => filters.networks.includes(key.split('-')[0]))
-	if(walletOptions.hideNoImage) {
-		filteredNFTContracts = filteredNFTContracts.filter(id => wallet_NFT[id].tokens.some(token => token.tokenURI && token.image))
-	}
+	let filteredNFTContracts = []
+	Object.keys(wallet_NFT).forEach((address) => {
+		Object.keys(wallet_NFT[address])
+			.filter(key => filters.networks.includes(key.split('-')[0]))
+			.forEach((id) => {
+				if(!walletOptions.hideNoImage || (walletOptions.hideNoImage && wallet_NFT[address][id].tokens.some(token => token.tokenURI && token.image))) {
+					filteredNFTContracts.push({ ...wallet_NFT[address][id], wallet: address })
+				}
+			})
+	})
+
 	return filteredNFTContracts
 }
 /* Utils - NFTs with/without preview images */
 const filteredNFTTokens = () => {
-	return filteredNFTWallet().map(id => wallet_NFT[id].tokens).flat()
+	return filteredNFTWallet().map(id => wallet_NFT[address][id].tokens).flat()
 }
 
 /* Utils - Calculate balance from value */
@@ -1637,4 +1720,11 @@ const displayValue = (balance, price, decimal) => {
 	if(value === 0) return 0
 	if(Math.abs(value) < 0.01) return '≈ 0'
 	return '$' + value
+}
+
+/* Utils - Check if exist and clear it */
+function clearTimeoutIf(timeout, network, address) {
+	if(timeout[network] && timeout[network][address]) {
+		clearTimeout(timeout[network][address])
+	}
 }
