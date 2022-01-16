@@ -26,8 +26,10 @@ let timerFetchTokenTx = {}
 let timerFetchErc721Tx = {}
 
 let filters = {
+	address: [],
 	networks: [],
-	search: ''
+	search: '',
+	addressEventAdded: false
 }
 let walletOptions = {
 	menu: {
@@ -107,7 +109,7 @@ function clearAllTimers() {
 // search transactions / tokens for the specified wallet address
 function configureWallet(inputAddress) {
 	const inputContainer = document.getElementById('input-wallet-container')
-	const globalInforationContainer = document.getElementById('global')
+	const globalInformationContainer = document.getElementById('global')
 	const stateContainer = document.getElementById('state')
 	const connectDemoContainer = document.getElementById('connect-demo-container')
 	const walletOptionsContainer = document.getElementById('wallet-options')
@@ -119,7 +121,7 @@ function configureWallet(inputAddress) {
 		stateContainer.classList.remove('shadow-white')
 
 		inputContainer.classList.toggle('margin-top', true)
-		globalInforationContainer.classList.toggle('none', true)
+		globalInformationContainer.classList.toggle('none', true)
 		connectDemoContainer.classList.toggle('none', true)
 		walletOptionsContainer.classList.remove('none')
 
@@ -156,7 +158,7 @@ function configureWallet(inputAddress) {
 
 	if(validAddresses.length === 0) {
 		inputContainer.classList.toggle('margin-top', true)
-		globalInforationContainer.classList.toggle('none', true)
+		globalInformationContainer.classList.toggle('none', true)
 
 		const urlParams = new URLSearchParams(window.location.search)
 		if(urlParams.has('address') && window.history.replaceState) {
@@ -244,8 +246,80 @@ function configureWallet(inputAddress) {
 	})
 
 	sessionStorage.setItem('walletAddress', walletAddress.join(','))
+
+
+	configureFilterByAddress()
 }
 
+
+const configureFilterByAddress = () => {
+	const addressList = document.getElementById('filter-by-address-list')
+	addressList.innerHTML = null
+	filters.address = walletAddress
+
+	if(walletAddress.length < 2) {
+		document.getElementById('filter-by-address-container').classList.toggle('none', true)
+		return
+	}
+
+	walletAddress.forEach((address) => {
+		const li = document.createElement('li')
+		li.id = 'filter-by-' + address
+		li.classList.add('filter-by-address-item')
+		const addr = document.createElement('div')
+		addr.innerHTML = address.slice(0, 6)
+		addr.classList.add('filter-by-address-text')
+		li.appendChild(addr)
+
+		const statusImg = document.createElement('img')
+		statusImg.classList.add('filter-by-address-status', 'checked')
+		statusImg.src = '/img/icons/check-circle.svg'
+		statusImg.width = '12'
+		statusImg.height = '12'
+		li.appendChild(statusImg)
+
+		addressList.appendChild(li)
+	})
+
+	if(!filters.addressEventAdded) {
+		filters.addressEventAdded = true
+		addressList.addEventListener('click', e => {
+			if(!e.target) {
+				return
+			}
+			let clicked
+			if(e.target.nodeName === 'LI') {
+				clicked = e.target
+			} else if (e.target.parentNode.nodeName === 'LI') {
+				clicked = e.target.parentNode
+			}
+			if(clicked) {
+				const filter = clicked.id.split('-')[2]
+				toggleAddressFilter(filter)
+			}
+		})
+	}
+
+	document.getElementById('filter-by-address-container').classList.remove('none')
+}
+
+const toggleAddressFilter = (address) => {
+	const li = document.getElementById('filter-by-' + address)
+	const imgStatus = li.getElementsByClassName('filter-by-address-status')[0]
+	if(filters.address.includes(address)) {
+		imgStatus.src = '/img/icons/x-circle.svg'
+		imgStatus.classList.remove('checked')
+		imgStatus.classList.add('unchecked')
+		filters.address.splice(filters.address.indexOf(address), 1)
+	} else {
+		imgStatus.src = '/img/icons/check-circle.svg'
+		imgStatus.classList.remove('unchecked')
+		imgStatus.classList.add('checked')
+		filters.address.push(address)
+	}
+
+	displayWallet(true)
+}
 
 // get token transactions list
 function getTokenTx(network, address, callback) {
@@ -1660,7 +1734,7 @@ const getId = (address, network, wallet) => {
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
 	let filtered = []
-	Object.keys(wallet).forEach((address) => {
+	filters.address.forEach((address) => {
 		Object.keys(wallet[address])
 			.filter(key => filters.networks.includes(key.split('-')[0]))
 			.filter(id => wallet[address][id].value && wallet[address][id].value !== '0')
@@ -1676,7 +1750,7 @@ const filteredWallet = () => {
 /* Utils - Wallet with/without preview images */
 const filteredNFTWallet = () => {
 	let filteredNFTContracts = []
-	Object.keys(wallet_NFT).forEach((address) => {
+	filters.address.forEach((address) => {
 		Object.keys(wallet_NFT[address])
 			.filter(key => filters.networks.includes(key.split('-')[0]))
 			.forEach((id) => {

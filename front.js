@@ -541,6 +541,6 @@ function getTimer() {
 		// between 15 and 30 seconds in Production Mode
 		return Math.round((15*Math.random() + 15)*1000)
 	}
-	// between 45 and 60 seconds in Dev Mode
-	return Math.round((15*Math.random() + 45)*1000)
+	// between 60 and 180 seconds in Dev Mode
+	return Math.round((120*Math.random() + 60)*1000)
 }
