@@ -29,6 +29,7 @@
 ## Supported protocols by the wallet tracker
 
 * [x] Aave v2 - Ethereum & Polygon/Matic
+* [x] Beefy.finance - Crosschain
 * [ ] Compound (borrowed tokens not supported) - Ethereum
 * [ ] Venus (borrowed tokens not supported) - Binance Smart Chain
 
