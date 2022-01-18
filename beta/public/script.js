@@ -198,7 +198,7 @@ function getSimple() {
 
 // get charts data from server
 // + update chart
-function getCharts() {
+async function getCharts() {
 	let data = await getChartsByAddresses(selectedToken, selectedBase, dexList[dex].chain_enum)
 	tokenCharts = data[selectedToken]
 	baseCharts = data[selectedBase]
