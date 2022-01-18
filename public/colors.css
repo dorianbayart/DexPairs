@@ -38,7 +38,7 @@ button {
 
 /* News */
 .main > h1,
-article.entry {
+.entry {
   background-color: #ffffffdd;
   color: #000000dd;
 }
