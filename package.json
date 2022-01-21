@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 restart ecosystem.config.js --env production",
-    "dev": "pm2 delete all && pm2 start ecosystem.config.js --env development && pm2 save",
-    "stop": "pm2 stop all",
+    "dev": "pm2 start ecosystem.config.js --env development && pm2 save",
+    "stop": "pm2 stop all && pm2 delete all",
     "deploy-production": "pm2 deploy ecosystem.config.js production",
     "upgrade-interactive": "rm package-lock.json || true && yarn && yarn upgrade-interactive --latest"
   },
