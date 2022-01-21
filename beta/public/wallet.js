@@ -214,12 +214,12 @@ function configureWallet(inputAddress) {
 		timerGetTransactions[network] = {}
 	})
 
+	console.log('Configure Wallet', walletAddress)
 	walletAddress.forEach((address) => {
 		tokentx[address] = {}
 		erc721tx[address] = {}
 		wallet[address] = {}
 		wallet_NFT[address] = {}
-		console.log('Configure Wallet', walletAddress, address)
 
 		Object.keys(NETWORK).forEach((network) => {
 			sessionStorage.removeItem('latest-block-' + address + '-' + NETWORK[network].enum)
@@ -1539,64 +1539,75 @@ function updatePieCharts() {
 
 
 
-	let pieAddressesData = [], pieAddressesLabels = [], pieAddressesColors = []
-	filters.address.forEach((address) => {
-		let total = 0
-		filters.networks.forEach((network) => {
-			Object.keys(wallet[address])
-				.filter((id) => id.startsWith(network))
-				.forEach((id) => {
-					if(wallet[address][id].price) {
-						total += parseFloat(calculateValue(wallet[address][id].value, wallet[address][id].price, wallet[address][id].tokenDecimal))
-					}
-				})
-		})
-		pieAddressesLabels.push(address.slice(0,6) + '...' + address.slice(-4))
-		pieAddressesData.push(total)
-		pieAddressesColors.push(getColorFromString(address))
-	})
-
-	// Addresses distribution
-	if(pieCharts && pieCharts.pieNetworks) {
-		pieCharts.pieAddresses.data.labels = pieAddressesLabels
-		pieCharts.pieAddresses.data.datasets[0].data = pieAddressesData
-		pieCharts.pieAddresses.data.datasets[0].backgroundColor = pieAddressesColors
-		pieCharts.pieAddresses.update()
+	if(filters.address.length < 2) {
+		if(pieCharts && pieCharts.pieAddresses) {
+			pieCharts.pieAddresses.destroy()
+			delete pieCharts.pieAddresses
+			document.getElementById('pie-addresses-container').style.display = 'none'
+		}
 	} else {
-		const ctx = document.getElementById('pie-addresses').getContext('2d')
-		pieCharts.pieAddresses = new Chart(ctx, {
-			type: 'pie',
-			labels: pieAddressesLabels,
-			data: {
-				datasets: [{
-					data: pieAddressesData,
-					backgroundColor: pieAddressesColors,
-					hoverOffset: 15,
-					borderRadius: 8
-				}]
-			}
-			,
-			options: {
-				responsive: true,
-				aspectRatio: 1,
-				maintainAspectRatio: false,
-				plugins: {
-					legend: {
-						labels: {
-							font: {
-								size: 10
-							}
+		let pieAddressesData = [], pieAddressesLabels = [], pieAddressesColors = []
+		filters.address.forEach((address) => {
+			let total = 0
+			filters.networks.forEach((network) => {
+				Object.keys(wallet[address])
+					.filter((id) => id.startsWith(network))
+					.forEach((id) => {
+						if(wallet[address][id].price) {
+							total += parseFloat(calculateValue(wallet[address][id].value, wallet[address][id].price, wallet[address][id].tokenDecimal))
+						}
+					})
+			})
+			pieAddressesLabels.push(address.slice(0,6) + '...' + address.slice(-4))
+			pieAddressesData.push(total)
+			pieAddressesColors.push(getColorFromString(address))
+		})
+
+		document.getElementById('pie-addresses-container').style.display = 'block'
+
+		// Addresses distribution
+		if(pieCharts && pieCharts.pieAddresses) {
+			pieCharts.pieAddresses.data.labels = pieAddressesLabels
+			pieCharts.pieAddresses.data.datasets[0].data = pieAddressesData
+			pieCharts.pieAddresses.data.datasets[0].backgroundColor = pieAddressesColors
+			pieCharts.pieAddresses.update()
+		} else {
+			const ctx = document.getElementById('pie-addresses').getContext('2d')
+			pieCharts.pieAddresses = new Chart(ctx, {
+				type: 'pie',
+				labels: pieAddressesLabels,
+				data: {
+					datasets: [{
+						data: pieAddressesData,
+						backgroundColor: pieAddressesColors,
+						hoverOffset: 15,
+						borderRadius: 8
+					}]
+				}
+				,
+				options: {
+					responsive: true,
+					aspectRatio: 1,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 10
+								}
+							},
+							position: 'left',
 						},
-						position: 'left',
-					},
-					title: {
-						display: true,
-						text: 'Addresses distribution'
+						title: {
+							display: true,
+							text: 'Addresses distribution'
+						}
 					}
 				}
-			}
-		})
+			})
+		}
 	}
+
 
 
 
