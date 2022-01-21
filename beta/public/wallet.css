@@ -190,6 +190,21 @@ body {
   filter: invert(1);
 }
 
+.wallet-distribution {
+  width: 100%;
+  height: max(20vh, 112px);
+  max-width: 800px;
+  display: flex;
+  justify-content: space-evenly;
+  margin: auto;
+}
+.pie-charts-container {
+  width: 48%;
+  height: 100%;
+  border-radius: 12px;
+  border: 1px solid #CCCCCCCC;
+}
+
 #state {
   text-align: center;
   font-size: .75em;

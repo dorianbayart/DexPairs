@@ -45,6 +45,7 @@ const NETWORK = {
 		enum: 'ETHEREUM',
 		name: 'Ethereum',
 		img: '/img/ethereum-icon.svg',
+		color: '#3a3a39',
 		rpc: 'https://cloudflare-eth.com',
 		explorer: 'https://etherscan.io/token/',
 		tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
@@ -64,6 +65,7 @@ const NETWORK = {
 		enum: 'POLYGON',
 		name: 'Polygon/Matic',
 		img: '/img/polygon-icon.svg',
+		color: '#8249e5',
 		rpc: 'https://polygon-rpc.com',
 		explorer: 'https://polygonscan.com/token/',
 		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
@@ -83,6 +85,7 @@ const NETWORK = {
 		enum: 'BSC',
 		name: 'Binance Smart Chain',
 		img: '/img/bsc-icon.svg',
+		color: '#f0b931',
 		rpc: 'https://bsc-dataseed.binance.org',
 		explorer: 'https://bscscan.com/token/',
 		tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
@@ -102,6 +105,7 @@ const NETWORK = {
 		enum: 'FANTOM',
 		name: 'Fantom/Opera',
 		img: '/img/fantom-icon.svg',
+		color: '#1c68fb',
 		rpc: 'https://rpcapi.fantom.network',
 		explorer: 'https://ftmscan.com/token/',
 		tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
@@ -121,6 +125,7 @@ const NETWORK = {
 		enum: 'XDAI',
 		name: 'xDai',
 		img: '/img/xdai-icon.svg',
+		color: '#4ea8a6',
 		rpc: 'https://rpc.xdaichain.com/',
 		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
 		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
@@ -423,4 +428,18 @@ const precise = (x) => {
 const gasRound = (x) => {
 	if(x > 9) { return Math.round(x) }
 	return Math.round(10 * x) / 10
+}
+
+
+
+// Build a Color from String
+const hashCode = (str) => {
+	let hash = 0
+	for (var i = 0; i < str.length; i++) {
+		hash = str.charCodeAt(i) + ((hash << 5) - hash)
+	}
+	return hash
+}
+const getColorFromString = (str) => {
+	return `hsl(${hashCode(str) % 360}, 100%, 45%)`
 }

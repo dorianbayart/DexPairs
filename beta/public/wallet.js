@@ -2,6 +2,7 @@
 
 let walletForage = null
 let globalChart = null
+let pieCharts = {}
 let walletValue = 0
 let loading = false
 let txDisplay = {
@@ -50,6 +51,7 @@ let walletOptions = {
 		}
 	},
 	hideSmallBalance: true,
+	smallBalance: 0.01,
 	hideNoImage: true
 }
 
@@ -521,7 +523,7 @@ async function searchTokens(network, address) {
 	clearTimeoutIf(timerGetTokenTx, network, address)
 	timerGetTokenTx[network][address] = setTimeout(() => getTokenTx(network, address, searchTokens), 30000 * (tokentx[address][network].length > 0 ? 1 : 3))
 
-	if(!tx || typeof tx === 'string' || (tx[0] && typeof tx[0] === 'string' && tx[0].includes('rate limit reached'))) {
+	if(!wallet[address] || !tx || typeof tx === 'string' || (tx[0] && typeof tx[0] === 'string' && tx[0].includes('rate limit reached'))) {
 		return
 	}
 
@@ -599,7 +601,7 @@ async function searchNFTs(network, address) {
 	let tx = erc721tx[address][network].filter(t => t && !t.done)
 	const latestBlock = parseInt(sessionStorage.getItem('latest-erc721-block-' + address + '-' + network))
 
-	if(!tx || typeof tx === 'string') {
+	if(!wallet[address] || !tx || typeof tx === 'string') {
 		return
 	}
 
@@ -645,11 +647,11 @@ async function populateNFTs(network, address) {
 	const id = Object.keys(wallet_NFT[address]).find(
 		id =>
 			wallet_NFT[address][id].network === network &&
-      (
-      	wallet_NFT[address][id].tokens.length < wallet_NFT[address][id].number ||
-        (wallet_NFT[address][id].error && wallet_NFT[address][id].error.errorNumber < 10) ||
-        wallet_NFT[address][id].tokens.some(token => token.tokenURI === undefined/* || token.error*/)
-      )
+			(
+				wallet_NFT[address][id].tokens.length < wallet_NFT[address][id].number ||
+				(wallet_NFT[address][id].error && wallet_NFT[address][id].error.errorNumber < 10) ||
+				wallet_NFT[address][id].tokens.some(token => token.tokenURI === undefined/* || token.error*/)
+			)
 	)
 
 	if(!id || !wallet_NFT[address] || !wallet_NFT[address][id]) {
@@ -801,7 +803,8 @@ function displayWallet(force = false) {
 		}
 		updateGlobalPrice()
 		updateGlobalChart()
-	}, force === true ? 0 : 250)
+		updatePieCharts()
+	}, force === true ? 50 : 500)
 }
 
 // Display Wallet Tokens
@@ -874,16 +877,16 @@ function displayTokens() {
 			spanValueBalance.appendChild(spanBalance)
 
 			/*
-      let spanAddress = document.createElement('span')
-      spanAddress.innerHTML = wallet[address][id].contract
-      spanAddress.classList.add('address')
-      li.appendChild(spanAddress)
+				let spanAddress = document.createElement('span')
+				spanAddress.innerHTML = wallet[address][id].contract
+				spanAddress.classList.add('address')
+				li.appendChild(spanAddress)
 
-      let spanChart = document.createElement('span')
-      spanChart.id = id + '-chart'
-      spanChart.classList.add('chart')
-      li.appendChild(spanChart)
-      */
+				let spanChart = document.createElement('span')
+				spanChart.id = id + '-chart'
+				spanChart.classList.add('chart')
+				li.appendChild(spanChart)
+				*/
 
 			document.getElementById('wallet-ul').appendChild(li)
 
@@ -891,16 +894,16 @@ function displayTokens() {
 				let item = e.target
 
 				while(item.id.length < 1 || item.id.includes('chart')) {
-					item = item.parentNode
-				}
+				item = item.parentNode
+			}
 
-				// TODO Replace with : expandCollapseItem(item)
-				if(item.classList.contains('expanded')) {
-					item.classList.remove('expanded')
-				} else {
-					//item.classList.toggle('expanded', true)
-				}
-			})*/
+			// TODO Replace with : expandCollapseItem(item)
+			if(item.classList.contains('expanded')) {
+			item.classList.remove('expanded')
+		} else {
+		//item.classList.toggle('expanded', true)
+	}
+})*/
 
 		}
 
@@ -908,12 +911,14 @@ function displayTokens() {
 
 	if(tokens.length > 0) {
 		document.getElementById('global').classList.remove('none')
+		document.getElementById('pie-charts').classList.remove('none')
 		document.getElementById('connect-demo-container').classList.toggle('none', true)
 		document.getElementById('state').innerHTML = null
 		document.getElementById('input-wallet-container').classList.remove('margin-top')
 		document.getElementById('state').classList.remove('shadow-white')
 	} else {
 		document.getElementById('global').classList.toggle('none', true)
+		document.getElementById('pie-charts').classList.toggle('none', true)
 		document.getElementById('input-wallet-container').classList.toggle('margin-top', true)
 		document.getElementById('connect-demo-container').classList.remove('none')
 		const stateContainer = document.getElementById('state')
@@ -958,8 +963,8 @@ function displayNFTs() {
 			let element = Array.from(listLi).find(el => el.id === id + '-' + nftContract.tokenSymbol + '-' + nft.id)
 
 			/*if(nft.image && nft.image.includes('ipfs://') && !nft.alt_image) {
-        nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
-      }*/
+			nft.alt_image = 'https://ipfs.io/ipfs/' + nft.image.slice(-nft.image.length + 7)
+		}*/
 
 			if(element) {
 				let aTokenURI = element.querySelector('a.tokenURI')
@@ -1058,22 +1063,22 @@ function displayNFTs() {
 					aTokenURI.classList.add('tokenURI')
 					li.appendChild(aTokenURI)
 
-					/*aTokenURI.addEventListener('click', function(e) {
-						let item = e.target
-						while(item.id.length < 1) {
-							item = item.parentNode
-						}
-						expandCollapseItem(item)
-					})*/
+				/*aTokenURI.addEventListener('click', function(e) {
+				let item = e.target
+				while(item.id.length < 1) {
+				item = item.parentNode
+			}
+			expandCollapseItem(item)
+		})*/
 				}
 
 				/*li.addEventListener('click', function(e) {
-					let item = e.target
-					while(item.id.length < 1 || item.id.includes('chart')) {
-						item = item.parentNode
-					}
-					expandCollapseItem(item)
-				})*/
+	let item = e.target
+	while(item.id.length < 1 || item.id.includes('chart')) {
+	item = item.parentNode
+}
+expandCollapseItem(item)
+})*/
 
 				document.getElementById('wallet-ul').appendChild(li)
 
@@ -1090,8 +1095,8 @@ function displayNFTs() {
 			spanNoNft.innerHTML = loading ? 'Loading ...' : 'No NFT can be found on this address'
 			spanNoNft.classList.add('loading-message')
 			document.getElementById('wallet').appendChild(spanNoNft)
-			//stateContainer.innerHTML = 'No NFT can be found on this address'
-			//stateContainer.classList.toggle('shadow-white', true)
+		//stateContainer.innerHTML = 'No NFT can be found on this address'
+		//stateContainer.classList.toggle('shadow-white', true)
 		} else {
 			stateContainer.innerHTML = null
 			stateContainer.classList.remove('shadow-white')
@@ -1349,7 +1354,10 @@ async function initializeHTML() {
 
 	document.getElementById('filter-by-network-container').classList.remove('none')
 
-	setTimeout(() => { document.getElementById('global').style = '' }, 1000)
+	setTimeout(() => {
+		document.getElementById('global').style = ''
+		document.getElementById('pie-charts').style = ''
+	}, 1000)
 
 	configureWalletEvents()
 }
@@ -1375,16 +1383,19 @@ function toggleHideButtons() {
 		document.getElementById('hide-small-balances-container').classList.remove('none')
 		document.getElementById('hide-no-image-container').classList.toggle('none', true)
 		document.getElementById('global').classList.remove('none')
+		document.getElementById('pie-charts').classList.remove('none')
 		document.getElementById('wallet').classList.remove('nft')
 	} else if(walletOptions.menu.nfts.isActive) {
 		document.getElementById('hide-no-image-container').classList.remove('none')
 		document.getElementById('hide-small-balances-container').classList.toggle('none', true)
 		document.getElementById('global').classList.toggle('none', true)
+		document.getElementById('pie-charts').classList.toggle('none', true)
 		document.getElementById('wallet').classList.toggle('nft', true)
 	} else if(walletOptions.menu.transactions.isActive) {
 		document.getElementById('hide-no-image-container').classList.toggle('none', true)
 		document.getElementById('hide-small-balances-container').classList.toggle('none', true)
 		document.getElementById('global').classList.toggle('none', true)
+		document.getElementById('pie-charts').classList.toggle('none', true)
 		document.getElementById('wallet').classList.remove('nft')
 	}
 }
@@ -1517,6 +1528,135 @@ document.getElementById('hide-no-image-container').addEventListener('click', (e)
 	displayWallet(true)
 })
 
+function updatePieCharts() {
+	if(!walletAddress || !walletAddress[0]) {
+		if(Object.keys(pieCharts).length > 0) {
+			Object.keys(pieCharts).forEach((chart) => pieCharts[chart].destroy())
+			pieCharts = {}
+		}
+		return
+	}
+
+	let pieNetworksData = []
+	let n = 0
+	filters.networks.forEach((network) => {
+		let total = 0
+		filters.address.forEach((address) => {
+			Object.keys(wallet[address])
+				.filter((id) => id.startsWith(network))
+				.forEach((id) => {
+					if(wallet[address][id].price) {
+						total += parseFloat(calculateValue(wallet[address][id].value, wallet[address][id].price, wallet[address][id].tokenDecimal))
+					}
+				})
+		})
+		pieNetworksData[n] = total
+		n += 1
+	})
+
+	// Network distribution
+	if(pieCharts && pieCharts.pieNetworks) {
+		pieCharts.pieNetworks.data.labels = filters.networks
+		pieCharts.pieNetworks.data.datasets[0].data = pieNetworksData
+		pieCharts.pieNetworks.data.datasets[0].backgroundColor = filters.networks.map((network) => NETWORK[network].color)
+		pieCharts.pieNetworks.update()
+	} else {
+		const ctx = document.getElementById('pie-networks').getContext('2d')
+		pieCharts.pieNetworks = new Chart(ctx, {
+			type: 'pie',
+			labels: filters.networks,
+			data: {
+				datasets: [{
+					data: pieNetworksData,
+					backgroundColor: filters.networks.map((network) => NETWORK[network].color),
+					hoverOffset: 15,
+					borderRadius: 8
+				}]
+			}
+			,
+			options: {
+				responsive: true,
+				aspectRatio: 1,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						labels: {
+							font: {
+								size: 10
+							}
+						},
+						position: 'left',
+					},
+					title: {
+						display: true,
+						text: 'Network distribution'
+					}
+				}
+			}
+		})
+	}
+
+
+
+	let pieTokensData = [], pieTokensLabels = [], pieTokensColors = []
+	filters.networks.forEach((network) => {
+		filters.address.forEach((address) => {
+			Object.keys(wallet[address])
+				.filter((id) => id.startsWith(network))
+				.forEach((id) => {
+					const balance = calculateValue(wallet[address][id].value, wallet[address][id].price, wallet[address][id].tokenDecimal)
+					if(balance && balance > walletOptions.smallBalance) {
+						pieTokensData.push(balance)
+						pieTokensLabels.push(wallet[address][id].tokenSymbol)
+						pieTokensColors.push(getColorFromString(id))
+					}
+				})
+		})
+	})
+
+
+	// Token distribution
+	if(pieCharts && pieCharts.pieTokens) {
+		pieCharts.pieTokens.data.labels = pieTokensLabels
+		pieCharts.pieTokens.data.datasets[0].data = pieTokensData
+		pieCharts.pieTokens.data.datasets[0].backgroundColor = pieTokensColors
+		pieCharts.pieTokens.options.plugins.legend.display = pieTokensLabels.length < 6
+		pieCharts.pieTokens.update()
+	} else {
+		const ctx = document.getElementById('pie-tokens').getContext('2d')
+		pieCharts.pieTokens = new Chart(ctx, {
+			type: 'pie',
+			labels: pieTokensLabels,
+			data: {
+				datasets: [{
+					data: pieTokensData,
+					backgroundColor: pieTokensColors,
+					hoverOffset: 15,
+					borderRadius: 8
+				}]
+			},
+			options: {
+				responsive: true,
+				aspectRatio: 1,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						labels: {
+							font: {
+								size: 10
+							}
+						},
+						position: 'left',
+					},
+					title: {
+						display: true,
+						text: 'Tokens distribution'
+					}
+				}
+			}
+		})
+	}
+}
 
 function updateGlobalChart() {
 	if(!walletAddress || !walletAddress[0] || walletValue === 0) {
@@ -1734,12 +1874,15 @@ const getId = (address, network, wallet) => {
 /* Utils - Wallet with not null value token */
 const filteredWallet = () => {
 	let filtered = []
+	if(!filters.address || Object.keys(wallet).length === 0) {
+		return filtered
+	}
 	filters.address.forEach((address) => {
 		Object.keys(wallet[address])
 			.filter(key => filters.networks.includes(key.split('-')[0]))
 			.filter(id => wallet[address][id].value && wallet[address][id].value !== '0')
 			.forEach((id) => {
-				if(!walletOptions.hideSmallBalance || (walletOptions.hideSmallBalance &&  Math.abs(calculateValue(wallet[address][id].value, wallet[address][id].price, wallet[address][id].tokenDecimal)) >= 0.01)) {
+				if(!walletOptions.hideSmallBalance || (walletOptions.hideSmallBalance &&  Math.abs(calculateValue(wallet[address][id].value, wallet[address][id].price, wallet[address][id].tokenDecimal)) >= walletOptions.smallBalance)) {
 					filtered.push({ ...wallet[address][id], wallet: address })
 				}
 			})
