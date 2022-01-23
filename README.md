@@ -71,4 +71,5 @@ yarn stop
 -----
 #### Thanks
 
+[ChainList.org](https://chainid.network/chains_mini.json) for networks data
 [Feathericons](https://feathericons.com/) for the icons
