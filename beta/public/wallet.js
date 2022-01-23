@@ -118,7 +118,7 @@ function configureWallet(inputAddress) {
 
 	clearAllTimers()
 
-	if(inputAddress.length === 0 || inputAddress.length > 0 && inputAddress === walletAddress.join(',')) {
+	if(inputAddress.length === 0 || walletAddress && inputAddress.length > 0 && inputAddress === walletAddress.join(',')) {
 		stateContainer.innerHTML = null
 		stateContainer.classList.remove('shadow-white')
 
@@ -141,6 +141,7 @@ function configureWallet(inputAddress) {
 		displayWallet(true)
 
 		walletOptionsContainer.classList.toggle('none', true)
+		configureFilterByAddress()
 
 		return
 	}
@@ -178,6 +179,8 @@ function configureWallet(inputAddress) {
 		stateContainer.innerHTML = 'No valid address, checksum cannot be verified'
 		stateContainer.classList.toggle('shadow-white', true)
 		walletOptionsContainer.classList.toggle('none', true)
+
+		configureFilterByAddress()
 
 		return
 	}
@@ -259,7 +262,7 @@ const configureFilterByAddress = () => {
 	addressList.innerHTML = null
 	filters.address = walletAddress
 
-	if(walletAddress.length < 2) {
+	if(!walletAddress || walletAddress.length < 2) {
 		document.getElementById('filter-by-address-container').classList.toggle('none', true)
 		return
 	}
@@ -1612,8 +1615,7 @@ function updatePieCharts() {
 
 
 
-	let pieNetworksData = []
-	let n = 0
+	let pieNetworksData = [], pieNetworksLabels = [], pieNetworksColors = []
 	filters.networks.forEach((network) => {
 		let total = 0
 		filters.address.forEach((address) => {
@@ -1625,51 +1627,65 @@ function updatePieCharts() {
 					}
 				})
 		})
-		pieNetworksData[n] = total
-		n += 1
+		if(total > 0) {
+			pieNetworksLabels.push(NETWORK[network].name)
+			pieNetworksData.push(total)
+			pieNetworksColors.push(NETWORK[network].color)
+		}
 	})
 
-	// Networks distribution
-	if(pieCharts && pieCharts.pieNetworks) {
-		pieCharts.pieNetworks.data.labels = filters.networks
-		pieCharts.pieNetworks.data.datasets[0].data = pieNetworksData
-		pieCharts.pieNetworks.data.datasets[0].backgroundColor = filters.networks.map((network) => NETWORK[network].color)
-		pieCharts.pieNetworks.update()
+
+	if(filters.networks.length < 2 || pieNetworksData.filter((value) => value > 0).length < 2) {
+		if(pieCharts && pieCharts.pieNetworks) {
+			pieCharts.pieNetworks.destroy()
+			delete pieCharts.pieNetworks
+			document.getElementById('pie-networks-container').style.display = 'none'
+		}
 	} else {
-		const ctx = document.getElementById('pie-networks').getContext('2d')
-		pieCharts.pieNetworks = new Chart(ctx, {
-			type: 'pie',
-			labels: filters.networks,
-			data: {
-				datasets: [{
-					data: pieNetworksData,
-					backgroundColor: filters.networks.map((network) => NETWORK[network].color),
-					hoverOffset: 15,
-					borderRadius: 8
-				}]
-			}
-			,
-			options: {
-				responsive: true,
-				aspectRatio: 1,
-				maintainAspectRatio: false,
-				plugins: {
-					legend: {
-						labels: {
-							font: {
-								size: 10
-							}
+		document.getElementById('pie-networks-container').style.display = 'block'
+		// Networks distribution
+		if(pieCharts && pieCharts.pieNetworks) {
+			pieCharts.pieNetworks.data.labels = pieNetworksLabels
+			pieCharts.pieNetworks.data.datasets[0].data = pieNetworksData
+			pieCharts.pieNetworks.data.datasets[0].backgroundColor = pieNetworksColors
+			pieCharts.pieNetworks.update()
+		} else {
+			const ctx = document.getElementById('pie-networks').getContext('2d')
+			pieCharts.pieNetworks = new Chart(ctx, {
+				type: 'pie',
+				labels: pieNetworksLabels,
+				data: {
+					datasets: [{
+						data: pieNetworksData,
+						backgroundColor: pieNetworksColors,
+						hoverOffset: 15,
+						borderRadius: 8
+					}]
+				}
+				,
+				options: {
+					responsive: true,
+					aspectRatio: 1,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							labels: {
+								font: {
+									size: 10
+								}
+							},
+							position: 'left',
 						},
-						position: 'left',
-					},
-					title: {
-						display: true,
-						text: 'Networks distribution'
+						title: {
+							display: true,
+							text: 'Networks distribution'
+						}
 					}
 				}
-			}
-		})
+			})
+		}
 	}
+
 
 
 
