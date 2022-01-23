@@ -212,13 +212,9 @@ require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(W
 
 	Object.keys(NETWORK).forEach((network) => {
 		web3[network] = new Web3(NETWORK[network].rpc)
+		setGas(network)
 	})
 
-	setTimeout(setGas(NETWORK.ETHEREUM.enum), 200)
-	setTimeout(setGas(NETWORK.POLYGON.enum), 400)
-	setTimeout(setGas(NETWORK.BSC.enum), 600)
-	setTimeout(setGas(NETWORK.FANTOM.enum), 800)
-	setTimeout(setGas(NETWORK.XDAI.enum), 1000)
 	setTimeout(updateGas, 5000)
 })
 
