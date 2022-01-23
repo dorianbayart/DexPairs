@@ -198,25 +198,18 @@ function getSimple() {
 
 // get charts data from server
 // + update chart
-function getCharts() {
-	let xmlhttp = new XMLHttpRequest()
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			let data = JSON.parse(this.responseText)
-			tokenCharts = data[selectedToken]
-			baseCharts = data[selectedBase]
-			if(tokenCharts && Object.keys(tokenCharts).length > 0) {
-				updateCharts()
-				setSwapperBase()
-				sessionStorage.setItem('tokenCharts', JSON.stringify(tokenCharts))
-				sessionStorage.setItem('baseCharts', JSON.stringify(baseCharts))
-			} else {
-				setTimeout(getCharts, 3000)
-			}
-		}
+async function getCharts() {
+	let data = await getChartsByAddresses(selectedToken, selectedBase, dexList[dex].chain_enum)
+	tokenCharts = data[selectedToken]
+	baseCharts = data[selectedBase]
+	if(tokenCharts && Object.keys(tokenCharts).length > 0) {
+		updateCharts()
+		setSwapperBase()
+		sessionStorage.setItem('tokenCharts', JSON.stringify(tokenCharts))
+		sessionStorage.setItem('baseCharts', JSON.stringify(baseCharts))
+	} else {
+		setTimeout(getCharts, 3000)
 	}
-	xmlhttp.open('GET', dexList[dex].url_data + '/charts/' + selectedToken + '/' + selectedBase, true)
-	xmlhttp.send()
 }
 
 

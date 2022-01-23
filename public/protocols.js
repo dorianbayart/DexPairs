@@ -2,6 +2,7 @@
 
 
 let underlyingAssets = {}
+let beefyRatio = {}
 
 // Utils
 async function get(url, query = null) {
@@ -24,6 +25,10 @@ async function get(url, query = null) {
 			.catch(reject)
 	})
 }
+
+
+// beefy.finance - get all ratio
+const beefy_ratio = 'https://api.beefy.finance/lps'
 
 
 // AAVE - Ethereum
@@ -240,4 +245,85 @@ async function getVenusBscUnderlyingAddresses(callback) {
 			debt: 1
 		}
 	})
+}
+
+
+
+
+
+async function getCoingeckoPrice(address, network) {
+	address = address.toLowerCase()
+	let token = coingecko[network + '-' + address]
+	if(token && Date.now() - token.updatedAt < 120000) {
+		return token.price
+	}
+
+	return fetch(SERVER_URL + '/coingecko/' + NETWORK[network].coingecko_name + '/' + address)
+		.then((response) => response.json())
+		.then((token) => {
+			coingecko[network + '-' + address] = { ...token, updatedAt: Date.now() }
+			return token.price
+		})
+		.catch(() => {
+			coingecko[network + '-' + address] = { updatedAt: Date.now() }
+			return
+		})
+}
+
+
+
+
+async function getPriceFromBeefy(contract, symbol, balance, network) {
+	if(Object.keys(beefyRatio).length === 0 || Date.now() - beefyRatio.updatedAt > 60000) {
+		beefyRatio = await get(beefy_ratio)
+		beefyRatio.updatedAt = Date.now()
+	}
+	const key = Object.keys(beefyRatio).find((item) => item.replace(/-/g, '').toLowerCase().endsWith(symbol.replace(/-/g, '').toLowerCase().substr(3)))
+	if(key) {
+		return beefyRatio[key]
+	} else {
+		try {
+			let underlyingContract = await getBeefyUnderlying(contract, network)
+			return await getCoingeckoPrice(underlyingContract, network)
+		} catch {
+			return
+		}
+	}
+}
+
+/* Utils - Return the Contract depending on the network */
+const getBeefyUnderlying = async (contractAddress, network) => {
+	const wantABI = [
+		// want
+		{
+			'constant':true,
+			'inputs':[],
+			'name':'want',
+			'outputs':[{'name':'','type':'address','internalType':'contract IERC20'}],
+			'type':'function',
+			'stateMutability':'view',
+			'payable':false
+		}
+	]
+	let contract = null
+	switch (network) {
+	case NETWORK.ETHEREUM.enum:
+		contract = new web3_ethereum.eth.Contract(wantABI, contractAddress)
+		break
+	case NETWORK.POLYGON.enum:
+		contract = new web3_polygon.eth.Contract(wantABI, contractAddress)
+		break
+	case NETWORK.FANTOM.enum:
+		contract = new web3_fantom.eth.Contract(wantABI, contractAddress)
+		break
+	case NETWORK.XDAI.enum:
+		contract = new web3_xdai.eth.Contract(wantABI, contractAddress)
+		break
+	case NETWORK.BSC.enum:
+		contract = new web3_bsc.eth.Contract(wantABI, contractAddress)
+		break
+	default:
+	}
+
+	return await contract.methods.want().call()
 }
