@@ -41,7 +41,7 @@ const WEEK = 604800000 // 1 week
 
 const NETWORK = {
 	ETHEREUM: {
-		order: 1,
+		chainId: 1,
 		enum: 'ETHEREUM',
 		name: 'Ethereum',
 		img: '/img/ethereum-icon.svg',
@@ -61,7 +61,7 @@ const NETWORK = {
 		coingecko_name: 'ethereum'
 	},
 	POLYGON: {
-		order: 2,
+		chainId: 137,
 		enum: 'POLYGON',
 		name: 'Polygon/Matic',
 		img: '/img/polygon-icon.svg',
@@ -81,7 +81,7 @@ const NETWORK = {
 		coingecko_name: 'polygon-pos'
 	},
 	BSC : {
-		order: 3,
+		chainId: 56,
 		enum: 'BSC',
 		name: 'Binance Smart Chain',
 		img: '/img/bsc-icon.svg',
@@ -101,7 +101,7 @@ const NETWORK = {
 		coingecko_name: 'binance-smart-chain'
 	},
 	FANTOM: {
-		order: 4,
+		chainId: 250,
 		enum: 'FANTOM',
 		name: 'Fantom/Opera',
 		img: '/img/fantom-icon.svg',
@@ -121,7 +121,7 @@ const NETWORK = {
 		coingecko_name: 'fantom'
 	},
 	XDAI: {
-		order: 5,
+		chainId: 100,
 		enum: 'XDAI',
 		name: 'xDai',
 		img: '/img/xdai-icon.svg',
@@ -197,11 +197,7 @@ const nftABI = [
 ]
 
 
-let web3_ethereum = null
-let web3_polygon = null
-let web3_fantom = null
-let web3_xdai = null
-let web3_bsc = null
+let web3 = null
 let walletAddress = []
 let wallet = {}
 let wallet_NFT = {}
@@ -212,11 +208,11 @@ let loadingChartsByAddress = false
 
 require.config({ waitSeconds: 0 })
 require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
-	web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
-	web3_polygon = new Web3(NETWORK.POLYGON.rpc)
-	web3_fantom = new Web3(NETWORK.FANTOM.rpc)
-	web3_xdai = new Web3(NETWORK.XDAI.rpc)
-	web3_bsc = new Web3(NETWORK.BSC.rpc)
+	web3 = {}
+
+	Object.keys(NETWORK).forEach((network) => {
+		web3[network] = new Web3(NETWORK[network].rpc)
+	})
 
 	setTimeout(setGas(NETWORK.ETHEREUM.enum), 200)
 	setTimeout(setGas(NETWORK.POLYGON.enum), 400)
@@ -235,15 +231,15 @@ const updateGas = () => {
 }
 
 const setGas = (network) => {
-	let web3 = getWeb3(NETWORK[network].enum)
+	let web3 = getWeb3(network)
 	if(web3) {
 		web3.eth.getGasPrice().then(gas => {
-			// sessionStorage.setItem('gas-' + NETWORK[network].enum, gasRound(web3.utils.fromWei(gas, 'gwei')))
-			const li = document.getElementById('gas-' + NETWORK[network].enum)
+			// sessionStorage.setItem('gas-' + network, gasRound(web3.utils.fromWei(gas, 'gwei')))
+			const li = document.getElementById('gas-' + network)
 			li.innerHTML = ''
 			let span = document.createElement('span')
 			span.classList.add('gas-network')
-			span.appendChild(createNetworkImg(NETWORK[network].enum))
+			span.appendChild(createNetworkImg(network))
 			li.appendChild(span)
 			span = document.createElement('span')
 			span.classList.add('gas-value')
@@ -336,21 +332,10 @@ document.getElementById('gas-realtime-button').addEventListener('click', (e) => 
 
 /* Utils - Return the web3 to use depending on the network */
 const getWeb3 = (network) => {
-	switch (network) {
-	case NETWORK.ETHEREUM.enum:
-		return web3_ethereum
-	case NETWORK.POLYGON.enum:
-		return web3_polygon
-	case NETWORK.FANTOM.enum:
-		return web3_fantom
-	case NETWORK.XDAI.enum:
-		return web3_xdai
-	case NETWORK.BSC.enum:
-		return web3_bsc
-	default:
-		return
-	}
+	return web3[network]
 }
+
+
 
 /* Utils - Create a document network img tag */
 const createNetworkImg = (network) => {

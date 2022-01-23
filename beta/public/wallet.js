@@ -146,14 +146,14 @@ function configureWallet(inputAddress) {
 		return
 	}
 
-	if(!web3_ethereum) {
+	if(!web3) {
 		setTimeout(() => configureWallet(inputAddress), 1000)
 		return
 	}
 
 	let validAddresses = []
 	inputAddress.forEach((address) => {
-		if(web3_ethereum.utils.isAddress(address)) {
+		if(getWeb3(NETWORK.ETHEREUM.enum).utils.isAddress(address)) {
 			validAddresses.push(address)
 		}
 	})
@@ -1837,37 +1837,11 @@ function updateGlobalChart() {
 
 /* Utils - Return the Contract depending on the network */
 const getContract = (contractAddress, network) => {
-	switch (network) {
-	case NETWORK.ETHEREUM.enum:
-		return new web3_ethereum.eth.Contract(minABI, contractAddress)
-	case NETWORK.POLYGON.enum:
-		return new web3_polygon.eth.Contract(minABI, contractAddress)
-	case NETWORK.FANTOM.enum:
-		return new web3_fantom.eth.Contract(minABI, contractAddress)
-	case NETWORK.XDAI.enum:
-		return new web3_xdai.eth.Contract(minABI, contractAddress)
-	case NETWORK.BSC.enum:
-		return new web3_bsc.eth.Contract(minABI, contractAddress)
-	default:
-		return
-	}
+	return new (getWeb3(network).eth).Contract(minABI, contractAddress)
 }
 /* Utils - Return the NFT Contract depending on the network */
 const getNFTContract = (contractAddress, network) => {
-	switch (network) {
-	case NETWORK.ETHEREUM.enum:
-		return new web3_ethereum.eth.Contract(nftABI, contractAddress)
-	case NETWORK.POLYGON.enum:
-		return new web3_polygon.eth.Contract(nftABI, contractAddress)
-	case NETWORK.FANTOM.enum:
-		return new web3_fantom.eth.Contract(nftABI, contractAddress)
-	case NETWORK.XDAI.enum:
-		return new web3_xdai.eth.Contract(nftABI, contractAddress)
-	case NETWORK.BSC.enum:
-		return new web3_bsc.eth.Contract(nftABI, contractAddress)
-	default:
-		return
-	}
+	return new (getWeb3(network).eth).Contract(nftABI, contractAddress)
 }
 
 /* Utils - Build transactions array */
@@ -1912,8 +1886,8 @@ const buildTxArray = () => {
 /* Utils - sort the wallet */
 const sortWallet = (a, b) => {
 	// sort by network
-	if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
-	if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+	if(NETWORK[a.network].chainId < NETWORK[b.network].chainId) return -1
+	if(NETWORK[a.network].chainId > NETWORK[b.network].chainId) return 1
 	// then sort by token network (eg: Ethereum, Matic, etc are first)
 	if(NETWORK[a.network].tokenContract === a.contract) return -1
 	if(NETWORK[b.network].tokenContract === b.contract) return 1
@@ -1930,8 +1904,8 @@ const sortWallet = (a, b) => {
 /* Utils - sort the NFT wallet */
 const sortNFTWallet = (a, b) => {
 	// sort by network
-	if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
-	if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+	if(NETWORK[a.network].chainId < NETWORK[b.network].chainId) return -1
+	if(NETWORK[a.network].chainId > NETWORK[b.network].chainId) return 1
 	// then sort by name
 	return a.tokenName.localeCompare(b.tokenName)
 }
