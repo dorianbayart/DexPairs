@@ -441,6 +441,7 @@ function setFavorites() {
 		img_logo.width = '20'
 		img_logo.height = '20'
 		img_logo.classList.add('favorite-logo')
+		img_logo.title = fav.symbol
 		div.appendChild(img_logo)
 
 		let dash = document.createElement('span')
@@ -456,6 +457,7 @@ function setFavorites() {
 		img_logo.width = '20'
 		img_logo.height = '20'
 		img_logo.classList.add('favorite-logo')
+		img_logo.title = fav.baseSymbol
 		div.appendChild(img_logo)
 		/*div_symbol = document.createElement('div')
     div_symbol.innerHTML = fav.baseSymbol
@@ -515,6 +517,7 @@ function setFromFavorite(id) {
 	const img = document.getElementById('dex-selection-img')
 	img.src = NETWORK[dexList[dex].chain_enum].img
 	img.alt = dexList[dex].chain + ' Logo'
+	img.title = img.alt
 
 	if(dex !== previousDex) {
 		clearTimeout(getListTimer)
@@ -948,7 +951,7 @@ function initializeHTML() {
 
 
 	let dexSelector = document.getElementById('dex-selector')
-	Object.keys(dexList).filter(item => !dexList[item].disabled).forEach((item) => {
+	Object.keys(dexList).sort(sortDEXByChainId).filter(item => !dexList[item].disabled).forEach((item) => {
 		let option = document.createElement('option')
 		dexSelector.appendChild(option)
 		option.innerHTML += dexList[item].chain + ' - ' + dexList[item].name

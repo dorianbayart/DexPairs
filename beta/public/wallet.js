@@ -1320,7 +1320,7 @@ async function initializeHTML() {
 	toggleHideButtons()
 
 	const networkList = document.getElementById('filter-by-network-list')
-	Object.keys(NETWORK).forEach((network) => {
+	Object.keys(NETWORK).sort(sortByChainId).forEach((network) => {
 		const li = document.createElement('li')
 		li.id = 'filter-by-' + NETWORK[network].enum
 		li.classList.add('filter-by-network-item')

@@ -210,7 +210,7 @@ require.config({ waitSeconds: 0 })
 require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
 	web3 = {}
 
-	Object.keys(NETWORK).forEach((network) => {
+	Object.keys(NETWORK).sort(sortByChainId).forEach((network) => {
 		web3[network] = new Web3(NETWORK[network].rpc)
 		setGas(network)
 	})
@@ -432,4 +432,15 @@ const hashCode = (str) => {
 }
 const getColorFromString = (str) => {
 	return `hsl(${hashCode(str) % 360}, 100%, 45%)`
+}
+
+
+// Sort By ChainId
+const sortByChainId = (a, b) => {
+	if(NETWORK[a].chainId > NETWORK[b].chainId) return 1
+	return -1
+}
+const sortDEXByChainId = (a, b) => {
+	if(NETWORK[dexList[a].chain_enum].chainId > NETWORK[dexList[b].chain_enum].chainId) return 1
+	return -1
 }
