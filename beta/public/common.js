@@ -219,34 +219,40 @@ require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(W
 })
 
 
-const updateGas = () => {
-	setTimeout(updateGas, gasIsRealtime ? 500 : 5000)
-	// randomly select a network to update gas
-	let network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
-	setGas(network)
+const updateGas = (network) => {
+	if(!network) {
+		// randomly select a network to update gas
+		network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
+		setTimeout(updateGas, gasIsRealtime ? 750 : 5000)
+	}
+
+	let web3 = getWeb3(network)
+	if(web3) {
+		try {
+			web3.eth.getGasPrice().then(gas => {
+				const gwei = gasRound(web3.utils.fromWei(gas, 'gwei'))
+				const li = document.getElementById(`gas-${network}`)
+				const span = document.getElementById(`gas-value-${network}`)
+				span.innerHTML = gwei
+				li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
+			})
+		} catch {}
+	}
 }
 
 const setGas = (network) => {
-	let web3 = getWeb3(network)
-	if(web3) {
-		web3.eth.getGasPrice().then(gas => {
-			// sessionStorage.setItem('gas-' + network, gasRound(web3.utils.fromWei(gas, 'gwei')))
-			const li = document.getElementById('gas-' + network)
-			li.innerHTML = ''
-			let span = document.createElement('span')
-			span.classList.add('gas-network')
-			span.appendChild(createNetworkImg(network))
-			li.appendChild(span)
-			span = document.createElement('span')
-			span.classList.add('gas-value')
-			const gwei = gasRound(web3.utils.fromWei(gas, 'gwei'))
-			span.innerHTML = gwei
-			li.appendChild(span)
-			li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
-		}/*, error => {
-      console.log(error)
-    }*/)
-	}
+	const li = document.getElementById(`gas-${network}`)
+	li.innerHTML = ''
+	let span = document.createElement('span')
+	span.classList.add('gas-network')
+	span.appendChild(createNetworkImg(network))
+	li.appendChild(span)
+	span = document.createElement('span')
+	span.classList.add('gas-value')
+	span.id = `gas-value-${network}`
+	li.appendChild(span)
+
+	updateGas(network)
 }
 
 
