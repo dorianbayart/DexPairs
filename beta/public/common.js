@@ -241,7 +241,9 @@ const updateGas = (network) => {
 }
 
 const setGas = (network) => {
-	const li = document.getElementById(`gas-${network}`)
+	const ul = document.getElementById('gas-list')
+	const li = document.createElement('li')
+	li.id = `gas-${network}`
 	li.innerHTML = ''
 	let span = document.createElement('span')
 	span.classList.add('gas-network')
@@ -251,6 +253,7 @@ const setGas = (network) => {
 	span.classList.add('gas-value')
 	span.id = `gas-value-${network}`
 	li.appendChild(span)
+	ul.appendChild(li)
 
 	updateGas(network)
 }

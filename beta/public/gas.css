@@ -67,6 +67,7 @@ ul.gas-list {
   padding: 0;
   display: inline-flex;
   list-style: none;
+  min-height: 26px;
 }
 
 .gas-list li {
