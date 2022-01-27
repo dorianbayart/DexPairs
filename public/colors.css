@@ -39,6 +39,7 @@ button {
 
 /* News */
 .main > h1,
+.back-button,
 .entry {
   background-color: #ffffffdd;
   color: #000000dd;
