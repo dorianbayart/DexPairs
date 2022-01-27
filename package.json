@@ -43,17 +43,17 @@
   ],
   "license": "GNU General Public License v3.0",
   "dependencies": {
-    "compression": "^1.7.4",
-    "express": "^4.17.2",
-    "express-rate-limit": "^6.2.0",
+    "compression": "*",
+    "express": "*",
+    "express-rate-limit": "*",
     "node-fetch": "^2.6.1",
-    "pm2": "^5.1.2",
-    "yarn": "^1.22.17"
+    "pm2": "*",
+    "yarn": "*"
   },
   "devDependencies": {
-    "eslint": "^8.6.0",
-    "stylelint": "^14.2.0",
-    "stylelint-config-standard": "^24.0.0",
-    "stylelint-order": "^5.0.0"
+    "eslint": "*",
+    "stylelint": "*",
+    "stylelint-config-standard": "*",
+    "stylelint-order": "*"
   }
 }
