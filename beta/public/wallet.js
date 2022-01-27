@@ -561,7 +561,7 @@ async function searchTokens(network, address) {
 
 			tokentx[address][network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
 		} catch(error) {
-			console.error(address, network, transaction.contractAddress, error)
+			// console.error(address, network, transaction.contractAddress, error)
 		}
 
 		sessionStorage.setItem('latest-block-' + address + '-' + network, transaction.blockNumber)
