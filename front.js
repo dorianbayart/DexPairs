@@ -347,7 +347,7 @@ setTimeout(launchCoingecko, 3000)
 
 
 
-const limiter = new rateLimit({
+const limiter = rateLimit({
 	windowMs: 10*1000, // 10 seconds
 	max: 75
 })
