@@ -1424,7 +1424,7 @@ function toggleNetworkFilter(network) {
 }
 
 function simpleDataTimers() {
-	Object.keys(NETWORK).forEach((network, i) => {
+	Object.keys(NETWORK).filter((network) => NETWORK[network].url_data !== '').forEach((network, i) => {
 		setTimeout(() => getSimpleData(NETWORK[network].enum, displayWallet), (i+1) * 250)
 
 		if(network === NETWORK.ETHEREUM.enum) {

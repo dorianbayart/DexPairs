@@ -1,9 +1,10 @@
 'use strict'
 
-const fetch = require('node-fetch')
-const os = require('os')
-const path = require('path')
-const fs = require('fs').promises
+import fetch from 'node-fetch'
+import os from 'os'
+import path from 'path'
+import { promises as fs } from 'fs'
+
 
 const PER_PAGE = 250
 const SUPPORTED_PROTOCOLS = ['ethereum', 'binance-smart-chain', 'xdai', 'polygon-pos', 'fantom', 'arbitrum-one', 'celo', 'avalanche']

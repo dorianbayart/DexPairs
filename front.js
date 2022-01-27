@@ -1,11 +1,14 @@
-const http = require('http')
-const os = require('os')
-const path = require('path')
-const express = require('express')
-const compression = require('compression')
-const fetch = require('node-fetch')
-const fs = require('fs').promises
-const rateLimit = require('express-rate-limit')
+'use strict'
+
+
+import http from 'http'
+import os from 'os'
+import path from 'path'
+import express from 'express'
+import compression from 'compression'
+import fetch from 'node-fetch'
+import { promises as fs } from 'fs'
+import rateLimit from 'express-rate-limit'
 
 
 
@@ -359,21 +362,21 @@ const app = express()
 app.use(compression())
 app.use(limiter)
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/index.html')))
-app.get('/charts', (req, res) => res.sendFile(path.join(__dirname, '/charts.html')))
-app.get('/wallet', (req, res) => res.sendFile(path.join(__dirname, '/wallet.html')))
-app.get('/news', (req, res) => res.sendFile(path.join(__dirname, '/news.html')))
-app.get('/donate', (req, res) => res.sendFile(path.join(__dirname, '/donate.html')))
-app.get('/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/feed.atom')))
+app.get('/', (req, res) => res.sendFile('/index.html', { root: '.' }))
+app.get('/charts', (req, res) => res.sendFile('/charts.html', { root: '.' }))
+app.get('/wallet', (req, res) => res.sendFile('/wallet.html', { root: '.' }))
+app.get('/news', (req, res) => res.sendFile('/news.html', { root: '.' }))
+app.get('/donate', (req, res) => res.sendFile('/donate.html', { root: '.' }))
+app.get('/feed.atom', (req, res) => res.sendFile('/feed.atom', { root: '.' }))
 app.use('/img', express.static('img'))
 app.use('/public', express.static('public'))
 app.use('/news/', express.static('news/'))
 
-app.get('/beta/', (req, res) => res.sendFile(path.join(__dirname, '/beta/index.html')))
-app.get('/beta/charts', (req, res) => res.sendFile(path.join(__dirname, '/beta/charts.html')))
-app.get('/beta/wallet', (req, res) => res.sendFile(path.join(__dirname, '/beta/wallet.html')))
-app.get('/beta/news', (req, res) => res.sendFile(path.join(__dirname, '/beta/news.html')))
-app.get('/beta/feed.atom', (req, res) => res.sendFile(path.join(__dirname, '/beta/feed.atom')))
+app.get('/beta/', (req, res) => res.sendFile('/beta/index.html', { root: '.' }))
+app.get('/beta/charts', (req, res) => res.sendFile('/beta/charts.html', { root: '.' }))
+app.get('/beta/wallet', (req, res) => res.sendFile('/beta/wallet.html', { root: '.' }))
+app.get('/beta/news', (req, res) => res.sendFile('/beta/news.html', { root: '.' }))
+app.get('/beta/feed.atom', (req, res) => res.sendFile('/beta/feed.atom', { root: '.' }))
 app.use('/beta/public', express.static('beta/public'))
 
 // Coingecko URL
@@ -387,7 +390,7 @@ app.get('/pancake/token/:token', (req, res) => {
 		Object.keys(tokens_data).includes(req.params.token) ||
     Object.keys(tokens_data).findIndex(address => tokens_data[address].s === req.params.token) !== -1
 	) {
-		res.sendFile(path.join(__dirname, '/index.html'))
+		res.sendFile('/index.html', { root: '.' })
 	} else {
 		// TODO Improve error => redirect to homepage
 		res.writeHead(400, {'Content-Type': 'text/html'})
@@ -414,7 +417,7 @@ app.get('(/uniswap)?/token/:token', (req, res) => {
 		Object.keys(uniswap_data).includes(req.params.token) ||
     Object.keys(uniswap_data).findIndex(address => uniswap_data[address].s === req.params.token) !== -1
 	) {
-		res.sendFile(path.join(__dirname, '/index.html'))
+		res.sendFile('/index.html', { root: '.' })
 	} else {
 		// TODO Improve error => redirect to homepage
 		res.writeHead(400, {'Content-Type': 'text/html'})
@@ -441,7 +444,7 @@ app.get('/quickswap/token/:token', (req, res) => {
 		Object.keys(quickswap_data).includes(req.params.token) ||
     Object.keys(quickswap_data).findIndex(address => quickswap_data[address].s === req.params.token) !== -1
 	) {
-		res.sendFile(path.join(__dirname, '/index.html'))
+		res.sendFile('/index.html', { root: '.' })
 	} else {
 		// TODO Improve error => redirect to homepage
 		res.writeHead(400, {'Content-Type': 'text/html'})
@@ -468,7 +471,7 @@ app.get('/spiritswap/token/:token', (req, res) => {
 		Object.keys(spiritswap_data).includes(req.params.token) ||
     Object.keys(spiritswap_data).findIndex(address => spiritswap_data[address].s === req.params.token) !== -1
 	) {
-		res.sendFile(path.join(__dirname, '/index.html'))
+		res.sendFile('/index.html', { root: '.' })
 	} else {
 		// TODO Improve error => redirect to homepage
 		res.writeHead(400, {'Content-Type': 'text/html'})
@@ -495,7 +498,7 @@ app.get('/honeyswap/token/:token', (req, res) => {
 		Object.keys(honeyswap_data).includes(req.params.token) ||
     Object.keys(honeyswap_data).findIndex(address => honeyswap_data[address].s === req.params.token) !== -1
 	) {
-		res.sendFile(path.join(__dirname, '/index.html'))
+		res.sendFile('/index.html', { root: '.' })
 	} else {
 		// TODO Improve error => redirect to homepage
 		res.writeHead(400, {'Content-Type': 'text/html'})

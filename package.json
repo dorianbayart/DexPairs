@@ -4,11 +4,12 @@
   "url": "https://dexpairs.xyz/",
   "description": "Multi-Chain && Multi-Protocol wallet tracker",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "pm2 restart ecosystem.config.js --env production",
-    "dev": "pm2 start ecosystem.config.js --env development && pm2 save",
+    "start": "pm2 restart ecosystem.config.cjs --env production",
+    "dev": "pm2 start ecosystem.config.cjs --env development && pm2 save",
     "stop": "pm2 stop all && pm2 delete all",
-    "deploy-production": "pm2 deploy ecosystem.config.js production",
+    "deploy-production": "pm2 deploy ecosystem.config.cjs production",
     "upgrade-interactive": "rm package-lock.json || true && yarn && yarn upgrade-interactive --latest"
   },
   "keywords": [
@@ -46,7 +47,7 @@
     "compression": "*",
     "express": "*",
     "express-rate-limit": "*",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "*",
     "pm2": "*",
     "yarn": "*"
   },

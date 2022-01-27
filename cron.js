@@ -1,6 +1,6 @@
 'use strict'
 
-const cp = require('child_process')
+import cp from 'child_process'
 
 const backFolder = './back'
 
