@@ -67,6 +67,7 @@ ul.gas-list {
   padding: 0;
   display: inline-flex;
   list-style: none;
+  min-height: 26px;
 }
 
 .gas-list li {
@@ -85,7 +86,7 @@ ul.gas-list {
 
 .gas-list li span.gas-network {
   display: flex;
-  padding: 1px 3px;
+  align-items: center;
 }
 
 .gas-list li span.gas-value {
@@ -95,9 +96,9 @@ ul.gas-list {
 }
 
 .gas-list li img {
-  max-width: 2em;
   width: auto;
-  height: 12px;
+  height: 100%;
+  margin: 0 2px 0 4px;
 }
 
 @media (max-width: 800px) {

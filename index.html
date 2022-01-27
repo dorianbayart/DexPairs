@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
   <title>DexPairs.xyz</title>
-  <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Polygon, BSC, Fantom and xDai chains." />
+  <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Cronos, BSC, xDai, Polygon, Fantom, Arbitrum One, Celo and Avalanche chains." />
   <meta name="author" content="Dorian Bayart" />
-  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, bsc, fantom, xdai, wallet, nft, defi, dex, uniswap, quickswap, pancakeswap, spiritswap, honeyswap" />
+  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, cronos, bsc, fantom, xdai, arbitrum, avalanche, celo, wallet, nft, defi, dex, uniswap, quickswap, pancakeswap, spiritswap, honeyswap" />
 
   <link rel="shortcut icon" type="image/png" href="/img/background-multichain-min.png" />
   <link href="./" rel="canonical" />
@@ -53,13 +53,13 @@
     <div class='content-illustration'>
       <div class='content'>
         <ul>
-          <li>Track historical prices of your favorite tokens</li>
-          <li>Data comes directly from popular DEXes</li>
+          <li>Track historical prices of hundreds of tokens, data comes directly from popular DEXes</li>
           <li>
-            Display price evolution based on any token you choose<br />
+            Display price evolution based on any token you choose, and compare token performance<br />
             (ie: <a href='./charts?dex=UNISWAP&token=AAVE&base=COMP&interval=4h&timeframe=1m' target='_blank'>Aave/Comp</a>, <a href='./charts?dex=PANCAKESWAP&token=Cake&base=DOT&interval=4h&timeframe=1m' target='_blank'>Cake/Dot</a>)
           </li>
-          <li>Always keep an eye on current gas prices</i>
+          <li>Save up to 6 favorite pairs to monitor</li>
+          <li>Keep an eye on live updated current gas prices</i>
         </ul>
 
         <a href='./charts' title='Track prices' class='GoTo'>Go to Charts</a>
@@ -79,20 +79,36 @@
         Ethereum
       </li>
       <li>
-        <img src="/img/polygon-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
-        Polygon/Matic
+        <img src="/img/cronos-icon.svg" alt="Cronos Logo" width="32px" height="32px" loading='lazy'>
+        Cronos
       </li>
       <li>
-        <img src="/img/bsc-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
+        <img src="/img/bsc-icon.svg" alt="BSC Logo" width="32px" height="32px" loading='lazy'>
         Binance Smart Chain
       </li>
       <li>
-        <img src="/img/fantom-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
+        <img src="/img/xdai-icon.svg" alt="xDai Logo" width="32px" height="32px" loading='lazy'>
+        xDai
+      </li>
+      <li>
+        <img src="/img/polygon-icon.svg" alt="Polygon Logo" width="32px" height="32px" loading='lazy'>
+        Polygon/Matic
+      </li>
+      <li>
+        <img src="/img/fantom-icon.svg" alt="Fantom Logo" width="32px" height="32px" loading='lazy'>
         Fantom/Opera
       </li>
       <li>
-        <img src="/img/xdai-icon.svg" alt="Ethereum Logo" width="32px" height="32px" loading='lazy'>
-        xDai
+        <img src="/img/arbitrum-icon.svg" alt="Arbitrum Logo" width="32px" height="32px" loading='lazy'>
+        Arbitrum One
+      </li>
+      <li>
+        <img src="/img/celo-icon.svg" alt="Celo Logo" width="32px" height="32px" loading='lazy'>
+        Celo
+      </li>
+      <li>
+        <img src="/img/avalanche-icon.svg" alt="Avalanche Logo" width="32px" height="32px" loading='lazy'>
+        Avalanche
       </li>
       <li>
         <i>More to come!</i>
@@ -109,15 +125,19 @@
       </div>
       <div class='content'>
         <ul>
-          <li>Your cross-chain portfolio with real prices at one place</li>
+          <li>Inspect your cross-chain portfolio with real prices at one place</li>
+          <li>Plot pie charts and measure how distributed you are over the different tokens, protocols, blockchains, addresses</li>
           <li>Display your NFTs collection as a gallery, and share it!</li>
-          <li>Estimate your portfolio history value with a global chart (based on Ethereum price evolution)</li>
-          <li>List all your transactions</li>
-          <li><i>Soon</i>: Track your whole portfolio (multi-addresses)!</li>
+          <li>Estimate your portfolio history value on a global chart (based on Ethereum price evolution)</li>
+          <li>List all your transactions, filter by network</li>
+          <li><i>Very soon</i>: Track your whole portfolio (multi-addresses)!</li>
 
         </ul>
 
-        <a href='./wallet' title='Explore your Wallet' class='GoTo'>Go to Wallet</a>
+        <div class='go-to-container'>
+          <a href='./wallet' title='Explore your Wallet' class='GoTo'>Go to your Wallet</a>
+          <a href='./wallet?address=0x0255c9D3850cacA1152AEB20425C264787661692' title='Open a demo wallet' class='GoToDemoLink'>Open a demo wallet</a>
+        </div>
       </div>
     </div>
   </section>
@@ -132,9 +152,9 @@
       <div class='content'>
         <ul>
           <li>Keep an eye on current minimal gas fees in realtime</li>
-          <li>On mobile, tablet or desktop, the design stays responsive</li>
+          <li>Use your mobile, tablet or desktop, the design is responsive</li>
           <li>Subscribe to a dedicated RSS feed - <a href='/news'>Read the news</a>!</li>
-          <li><i>Soon</i>: Many more useful features in the pipe!</li>
+          <li><i>Soon</i>: Stay tuned, many more useful features are in the pipe!</li>
 
         </ul>
       </div>

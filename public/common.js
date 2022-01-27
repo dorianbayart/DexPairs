@@ -41,9 +41,10 @@ const WEEK = 604800000 // 1 week
 
 const NETWORK = {
 	ETHEREUM: {
-		order: 1,
+		chainId: 1,
 		enum: 'ETHEREUM',
 		name: 'Ethereum',
+		shortName: 'eth',
 		img: '/img/ethereum-icon.svg',
 		color: '#3a3a39',
 		rpc: 'https://cloudflare-eth.com',
@@ -60,30 +61,32 @@ const NETWORK = {
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3',
 		coingecko_name: 'ethereum'
 	},
-	POLYGON: {
-		order: 2,
-		enum: 'POLYGON',
-		name: 'Polygon/Matic',
-		img: '/img/polygon-icon.svg',
-		color: '#8249e5',
-		rpc: 'https://polygon-rpc.com',
-		explorer: 'https://polygonscan.com/token/',
-		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: SERVER_URL + '/quickswap',
+	CRONOS: {
+		chainId: 25,
+		enum: 'CRONOS',
+		name: 'Cronos',
+		shortName: 'cro',
+		img: '/img/cronos-icon.svg',
+		color: '#00296c',
+		rpc: 'https://evm-cronos.crypto.org',
+		explorer: 'https://cronos.crypto.org/explorer/token/',
+		tokentx: 'https://cronos.crypto.org/explorer/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://cronos.crypto.org/explorer/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://cronos.crypto.org/explorer/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: '',
 		tokenContract: '0x0',
-		tokenSymbol: 'MATIC',
-		tokenName: 'Matic',
+		tokenSymbol: 'CRO',
+		tokenName: 'Crypto.org Coin',
 		tokenDecimal: 18,
-		tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/henrydapp/quickswap',
-		coingecko_name: 'polygon-pos'
+		tokenPriceContract: '0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23',
+		subgraph_url: '',
+		coingecko_name: 'cronos'
 	},
 	BSC : {
-		order: 3,
+		chainId: 56,
 		enum: 'BSC',
 		name: 'Binance Smart Chain',
+		shortName: 'bnb',
 		img: '/img/bsc-icon.svg',
 		color: '#f0b931',
 		rpc: 'https://bsc-dataseed.binance.org',
@@ -100,10 +103,53 @@ const NETWORK = {
 		subgraph_url: 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/graphql',
 		coingecko_name: 'binance-smart-chain'
 	},
+	XDAI: {
+		chainId: 100,
+		enum: 'XDAI',
+		name: 'Gnosis Chain (formerly xDai)',
+		shortName: 'gno',
+		img: '/img/xdai-icon.svg',
+		color: '#4ea8a6',
+		rpc: 'https://rpc.xdaichain.com/',
+		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
+		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: SERVER_URL + '/honeyswap',
+		tokenContract: '0x0',
+		tokenSymbol: 'XDAI',
+		tokenName: 'xDai',
+		tokenDecimal: 18,
+		tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap',
+		coingecko_name: 'xdai'
+	},
+	POLYGON: {
+		chainId: 137,
+		enum: 'POLYGON',
+		name: 'Polygon/Matic',
+		shortName: 'MATIC',
+		img: '/img/polygon-icon.svg',
+		color: '#8249e5',
+		rpc: 'https://polygon-rpc.com',
+		explorer: 'https://polygonscan.com/token/',
+		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: SERVER_URL + '/quickswap',
+		tokenContract: '0x0',
+		tokenSymbol: 'MATIC',
+		tokenName: 'Matic',
+		tokenDecimal: 18,
+		tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/henrydapp/quickswap',
+		coingecko_name: 'polygon-pos'
+	},
 	FANTOM: {
-		order: 4,
+		chainId: 250,
 		enum: 'FANTOM',
-		name: 'Fantom/Opera',
+		name: 'Fantom Opera',
+		shortName: 'ftm',
 		img: '/img/fantom-icon.svg',
 		color: '#1c68fb',
 		rpc: 'https://rpcapi.fantom.network',
@@ -120,25 +166,68 @@ const NETWORK = {
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/layer3org/spiritswap-analytics',
 		coingecko_name: 'fantom'
 	},
-	XDAI: {
-		order: 5,
-		enum: 'XDAI',
-		name: 'xDai',
-		img: '/img/xdai-icon.svg',
-		color: '#4ea8a6',
-		rpc: 'https://rpc.xdaichain.com/',
-		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
-		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		erc721tx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: SERVER_URL + '/honeyswap',
+	ARBITRUM_ONE: {
+		chainId: 42161,
+		enum: 'ARBITRUM_ONE',
+		name: 'Arbitrum One',
+		shortName: 'arb1',
+		img: '/img/arbitrum-icon.svg',
+		color: '#3aa0f0',
+		rpc: 'https://arb1.arbitrum.io/rpc',
+		explorer: 'https://arbiscan.io/token/',
+		tokentx: 'https://api.arbiscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://api.arbiscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://api.arbiscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: '', // SERVER_URL + '/uniswap-arbitrum',
 		tokenContract: '0x0',
-		tokenSymbol: 'XDAI',
-		tokenName: 'xDai',
+		tokenSymbol: 'AETH',
+		tokenName: 'Ether',
 		tokenDecimal: 18,
-		tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap',
-		coingecko_name: 'xdai'
+		tokenPriceContract: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ianlapham/arbitrum-minimal',
+		coingecko_name: 'arbitrum-one'
+	},
+	CELO: {
+		chainId: 42220,
+		enum: 'CELO',
+		name: 'Celo',
+		shortName: 'CELO',
+		img: '/img/celo-icon.svg',
+		color: '#6ad181',
+		rpc: 'https://forno.celo.org',
+		explorer: 'https://explorer.celo.org/token/',
+		tokentx: 'https://explorer.celo.org/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://explorer.celo.org/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://explorer.celo.org/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: '', // SERVER_URL + '/ubeswap',
+		tokenContract: '0x0',
+		tokenSymbol: 'CELO',
+		tokenName: 'CELO',
+		tokenDecimal: 18,
+		tokenPriceContract: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ubeswap/ubeswap',
+		coingecko_name: 'celo'
+	},
+	AVALANCHE: {
+		chainId: 43114,
+		enum: 'AVALANCHE',
+		name: 'Avalanche',
+		shortName: 'Avalanche',
+		img: '/img/avalanche-icon.svg',
+		color: '#e84142',
+		rpc: 'https://api.avax.network/ext/bc/C/rpc',
+		explorer: 'https://snowtrace.io/token/',
+		tokentx: 'https://api.snowtrace.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://api.snowtrace.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://api.snowtrace.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: '', // SERVER_URL + '/traderjoe',
+		tokenContract: '0x0',
+		tokenSymbol: 'AVAX',
+		tokenName: 'Avalanche',
+		tokenDecimal: 18,
+		tokenPriceContract: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/traderjoe-xyz/exchange',
+		coingecko_name: 'avalanche'
 	},
 }
 
@@ -197,11 +286,7 @@ const nftABI = [
 ]
 
 
-let web3_ethereum = null
-let web3_polygon = null
-let web3_fantom = null
-let web3_xdai = null
-let web3_bsc = null
+let web3 = null
 let walletAddress = []
 let wallet = {}
 let wallet_NFT = {}
@@ -212,49 +297,54 @@ let loadingChartsByAddress = false
 
 require.config({ waitSeconds: 0 })
 require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
-	web3_ethereum = new Web3(NETWORK.ETHEREUM.rpc)
-	web3_polygon = new Web3(NETWORK.POLYGON.rpc)
-	web3_fantom = new Web3(NETWORK.FANTOM.rpc)
-	web3_xdai = new Web3(NETWORK.XDAI.rpc)
-	web3_bsc = new Web3(NETWORK.BSC.rpc)
+	web3 = {}
 
-	setTimeout(setGas(NETWORK.ETHEREUM.enum), 200)
-	setTimeout(setGas(NETWORK.POLYGON.enum), 400)
-	setTimeout(setGas(NETWORK.BSC.enum), 600)
-	setTimeout(setGas(NETWORK.FANTOM.enum), 800)
-	setTimeout(setGas(NETWORK.XDAI.enum), 1000)
+	Object.keys(NETWORK).sort(sortByChainId).forEach((network) => {
+		web3[network] = new Web3(NETWORK[network].rpc)
+		setGas(network)
+	})
+
 	setTimeout(updateGas, 5000)
 })
 
 
-const updateGas = () => {
-	setTimeout(updateGas, gasIsRealtime ? 500 : 5000)
-	// randomly select a network to update gas
-	let network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
-	setGas(network)
+const updateGas = (network) => {
+	if(!network) {
+		// randomly select a network to update gas
+		network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
+		setTimeout(updateGas, gasIsRealtime ? 750 : 5000)
+	}
+
+	let web3 = getWeb3(network)
+	if(web3) {
+		try {
+			web3.eth.getGasPrice().then(gas => {
+				const gwei = gasRound(web3.utils.fromWei(gas, 'gwei'))
+				const li = document.getElementById(`gas-${network}`)
+				const span = document.getElementById(`gas-value-${network}`)
+				span.innerHTML = gwei
+				li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
+			})
+		} catch {}
+	}
 }
 
 const setGas = (network) => {
-	let web3 = getWeb3(NETWORK[network].enum)
-	if(web3) {
-		web3.eth.getGasPrice().then(gas => {
-			// sessionStorage.setItem('gas-' + NETWORK[network].enum, gasRound(web3.utils.fromWei(gas, 'gwei')))
-			const li = document.getElementById('gas-' + NETWORK[network].enum)
-			li.innerHTML = ''
-			let span = document.createElement('span')
-			span.classList.add('gas-network')
-			span.appendChild(createNetworkImg(NETWORK[network].enum))
-			li.appendChild(span)
-			span = document.createElement('span')
-			span.classList.add('gas-value')
-			const gwei = gasRound(web3.utils.fromWei(gas, 'gwei'))
-			span.innerHTML = gwei
-			li.appendChild(span)
-			li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
-		}/*, error => {
-      console.log(error)
-    }*/)
-	}
+	const ul = document.getElementById('gas-list')
+	const li = document.createElement('li')
+	li.id = `gas-${network}`
+	li.innerHTML = ''
+	let span = document.createElement('span')
+	span.classList.add('gas-network')
+	span.appendChild(createNetworkImg(network))
+	li.appendChild(span)
+	span = document.createElement('span')
+	span.classList.add('gas-value')
+	span.id = `gas-value-${network}`
+	li.appendChild(span)
+	ul.appendChild(li)
+
+	updateGas(network)
 }
 
 
@@ -336,21 +426,10 @@ document.getElementById('gas-realtime-button').addEventListener('click', (e) => 
 
 /* Utils - Return the web3 to use depending on the network */
 const getWeb3 = (network) => {
-	switch (network) {
-	case NETWORK.ETHEREUM.enum:
-		return web3_ethereum
-	case NETWORK.POLYGON.enum:
-		return web3_polygon
-	case NETWORK.FANTOM.enum:
-		return web3_fantom
-	case NETWORK.XDAI.enum:
-		return web3_xdai
-	case NETWORK.BSC.enum:
-		return web3_bsc
-	default:
-		return
-	}
+	return web3[network]
 }
+
+
 
 /* Utils - Create a document network img tag */
 const createNetworkImg = (network) => {
@@ -442,4 +521,15 @@ const hashCode = (str) => {
 }
 const getColorFromString = (str) => {
 	return `hsl(${hashCode(str) % 360}, 100%, 45%)`
+}
+
+
+// Sort By ChainId
+const sortByChainId = (a, b) => {
+	if(NETWORK[a].chainId > NETWORK[b].chainId) return 1
+	return -1
+}
+const sortDEXByChainId = (a, b) => {
+	if(NETWORK[dexList[a].chain_enum].chainId > NETWORK[dexList[b].chain_enum].chainId) return 1
+	return -1
 }

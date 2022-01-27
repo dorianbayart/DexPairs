@@ -118,6 +118,11 @@ section.supported-blockchains ul li img {
   margin: 12px 0;
 }
 
+.content .go-to-container {
+  display: inline-flex;
+  align-items: center;
+}
+
 .content a.GoTo {
   align-self: flex-end;
   padding: 12px 24px;
@@ -129,6 +134,10 @@ section.supported-blockchains ul li img {
 
 section.section-wallet .content a.GoTo {
   align-self: flex-start;
+}
+section.section-wallet .content a.GoToDemoLink {
+  font-size: .75em;
+  margin-left: 1em;
 }
 
 .content a.GoTo:hover {

@@ -146,14 +146,14 @@ function configureWallet(inputAddress) {
 		return
 	}
 
-	if(!web3_ethereum) {
+	if(!web3) {
 		setTimeout(() => configureWallet(inputAddress), 1000)
 		return
 	}
 
 	let validAddresses = []
 	inputAddress.forEach((address) => {
-		if(web3_ethereum.utils.isAddress(address)) {
+		if(getWeb3(NETWORK.ETHEREUM.enum).utils.isAddress(address)) {
 			validAddresses.push(address)
 		}
 	})
@@ -561,7 +561,7 @@ async function searchTokens(network, address) {
 
 			tokentx[address][network].filter(t => transaction.contractAddress === t.contractAddress && !t.done).forEach(t => t.done = true)
 		} catch(error) {
-			console.error(address, network, transaction.contractAddress, error)
+			// console.error(address, network, transaction.contractAddress, error)
 		}
 
 		sessionStorage.setItem('latest-block-' + address + '-' + network, transaction.blockNumber)
@@ -1320,7 +1320,7 @@ async function initializeHTML() {
 	toggleHideButtons()
 
 	const networkList = document.getElementById('filter-by-network-list')
-	Object.keys(NETWORK).forEach((network) => {
+	Object.keys(NETWORK).sort(sortByChainId).forEach((network) => {
 		const li = document.createElement('li')
 		li.id = 'filter-by-' + NETWORK[network].enum
 		li.classList.add('filter-by-network-item')
@@ -1424,7 +1424,7 @@ function toggleNetworkFilter(network) {
 }
 
 function simpleDataTimers() {
-	Object.keys(NETWORK).forEach((network, i) => {
+	Object.keys(NETWORK).filter((network) => NETWORK[network].url_data !== '').forEach((network, i) => {
 		setTimeout(() => getSimpleData(NETWORK[network].enum, displayWallet), (i+1) * 250)
 
 		if(network === NETWORK.ETHEREUM.enum) {
@@ -1837,37 +1837,11 @@ function updateGlobalChart() {
 
 /* Utils - Return the Contract depending on the network */
 const getContract = (contractAddress, network) => {
-	switch (network) {
-	case NETWORK.ETHEREUM.enum:
-		return new web3_ethereum.eth.Contract(minABI, contractAddress)
-	case NETWORK.POLYGON.enum:
-		return new web3_polygon.eth.Contract(minABI, contractAddress)
-	case NETWORK.FANTOM.enum:
-		return new web3_fantom.eth.Contract(minABI, contractAddress)
-	case NETWORK.XDAI.enum:
-		return new web3_xdai.eth.Contract(minABI, contractAddress)
-	case NETWORK.BSC.enum:
-		return new web3_bsc.eth.Contract(minABI, contractAddress)
-	default:
-		return
-	}
+	return new (getWeb3(network).eth).Contract(minABI, contractAddress)
 }
 /* Utils - Return the NFT Contract depending on the network */
 const getNFTContract = (contractAddress, network) => {
-	switch (network) {
-	case NETWORK.ETHEREUM.enum:
-		return new web3_ethereum.eth.Contract(nftABI, contractAddress)
-	case NETWORK.POLYGON.enum:
-		return new web3_polygon.eth.Contract(nftABI, contractAddress)
-	case NETWORK.FANTOM.enum:
-		return new web3_fantom.eth.Contract(nftABI, contractAddress)
-	case NETWORK.XDAI.enum:
-		return new web3_xdai.eth.Contract(nftABI, contractAddress)
-	case NETWORK.BSC.enum:
-		return new web3_bsc.eth.Contract(nftABI, contractAddress)
-	default:
-		return
-	}
+	return new (getWeb3(network).eth).Contract(nftABI, contractAddress)
 }
 
 /* Utils - Build transactions array */
@@ -1912,8 +1886,8 @@ const buildTxArray = () => {
 /* Utils - sort the wallet */
 const sortWallet = (a, b) => {
 	// sort by network
-	if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
-	if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+	if(NETWORK[a.network].chainId < NETWORK[b.network].chainId) return -1
+	if(NETWORK[a.network].chainId > NETWORK[b.network].chainId) return 1
 	// then sort by token network (eg: Ethereum, Matic, etc are first)
 	if(NETWORK[a.network].tokenContract === a.contract) return -1
 	if(NETWORK[b.network].tokenContract === b.contract) return 1
@@ -1930,8 +1904,8 @@ const sortWallet = (a, b) => {
 /* Utils - sort the NFT wallet */
 const sortNFTWallet = (a, b) => {
 	// sort by network
-	if(NETWORK[a.network].order < NETWORK[b.network].order) return -1
-	if(NETWORK[a.network].order > NETWORK[b.network].order) return 1
+	if(NETWORK[a.network].chainId < NETWORK[b.network].chainId) return -1
+	if(NETWORK[a.network].chainId > NETWORK[b.network].chainId) return 1
 	// then sort by name
 	return a.tokenName.localeCompare(b.tokenName)
 }
