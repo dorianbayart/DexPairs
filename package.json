@@ -13,8 +13,12 @@
     "upgrade-interactive": "rm package-lock.json || true && yarn && yarn upgrade-interactive --latest"
   },
   "keywords": [
+    "arbitrum",
+    "avalanche",
     "bsc",
     "blockchain",
+    "celo",
+    "cronos",
     "currency",
     "crypto",
     "dex",

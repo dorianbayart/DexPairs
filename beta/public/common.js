@@ -61,6 +61,27 @@ const NETWORK = {
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3',
 		coingecko_name: 'ethereum'
 	},
+	CRONOS: {
+		chainId: 25,
+		enum: 'CRONOS',
+		name: 'Cronos',
+		shortName: 'cro',
+		img: '/img/cronos-icon.svg',
+		color: '#00296c',
+		rpc: 'https://evm-cronos.crypto.org',
+		explorer: 'https://cronos.crypto.org/explorer/token/',
+		tokentx: 'https://cronos.crypto.org/explorer/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://cronos.crypto.org/explorer/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://cronos.crypto.org/explorer/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: '',
+		tokenContract: '0x0',
+		tokenSymbol: 'CRO',
+		tokenName: 'Crypto.org Coin',
+		tokenDecimal: 18,
+		tokenPriceContract: '0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23',
+		subgraph_url: '',
+		coingecko_name: 'cronos'
+	},
 	BSC : {
 		chainId: 56,
 		enum: 'BSC',

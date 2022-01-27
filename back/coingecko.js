@@ -7,7 +7,7 @@ import { promises as fs } from 'fs'
 
 
 const PER_PAGE = 250
-const SUPPORTED_PROTOCOLS = ['ethereum', 'binance-smart-chain', 'xdai', 'polygon-pos', 'fantom', 'arbitrum-one', 'celo', 'avalanche']
+const SUPPORTED_PROTOCOLS = ['ethereum', 'cronos', 'binance-smart-chain', 'xdai', 'polygon-pos', 'fantom', 'arbitrum-one', 'celo', 'avalanche']
 const BASE_URL = 'https://api.coingecko.com/api/v3/'
 const URL_LIST_TOKENS = `${BASE_URL}coins/list/?include_platform=true`
 const URL_FETCH_PRICES = `${BASE_URL}coins/markets?vs_currency=usd&per_page=${PER_PAGE}`
