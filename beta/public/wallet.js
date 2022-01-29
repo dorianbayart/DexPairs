@@ -153,7 +153,7 @@ function configureWallet(inputAddress) {
 
 	let validAddresses = []
 	inputAddress.forEach((address) => {
-		if(getWeb3(NETWORK.ETHEREUM.enum).utils.isAddress(address)) {
+		if(getWeb3(NETWORK.ETHEREUM.enum).utils.isAddress(unprefixAddress(address))) {
 			validAddresses.push(address)
 		}
 	})
@@ -224,7 +224,7 @@ function configureWallet(inputAddress) {
 		wallet[address] = {}
 		wallet_NFT[address] = {}
 
-		Object.keys(NETWORK).forEach((network) => {
+		getNetworksOfAddress(address).forEach((network) => {
 			sessionStorage.removeItem('latest-block-' + address + '-' + NETWORK[network].enum)
 			sessionStorage.removeItem('latest-erc721-block-' + address + '-' + NETWORK[network].enum)
 			sessionStorage.removeItem('latest-fetched-block-' + address + '-' + NETWORK[network].enum)
@@ -257,6 +257,21 @@ function configureWallet(inputAddress) {
 }
 
 
+// Return networks depending on the prefix of the address
+const getNetworksOfAddress = (address) => {
+	return address.includes(':')
+		? Object.keys(NETWORK).filter((network) => NETWORK[network].shortName.toLowerCase() === address.split(':')[0].toLowerCase())
+		: Object.keys(NETWORK)
+}
+
+
+// Remove the EIP-3770 prefix if needed
+// eth:0x123456 => 0x123456
+const unprefixAddress = (address) => {
+	return address.includes(':') ? address.split(':')[1] : address
+}
+
+
 const configureFilterByAddress = () => {
 	const addressList = document.getElementById('filter-by-address-list')
 	addressList.innerHTML = null
@@ -272,7 +287,7 @@ const configureFilterByAddress = () => {
 		li.id = 'filter-by-' + address
 		li.classList.add('filter-by-address-item')
 		const addr = document.createElement('div')
-		addr.innerHTML = address.slice(0, 6)
+		addr.innerHTML = address.includes(':') ? address.split(':')[0]+':'+address.split(':')[1].slice(0, 6) : address.slice(0, 6)
 		addr.classList.add('filter-by-address-text')
 		li.appendChild(addr)
 
@@ -365,7 +380,7 @@ function getTokenTx(network, address, callback) {
 		// console.log('getTokenTx', this)
 	}
 	const latestBlock = sessionStorage.getItem('latest-fetched-block-' + address + '-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-block-' + address + '-' + network)) + 1 : 0
-	xmlhttp.open('GET', NETWORK[network].tokentx.replace('WALLET_ADDRESS', address).replace('START_BLOCK', latestBlock), true)
+	xmlhttp.open('GET', NETWORK[network].tokentx.replace('WALLET_ADDRESS', unprefixAddress(address)).replace('START_BLOCK', latestBlock), true)
 	xmlhttp.send()
 }
 
@@ -377,6 +392,9 @@ function getERC721Tx(network, address, callback) {
 	}
 	if(!address) {
 		clearAllTimers()
+		return
+	}
+	if(!NETWORK[network].erc721tx) {
 		return
 	}
 
@@ -411,7 +429,7 @@ function getERC721Tx(network, address, callback) {
 
 	// TODO Send transaction from only latest needed blocks !
 	const latestBlock = sessionStorage.getItem('latest-fetched-erc721-block-' + address + '-' + network) ? parseInt(sessionStorage.getItem('latest-fetched-erc721-block-' + address + '-' + network)) + 1 : 0
-	xmlhttp.open('GET', NETWORK[network].erc721tx.replace('WALLET_ADDRESS', address).replace('START_BLOCK', latestBlock), true)
+	xmlhttp.open('GET', NETWORK[network].erc721tx.replace('WALLET_ADDRESS', unprefixAddress(address)).replace('START_BLOCK', latestBlock), true)
 	xmlhttp.send()
 }
 
@@ -434,7 +452,7 @@ async function getTokenBalanceWeb3(contractAddress, address, network) {
 	let contract = getContract(contractAddress, network)
 
 	// Call balanceOf function
-	return await contract.methods.balanceOf(address).call(async (error, value) => {
+	return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
 		return value
 	})
 }
@@ -445,7 +463,7 @@ async function populateNFTContract(contractAddress, address, network) {
 
 	// Loop over each NFT hold on this Contract by the WalletAddress
 	for (var i = 0; i < wallet_NFT[address][id].number; i++) {
-		await nftContract.methods.tokenOfOwnerByIndex(address, i).call(async (error, indexId) => {
+		await nftContract.methods.tokenOfOwnerByIndex(unprefixAddress(address), i).call(async (error, indexId) => {
 			if(error) { return }
 			const t = wallet_NFT[address][id].tokens.find(token => token.id === indexId)
 			if(t) {
@@ -697,7 +715,7 @@ async function populateNFTs(network, address) {
 
 async function getTokenId(address, nftContract, index) {
 	try {
-		return await nftContract.methods.tokenOfOwnerByIndex(address, index).call(async (error, indexId) => {
+		return await nftContract.methods.tokenOfOwnerByIndex(unprefixAddress(address), index).call(async (error, indexId) => {
 			return indexId
 		})
 	} catch(error) {
@@ -733,7 +751,7 @@ async function getTokenURI(nftContract, indexId) {
 
 function getNetworkBalance(network, address) {
 	const web3 = getWeb3(network)
-	if(!web3 || !address || !web3.utils.isAddress(address)) {
+	if(!web3 || !address || !web3.utils.isAddress(unprefixAddress(address))) {
 		return
 	}
 
@@ -754,7 +772,7 @@ function getNetworkBalance(network, address) {
 	wallet[address][id].price = getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
 
 
-	web3.eth.getBalance(address).then(balance => {
+	web3.eth.getBalance(unprefixAddress(address)).then(balance => {
 		wallet[address][id].value = balance
 
 		displayWallet()
@@ -1294,7 +1312,6 @@ async function initializeHTML() {
 	else if(sessionStorage.getItem('walletAddress')) {
 		address = sessionStorage.getItem('walletAddress').split(',')
 	}
-
 	if(address) {
 		document.getElementById('input-wallet').value = address.join(',')
 		configureWallet(address)
@@ -1456,7 +1473,7 @@ document.getElementById('menu-tokens').addEventListener('click', (e) => {
 	displayWallet(true)
 
 	walletAddress.forEach((address) => {
-		Object.keys(NETWORK).forEach((network) => {
+		getNetworksOfAddress(address).forEach((network) => {
 			clearTimeoutIf(timerGetNetworkBalance, network, address)
 			clearTimeoutIf(timerGetERC721Tx, network, address)
 			clearTimeoutIf(timerGetTransactions, network, address)
@@ -1482,7 +1499,7 @@ document.getElementById('menu-nfts').addEventListener('click', (e) => {
 	displayWallet(true)
 
 	walletAddress.forEach((address) => {
-		Object.keys(NETWORK).forEach((network) => {
+		getNetworksOfAddress(address).forEach((network) => {
 			clearTimeoutIf(timerGetTokenTx, network, address)
 			clearTimeoutIf(timerGetTransactions, network, address)
 			getERC721Tx(NETWORK[network].enum, address, searchNFTs)
@@ -1505,7 +1522,7 @@ document.getElementById('menu-transactions').addEventListener('click', (e) => {
 	displayWallet(true)
 
 	walletAddress.forEach((address) => {
-		Object.keys(NETWORK).forEach((network) => {
+		getNetworksOfAddress(address).forEach((network) => {
 			clearTimeoutIf(timerGetNetworkBalance, network, address)
 			clearTimeoutIf(timerGetTokenTx, network, address)
 			clearTimeoutIf(timerSearchTokens, network, address)
