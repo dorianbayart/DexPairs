@@ -96,6 +96,12 @@ let interval = INTERVAL_4H
 let timeframe = TIMEFRAME_1W
 let movingAverageSize = 12
 
+const Y_AXIS_TYPES = {
+	linear: 'linear',
+	logarithmic: 'logarithmic'
+}
+let yAxisType = Y_AXIS_TYPES.linear
+
 
 // get tokens list
 // + put the list on the page
@@ -844,6 +850,15 @@ function setActiveTimeframe(item) {
 	})
 }
 
+document.getElementById('log_choice').addEventListener(
+	'click', function(e) {
+		yAxisType = yAxisType === Y_AXIS_TYPES.linear ? Y_AXIS_TYPES.logarithmic : Y_AXIS_TYPES.linear
+		myChart.options.scales.y.type = yAxisType
+		updateCharts()
+		e.target.classList.toggle('active', yAxisType === Y_AXIS_TYPES.logarithmic)
+	}
+)
+
 // Share this chart - Button
 document.getElementById('share_charts').addEventListener('click', () => {
 	const location = window.location
@@ -1171,6 +1186,7 @@ function updateCharts() {
 						},
 					},
 					y: {
+						type: yAxisType,
 						title: {
 							display: true,
 							text: simple[selectedBase].s

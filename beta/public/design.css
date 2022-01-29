@@ -422,13 +422,24 @@ button#base_change:hover img {
 }
 
 #interval .interval-choice:hover,
-#timeframe .timeframe-choice:hover {
+#timeframe .timeframe-choice:hover,
+.log-choice:hover {
   box-shadow: 1px 1px 8px #bbbbbb;
 }
 
 #interval .interval-choice.active,
-#timeframe .timeframe-choice.active {
+#timeframe .timeframe-choice.active,
+.log-choice.active {
   box-shadow: 1px 1px 8px lightseagreen;
+}
+
+.log-choice {
+  display: inline-block;
+  cursor: pointer;
+  font-size: small;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: .25em .5em;
 }
 
 #myChart {
