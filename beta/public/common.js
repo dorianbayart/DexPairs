@@ -445,7 +445,7 @@ const createNetworkImg = (network) => {
 
 
 /* Utils - Get Price of Address on Network */
-const getPriceByAddressNetwork = (searchedAddress, network) => {
+const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 	let address = searchedAddress
 	let debt = 1
 	let rate = 1
@@ -455,9 +455,14 @@ const getPriceByAddressNetwork = (searchedAddress, network) => {
 		debt = underlyingAssets[network + '-' + searchedAddress].debt
 	}
 	let prices = NETWORK[network].simple_data ? JSON.parse(NETWORK[network].simple_data) : null
-	if(prices && Object.keys(prices).length > 0) {
-		return prices[address] && (Date.now() - prices[address].t < TIME_1W) ? prices[address].p * debt * rate : null
+	if(prices && prices[address] && (Date.now() - prices[address].t < TIME_1W)) {
+		return prices[address].p * debt * rate
 	}
+
+	if(balance > 0) {
+		return await getCoingeckoPrice(address, network)
+	}
+
 	return null
 }
 
