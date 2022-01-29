@@ -611,11 +611,7 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 			return price
 		}
 	}
-	price = getPriceByAddressNetwork(transaction.contractAddress, network)
-	if(!price && balance > 0) {
-		price = await getCoingeckoPrice(transaction.contractAddress, network)
-	}
-	return price
+	return await getPriceByAddressNetwork(transaction.contractAddress, balance, network)
 }
 
 async function searchNFTs(network, address) {
@@ -749,7 +745,7 @@ async function getTokenURI(nftContract, indexId) {
 }
 
 
-function getNetworkBalance(network, address) {
+async function getNetworkBalance(network, address) {
 	const web3 = getWeb3(network)
 	if(!web3 || !address || !web3.utils.isAddress(unprefixAddress(address))) {
 		return
@@ -769,13 +765,14 @@ function getNetworkBalance(network, address) {
 			tokenDecimal: NETWORK[network].tokenDecimal
 		}
 	}
-	wallet[address][id].price = getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, network)
+	wallet[address][id].price = await getPriceByAddressNetwork(NETWORK[network].tokenPriceContract, 1, network)
 
 
 	web3.eth.getBalance(unprefixAddress(address)).then(balance => {
-		wallet[address][id].value = balance
-
-		displayWallet()
+		if(balance) {
+			wallet[address][id].value = balance
+			displayWallet()
+		}
 
 		clearTimeoutIf(timerGetNetworkBalance, network, address)
 		timerGetNetworkBalance[network][address] = setTimeout(() => getNetworkBalance(network, address), (Math.round(Math.random() * 15) + 25) * 1000)
