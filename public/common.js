@@ -295,8 +295,8 @@ let gasIsRealtime = false
 let loadingChartsByAddress = false
 
 
-require.config({ waitSeconds: 0 })
-require(['https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js'], function(Web3) {
+
+document.addEventListener('DOMContentLoaded', function() {
 	web3 = {}
 
 	Object.keys(NETWORK).sort(sortByChainId).forEach((network) => {
