@@ -26,6 +26,16 @@ const COLOR_THEMES = {
 /* https://api.dexpairs.xyz or empty for localhost */
 const DOMAIN_NAME = 'DexPairs.xyz'
 const SERVER_URL = window.location.href.includes(DOMAIN_NAME.toLowerCase()) ? 'https://api.dexpairs.xyz' : ''
+const PAGES = {
+	CHARTS: 'charts',
+	WALLET: 'wallet'
+}
+const CURRENT_PAGE =
+	window.location.href.toLowerCase().includes(PAGES.CHARTS)
+		? PAGES.CHARTS
+		: window.location.href.toLowerCase().includes(PAGES.WALLET)
+			? PAGES.WALLET
+			: null
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
 const TIME_24H = 1000*60*60*24
@@ -47,7 +57,7 @@ const NETWORK = {
 		shortName: 'eth',
 		img: '/img/ethereum-icon.svg',
 		color: '#3a3a39',
-		rpc: 'https://cloudflare-eth.com',
+		rpc: 'https://api.mycryptoapi.com/eth', // 'https://cloudflare-eth.com',
 		explorer: 'https://etherscan.io/token/',
 		tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
@@ -247,6 +257,22 @@ const minABI = [
 		'name':'decimals',
 		'outputs':[{'name':'','type':'uint8'}],
 		'type':'function'
+	},
+	// allowance
+	{
+		'constant':true,
+		'inputs':[{'name':'owner','type':'address'},{'name':'spender','type':'address'}],
+		'name':'allowance',
+		'outputs':[{'name':'amount','type':'uint256'}],
+		'type':'function'
+	},
+	// approve
+	{
+		'constant':true,
+		'inputs':[{'name':'spender','type':'address'},{'name':'amount','type':'uint256'}],
+		'name':'allowance',
+		'outputs':[{'name':'','type':'bool'}],
+		'type':'function'
 	}
 ]
 
@@ -296,6 +322,30 @@ let loadingChartsByAddress = false
 
 
 
+// Utils
+async function get(url, query = null) {
+	if(query) {
+		return new Promise((resolve, reject) => {
+			fetch(url, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query })
+			})
+				.then((response) => response.json())
+				.then(resolve)
+				.catch(reject)
+		})
+	}
+	return new Promise((resolve, reject) => {
+		fetch(url)
+			.then((response) => response.json())
+			.then(resolve)
+			.catch(reject)
+	})
+}
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
 	web3 = {}
 
@@ -311,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const updateGas = (network) => {
 	if(!network) {
 		// randomly select a network to update gas
-		network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
+		network = Object.keys(NETWORK)[Math.floor(Object.keys(NETWORK).length * Math.random())]
 		setTimeout(updateGas, gasIsRealtime ? 750 : 5000)
 	}
 
@@ -324,7 +374,7 @@ const updateGas = (network) => {
 				const span = document.getElementById(`gas-value-${network}`)
 				span.innerHTML = gwei
 				li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
-			})
+			}, error => {})
 		} catch {}
 	}
 }
@@ -429,6 +479,30 @@ const getWeb3 = (network) => {
 	return web3[network]
 }
 
+
+
+// Get token balance
+const getTokenBalanceWeb3 = async (contractAddress, address, network) => {
+	if(contractAddress === '0x0' || !address) return
+	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
+	return await contract.methods.balanceOf(address).call(async (error, value) => {
+		return value
+	})
+}
+
+const getTokenDecimals = async (contractAddress, network) => {
+	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
+	return await contract.methods.decimals().call(async (err, val) => {
+		return val
+	})
+}
+
+const getTokenAllowance = async (contractAddress, ownerAddress, spenderAddress, network) => {
+	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
+	return await contract.methods.allowance(ownerAddress, spenderAddress).call(async (err, val) => {
+		return val
+	})
+}
 
 
 /* Utils - Create a document network img tag */
