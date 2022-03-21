@@ -4,28 +4,6 @@
 let underlyingAssets = {}
 let beefyRatio = {}
 
-// Utils
-async function get(url, query = null) {
-	if(query) {
-		return new Promise((resolve, reject) => {
-			fetch(url, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ query })
-			})
-				.then((response) => response.json())
-				.then(resolve)
-				.catch(reject)
-		})
-	}
-	return new Promise((resolve, reject) => {
-		fetch(url)
-			.then((response) => response.json())
-			.then(resolve)
-			.catch(reject)
-	})
-}
-
 
 // beefy.finance - get all ratio
 const beefy_ratio = 'https://api.beefy.finance/lps'
