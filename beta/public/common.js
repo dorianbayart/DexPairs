@@ -270,7 +270,7 @@ const minABI = [
 	{
 		'constant':true,
 		'inputs':[{'name':'spender','type':'address'},{'name':'amount','type':'uint256'}],
-		'name':'allowance',
+		'name':'approve',
 		'outputs':[{'name':'','type':'bool'}],
 		'type':'function'
 	}
