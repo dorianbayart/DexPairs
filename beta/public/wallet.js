@@ -444,19 +444,6 @@ async function getTransactions(network, address) {
 
 }
 
-// Get token balance
-async function getTokenBalanceWeb3(contractAddress, address, network) {
-	if(contractAddress === '0x0' || !address) return
-
-	// Get ERC20 Token contract instance
-	let contract = getContract(contractAddress, network)
-
-	// Call balanceOf function
-	return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
-		return value
-	})
-}
-
 async function populateNFTContract(contractAddress, address, network) {
 	const id = getId(contractAddress, network)
 	const nftContract = getNFTContract(contractAddress, network)
