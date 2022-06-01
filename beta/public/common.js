@@ -529,7 +529,7 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 		debt = underlyingAssets[network + '-' + searchedAddress].debt
 	}
 	let prices = NETWORK[network].simple_data ? JSON.parse(NETWORK[network].simple_data) : null
-	if(prices && prices[address] && (Date.now() - prices[address].t < TIME_1W)) {
+	if(prices && prices[address] && prices[address].p > 0 && (Date.now() - prices[address].t < TIME_1W)) {
 		return prices[address].p * debt * rate
 	}
 
