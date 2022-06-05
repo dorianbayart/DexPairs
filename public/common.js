@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const updateGas = (network) => {
 	if(!network) {
 		// randomly select a network to update gas
-		network = Object.keys(NETWORK)[Math.floor(5*Math.random())]
+		network = Object.keys(NETWORK)[Math.floor(Object.keys(NETWORK).length * Math.random())]
 		setTimeout(updateGas, gasIsRealtime ? 750 : 5000)
 	}
 
@@ -324,7 +324,7 @@ const updateGas = (network) => {
 				const span = document.getElementById(`gas-value-${network}`)
 				span.innerHTML = gwei
 				li.title = gwei + ' gwei' + (gwei > 1 ? 's' : '') + ' on ' + NETWORK[network].name
-			})
+			}, error => {})
 		} catch {}
 	}
 }
