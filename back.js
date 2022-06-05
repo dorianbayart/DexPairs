@@ -39,7 +39,7 @@ const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAY = 86400000 // 1 day
 const WEEK = 604800000 // 1 week
-const HISTORY_SIZE = 192
+const HISTORY_SIZE = process.env.NODE_ENV === 'production' ? 192 : 96 // 45 or 120 seconds
 const HISTORY_SIZE_24H = 96 // 24h / 15min
 const TOP_SIZE = 6
 
