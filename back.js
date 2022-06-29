@@ -156,7 +156,7 @@ query
 
 // Use TheGraph API - https://thegraph.com/legacy-explorer/subgraph/henrydapp/quickswap
 async function getQuickswapTopTokens() {
-	return await get('https://api.thegraph.com/subgraphs/name/henrydapp/quickswap', quickswap_request)
+	return await get('https://api.thegraph.com/subgraphs/name/proy24/quickswap-polygon', quickswap_request)
 }
 
 // Get Spiritswap's top
