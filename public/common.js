@@ -110,7 +110,7 @@ const NETWORK = {
 		shortName: 'gno',
 		img: '/img/xdai-icon.svg',
 		color: '#4ea8a6',
-		rpc: 'https://rpc.xdaichain.com/',
+		rpc: 'https://rpc.gnosischain.com',
 		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
 		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
