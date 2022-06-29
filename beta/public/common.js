@@ -480,12 +480,18 @@ const getWeb3 = (network) => {
 }
 
 
+// Remove the EIP-3770 prefix if needed
+// eth:0x123456 => 0x123456
+const unprefixAddress = (address) => {
+	return address.includes(':') ? address.split(':')[1] : address
+}
+
 
 // Get token balance
 const getTokenBalanceWeb3 = async (contractAddress, address, network) => {
 	if(contractAddress === '0x0' || !address) return
 	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
-	return await contract.methods.balanceOf(address).call(async (error, value) => {
+	return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
 		return value
 	})
 }
@@ -499,7 +505,7 @@ const getTokenDecimals = async (contractAddress, network) => {
 
 const getTokenAllowance = async (contractAddress, ownerAddress, spenderAddress, network) => {
 	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
-	return await contract.methods.allowance(ownerAddress, spenderAddress).call(async (err, val) => {
+	return await contract.methods.allowance(unprefixAddress(ownerAddress), unprefixAddress(spenderAddress)).call(async (err, val) => {
 		return val
 	})
 }

@@ -265,12 +265,6 @@ const getNetworksOfAddress = (address) => {
 }
 
 
-// Remove the EIP-3770 prefix if needed
-// eth:0x123456 => 0x123456
-const unprefixAddress = (address) => {
-	return address.includes(':') ? address.split(':')[1] : address
-}
-
 
 const configureFilterByAddress = () => {
 	const addressList = document.getElementById('filter-by-address-list')
