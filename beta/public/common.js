@@ -57,7 +57,7 @@ const NETWORK = {
 		shortName: 'eth',
 		img: '/img/ethereum-icon.svg',
 		color: '#3a3a39',
-		rpc: 'https://cloudflare-eth.com', // 'https://cloudflare-eth.com', 'https://api.mycryptoapi.com/eth'
+		rpc: 'https://api.mycryptoapi.com/eth/', // 'https://cloudflare-eth.com', 'https://api.mycryptoapi.com/eth'
 		explorer: 'https://etherscan.io/token/',
 		tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',

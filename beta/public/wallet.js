@@ -66,8 +66,7 @@ document.getElementById('input-wallet').addEventListener('change', function(e) {
 document.getElementById('connect-wallet').addEventListener('click', function() {
 	if (window.ethereum) {
 		window.ethereum.request({ method: 'eth_requestAccounts' }).then(addresses => {
-			document.getElementById('input-wallet').value = addresses
-			configureWallet(addresses)
+			updateConnectedAccount(addresses[0])
 		})
 	} else {
 		alert('Connection is only supported through Metamask extension')
@@ -268,7 +267,7 @@ const getNetworksOfAddress = (address) => {
 // Remove the EIP-3770 prefix if needed
 // eth:0x123456 => 0x123456
 const unprefixAddress = (address) => {
-	return address.includes(':') ? address.split(':')[1] : address
+	return address && address.includes(':') ? address.split(':')[1] : address
 }
 
 
@@ -581,7 +580,7 @@ async function searchTokens(network, address) {
 		// console.log('searchTokens finished on ' + network)
 
 		// Reset status of few random tx to update them
-		tokentx[address][network].filter(t => t.done).forEach(t => {
+		tokentx[address][network].filter(t => t?.done).forEach(t => {
 			if(Math.random() < 0.1 / Math.log2(2 + tokentx[address][network].length)) {
 				t.done = false
 			}
@@ -1292,6 +1291,9 @@ async function initializeHTML() {
 	let address = null
 	if(urlParams.has('address')) {
 		address = urlParams.get('address').split(',')
+	}
+	else if(sessionStorage.getItem('connected-account')) {
+		address = [sessionStorage.getItem('connected-account')]
 	}
 	else if(sessionStorage.getItem('walletAddress')) {
 		address = sessionStorage.getItem('walletAddress').split(',')
