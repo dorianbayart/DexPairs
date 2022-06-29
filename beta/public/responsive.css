@@ -63,10 +63,20 @@
 }
 
 #swapper_token,
-#swapper_base {
+#swapper_base,
+#paraswap_dest_amount {
   width: 30%;
-  margin: 1em;
-  padding: .5em 1em;
+  margin: .25em 1em;
+  padding: .5em;
+  font-size: 1.25em;
+}
+.paraswap_src_amount_container {
+  width: 30%;
+  margin: .25em 1em;
+}
+#paraswap_src_amount {
+  width: 100%;
+  padding: .5em;
   font-size: 1.25em;
 }
 
@@ -147,8 +157,16 @@
   }
 
   #swapper_token,
-  #swapper_base {
+  #swapper_base,
+  #paraswap_dest_amount {
     margin: .5em;
+    padding: .25em .5em;
+    font-size: 1.2em;
+  }
+  .paraswap_src_amount_container {
+    margin: .5em;
+  }
+  #paraswap_src_amount {
     padding: .25em .5em;
     font-size: 1.2em;
   }
@@ -219,8 +237,16 @@
   }
 
   #swapper_token,
-  #swapper_base {
+  #swapper_base,
+  #paraswap_dest_amount {
     margin: .25em;
+    padding: .1em .25em;
+    font-size: 1.1em;
+  }
+  .paraswap_src_amount_container {
+    margin: .25em;
+  }
+  #paraswap_src_amount {
     padding: .1em .25em;
     font-size: 1.1em;
   }

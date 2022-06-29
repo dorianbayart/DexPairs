@@ -36,6 +36,8 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.0/web3.min.js"></script>
   <script defer src="./public/common.js"></script>
+  <script defer src="./public/js/paraswap.js"></script>
+  <script defer src="./public/connect.js"></script>
   <script defer src="./public/script.js"></script>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZQ634B55N"></script>
@@ -86,6 +88,13 @@
         </a>
       </div>
     </div>
+  </div>
+
+  <div class="connect-wallet-container unselectable">
+    <button id="connect-button">
+      <img src='/img/metamask-fox.svg' alt='Metamask SVG Logo' title='Connect your wallet' />
+      Connect
+    </button>
   </div>
 
   <div class='gas'>
@@ -206,12 +215,37 @@
           <button id='share_charts'>Share this chart</button>
         </div>
       </div>
-      <div class='flex-pair'>
+      <div id='basic_swapper' class='flex-pair'>
         <div id='swapper_token_symbol'></div>
-        <input type='number' id='swapper_token' min='0' step='0.0000000000000001' title='Calculator'>
+        <input type='number' id='swapper_token' min='0' step='0.001' title='Calculator'>
 
-        <input type='number' id='swapper_base' min='0' step='0.0000000000000001' title='Calculator'>
+        <input type='number' id='swapper_base' min='0' step='0.001' title='Calculator'>
         <div id='swapper_base_symbol'></div>
+      </div>
+      <div id='paraswap_swapper' class='none'>
+        <div id='paraswap_swapper_title'>Swapper</div>
+        <div class='flex-pair'>
+          <div id='paraswap_src_symbol'></div>
+          <div class="paraswap_src_amount_container">
+            <input type='number' id='paraswap_src_amount' value=1 min=0 step=0.01 title=''>
+            <button id='paraswap_src_max_amount' onclick='setMaxAmount()'></button>
+          </div>
+
+          <input type='number' id='paraswap_dest_amount' title='' disabled>
+          <div id='paraswap_dest_symbol'></div>
+        </div>
+
+
+
+
+
+
+        <div class='buttons-container'>
+          <button id='paraswap_swapper_approve_button' onclick="approveTokenClicked()" class='none'>Approve</button>
+          <button id='paraswap_swapper_swap_button' onclick="swapTokenClicked()" class='none'>Swap</button>
+        </div>
+
+        <div id='paraswap_attribution'>Powered by <a href="https://developers.paraswap.network" target="_blank">Paraswap.io</a></div>
       </div>
     </div>
   </div>
