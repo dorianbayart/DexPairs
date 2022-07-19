@@ -167,7 +167,7 @@ function logByProtocol(protocol, index, array) {
 
 
 function filterByProtocol(list, protocol) {
-	return list.filter((token) => Object.keys(token.platforms).some((platform) => platform === protocol))
+	return list.filter((token) => token.platforms && Object.keys(token.platforms).some((platform) => platform === protocol))
 }
 
 
