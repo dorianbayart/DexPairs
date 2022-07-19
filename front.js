@@ -381,7 +381,7 @@ app.use('/beta/public', express.static('beta/public'))
 
 // Coingecko URL
 app.get('/coingecko/:blockchain/:token', (req, res) => {
-	res.json(coingecko.find((token) => token.platforms[req.params.blockchain] && token.platforms[req.params.blockchain].toLowerCase() === req.params.token.toLowerCase()))
+	res.json(coingecko.find((token) => token.platforms && token.platforms[req.params.blockchain] && token.platforms[req.params.blockchain].toLowerCase() === req.params.token.toLowerCase()))
 })
 
 // Pancake URLs
