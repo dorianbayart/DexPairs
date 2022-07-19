@@ -331,6 +331,7 @@ async function launchCoingecko() {
 	try {
 		const file = await fs.readFile(path.join(dir_home, 'coingecko.json'), 'utf8')
 		coingecko = JSON.parse(file)
+		coingecko = coingecko.filter((token) => token.market_cap > 0 && token.market_cap_rank && token.platforms)
 	} catch (err) {
 		console.error(err)
 	}
@@ -381,7 +382,7 @@ app.use('/beta/public', express.static('beta/public'))
 
 // Coingecko URL
 app.get('/coingecko/:blockchain/:token', (req, res) => {
-	res.json(coingecko.find((token) => token.platforms && token.platforms[req.params.blockchain] && token.platforms[req.params.blockchain].toLowerCase() === req.params.token.toLowerCase()))
+	res.json(coingecko.find((token) => token.platforms[req.params.blockchain] && token.platforms[req.params.blockchain].toLowerCase() === req.params.token.toLowerCase()))
 })
 
 // Pancake URLs

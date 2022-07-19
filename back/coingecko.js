@@ -47,7 +47,7 @@ async function getList() {
 		if(!data) {
 			data = await readBackupOnDisk()
 			if(!data) {
-				return
+				data = []
 			}
 		}
 
@@ -59,7 +59,6 @@ async function getList() {
 			let list = await data.json()
 			// keep only tokens on supported protocols
 			let filtered = list.filter((token) => Object.values(token.platforms) && Object.values(token.platforms)[0] !== '' && Object.keys(token.platforms).some((platform) => SUPPORTED_PROTOCOLS.includes(platform)))
-			console.log(filtered.length)
 
 			filtered.forEach((item) => {
 				let tokenIndex = tokensList.findIndex((token) => token.id === item.id)
@@ -152,7 +151,9 @@ async function fetchPrices() {
 		return {
 			id: token.id,
 			price: token.current_price,
-			logo: token.image
+			logo: token.image,
+			market_cap: token.market_cap,
+			market_cap_rank: token.market_cap_rank
 		}
 	})
 }
