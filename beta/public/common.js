@@ -130,7 +130,7 @@ const NETWORK = {
 		tokenSymbol: 'XDAI',
 		tokenName: 'xDai',
 		tokenDecimal: 18,
-		tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+		tokenPriceContract: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap',
 		coingecko_name: 'xdai'
 	},
@@ -193,7 +193,7 @@ const NETWORK = {
 		tokenSymbol: 'AETH',
 		tokenName: 'Ether',
 		tokenDecimal: 18,
-		tokenPriceContract: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+		tokenPriceContract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', // WETH
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ianlapham/arbitrum-minimal',
 		coingecko_name: 'arbitrum-one'
 	},
@@ -214,7 +214,7 @@ const NETWORK = {
 		tokenSymbol: 'CELO',
 		tokenName: 'CELO',
 		tokenDecimal: 18,
-		tokenPriceContract: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+		tokenPriceContract: '0x471ece3750da237f93b8e339c536989b8978a438',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ubeswap/ubeswap',
 		coingecko_name: 'celo'
 	},
@@ -235,7 +235,7 @@ const NETWORK = {
 		tokenSymbol: 'AVAX',
 		tokenName: 'Avalanche',
 		tokenDecimal: 18,
-		tokenPriceContract: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
+		tokenPriceContract: '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/traderjoe-xyz/exchange',
 		coingecko_name: 'avalanche'
 	},

@@ -65,6 +65,16 @@ let honeyswap_charts = {}
 
 // CoinGecko
 let coingecko = []
+const coingeckoWhiteList = [
+	'celo',
+	'wbnb',
+	'weth',
+	'wmatic',
+	'wrapped-avax',
+	'wrapped-cro',
+	'wrapped-fantom',
+	'wrapped-xdai'
+]
 
 
 
@@ -331,7 +341,9 @@ async function launchCoingecko() {
 	try {
 		const file = await fs.readFile(path.join(dir_home, 'coingecko.json'), 'utf8')
 		coingecko = JSON.parse(file)
-		coingecko = coingecko.filter((token) => token.market_cap > 0 && token.market_cap_rank && token.platforms)
+		coingecko = coingecko.filter((token) =>
+			(token.market_cap > 0 && token.market_cap_rank && token.platforms) || coingeckoWhiteList.includes(token.id)
+		)
 	} catch (err) {
 		console.error(err)
 	}
