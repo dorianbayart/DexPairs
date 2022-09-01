@@ -314,17 +314,14 @@ body {
   height: 100%;
 }
 
-#wallet ul li span.nameSymbol,
+#wallet ul li span.nameSymbol {
+  display: flex;
+  flex-flow: column;
+  flex: .5;
+}
 #wallet ul li span.nonceTimestamp {
   display: flex;
   flex-flow: column;
-  flex: 1;
-}
-#wallet ul li span.txNameSymbol {
-  max-width: 40%;
-}
-#wallet ul li span.nonceTimestamp {
-  display: inline-flex;
   flex: .25;
 }
 
@@ -347,12 +344,15 @@ body {
   flex-flow: column;
 }
 
-#wallet ul li span.txBalance {
+#wallet ul li span.txBalance,
+#wallet ul li span.txFunction {
   display: inline-flex;
   flex: .25;
-  font-size: larger;
   padding-right: 1em;
   justify-content: flex-end;
+}
+#wallet ul li span.txBalance {
+  font-size: larger;
 }
 #wallet ul li span.balance {
   font-size: .75em;
