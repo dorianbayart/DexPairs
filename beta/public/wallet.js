@@ -1232,7 +1232,6 @@ function displayTransactions() {
 
 
 			let spanNameSymbol = document.createElement('span')
-			spanNameSymbol.classList.add('nameSymbol')
 			spanNameSymbol.classList.add('txNameSymbol')
 			li.appendChild(spanNameSymbol)
 
@@ -1248,9 +1247,9 @@ function displayTransactions() {
 				spanSymbol.innerHTML = NETWORK[tx.network].tokenSymbol
 
 				if(tx.from && !tx.wallet.toLowerCase().includes(tx.from.toLowerCase())) {
-					spanName.innerHTML = 'Received from ' + tx.from
+					spanName.innerHTML = 'Received from ' + shortenAddress(tx.from)
 				} else if(tx.to && !tx.wallet.toLowerCase().includes(tx.to.toLowerCase())) {
-					spanName.innerHTML = 'Sent to ' + tx.to
+					spanName.innerHTML = 'Sent to ' + shortenAddress(tx.to)
 				}
 			}
 

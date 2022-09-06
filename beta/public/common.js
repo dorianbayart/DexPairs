@@ -590,6 +590,10 @@ function debounce(func, timeout = 500) {
 }
 
 
+const shortenAddress = (address) => {
+	return address.slice(0, 6) + '...' + address.slice(-4)
+}
+
 // Round number
 const precise = (x) => {
 	if(Math.abs(x) > 999) { return Math.round(x) }

@@ -314,14 +314,19 @@ body {
   height: 100%;
 }
 
-#wallet ul li span.nameSymbol {
-  display: flex;
-  flex-flow: column;
-  flex: .5;
-}
+#wallet ul li span.nameSymbol,
+#wallet ul li span.txNameSymbol,
 #wallet ul li span.nonceTimestamp {
   display: flex;
   flex-flow: column;
+}
+#wallet ul li span.nameSymbol {
+  flex: 1;
+}
+#wallet ul li span.txNameSymbol {
+  flex: .5;
+}
+#wallet ul li span.nonceTimestamp {
   flex: .25;
 }
 
