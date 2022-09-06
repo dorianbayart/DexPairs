@@ -138,15 +138,15 @@ async function getUniswapV2TopTokens() {
 }
 
 // Get Quickswap's top
-const quickswap_request = `
+const polygon_sushiswap_request = `
 query
 {
-  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10" } ) {
+  tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { liquidity_gt: "10", volumeUSD_gt: "1000" } ) {
     id
     name
     symbol
     derivedETH,
-    tradeVolumeUSD
+    volumeUSD
   }
   bundle(id: "1" ) {
     ethPrice
@@ -154,9 +154,9 @@ query
 }
 `
 
-// Use TheGraph API - https://thegraph.com/legacy-explorer/subgraph/henrydapp/quickswap
-async function getQuickswapTopTokens() {
-	return await get('https://api.thegraph.com/subgraphs/name/proy24/quickswap-polygon', quickswap_request)
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/sushiswap/matic-exchange
+async function getPolygonSushiSwapTopTokens() {
+	return await get('https://api.thegraph.com/subgraphs/name/sushiswap/matic-exchange', polygon_sushiswap_request)
 }
 
 // Get Spiritswap's top
@@ -720,6 +720,7 @@ async function launchUniswap() {
 }
 
 
+// TODO: rename to Polygon
 // Program - Quickswap
 async function launchQuickswap() {
 
@@ -794,7 +795,7 @@ async function launchQuickswap() {
 
 
 	// get data from Quickswap
-	const top = await getQuickswapTopTokens()
+	const top = await getPolygonSushiSwapTopTokens()
 
 
 

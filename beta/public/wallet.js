@@ -1262,9 +1262,6 @@ function displayTransactions() {
 		}
 
 
-
-
-
 		document.getElementById('wallet-ul').appendChild(li)
 	})
 
