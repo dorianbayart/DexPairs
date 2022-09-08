@@ -2,8 +2,8 @@
 #header {
   display: flex;
   align-items: center;
-  margin-bottom: 1em;
   flex-wrap: wrap;
+  margin-bottom: .5em;
 }
 
 #title {
@@ -105,6 +105,31 @@ header .version .low {
 .menu .menu-item.active.menu-news h2,
 .menu .menu-item.menu-news:hover h2 {
   background-color: palegreen;
+}
+
+.connect-wallet-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 12px;
+  width: 100%;
+}
+.connect-wallet-container button {
+  display: inline-flex;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: lightgrey 1px solid;
+  border-radius: 12px;
+  padding: 2px 12px;
+  cursor: pointer;
+}
+.connect-wallet-container button:hover {
+  box-shadow: 0 0 12px #888888ee;
+}
+.connect-wallet-container button img {
+  height: 100%;
+  margin: 4px;
 }
 
 @media (max-width: 800px) {

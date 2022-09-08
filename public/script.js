@@ -76,7 +76,7 @@ let dexList = {
 		url_data: SERVER_URL + '/honeyswap',
 		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
 		tokens: {
-			token: '0x71850b7e9ee3f13ab46d67167341e4bdc905eef9',
+			token: '0x9c58bacc331c9aa871afd802db6379a98e80cedb',
 			base: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
 		}
 	},
@@ -95,6 +95,12 @@ const LIST_INITIAL_SIZE = 100
 let interval = INTERVAL_4H
 let timeframe = TIMEFRAME_1W
 let movingAverageSize = 12
+
+const Y_AXIS_TYPES = {
+	linear: 'linear',
+	logarithmic: 'logarithmic'
+}
+let yAxisType = Y_AXIS_TYPES.linear
 
 
 // get tokens list
@@ -699,6 +705,13 @@ document.getElementById('swapper_base').addEventListener(
 	}
 )
 
+document.getElementById('paraswap_src_amount').addEventListener(
+	'change', async function() {
+		setParaswapAmount(document.getElementById('paraswap_src_amount').value)
+		document.getElementById('paraswap_dest_amount').value = await getParaswapPrices()
+	}
+)
+
 // OnClick on Edit Base token => Display the selection list
 document.getElementById('base_change').addEventListener(
 	'click', function() {
@@ -843,6 +856,15 @@ function setActiveTimeframe(item) {
 		div.classList.toggle('active', div.id === item.id || div.textContent === item.textContent)
 	})
 }
+
+document.getElementById('log_choice').addEventListener(
+	'click', function(e) {
+		yAxisType = yAxisType === Y_AXIS_TYPES.linear ? Y_AXIS_TYPES.logarithmic : Y_AXIS_TYPES.linear
+		myChart.options.scales.y.type = yAxisType
+		updateCharts()
+		e.target.classList.toggle('active', yAxisType === Y_AXIS_TYPES.logarithmic)
+	}
+)
 
 // Share this chart - Button
 document.getElementById('share_charts').addEventListener('click', () => {
@@ -996,11 +1018,86 @@ function setSourceDataText() {
 	source_data.appendChild(a)
 }
 
+const setSwapper = async () => {
+	const basic_swapper = document.getElementById('basic_swapper')
+	const paraswap_swapper = document.getElementById('paraswap_swapper')
+	if(PARASWAP_SUPPORTED_CHAINID.includes(NETWORK[dexList[dex].chain_enum].chainId)) {
+		// set Paraswap swapper
+		basic_swapper.classList.toggle('none', true)
+		paraswap_swapper.classList.remove('none')
+		document.getElementById('paraswap_src_symbol').innerHTML = simple[selectedToken].s
+		document.getElementById('paraswap_dest_symbol').innerHTML = simple[selectedBase].s
+		// document.getElementById('paraswap_src_amount').value = 0
+		// document.getElementById('paraswap_dest_amount').value = null
+		const srcDecimals = await getTokenDecimals(selectedToken, dexList[dex].chain_enum)
+		const destDecimals = await getTokenDecimals(selectedBase, dexList[dex].chain_enum)
+		let srcBalance = (await getTokenBalanceWeb3(selectedToken, walletConnected, dexList[dex].chain_enum)) * Math.pow(10, -srcDecimals)
+		if(!srcBalance || srcBalance === 0) {
+			//document.getElementById('paraswap_src_max_amount').classList.toggle('none', true)
+		} else {
+			document.getElementById('paraswap_src_max_amount').classList.remove('none')
+		}
+		let srcAmount = document.getElementById('paraswap_src_amount').value ? document.getElementById('paraswap_src_amount').value : 1
+
+		document.getElementById('paraswap_src_max_amount').value = srcBalance
+		document.getElementById('paraswap_src_max_amount').innerHTML =  "Balance: " + srcBalance
+		document.getElementById('paraswap_src_amount').value = srcAmount
+
+		configureParaswap(selectedToken, selectedBase, srcAmount, srcDecimals, destDecimals, NETWORK[dexList[dex].chain_enum].chainId)
+		document.getElementById('paraswap_dest_amount').value = await getParaswapPrices()
+
+		if(walletConnected) {
+			getTokenAllowance(selectedToken, walletConnected, paraswapTransferProxy, dexList[dex].chain_enum).then(allowed => {
+				paraswapAllowance = allowed
+
+				if(paraswapAllowance * Math.pow(10, -srcDecimals) < Number(document.getElementById('paraswap_src_amount').value)) {
+					document.getElementById('paraswap_swapper_approve_button').classList.remove('none')
+					document.getElementById('paraswap_swapper_swap_button').classList.toggle('none', true)
+				} else {
+					document.getElementById('paraswap_swapper_approve_button').classList.toggle('none', true)
+					document.getElementById('paraswap_swapper_swap_button').classList.remove('none')
+				}
+				if(!srcBalance || srcBalance === 0) {
+					document.getElementById('paraswap_swapper_approve_button').classList.toggle('none', true)
+					document.getElementById('paraswap_swapper_swap_button').classList.toggle('none', true)
+				}
+			})
+		} else {
+			document.getElementById('paraswap_src_max_amount').classList.toggle('none', true)
+			document.getElementById('paraswap_swapper_approve_button').classList.toggle('none', true)
+			document.getElementById('paraswap_swapper_swap_button').classList.toggle('none', true)
+		}
+
+
+	} else {
+		// set basic swapper calculator
+		paraswap_swapper.classList.toggle('none', true)
+		basic_swapper.classList.remove('none')
+	}
+}
+
+const setMaxAmount = () => {
+	document.getElementById('paraswap_src_amount').value = document.getElementById('paraswap_src_max_amount').value
+	setSwapper()
+}
+
+const approveTokenClicked = () => {
+	console.log('approve clicked')
+}
+
+const swapTokenClicked = () => {
+	console.log('swap clicked')
+}
+
+
+
 
 function updateCharts() {
 	saveSessionVariables()
 
 	setFavoriteIcon()
+
+	setSwapper()
 
 	let tokenChart = null, baseChart = null, scaleUnit = 'day'
 	let intervalMS = 0, timeframeMS = 0
@@ -1171,6 +1268,7 @@ function updateCharts() {
 						},
 					},
 					y: {
+						type: yAxisType,
 						title: {
 							display: true,
 							text: simple[selectedBase].s

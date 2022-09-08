@@ -422,13 +422,24 @@ button#base_change:hover img {
 }
 
 #interval .interval-choice:hover,
-#timeframe .timeframe-choice:hover {
+#timeframe .timeframe-choice:hover,
+.log-choice:hover {
   box-shadow: 1px 1px 8px #bbbbbb;
 }
 
 #interval .interval-choice.active,
-#timeframe .timeframe-choice.active {
+#timeframe .timeframe-choice.active,
+.log-choice.active {
   box-shadow: 1px 1px 8px lightseagreen;
+}
+
+.log-choice {
+  display: inline-block;
+  cursor: pointer;
+  font-size: small;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: .25em .5em;
 }
 
 #myChart {
@@ -462,22 +473,48 @@ button#base_change:hover img {
   box-shadow: 0 0 8px #aaaaaaee;
 }
 
+
+#basic_swapper.none,
+#paraswap_swapper.none,
+#paraswap_swapper_approve_button.none,
+#paraswap_swapper_swap_button.none,
+#paraswap_src_max_amount.none {
+  display: none;
+}
+
 #swapper_token,
-#swapper_base {
+#swapper_base,
+#paraswap_src_amount,
+#paraswap_dest_amount {
   border: 1px solid #cccccc;
   border-radius: 12px;
-  max-width: 120px;
+  max-width: 180px;
   text-align: center;
   flex: auto;
+  -moz-appearance: textfield;
+}
+#swapper_token::-webkit-inner-spin-button,
+#swapper_token::-webkit-outer-spin-button,
+#swapper_base::-webkit-inner-spin-button,
+#swapper_base::-webkit-outer-spin-button,
+#paraswap_src_amount::-webkit-inner-spin-button,
+#paraswap_src_amount::-webkit-outer-spin-button,
+#paraswap_dest_amount::-webkit-inner-spin-button,
+#paraswap_dest_amount::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 #swapper_token_symbol,
-#swapper_base_symbol {
+#swapper_base_symbol,
+#paraswap_src_symbol,
+#paraswap_dest_symbol {
   margin: .25em;
   flex: auto;
 }
 
-#swapper_token_symbol {
+#swapper_token_symbol,
+#paraswap_src_symbol {
   text-align: right;
 }
 
@@ -500,4 +537,70 @@ button#base_change:hover img {
 
 #swapper_switch:hover img {
   transform: rotateY(180deg);
+}
+
+#paraswap_swapper {
+  margin: 1em;
+  padding: .25em;
+  border: 1px solid lightgray;
+  border-radius: 12px;
+  position: relative;
+}
+
+#paraswap_swapper_title {
+  position: absolute;
+  top: -.66em;
+  left: 1.5em;
+  background-color: white;
+  padding: 0 .5em;
+  text-transform: capitalize;
+  font-weight: lighter;
+}
+
+#paraswap_attribution {
+  position: absolute;
+  right: 1.5em;
+  bottom: -.6em;
+  background-color: white;
+  padding: 0 .5em;
+  font-weight: lighter;
+  font-size: x-small;
+}
+
+.paraswap_src_amount_container {
+  max-width: 180px;
+  position: relative;
+  align-items: center;
+  display: flex;
+}
+#paraswap_src_max_amount {
+  position: absolute;
+  right: 5px;
+  font-size: 10px;
+  max-width: 30%;
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background-color: white;
+  text-align: right;
+  cursor: pointer;
+}
+
+#paraswap_swapper .buttons-container {
+  text-align: center;
+}
+#paraswap_swapper .buttons-container button {
+  border: 1px solid lightgray;
+  border-radius: 8px;
+  padding: .5em 1em;
+  font-size: 1em;
+  cursor: pointer;
+}
+#paraswap_swapper .buttons-container button:hover {
+  border: 1px solid gray;
+}
+#paraswap_swapper .buttons-container button:active {
+  border: 1px solid gray;
+  background-color: #CCCCCCCC
 }

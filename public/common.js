@@ -26,6 +26,16 @@ const COLOR_THEMES = {
 /* https://api.dexpairs.xyz or empty for localhost */
 const DOMAIN_NAME = 'DexPairs.xyz'
 const SERVER_URL = window.location.href.includes(DOMAIN_NAME.toLowerCase()) ? 'https://api.dexpairs.xyz' : ''
+const PAGES = {
+	CHARTS: 'charts',
+	WALLET: 'wallet'
+}
+const CURRENT_PAGE =
+	window.location.href.toLowerCase().includes(PAGES.CHARTS)
+		? PAGES.CHARTS
+		: window.location.href.toLowerCase().includes(PAGES.WALLET)
+			? PAGES.WALLET
+			: null
 
 const ALPHA_NUM = 'abcdefghijklmnopqrstuvwxyz0123456789-'
 const TIME_24H = 1000*60*60*24
@@ -47,8 +57,9 @@ const NETWORK = {
 		shortName: 'eth',
 		img: '/img/ethereum-icon.svg',
 		color: '#3a3a39',
-		rpc: 'https://cloudflare-eth.com',
+		rpc: 'https://cloudflare-eth.com', // 'https://cloudflare-eth.com', 'https://api.mycryptoapi.com/eth'
 		explorer: 'https://etherscan.io/token/',
+		normaltx: 'https://api.etherscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -70,6 +81,7 @@ const NETWORK = {
 		color: '#00296c',
 		rpc: 'https://evm-cronos.crypto.org',
 		explorer: 'https://cronos.crypto.org/explorer/token/',
+		normaltx: 'https://cronos.crypto.org/explorer/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://cronos.crypto.org/explorer/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://cronos.crypto.org/explorer/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -91,6 +103,7 @@ const NETWORK = {
 		color: '#f0b931',
 		rpc: 'https://bsc-dataseed.binance.org',
 		explorer: 'https://bscscan.com/token/',
+		normaltx: 'https://api.bscscan.com/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.bscscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -112,6 +125,7 @@ const NETWORK = {
 		color: '#4ea8a6',
 		rpc: 'https://rpc.gnosischain.com',
 		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
+		normaltx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -120,7 +134,7 @@ const NETWORK = {
 		tokenSymbol: 'XDAI',
 		tokenName: 'xDai',
 		tokenDecimal: 18,
-		tokenPriceContract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+		tokenPriceContract: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap',
 		coingecko_name: 'xdai'
 	},
@@ -133,6 +147,7 @@ const NETWORK = {
 		color: '#8249e5',
 		rpc: 'https://polygon-rpc.com',
 		explorer: 'https://polygonscan.com/token/',
+		normaltx: 'https://api.polygonscan.com/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -154,6 +169,7 @@ const NETWORK = {
 		color: '#1c68fb',
 		rpc: 'https://rpcapi.fantom.network',
 		explorer: 'https://ftmscan.com/token/',
+		normaltx: 'https://api.ftmscan.com/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.ftmscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -175,6 +191,7 @@ const NETWORK = {
 		color: '#3aa0f0',
 		rpc: 'https://arb1.arbitrum.io/rpc',
 		explorer: 'https://arbiscan.io/token/',
+		normaltx: 'https://api.arbiscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://api.arbiscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.arbiscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.arbiscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -183,7 +200,7 @@ const NETWORK = {
 		tokenSymbol: 'AETH',
 		tokenName: 'Ether',
 		tokenDecimal: 18,
-		tokenPriceContract: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+		tokenPriceContract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', // WETH
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ianlapham/arbitrum-minimal',
 		coingecko_name: 'arbitrum-one'
 	},
@@ -196,6 +213,7 @@ const NETWORK = {
 		color: '#6ad181',
 		rpc: 'https://forno.celo.org',
 		explorer: 'https://explorer.celo.org/token/',
+		normaltx: 'https://explorer.celo.org/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://explorer.celo.org/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://explorer.celo.org/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -204,7 +222,7 @@ const NETWORK = {
 		tokenSymbol: 'CELO',
 		tokenName: 'CELO',
 		tokenDecimal: 18,
-		tokenPriceContract: '0x471EcE3750Da237f93B8E339c536989b8978a438',
+		tokenPriceContract: '0x471ece3750da237f93b8e339c536989b8978a438',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ubeswap/ubeswap',
 		coingecko_name: 'celo'
 	},
@@ -217,6 +235,7 @@ const NETWORK = {
 		color: '#e84142',
 		rpc: 'https://api.avax.network/ext/bc/C/rpc',
 		explorer: 'https://snowtrace.io/token/',
+		normaltx: 'https://api.snowtrace.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://api.snowtrace.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://api.snowtrace.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
@@ -225,7 +244,7 @@ const NETWORK = {
 		tokenSymbol: 'AVAX',
 		tokenName: 'Avalanche',
 		tokenDecimal: 18,
-		tokenPriceContract: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
+		tokenPriceContract: '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/traderjoe-xyz/exchange',
 		coingecko_name: 'avalanche'
 	},
@@ -246,6 +265,22 @@ const minABI = [
 		'inputs':[],
 		'name':'decimals',
 		'outputs':[{'name':'','type':'uint8'}],
+		'type':'function'
+	},
+	// allowance
+	{
+		'constant':true,
+		'inputs':[{'name':'owner','type':'address'},{'name':'spender','type':'address'}],
+		'name':'allowance',
+		'outputs':[{'name':'amount','type':'uint256'}],
+		'type':'function'
+	},
+	// approve
+	{
+		'constant':true,
+		'inputs':[{'name':'spender','type':'address'},{'name':'amount','type':'uint256'}],
+		'name':'approve',
+		'outputs':[{'name':'','type':'bool'}],
 		'type':'function'
 	}
 ]
@@ -293,6 +328,30 @@ let wallet_NFT = {}
 
 let gasIsRealtime = false
 let loadingChartsByAddress = false
+
+
+
+// Utils
+async function get(url, query = null) {
+	if(query) {
+		return new Promise((resolve, reject) => {
+			fetch(url, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ query })
+			})
+				.then((response) => response.json())
+				.then(resolve)
+				.catch(reject)
+		})
+	}
+	return new Promise((resolve, reject) => {
+		fetch(url)
+			.then((response) => response.json())
+			.then(resolve)
+			.catch(reject)
+	})
+}
 
 
 
@@ -430,6 +489,36 @@ const getWeb3 = (network) => {
 }
 
 
+// Remove the EIP-3770 prefix if needed
+// eth:0x123456 => 0x123456
+const unprefixAddress = (address) => {
+	return address?.includes(':') ? address.split(':')[1] : address
+}
+
+
+// Get token balance
+const getTokenBalanceWeb3 = async (contractAddress, address, network) => {
+	if(contractAddress === '0x0' || !address) return
+	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
+	return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
+		return value
+	})
+}
+
+const getTokenDecimals = async (contractAddress, network) => {
+	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
+	return await contract.methods.decimals().call(async (err, val) => {
+		return val
+	})
+}
+
+const getTokenAllowance = async (contractAddress, ownerAddress, spenderAddress, network) => {
+	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
+	return await contract.methods.allowance(unprefixAddress(ownerAddress), unprefixAddress(spenderAddress)).call(async (err, val) => {
+		return val
+	})
+}
+
 
 /* Utils - Create a document network img tag */
 const createNetworkImg = (network) => {
@@ -500,6 +589,10 @@ function debounce(func, timeout = 500) {
 	}
 }
 
+
+const shortenAddress = (address) => {
+	return address.slice(0, 6) + '...' + address.slice(-4)
+}
 
 // Round number
 const precise = (x) => {
