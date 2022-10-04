@@ -305,7 +305,7 @@ body {
 }
 
 #wallet ul li span.network {
-  width: 8%;
+  width: 42px;
   min-width: 30px;
   display: flex;
 }
@@ -322,6 +322,7 @@ body {
 }
 #wallet ul li span.nameSymbol {
   flex: 1;
+  overflow: hidden;
 }
 #wallet ul li span.txNameSymbol {
   flex: .5;
@@ -330,21 +331,32 @@ body {
   flex: .25;
 }
 
+#wallet ul li span.symbol.small{
+  font-size: .8em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#wallet ul li span.name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 #wallet ul li span.name,
 #wallet ul li span.timestamp {
   font-size: .75em;
 }
 
 #wallet ul li span.price {
+  flex: .25;
   text-align: end;
-  width: 20%;
   font-size: .8em;
   padding-top: .5em;
 }
 
 #wallet ul li span.valueBalance {
+  flex: .25;
   text-align: end;
-  width: 17%;
   display: flex;
   flex-flow: column;
 }

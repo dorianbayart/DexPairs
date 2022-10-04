@@ -641,6 +641,13 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 			return price
 		}
 	}
+	// realt.co
+	else if(transaction.tokenName.toLowerCase().startsWith('realtoken') && balance > 0) {
+		price = await getPriceFromRealT(transaction.contractAddress, transaction.tokenSymbol, balance, network)
+		if(price) {
+			return price
+		}
+	}
 	return await getPriceByAddressNetwork(transaction.contractAddress, balance, network)
 }
 
@@ -888,6 +895,7 @@ function displayTokens() {
 			let spanSymbol = document.createElement('span')
 			spanSymbol.innerHTML = token.tokenSymbol
 			spanSymbol.classList.add('symbol')
+			if(token.tokenSymbol.length > 25) spanSymbol.classList.add('small')
 			spanNameSymbol.appendChild(spanSymbol)
 			let spanName = document.createElement('span')
 			spanName.innerHTML = token.tokenName
