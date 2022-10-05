@@ -3,32 +3,13 @@
 
 let underlyingAssets = {}
 let beefyRatio = {}
-
-// Utils
-async function get(url, query = null) {
-	if(query) {
-		return new Promise((resolve, reject) => {
-			fetch(url, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ query })
-			})
-				.then((response) => response.json())
-				.then(resolve)
-				.catch(reject)
-		})
-	}
-	return new Promise((resolve, reject) => {
-		fetch(url)
-			.then((response) => response.json())
-			.then(resolve)
-			.catch(reject)
-	})
-}
+let realtTokens = []
 
 
 // beefy.finance - get all ratio
 const beefy_ratio = 'https://api.beefy.finance/lps'
+// realt.co - get all tokens
+const realt_tokens = 'https://api.realt.community/v1/token'
 
 
 // AAVE - Ethereum
@@ -250,7 +231,7 @@ async function getVenusBscUnderlyingAddresses(callback) {
 
 
 
-
+/* Coingecko */
 async function getCoingeckoPrice(address, network) {
 	address = address.toLowerCase()
 	let token = coingecko[network + '-' + address]
@@ -272,7 +253,7 @@ async function getCoingeckoPrice(address, network) {
 
 
 
-
+/* Beefy.Finance */
 async function getPriceFromBeefy(contract, symbol, balance, network) {
 	if(Object.keys(beefyRatio).length === 0 || Date.now() - beefyRatio.updatedAt > 60000) {
 		beefyRatio = await get(beefy_ratio)
@@ -289,6 +270,19 @@ async function getPriceFromBeefy(contract, symbol, balance, network) {
 			return
 		}
 	}
+}
+
+
+/* RealT */
+async function getPriceFromRealT(contract, symbol, balance, network) {
+	if(realtTokens.length === 0) {
+		realtTokens = await get(realt_tokens)
+	}
+	const token = realtTokens.find((token) => token.uuid.toLowerCase() === contract.toLowerCase())
+	if(token) {
+		return token.tokenPrice
+	}
+  return
 }
 
 /* Utils - Return the Contract depending on the network */

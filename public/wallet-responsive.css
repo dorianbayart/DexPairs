@@ -158,9 +158,9 @@
   }
 
   #wallet ul li span.network {
-    min-width: 24px;
+    width: 32px;
   }
-  
+
   #wallet ul li span.network img.network {
     width: 18px;
   }
