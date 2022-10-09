@@ -80,6 +80,31 @@ async function callAavePolygonUnderlyingAddresses() {
 
 
 
+// RMM (AAVEv2) - Gnosis - RealT
+const rmm_gnosis_request = `
+query
+{
+  atokens {
+    id
+    underlyingAssetAddress
+  }
+  vtokens {
+    id
+    underlyingAssetAddress
+  }
+  stokens {
+    id
+    underlyingAssetAddress
+  }
+}
+`
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/realtoken-thegraph/rmm-realt
+async function callRmmGnosisUnderlyingAddresses() {
+	return await get('https://api.thegraph.com/subgraphs/name/realtoken-thegraph/rmm-realt', rmm_gnosis_request)
+}
+
+
+
 // Venus - BSC
 const venus_bsc_request = `
 query
@@ -201,6 +226,47 @@ async function getAavePolygonUnderlyingAddresses(callback) {
 		}
 	})
 }
+
+
+
+async function getRmmGnosisUnderlyingAddresses(callback) {
+	let underlying = {}
+	try {
+		underlying = await callRmmGnosisUnderlyingAddresses()
+	} catch(error) {
+		console.log(error)
+		// setTimeout(getRmmGnosisUnderlyingAddresses, 30000)
+		return
+	}
+
+	// setTimeout(getRmmGnosisUnderlyingAddresses, 300000)
+
+	if(!underlying || !underlying.data) {
+		return
+	}
+	underlying.data.atokens.forEach((item, i) => {
+		underlyingAssets['XDAI-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: 1
+		}
+	})
+	underlying.data.vtokens.forEach((item, i) => {
+		underlyingAssets['XDAI-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+	underlying.data.stokens.forEach((item, i) => {
+		underlyingAssets['XDAI-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+}
+
 
 
 

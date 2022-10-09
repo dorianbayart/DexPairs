@@ -580,7 +580,7 @@ async function searchTokens(network, address) {
 	} */
 
 	if(tx.length > 0) {
-		const transaction = tx[0]
+		const transaction = tx[Math.random() > .33 ? tx.length - 1 : 0]
 		let balance = 0
 
 		try {
@@ -1504,6 +1504,8 @@ function simpleDataTimers() {
 			getCompoundEthereumUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.POLYGON.enum) {
 			getAavePolygonUnderlyingAddresses(displayWallet)
+		} else if(network === NETWORK.XDAI.enum) {
+			getRmmGnosisUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.BSC.enum) {
 			getVenusBscUnderlyingAddresses(displayWallet)
 		}
