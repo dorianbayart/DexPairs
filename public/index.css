@@ -11,7 +11,7 @@ header {
   width: 100%;
   text-align: center;
   padding: max(32px, 4vh);
-  font-size: max(36px, 4vw);
+  font-size: max(42px, 5vw);
   display: inline-block;
   background: linear-gradient(-45deg, yellow, lightseagreen);
   -webkit-background-clip: text;
@@ -31,7 +31,7 @@ header .version {
 
 section {
   max-width: min(1200px, 95%);
-  margin: 128px auto;
+  margin: 80px auto;
   padding: min(48px, 4vh);
   border-radius: 24px;
 }
