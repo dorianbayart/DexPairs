@@ -7,6 +7,7 @@ import path from 'path'
 import express from 'express'
 import fetch from 'node-fetch'
 import { readFileSync, writeFile, writeFileSync } from 'fs'
+import rateLimit from 'express-rate-limit'
 
 
 /********************************
@@ -1515,6 +1516,12 @@ const sortTokensByVolume = (listToSort, listVolume) => {
 /* server */
 const port = process.env.PORT || 3000
 const app = express()
+
+const limiter = rateLimit({
+	windowMs: 10*1000, // 10 seconds
+	max: 25
+})
+app.use(limiter)
 
 // Pancake URLs
 app.get('/list/pancake', (req, res) => {
