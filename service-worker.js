@@ -23,7 +23,7 @@ self.addEventListener('install', async e => {
 
 // Check if service worker is activated
 self.addEventListener('activate', async e => {
-	console.log('[ServiceWorker] Activate')
+	// console.log('[ServiceWorker] Activate')
 	// Delete old static cache
 	e.waitUntil(
 		caches.keys().then(cacheNames => {
@@ -43,7 +43,7 @@ self.addEventListener('fetch', async event => {
 	}
 	if (['font', 'image'].includes(event.request.destination)) {
 		// Cache first, falling back to network
-		console.log('[ServiceWorker][CacheFirst] ', event.request.url)
+		// console.log('[ServiceWorker][CacheFirst] ', event.request.url)
 		event.respondWith(
 			caches.open(CACHE_NAME).then((cache) => {
 				return cache.match(event.request).then((cachedResponse) => {
@@ -56,7 +56,7 @@ self.addEventListener('fetch', async event => {
 		)
 	} else if (['document', 'script', 'style'].includes(event.request.destination) || event.request.url.includes('feed.atom')) {
 		// Stale-while-revalidate
-		console.log('[ServiceWorker][StaleRevalidate] ', event.request.url)
+		// console.log('[ServiceWorker][StaleRevalidate] ', event.request.url)
 		event.respondWith(
 			caches.open(CACHE_NAME).then(async cache => {
 				return cache.match(event.request).then(async response => {
@@ -70,7 +70,7 @@ self.addEventListener('fetch', async event => {
 		)
 	} else {
 		// Network first, falling back to cache
-		console.log('[ServiceWorker][NetworkFirst] ', event.request.url)
+		// console.log('[ServiceWorker][NetworkFirst] ', event.request.url)
 		event.respondWith(
 			caches.open(CACHE_NAME).then(async cache => {
 				return fetch(event.request.url).then(async fetchedResponse => {

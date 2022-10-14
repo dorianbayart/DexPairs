@@ -2,7 +2,7 @@
 
 window.addEventListener('load', function () {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/public/js/service-worker.js', { scope: '/' })
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
     .then(function (reg) {
       console.log('[ServiceWorker] Registered', reg)
     }).catch(function (error) {
