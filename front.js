@@ -382,8 +382,14 @@ app.get('/news', (req, res) => res.sendFile('/news.html', { root: '.' }))
 app.get('/donate', (req, res) => res.sendFile('/donate.html', { root: '.' }))
 app.get('/feed.atom', (req, res) => res.sendFile('/feed.atom', { root: '.' }))
 app.use('/img', express.static('img'))
-app.use('/public', express.static('public'))
 app.use('/news/', express.static('news/'))
+
+const options = {
+    setHeaders: function (res, path, stat) {
+        res.set('Service-Worker-Allowed', '/')
+    },
+}
+app.use('/public', express.static('public', options))
 
 app.get('/beta/', (req, res) => res.sendFile('/beta/index.html', { root: '.' }))
 app.get('/beta/charts', (req, res) => res.sendFile('/beta/charts.html', { root: '.' }))

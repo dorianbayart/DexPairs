@@ -1,3 +1,4 @@
+'use strict'
 
 const PARASWAP_PRICES_URL = 'https://apiv5.paraswap.io/prices/?srcToken=SRC_TOKEN&destToken=DEST_TOKEN&amount=AMOUNT&srcDecimals=SRC_DECIMALS&destDecimals=DEST_DECIMALS&side=SELL&network=NETWORK'
 const PARASWAP_TRANSACTIONS_URL = 'https://apiv5.paraswap.io/transactions/NETWORK'
