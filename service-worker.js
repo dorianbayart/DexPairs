@@ -38,7 +38,7 @@ self.addEventListener('activate', async e => {
 })
 
 self.addEventListener('fetch', async event => {
-	if(event.request.method !== "GET") {
+	if(event.request.method !== "GET" || event.request.url.includes('extension')) {
 		return
 	}
 	if (['font', 'image'].includes(event.request.destination)) {
