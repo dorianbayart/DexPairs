@@ -350,7 +350,7 @@ const toggleAddressFilter = (address) => {
 	displayWallet(true)
 }
 
-// get token transactions list
+// get normal transactions list
 function getNormalTx(network, address, callback) {
 	if(timerGetNormalTx[network] && timerGetNormalTx[network][address]) {
 		clearTimeoutIf(timerGetNormalTx, network, address)
@@ -564,11 +564,12 @@ async function searchTokens(network, address) {
 	// const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + address + '-' + network))
 
 	// Launch timer to update transactions
+	/*
 	clearTimeoutIf(timerGetTokenTx, network, address)
 	timerGetTokenTx[network][address] = setTimeout(() => getTokenTx(network, address, searchTokens), 30000 * (tokentx[address][network].length > 0 ? 1 : 3))
 	clearTimeoutIf(timerGetNormalTx, network, address)
 	timerGetNormalTx[network][address] = setTimeout(() => getNormalTx(network, address, searchTokens), 36000 * (normaltx[address][network].length > 0 ? 1 : 3))
-
+	*/
 	if(!wallet[address] || !tx || typeof tx === 'string' || (tx[0] && typeof tx[0] === 'string' && tx[0].includes('rate limit reached'))) {
 		return
 	}
@@ -798,7 +799,7 @@ async function getNetworkBalance(network, address) {
 
 
 	web3.eth.getBalance(unprefixAddress(address)).then(balance => {
-		if(balance) {
+		if(balance && wallet[address][id].value !== balance) {
 			wallet[address][id].value = balance
 			displayWallet()
 		}
