@@ -32,7 +32,8 @@ button {
 #wallet ul li,
 #connect-wallet,
 .pie-charts-container,
-.filter-by-network-item {
+.filter-by-network-item,
+.filter-by-address-item {
   background-color: #ffffffdd;
   color: #000000dd;
 }

@@ -620,6 +620,9 @@ const hashCode = (str) => {
 const getColorFromString = (str) => {
 	return `hsl(${hashCode(str) % 360}, 100%, 45%)`
 }
+const getColorFromStringWithTransparency = (str, transparency) => {
+	return `hsla(${hashCode(str) % 360}, 100%, 45%, ${transparency})`
+}
 
 
 // Sort By ChainId

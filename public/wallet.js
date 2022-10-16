@@ -295,6 +295,10 @@ const configureFilterByAddress = () => {
 		const li = document.createElement('li')
 		li.id = 'filter-by-' + address
 		li.classList.add('filter-by-address-item')
+		const borderColor = `4px solid ${getColorFromStringWithTransparency(address, .75)}`
+		li.style['border-left'] = borderColor
+		li.style['border-right'] = borderColor
+
 		const addr = document.createElement('div')
 		addr.innerHTML = address.includes(':') ? address.split(':')[0]+':'+address.split(':')[1].slice(0, 6) : address.slice(0, 6)
 		addr.classList.add('filter-by-address-text')
@@ -350,7 +354,7 @@ const toggleAddressFilter = (address) => {
 	displayWallet(true)
 }
 
-// get token transactions list
+// get normal transactions list
 function getNormalTx(network, address, callback) {
 	if(timerGetNormalTx[network] && timerGetNormalTx[network][address]) {
 		clearTimeoutIf(timerGetNormalTx, network, address)
@@ -564,11 +568,12 @@ async function searchTokens(network, address) {
 	// const latestBlock = parseInt(sessionStorage.getItem('latest-block-' + address + '-' + network))
 
 	// Launch timer to update transactions
+	/*
 	clearTimeoutIf(timerGetTokenTx, network, address)
 	timerGetTokenTx[network][address] = setTimeout(() => getTokenTx(network, address, searchTokens), 30000 * (tokentx[address][network].length > 0 ? 1 : 3))
 	clearTimeoutIf(timerGetNormalTx, network, address)
 	timerGetNormalTx[network][address] = setTimeout(() => getNormalTx(network, address, searchTokens), 36000 * (normaltx[address][network].length > 0 ? 1 : 3))
-
+	*/
 	if(!wallet[address] || !tx || typeof tx === 'string' || (tx[0] && typeof tx[0] === 'string' && tx[0].includes('rate limit reached'))) {
 		return
 	}
@@ -798,7 +803,7 @@ async function getNetworkBalance(network, address) {
 
 
 	web3.eth.getBalance(unprefixAddress(address)).then(balance => {
-		if(balance) {
+		if(balance && wallet[address][id].value !== balance) {
 			wallet[address][id].value = balance
 			displayWallet()
 		}
@@ -882,6 +887,9 @@ function displayTokens() {
 			let li = document.createElement('li')
 			li.title = ''
 			li.id = id
+			const borderColor = `3px solid ${getColorFromStringWithTransparency(token.wallet, .75)}`
+			li.style['border-left'] = borderColor
+			li.style['border-right'] = borderColor
 
 			let spanNetwork = document.createElement('span')
 			spanNetwork.classList.add('network')
@@ -1047,6 +1055,8 @@ function displayNFTs() {
 				li.title = nftContract.tokenName + ' #' + nft.id
 				li.id = id + '-' + nftContract.tokenSymbol + '-' + nft.id
 				li.classList.add('nft')
+				const borderColor = `1px solid ${getColorFromStringWithTransparency(nftContract.wallet, .75)}`
+				li.style['border'] = borderColor
 
 				let spanNetwork = document.createElement('span')
 				spanNetwork.classList.add('network')
@@ -1197,6 +1207,9 @@ function displayTransactions() {
 		// li.title = ''
 		li.id = tx.id
 		li.classList.add('transaction')
+		const borderColor = `3px solid ${getColorFromStringWithTransparency(tx.wallet, .75)}`
+		li.style['border-left'] = borderColor
+		li.style['border-right'] = borderColor
 
 		let spanNetwork = document.createElement('span')
 		spanNetwork.classList.add('network')
