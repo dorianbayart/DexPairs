@@ -1213,9 +1213,11 @@ function displayTransactions() {
 		// li.title = ''
 		li.id = tx.id
 		li.classList.add('transaction')
-		const borderColor = `3px solid ${getColorFromStringWithTransparency(tx.wallet, .75)}`
-		li.style['border-left'] = borderColor
-		li.style['border-right'] = borderColor
+		if(walletAddress.length > 1) {
+			const borderColor = `3px solid ${getColorFromStringWithTransparency(tx.wallet, .75)}`
+			li.style['border-left'] = borderColor
+			li.style['border-right'] = borderColor
+		}
 
 		let spanNetwork = document.createElement('span')
 		spanNetwork.classList.add('network')
