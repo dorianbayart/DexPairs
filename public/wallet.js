@@ -295,9 +295,11 @@ const configureFilterByAddress = () => {
 		const li = document.createElement('li')
 		li.id = 'filter-by-' + address
 		li.classList.add('filter-by-address-item')
-		const borderColor = `4px solid ${getColorFromStringWithTransparency(address, .75)}`
-		li.style['border-left'] = borderColor
-		li.style['border-right'] = borderColor
+		if(walletAddress.length > 1) {
+			const borderColor = `4px solid ${getColorFromStringWithTransparency(address, .75)}`
+			li.style['border-left'] = borderColor
+			li.style['border-right'] = borderColor
+		}
 
 		const addr = document.createElement('div')
 		addr.innerHTML = address.includes(':') ? address.split(':')[0]+':'+address.split(':')[1].slice(0, 6) : address.slice(0, 6)
@@ -887,9 +889,11 @@ function displayTokens() {
 			let li = document.createElement('li')
 			li.title = ''
 			li.id = id
-			const borderColor = `3px solid ${getColorFromStringWithTransparency(token.wallet, .75)}`
-			li.style['border-left'] = borderColor
-			li.style['border-right'] = borderColor
+			if(walletAddress.length > 1) {
+				const borderColor = `3px solid ${getColorFromStringWithTransparency(token.wallet, .75)}`
+				li.style['border-left'] = borderColor
+				li.style['border-right'] = borderColor
+			}
 
 			let spanNetwork = document.createElement('span')
 			spanNetwork.classList.add('network')
@@ -1055,8 +1059,10 @@ function displayNFTs() {
 				li.title = nftContract.tokenName + ' #' + nft.id
 				li.id = id + '-' + nftContract.tokenSymbol + '-' + nft.id
 				li.classList.add('nft')
-				const borderColor = `1px solid ${getColorFromStringWithTransparency(nftContract.wallet, .75)}`
-				li.style['border'] = borderColor
+				if(walletAddress.length > 1) {
+					const borderColor = `1px solid ${getColorFromStringWithTransparency(nftContract.wallet, .75)}`
+					li.style['border'] = borderColor
+				}
 
 				let spanNetwork = document.createElement('span')
 				spanNetwork.classList.add('network')
@@ -1207,9 +1213,11 @@ function displayTransactions() {
 		// li.title = ''
 		li.id = tx.id
 		li.classList.add('transaction')
-		const borderColor = `3px solid ${getColorFromStringWithTransparency(tx.wallet, .75)}`
-		li.style['border-left'] = borderColor
-		li.style['border-right'] = borderColor
+		if(walletAddress.length > 1) {
+			const borderColor = `3px solid ${getColorFromStringWithTransparency(tx.wallet, .75)}`
+			li.style['border-left'] = borderColor
+			li.style['border-right'] = borderColor
+		}
 
 		let spanNetwork = document.createElement('span')
 		spanNetwork.classList.add('network')
