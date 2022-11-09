@@ -222,7 +222,7 @@ async function getCharts() {
 
 // defines event on search field
 document.getElementById('search_field').addEventListener('keyup', function(e) {
-	search = e.target.value.toLowerCase()
+	search = document.getElementById('search_field').value.toLowerCase()
 
 	filteredList = {}
 	Object.keys(list).forEach(function (address) {
@@ -264,7 +264,7 @@ function updateList() {
 
 	let currentList = search.length > 0 ? filteredList : list
 
-	const ul =document.getElementById('list_ul')
+	const ul = document.getElementById('list_ul')
 	ul.innerHTML = null
 
 	const fullList = sessionStorage.getItem('full-list')
@@ -291,7 +291,7 @@ function updateList() {
 		})
 	} else {
 		const button = document.getElementById('list-load-more')
-		if(button && fullList) {
+		if(button && (fullList || Object.keys(currentList).length <= LIST_INITIAL_SIZE)) {
 			button.remove()
 		}
 	}
@@ -324,7 +324,14 @@ function setTop() {
 		return
 	}
 	let top = document.getElementById('top')
-	top.innerHTML = null
+
+	if(top.children.length) {
+		Array.from(top.children).forEach((item) => {
+			item.remove()
+		})
+	}
+
+	// top.innerHTML = null
 	for (let i = 0; i < 6; i++) {
 		const address = Object.keys(topTokens)[i]
 		const symbol = topTokens[address].s
@@ -423,7 +430,11 @@ function setFavorites() {
 	setFavoriteIcon()
 
 	let favHTML = document.getElementById('favorites')
-	favHTML.innerHTML = null
+	if(favHTML.children.length) {
+		Array.from(favHTML.children).forEach((item) => {
+			item.remove()
+		})
+	}
 
 	if(Object.keys(favorites).length < 1) {
 		favHTML.classList.toggle('empty', true)
@@ -1165,7 +1176,7 @@ function updateCharts() {
 
 
 	let timeDataInterpolated = []
-	for (let i = 0; intervalMS * i < Date.now() - tokenChart[0].t; i++) {
+	for (let i = 0; intervalMS * i < Date.now() - tokenChart[0]?.t; i++) {
 		timeDataInterpolated.unshift(new Date(tokenChart[tokenChart.length-1].t - intervalMS * i))
 	}
 	let tokenDataInterpolated = timeDataInterpolated.map(time => {
