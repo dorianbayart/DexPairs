@@ -51,6 +51,7 @@
     "compression": "*",
     "express": "*",
     "express-rate-limit": "*",
+    "express-ws": "^5.0.2",
     "node-fetch": "*",
     "pm2": "*",
     "yarn": "*"

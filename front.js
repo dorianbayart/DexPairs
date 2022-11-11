@@ -5,6 +5,7 @@ import http from 'http'
 import os from 'os'
 import path from 'path'
 import express from 'express'
+import expressWs from 'express-ws'
 import compression from 'compression'
 import fetch from 'node-fetch'
 import { promises as fs } from 'fs'
@@ -533,12 +534,38 @@ app.get('/honeyswap/charts/:token/:base', (req, res) => {
 	res.json(pair)
 })
 
-app.listen(port, () => console.log(`Frontend start at ${port}`))
+const server = app.listen(port, () => console.log(`Frontend start at ${port}`))
 
 http.createServer((req, res) => {
 	res.writeHead(200, {'Content-Type': 'text/html'})
 	res.end('Hello World')
 })
+
+
+
+/**
+* WebSocket Server
+*/
+expressWs(app, server)
+app.ws('/ws', async function(ws, req) {
+	ws.on('message', async function(data) {
+		const msg = JSON.parse(data)
+		console.log(msg)
+		switch (msg.type) {
+			case 'connection':
+				console.log('client connected to WSS')
+				ws.send(JSON.stringify({
+					type: 'connection',
+					data: true
+				}))
+				break
+			default:
+				console.log('other')
+		}
+	})
+})
+
+
 
 
 // useful filtering - filter all tokens with price = 0

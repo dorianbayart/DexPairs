@@ -913,7 +913,14 @@
   "resolved" "https://registry.npmjs.org/express-rate-limit/-/express-rate-limit-6.2.0.tgz"
   "version" "6.2.0"
 
-"express@*", "express@^4":
+"express-ws@^5.0.2":
+  "integrity" "sha512-0uvmuk61O9HXgLhGl3QhNSEtRsQevtmbL94/eILaliEADZBHZOQUAiHFrGPrgsjikohyrmSG5g+sCfASTt0lkQ=="
+  "resolved" "https://registry.npmjs.org/express-ws/-/express-ws-5.0.2.tgz"
+  "version" "5.0.2"
+  dependencies:
+    "ws" "^7.4.6"
+
+"express@*", "express@^4", "express@^4.0.0 || ^5.0.0-alpha.1":
   "integrity" "sha512-oxlxJxcQlYwqPWKVJJtvQiwHgosH/LrLSPA+H4UxpyvSS6jC5aH+5MoHFM+KABgTOt0APue4w66Ha8jCUo9QGg=="
   "resolved" "https://registry.npmjs.org/express/-/express-4.17.2.tgz"
   "version" "4.17.2"
@@ -1621,9 +1628,9 @@
   "version" "1.0.1"
 
 "minimatch@^3.0.4":
-  "integrity" "sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA=="
-  "resolved" "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
-  "version" "3.0.4"
+  "integrity" "sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw=="
+  "resolved" "https://registry.npmjs.org/minimatch/-/minimatch-3.1.2.tgz"
+  "version" "3.1.2"
   dependencies:
     "brace-expansion" "^1.1.7"
 
@@ -2805,7 +2812,7 @@
     "signal-exit" "^3.0.2"
     "typedarray-to-buffer" "^4.0.0"
 
-"ws@^7.0.0", "ws@~7.4.0":
+"ws@^7.0.0", "ws@^7.4.6", "ws@~7.4.0":
   "integrity" "sha512-YmhHDO4MzaDLB+M9ym/mDA5z0naX8j7SIlT8f8z+I0VtzsRbekxEutHSme7NPS2qE8StCYQNUnfWdXta/Yu85A=="
   "resolved" "https://registry.npmjs.org/ws/-/ws-7.4.6.tgz"
   "version" "7.4.6"
