@@ -1525,6 +1525,7 @@ function simpleDataTimers() {
 			getCompoundEthereumUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.POLYGON.enum) {
 			getAavePolygonUnderlyingAddresses(displayWallet)
+			getAaveV3PolygonUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.XDAI.enum) {
 			getRmmGnosisUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.BSC.enum) {

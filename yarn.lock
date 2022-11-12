@@ -913,7 +913,7 @@
   "resolved" "https://registry.npmjs.org/express-rate-limit/-/express-rate-limit-6.2.0.tgz"
   "version" "6.2.0"
 
-"express-ws@^5.0.2":
+"express-ws@*":
   "integrity" "sha512-0uvmuk61O9HXgLhGl3QhNSEtRsQevtmbL94/eILaliEADZBHZOQUAiHFrGPrgsjikohyrmSG5g+sCfASTt0lkQ=="
   "resolved" "https://registry.npmjs.org/express-ws/-/express-ws-5.0.2.tgz"
   "version" "5.0.2"

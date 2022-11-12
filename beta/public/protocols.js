@@ -55,7 +55,7 @@ async function callCompoundEthereumUnderlyingAddresses() {
 
 
 
-// AAVE - Polygon
+// AAVEv2 - Polygon
 const aave_polygon_request = `
 query
 {
@@ -76,6 +76,45 @@ query
 // Use TheGraph API - https://thegraph.com/legacy-explorer/subgraph/aave/aave-v2-matic
 async function callAavePolygonUnderlyingAddresses() {
 	return await get('https://api.thegraph.com/subgraphs/name/aave/aave-v2-matic', aave_polygon_request)
+}
+
+
+// AAVEv3 - Polygon
+const aave_v3_polygon_request = `
+query
+{
+  subTokens(first: 1000) {
+    id
+    underlyingAssetAddress
+    pool {
+      reserves {
+        underlyingAsset
+        symbol
+        name
+        decimals
+        price {
+          priceInEth
+        }
+        aToken {
+          id
+          underlyingAssetAddress
+        }
+        vToken {
+          id
+          underlyingAssetAddress
+        }
+        sToken {
+          id
+          underlyingAssetAddress
+        }
+      }
+    }
+  }
+}
+`
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/aave/protocol-v3-polygon
+async function callAaveV3PolygonUnderlyingAddresses() {
+	return await get('https://api.thegraph.com/subgraphs/name/aave/protocol-v3-polygon', aave_v3_polygon_request)
 }
 
 
@@ -225,6 +264,45 @@ async function getAavePolygonUnderlyingAddresses(callback) {
 			debt: -1
 		}
 	})
+}
+
+
+async function getAaveV3PolygonUnderlyingAddresses(callback) {
+	let underlying = {}
+	try {
+		underlying = await callAaveV3PolygonUnderlyingAddresses()
+	} catch(error) {
+		console.log(error)
+		// setTimeout(callAaveV3PolygonUnderlyingAddresses, 30000)
+		return
+	}
+
+	// setTimeout(callAaveV3PolygonUnderlyingAddresses, 300000)
+
+	if(!underlying || !underlying.data) {
+		return
+	}
+	underlying.data.subTokens.forEach((item, i) => {
+		underlyingAssets['POLYGON-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: 1
+		}
+	})
+	/*underlying.data.vtokens.forEach((item, i) => {
+		underlyingAssets['POLYGON-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+	underlying.data.stokens.forEach((item, i) => {
+		underlyingAssets['POLYGON-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})*/
 }
 
 

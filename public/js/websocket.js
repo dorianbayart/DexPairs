@@ -12,7 +12,7 @@ const connect = async () =>  {
     socket = new WebSocket(socketUrl)
 
     socket.onopen = () => {
-      socketMessageSend({ type: 'connection', data: 'connecting' })
+      socketMessageSend({ type: 'connection', data: window.location.href })
       resolve()
     }
 
