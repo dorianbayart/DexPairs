@@ -113,7 +113,7 @@ function getList() {
 			let data = JSON.parse(this.responseText)
 			list = data
 			if(list && Object.keys(list).length > 0) {
-				updateList()
+				updateSearchList()
 				sessionStorage.setItem('list', JSON.stringify(list))
 			} else {
 				clearTimeout(getListTimer)
@@ -157,7 +157,7 @@ function getTop() {
 
 // get simple data from server
 // + update main/base tokens with default ones
-function getSimple() {
+function getSimple(callback) {
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
@@ -187,6 +187,8 @@ function getSimple() {
 				setBase(selectedBase)
 				getCharts()
 				sessionStorage.setItem('simple', JSON.stringify(simple))
+
+				if(callback) callback()
 			} else {
 				clearTimeout(getSimpleTimer)
 				getSimpleTimer = setTimeout(getSimple, 4000)
@@ -222,21 +224,25 @@ async function getCharts() {
 
 // defines event on search field
 document.getElementById('search_field').addEventListener('keyup', function(e) {
-	search = e.target.value.toLowerCase()
+	updateSearchList(e.key.toLowerCase())
+})
+
+function updateSearchList(key) {
+	search = document.getElementById('search_field').value.toLowerCase()
 
 	filteredList = {}
 	Object.keys(list).forEach(function (address) {
-		if(address.toLowerCase().includes(search) || simple[address].s.toLowerCase().includes(search) || simple[address].n.toLowerCase().includes(search)) {
-			filteredList[address] = simple[address].s
+		if(address.toLowerCase().includes(search) || simple[address]?.s?.toLowerCase().includes(search) || simple[address]?.n?.toLowerCase().includes(search)) {
+			filteredList[address] = simple[address]?.s
 		}
 	})
 
 	updateList()
 
-	if(search.length > 0 && ALPHA_NUM.includes(e.key.toLowerCase())) {
+	if(search.length > 0 && (ALPHA_NUM.includes(key) || !key)) {
 		debounce(selectToken)(Object.keys(filteredList)[0])
 	}
-})
+}
 
 /* Select the token */
 function selectToken(selected) {
@@ -264,8 +270,17 @@ function updateList() {
 
 	let currentList = search.length > 0 ? filteredList : list
 
-	const ul =document.getElementById('list_ul')
+	document.getElementById('list-load-more')?.remove()
+	const ul = document.getElementById('list_ul')
 	ul.innerHTML = null
+
+	document.getElementById('span-no-result')?.remove()
+	if(Object.keys(currentList).length === 0) {
+		const span = document.createElement('span')
+		span.id = 'span-no-result'
+		span.innerHTML = 'No result'
+		ul.parentElement.appendChild(span)
+	}
 
 	const fullList = sessionStorage.getItem('full-list')
 	const length = Object.keys(currentList).length > LIST_INITIAL_SIZE && !fullList ? LIST_INITIAL_SIZE : Object.keys(currentList).length
@@ -278,24 +293,18 @@ function updateList() {
 		li.classList.toggle('active', li.id === selectedToken)
 	}
 
-	if(!fullList && !document.getElementById('list-load-more') && Object.keys(currentList).length > LIST_INITIAL_SIZE) {
+	if(!fullList && Object.keys(currentList).length > LIST_INITIAL_SIZE) {
 		const button = document.createElement('button')
 		button.id = 'list-load-more'
 		button.innerHTML = 'Load more'
 		button.title = 'Display the full list'
 		button.classList.add('load-more')
-		document.getElementById('list_ul').parentElement.appendChild(button)
+		ul.parentElement.appendChild(button)
 		button.addEventListener('click', function() {
 			sessionStorage.setItem('full-list', true)
 			updateList()
 		})
-	} else {
-		const button = document.getElementById('list-load-more')
-		if(button && fullList) {
-			button.remove()
-		}
 	}
-
 }
 
 // set base list selection
@@ -324,7 +333,14 @@ function setTop() {
 		return
 	}
 	let top = document.getElementById('top')
-	top.innerHTML = null
+
+	if(top.children.length) {
+		Array.from(top.children).forEach((item) => {
+			item.remove()
+		})
+	}
+
+	// top.innerHTML = null
 	for (let i = 0; i < 6; i++) {
 		const address = Object.keys(topTokens)[i]
 		const symbol = topTokens[address].s
@@ -423,7 +439,11 @@ function setFavorites() {
 	setFavoriteIcon()
 
 	let favHTML = document.getElementById('favorites')
-	favHTML.innerHTML = null
+	if(favHTML.children.length) {
+		Array.from(favHTML.children).forEach((item) => {
+			item.remove()
+		})
+	}
 
 	if(Object.keys(favorites).length < 1) {
 		favHTML.classList.toggle('empty', true)
@@ -529,8 +549,7 @@ function setFromFavorite(id) {
 		clearTimeout(getListTimer)
 		clearTimeout(getSimpleTimer)
 		clearTimeout(getTopTimer)
-		getList()
-		getSimple()
+		getSimple(getList)
 		getTop()
 	} else {
 		setBase(selectedBase)
@@ -678,8 +697,7 @@ document.getElementById('dex-selector').addEventListener(
 		clearTimeout(getSimpleTimer)
 		clearTimeout(getTopTimer)
 
-		getList()
-		getSimple()
+		getSimple(getList)
 		getTop()
 
 		setSourceDataText()
@@ -888,8 +906,8 @@ document.getElementById('share_charts').addEventListener('click', () => {
 
 /* MAIN */
 initializeHTML()
-getList()
-getSimple()
+
+getSimple(getList)
 getTop()
 
 updateFavorites()
@@ -943,7 +961,7 @@ function initializeHTML() {
 
 	if(sessionStorage.getItem('list')) {
 		list = JSON.parse(sessionStorage.getItem('list'))
-		if(list && Object.keys(list).length > 0) { updateList() }
+		if(list && Object.keys(list).length > 0) { updateSearchList() }
 		topTokens = JSON.parse(sessionStorage.getItem('topTokens'))
 		if(topTokens && Object.keys(topTokens).length > 0) { setTop() }
 		simple = JSON.parse(sessionStorage.getItem('simple'))
@@ -1165,7 +1183,7 @@ function updateCharts() {
 
 
 	let timeDataInterpolated = []
-	for (let i = 0; intervalMS * i < Date.now() - tokenChart[0].t; i++) {
+	for (let i = 0; intervalMS * i < Date.now() - tokenChart[0]?.t; i++) {
 		timeDataInterpolated.unshift(new Date(tokenChart[tokenChart.length-1].t - intervalMS * i))
 	}
 	let tokenDataInterpolated = timeDataInterpolated.map(time => {

@@ -655,6 +655,13 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 			return price
 		}
 	}
+	// Balancer Pool
+	else if(transaction.tokenSymbol.startsWith('B-') && balance > 0) {
+		price = await getPriceFromBalancerPool(transaction.contractAddress, transaction.tokenSymbol, balance, network)
+		if(price) {
+			return price
+		}
+	}
 	return await getPriceByAddressNetwork(transaction.contractAddress, balance, network)
 }
 
@@ -1525,6 +1532,7 @@ function simpleDataTimers() {
 			getCompoundEthereumUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.POLYGON.enum) {
 			getAavePolygonUnderlyingAddresses(displayWallet)
+			getAaveV3PolygonUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.XDAI.enum) {
 			getRmmGnosisUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.BSC.enum) {

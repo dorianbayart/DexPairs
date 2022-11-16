@@ -4,6 +4,7 @@
 let underlyingAssets = {}
 let beefyRatio = {}
 let realtTokens = []
+let balancerPools = {}
 
 
 // beefy.finance - get all ratio
@@ -55,7 +56,7 @@ async function callCompoundEthereumUnderlyingAddresses() {
 
 
 
-// AAVE - Polygon
+// AAVEv2 - Polygon
 const aave_polygon_request = `
 query
 {
@@ -76,6 +77,45 @@ query
 // Use TheGraph API - https://thegraph.com/legacy-explorer/subgraph/aave/aave-v2-matic
 async function callAavePolygonUnderlyingAddresses() {
 	return await get('https://api.thegraph.com/subgraphs/name/aave/aave-v2-matic', aave_polygon_request)
+}
+
+
+// AAVEv3 - Polygon
+const aave_v3_polygon_request = `
+query
+{
+  subTokens(first: 1000) {
+    id
+    underlyingAssetAddress
+    pool {
+      reserves {
+        underlyingAsset
+        symbol
+        name
+        decimals
+        price {
+          priceInEth
+        }
+        aToken {
+          id
+          underlyingAssetAddress
+        }
+        vToken {
+          id
+          underlyingAssetAddress
+        }
+        sToken {
+          id
+          underlyingAssetAddress
+        }
+      }
+    }
+  }
+}
+`
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/aave/protocol-v3-polygon
+async function callAaveV3PolygonUnderlyingAddresses() {
+	return await get('https://api.thegraph.com/subgraphs/name/aave/protocol-v3-polygon', aave_v3_polygon_request)
 }
 
 
@@ -119,6 +159,44 @@ query
 // Use TheGraph API - https://thegraph.com/legacy-explorer/subgraph/venusprotocol/venus-subgraph
 async function callVenusBscUnderlyingAddresses() {
 	return await get('https://api.thegraph.com/subgraphs/name/venusprotocol/venus-subgraph', venus_bsc_request)
+}
+
+
+
+// Balancer Pools
+const balancer_pools_request = `
+query
+{
+  tokens(first: 1000,
+    where: {
+      symbol_starts_with: "B-"
+    }
+  ) {
+      symbol
+      name
+      address
+    	latestUSDPrice
+    }
+}
+`
+// Use TheGraph API
+// https://thegraph.com/hosted-service/subgraph/balancer-labs/balancer-v2
+// https://thegraph.com/hosted-service/subgraph/balancer-labs/balancer-polygon-v2
+// https://thegraph.com/hosted-service/subgraph/balancer-labs/balancer-arbitrum-v2
+async function callBalancerPoolsRequest(network) {
+  switch (network) {
+    case 'ETHEREUM':
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2', balancer_pools_request)
+      break
+    case 'POLYGON':
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-polygon-v2', balancer_pools_request)
+      break
+    case 'ARBITRUM_ONE':
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2', balancer_pools_request)
+      break
+    default:
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2', balancer_pools_request)
+  }
 }
 
 
@@ -225,6 +303,45 @@ async function getAavePolygonUnderlyingAddresses(callback) {
 			debt: -1
 		}
 	})
+}
+
+
+async function getAaveV3PolygonUnderlyingAddresses(callback) {
+	let underlying = {}
+	try {
+		underlying = await callAaveV3PolygonUnderlyingAddresses()
+	} catch(error) {
+		console.log(error)
+		// setTimeout(callAaveV3PolygonUnderlyingAddresses, 30000)
+		return
+	}
+
+	// setTimeout(callAaveV3PolygonUnderlyingAddresses, 300000)
+
+	if(!underlying || !underlying.data) {
+		return
+	}
+	underlying.data.subTokens.forEach((item, i) => {
+		underlyingAssets['POLYGON-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: 1
+		}
+	})
+	/*underlying.data.vtokens.forEach((item, i) => {
+		underlyingAssets['POLYGON-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+	underlying.data.stokens.forEach((item, i) => {
+		underlyingAssets['POLYGON-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})*/
 }
 
 
@@ -350,6 +467,27 @@ async function getPriceFromRealT(contract, symbol, balance, network) {
 	}
   return
 }
+
+
+/* Balancer Pool */
+async function getPriceFromBalancerPool(contract, symbol, balance, network) {
+	if(!balancerPools[network] || balancerPools[network]?.tokens?.length === 0 || Date.now() - balancerPools[network].updatedAt > 60000) {
+		let data = await callBalancerPoolsRequest(network)
+    balancerPools[network] = data.data
+		balancerPools[network].updatedAt = Date.now()
+	}
+	const price = balancerPools[network].tokens.find(token => token.address === contract)?.latestUSDPrice
+	if(price) {
+		return price
+	} else {
+		try {
+			return await getCoingeckoPrice(contract, network)
+		} catch {
+			return
+		}
+	}
+}
+
 
 /* Utils - Return the Contract depending on the network */
 const getBeefyUnderlying = async (contractAddress, network) => {
