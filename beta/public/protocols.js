@@ -4,6 +4,7 @@
 let underlyingAssets = {}
 let beefyRatio = {}
 let realtTokens = []
+let balancerPools = {}
 
 
 // beefy.finance - get all ratio
@@ -158,6 +159,44 @@ query
 // Use TheGraph API - https://thegraph.com/legacy-explorer/subgraph/venusprotocol/venus-subgraph
 async function callVenusBscUnderlyingAddresses() {
 	return await get('https://api.thegraph.com/subgraphs/name/venusprotocol/venus-subgraph', venus_bsc_request)
+}
+
+
+
+// Balancer Pools
+const balancer_pools_request = `
+query
+{
+  tokens(first: 1000,
+    where: {
+      symbol_starts_with: "B-"
+    }
+  ) {
+      symbol
+      name
+      address
+    	latestUSDPrice
+    }
+}
+`
+// Use TheGraph API
+// https://thegraph.com/hosted-service/subgraph/balancer-labs/balancer-v2
+// https://thegraph.com/hosted-service/subgraph/balancer-labs/balancer-polygon-v2
+// https://thegraph.com/hosted-service/subgraph/balancer-labs/balancer-arbitrum-v2
+async function callBalancerPoolsRequest(network) {
+  switch (network) {
+    case 'ETHEREUM':
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2', balancer_pools_request)
+      break
+    case 'POLYGON':
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-polygon-v2', balancer_pools_request)
+      break
+    case 'ARBITRUM_ONE':
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2', balancer_pools_request)
+      break
+    default:
+      return await get('https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2', balancer_pools_request)
+  }
 }
 
 
@@ -428,6 +467,27 @@ async function getPriceFromRealT(contract, symbol, balance, network) {
 	}
   return
 }
+
+
+/* Balancer Pool */
+async function getPriceFromBalancerPool(contract, symbol, balance, network) {
+	if(!balancerPools[network] || balancerPools[network]?.tokens?.length === 0 || Date.now() - balancerPools[network].updatedAt > 60000) {
+		let data = await callBalancerPoolsRequest(network)
+    balancerPools[network] = data.data
+		balancerPools[network].updatedAt = Date.now()
+	}
+	const price = balancerPools[network].tokens.find(token => token.address === contract)?.latestUSDPrice
+	if(price) {
+		return price
+	} else {
+		try {
+			return await getCoingeckoPrice(contract, network)
+		} catch {
+			return
+		}
+	}
+}
+
 
 /* Utils - Return the Contract depending on the network */
 const getBeefyUnderlying = async (contractAddress, network) => {
