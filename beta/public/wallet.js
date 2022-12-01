@@ -1524,9 +1524,8 @@ function toggleNetworkFilter(network) {
 }
 
 function simpleDataTimers() {
-	Object.keys(NETWORK).filter((network) => NETWORK[network].url_data !== '').forEach((network, i) => {
+	Object.keys(NETWORK).filter((network) => typeof NETWORK[network].url_data === 'string').forEach((network, i) => {
 		setTimeout(() => getSimpleData(NETWORK[network].enum, displayWallet), (i+1) * 250)
-
 		if(network === NETWORK.ETHEREUM.enum) {
 			getAaveEthereumUnderlyingAddresses(displayWallet)
 			getCompoundEthereumUnderlyingAddresses(displayWallet)
