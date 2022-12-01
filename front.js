@@ -10,6 +10,7 @@ import compression from 'compression'
 import fetch from 'node-fetch'
 import { promises as fs } from 'fs'
 import rateLimit from 'express-rate-limit'
+import { MongoClient } from 'mongodb'
 
 
 
@@ -32,6 +33,17 @@ import rateLimit from 'express-rate-limit'
 
 const BACKEND_URL = 'http://127.0.0.1:3000'
 const dir_home = os.homedir()
+
+/*
+*
+* Mongo Configuration
+*
+*/
+const MONGO_URL = 'mongodb://localhost:27017'
+const MONGO_CLIENT = new MongoClient(MONGO_URL)
+const DN_NAME = 'DexPairs'
+let collections = {}
+
 
 // Pancake data - BSC
 let tokens_list = {}
@@ -62,20 +74,6 @@ let honeyswap_list = {}
 let honeyswap_top = {}
 let honeyswap_data = {}
 let honeyswap_charts = {}
-
-
-// CoinGecko
-let coingecko = []
-const coingeckoWhiteList = [
-	'celo',
-	'wbnb',
-	'weth',
-	'wmatic',
-	'wrapped-avax',
-	'wrapped-cro',
-	'wrapped-fantom',
-	'wrapped-xdai'
-]
 
 
 
@@ -334,20 +332,12 @@ async function launchHoneyswap() {
 
 
 
-// Program - CoinGecko
-async function launchCoingecko() {
-	// loop
-	setTimeout(launchCoingecko, getTimer())
 
-	try {
-		const file = await fs.readFile(path.join(dir_home, 'coingecko.json'), 'utf8')
-		coingecko = JSON.parse(file)
-		coingecko = coingecko.filter((token) =>
-			(token.market_cap > 0 && token.market_cap_rank && token.platforms) || coingeckoWhiteList.includes(token.id)
-		)
-	} catch (err) {
-		console.error(err)
-	}
+// Prepare Mongo collections
+async function prepareCollections() {
+  await MONGO_CLIENT.connect()
+	const db = MONGO_CLIENT.db(DN_NAME)
+	collections.coingecko = db.collection('coingecko')
 }
 
 
@@ -360,7 +350,7 @@ setTimeout(function(){ launchSpiritswap() }, 7000)
 setTimeout(function(){ launchHoneyswap() }, 8000)
 setTimeout(function(){ launch() }, 3000)
 
-setTimeout(launchCoingecko, 3000)
+setTimeout(prepareCollections, 250)
 
 
 
@@ -395,8 +385,14 @@ app.get('/beta/feed.atom', (req, res) => res.sendFile('/beta/feed.atom', { root:
 app.use('/beta/public', express.static('beta/public'))
 
 // Coingecko URL
-app.get('/coingecko/:blockchain/:token', (req, res) => {
-	res.json(coingecko.find((token) => token.platforms[req.params.blockchain] && token.platforms[req.params.blockchain].toLowerCase() === req.params.token.toLowerCase()))
+app.get('/coingecko/:blockchain/:token', async (req, res) => {
+  const query = {
+    $and: [
+      { platforms: { $regex : req.params.blockchain + '-' + req.params.token.toLowerCase() } },
+      { market_cap: { $ne: false } }
+    ]
+  }
+  res.json(await collections.coingecko.findOne(query))
 })
 
 // Pancake URLs

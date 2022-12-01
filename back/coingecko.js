@@ -4,6 +4,7 @@ import fetch from 'node-fetch'
 import os from 'os'
 import path from 'path'
 import { promises as fs } from 'fs'
+import { MongoClient } from 'mongodb'
 
 
 const PER_PAGE = 250
@@ -12,8 +13,23 @@ const BASE_URL = 'https://api.coingecko.com/api/v3/'
 const URL_LIST_TOKENS = `${BASE_URL}coins/list/?include_platform=true`
 const URL_FETCH_PRICES = `${BASE_URL}coins/markets?vs_currency=usd&per_page=${PER_PAGE}`
 
+const MONGO_URL = 'mongodb://localhost:27017'
+const MONGO_CLIENT = new MongoClient(MONGO_URL)
+const DN_NAME = 'DexPairs'
+
 
 let tokensList = []
+
+const whiteList = [
+	'celo',
+	'wbnb',
+	'weth',
+	'wmatic',
+	'wrapped-avax',
+	'wrapped-cro',
+	'wrapped-fantom',
+	'wrapped-xdai'
+]
 
 
 const dir_home = os.homedir()
@@ -24,34 +40,28 @@ buildList()
 
 
 async function buildList() {
-	await getList()
+	await MONGO_CLIENT.connect()
+	const db = MONGO_CLIENT.db(DN_NAME)
+	const collection = db.collection('coingecko')
+	await getList(collection)
 
 	if(tokensList.length === 0) {
 		return
 	}
 
-	await updateList()
+	await updateList(collection)
 
-	await writeOnDisk()
-
-	if(Math.random() < 0.05) { // Sometimes backup file
+	if(Math.random() < 0.01) { // Sometimes backup file
 		await writeBackupOnDisk()
 	}
+	setTimeout(() => MONGO_CLIENT.close(), 500)
 }
 
 
-async function getList() {
+async function getList(collection) {
 	try {
-		// get the file on disk
-		let data = await readOnDisk()
-		if(!data) {
-			data = await readBackupOnDisk()
-			if(!data) {
-				data = []
-			}
-		}
 
-		tokensList = data
+		tokensList = await collection.find({}).toArray()
 
 		if(tokensList.length === 0 || Math.random() > 0.95) {
 			// fetch tokens from CoinGecko
@@ -60,77 +70,53 @@ async function getList() {
 			// keep only tokens on supported protocols
 			let filtered = list.filter((token) => Object.values(token.platforms) && Object.values(token.platforms)[0] !== '' && Object.keys(token.platforms).some((platform) => SUPPORTED_PROTOCOLS.includes(platform)))
 
-			filtered.forEach((item) => {
-				let tokenIndex = tokensList.findIndex((token) => token.id === item.id)
-				if(tokenIndex > 0) {
-					tokensList[tokenIndex] = {
-						...tokensList[tokenIndex],
-						...item
+			//filtered.forEach(async (item) => {
+			for(const item of filtered) {
+				const query = { id: item.id }
+		  	const values = {
+					$set: {
+						id: item.id,
+						symbol: item.symbol,
+						name: item.name,
+						platforms: Object.entries(item.platforms).map(e => e.join('-')).join(':')
 					}
-				} else {
-					tokensList.push(item)
 				}
-			})
+				const options = { upsert: true }
+				const existingToken = tokensList.find(token => token.id === item.id)
+				if(!existingToken || existingToken.symbol !== item.symbol || existingToken.name !== item.name || !existingToken.platforms.localeCompare(item.platforms)) {
+					await collection.updateOne(query, values, options)
+				}
+			}
+
+			SUPPORTED_PROTOCOLS.forEach(logByProtocol)
 		}
 	} catch(error) {
 		console.error(error)
 	}
-
-	SUPPORTED_PROTOCOLS.forEach(logByProtocol)
 }
 
 
 
-
-async function updateList() {
+async function updateList(collection) {
 	let fewPrices = await fetchPrices()
 
-	fewPrices.forEach((item) => {
-		let tokenIndex = tokensList.findIndex((token) => token.id === item.id)
-		tokensList[tokenIndex] = {
-			...tokensList[tokenIndex],
-			...item
+	for(const item of fewPrices) {
+		const query = { id: item.id }
+  	const values = {
+			$set: {
+				price: item.price,
+				logo: item.logo,
+				market_cap: item.market_cap && item.market_cap > 0 ? item.market_cap : whiteList.includes(item.id),
+				market_cap_rank: item.market_cap_rank
+			}
 		}
-	})
-}
-
-
-async function readOnDisk() {
-	try {
-		const file = await fs.readFile(path.join(dir_home, 'coingecko.json'), 'utf8')
-		return JSON.parse(file)
-	} catch (err) {
-		try {
-			await fs.access(path.join(dir_home, 'coingecko.json'))
-		} catch {
-			console.log('File does not exist yet')
-			writeOnDisk()
-			return tokensList
-		}
-		console.error(err)
+		const result = await collection.updateOne(query, values)
 	}
 }
 
-async function writeOnDisk() {
-	console.log('Write a file')
-	try {
-		await fs.writeFile(path.join(dir_home, 'coingecko.json'), JSON.stringify(tokensList))
-	} catch (err) {
-		console.error(err)
-	}
-}
-
-async function readBackupOnDisk() {
-	try {
-		const file = await fs.readFile(path.join(dir_home, 'save_coingecko.json'), 'utf8')
-		return JSON.parse(file)
-	} catch (err) {
-		console.error(err)
-	}
-}
 
 async function writeBackupOnDisk() {
-	console.log('Write a backup')
+	console.log('Write a backup of Coingecko prices')
 	try {
 		await fs.writeFile(path.join(dir_home, 'save_coingecko.json'), JSON.stringify(tokensList))
 	} catch (err) {
@@ -145,7 +131,6 @@ async function fetchPrices() {
 	let parameter = '&ids=' + randomItems.join()
 	let data = await fetch(URL_FETCH_PRICES + parameter)
 	let json = await data.json()
-
 
 	return json.map((token) => {
 		return {
@@ -168,7 +153,7 @@ function logByProtocol(protocol, index, array) {
 
 
 function filterByProtocol(list, protocol) {
-	return list.filter((token) => token.platforms && Object.keys(token.platforms).some((platform) => platform === protocol))
+	return list.filter((token) => token.platforms && token.platforms.includes(protocol))
 }
 
 

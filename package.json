@@ -52,6 +52,7 @@
     "express": "*",
     "express-rate-limit": "*",
     "express-ws": "*",
+    "mongodb": "^4.12.1",
     "node-fetch": "*",
     "pm2": "*",
     "yarn": "*"
