@@ -16,7 +16,7 @@ import { MongoClient } from 'mongodb'
 
 /********************************
 
-          DexPairs.xyz
+DexPairs.xyz
 
 *********************************/
 /*        Dorian Bayart         */
@@ -46,9 +46,9 @@ let collections = {}
 
 
 // Pancake data - BSC
-let tokens_list = {}
+// let tokens_list = {}
 let top_tokens = {}
-let tokens_data = {}
+// let tokens_data = {}
 let tokens_charts = {}
 
 // Uniswap data - Ethereum
@@ -70,9 +70,9 @@ let spiritswap_data = {}
 let spiritswap_charts = {}
 
 // Honeyswap data - xDai
-let honeyswap_list = {}
+// let honeyswap_list = {}
 let honeyswap_top = {}
-let honeyswap_data = {}
+// let honeyswap_data = {}
 let honeyswap_charts = {}
 
 
@@ -82,49 +82,49 @@ async function launch() {
 	// loop
 	setTimeout(launch, getTimer())
 
-	await fetch(BACKEND_URL + '/list/pancake')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				tokens_list = json
-				console.log('Pancakeswap List Json is Okay')
-			} else {
-				console.error('Pancakeswap List Json error: '+ JSON.stringify(json))
-			}
-		})
+	// await fetch(BACKEND_URL + '/list/pancake')
+	// .then(res => res.json())
+	// .then(json => {
+	// 	if(Object.keys(json).length > 0) {
+	// 		tokens_list = json
+	// 		console.log('Pancakeswap List Json is Okay')
+	// 	} else {
+	// 		console.error('Pancakeswap List Json error: '+ JSON.stringify(json))
+	// 	}
+	// })
 
 	await fetch(BACKEND_URL + '/top/pancake')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				top_tokens = json
-				console.log('Pancakeswap Top Json is Okay')
-			} else {
-				console.error('Pancakeswap Top Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			top_tokens = json
+			console.log('Pancakeswap Top Json is Okay')
+		} else {
+			console.error('Pancakeswap Top Json error: '+ JSON.stringify(json))
+		}
+	})
 
-	await fetch(BACKEND_URL + '/simple/pancake')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				tokens_data = json
-				console.log('Pancakeswap Simple Json is Okay')
-			} else {
-				console.error('Pancakeswap Simple Json error: '+ JSON.stringify(json))
-			}
-		})
+	// await fetch(BACKEND_URL + '/simple/pancake')
+	// 	.then(res => res.json())
+	// 	.then(json => {
+	// 		if(Object.keys(json).length > 0) {
+	// 			tokens_data = json
+	// 			console.log('Pancakeswap Simple Json is Okay')
+	// 		} else {
+	// 			console.error('Pancakeswap Simple Json error: '+ JSON.stringify(json))
+	// 		}
+	// 	})
 
 	await fetch(BACKEND_URL + '/charts/pancake')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				tokens_charts = json
-				console.log('Pancakeswap Charts Json is Okay')
-			} else {
-				console.error('Pancakeswap Charts Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			tokens_charts = json
+			console.log('Pancakeswap Charts Json is Okay')
+		} else {
+			console.error('Pancakeswap Charts Json error: '+ JSON.stringify(json))
+		}
+	})
 }
 
 // Program - Uniswap
@@ -134,48 +134,48 @@ async function launchUniswap() {
 	setTimeout(launchUniswap, getTimer())
 
 	await fetch(BACKEND_URL + '/list/uniswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				uniswap_list = json
-				console.log('Uniswap List Json is Okay')
-			} else {
-				console.error('Uniswap List Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			uniswap_list = json
+			console.log('Uniswap List Json is Okay')
+		} else {
+			console.error('Uniswap List Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/top/uniswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				uniswap_top = json
-				console.log('Uniswap Top Json is Okay')
-			} else {
-				console.error('Uniswap Top Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			uniswap_top = json
+			console.log('Uniswap Top Json is Okay')
+		} else {
+			console.error('Uniswap Top Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/simple/uniswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				uniswap_data = json
-				console.log('Uniswap Simple Json is Okay')
-			} else {
-				console.error('Uniswap Simple Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			uniswap_data = json
+			console.log('Uniswap Simple Json is Okay')
+		} else {
+			console.error('Uniswap Simple Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/charts/uniswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				uniswap_charts = json
-				console.log('Uniswap Charts Json is Okay')
-			} else {
-				console.error('Uniswap Charts Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			uniswap_charts = json
+			console.log('Uniswap Charts Json is Okay')
+		} else {
+			console.error('Uniswap Charts Json error: '+ JSON.stringify(json))
+		}
+	})
 
 }
 
@@ -185,48 +185,48 @@ async function launchQuickswap() {
 	setTimeout(launchQuickswap, getTimer())
 
 	await fetch(BACKEND_URL + '/list/quickswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				quickswap_list = json
-				console.log('Quickswap List Json is Okay')
-			} else {
-				console.error('Quickswap List Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			quickswap_list = json
+			console.log('Quickswap List Json is Okay')
+		} else {
+			console.error('Quickswap List Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/top/quickswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				quickswap_top = json
-				console.log('Quickswap Top Json is Okay')
-			} else {
-				console.error('Quickswap Top Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			quickswap_top = json
+			console.log('Quickswap Top Json is Okay')
+		} else {
+			console.error('Quickswap Top Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/simple/quickswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				quickswap_data = json
-				console.log('Quickswap Simple Json is Okay')
-			} else {
-				console.error('Quickswap Simple Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			quickswap_data = json
+			console.log('Quickswap Simple Json is Okay')
+		} else {
+			console.error('Quickswap Simple Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/charts/quickswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				quickswap_charts = json
-				console.log('Quickswap Charts Json is Okay')
-			} else {
-				console.error('Quickswap Charts Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			quickswap_charts = json
+			console.log('Quickswap Charts Json is Okay')
+		} else {
+			console.error('Quickswap Charts Json error: '+ JSON.stringify(json))
+		}
+	})
 }
 
 // Program - Spiritswap
@@ -235,48 +235,48 @@ async function launchSpiritswap() {
 	setTimeout(launchSpiritswap, getTimer())
 
 	await fetch(BACKEND_URL + '/list/spiritswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				spiritswap_list = json
-				console.log('Spiritswap List Json is Okay')
-			} else {
-				console.error('Spiritswap List Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			spiritswap_list = json
+			console.log('Spiritswap List Json is Okay')
+		} else {
+			console.error('Spiritswap List Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/top/spiritswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				spiritswap_top = json
-				console.log('Spiritswap Top Json is Okay')
-			} else {
-				console.error('Spiritswap Top Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			spiritswap_top = json
+			console.log('Spiritswap Top Json is Okay')
+		} else {
+			console.error('Spiritswap Top Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/simple/spiritswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				spiritswap_data = json
-				console.log('Spiritswap Simple Json is Okay')
-			} else {
-				console.error('Spiritswap Simple Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			spiritswap_data = json
+			console.log('Spiritswap Simple Json is Okay')
+		} else {
+			console.error('Spiritswap Simple Json error: '+ JSON.stringify(json))
+		}
+	})
 
 	await fetch(BACKEND_URL + '/charts/spiritswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				spiritswap_charts = json
-				console.log('Spiritswap Charts Json is Okay')
-			} else {
-				console.error('Spiritswap Charts Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			spiritswap_charts = json
+			console.log('Spiritswap Charts Json is Okay')
+		} else {
+			console.error('Spiritswap Charts Json error: '+ JSON.stringify(json))
+		}
+	})
 }
 
 // Program - Honeyswap
@@ -284,49 +284,49 @@ async function launchHoneyswap() {
 	// loop
 	setTimeout(launchHoneyswap, getTimer())
 
-	await fetch(BACKEND_URL + '/list/honeyswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				honeyswap_list = json
-				console.log('Honeyswap List Json is Okay')
-			} else {
-				console.error('Honeyswap List Json error: '+ JSON.stringify(json))
-			}
-		})
+	// await fetch(BACKEND_URL + '/list/honeyswap')
+	// .then(res => res.json())
+	// .then(json => {
+	// 	if(Object.keys(json).length > 0) {
+	// 		honeyswap_list = json
+	// 		console.log('Honeyswap List Json is Okay')
+	// 	} else {
+	// 		console.error('Honeyswap List Json error: '+ JSON.stringify(json))
+	// 	}
+	// })
 
 	await fetch(BACKEND_URL + '/top/honeyswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				honeyswap_top = json
-				console.log('Honeyswap Top Json is Okay')
-			} else {
-				console.error('Honeyswap Top Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			honeyswap_top = json
+			console.log('Honeyswap Top Json is Okay')
+		} else {
+			console.error('Honeyswap Top Json error: '+ JSON.stringify(json))
+		}
+	})
 
-	await fetch(BACKEND_URL + '/simple/honeyswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				honeyswap_data = json
-				console.log('Honeyswap Simple Json is Okay')
-			} else {
-				console.error('Honeyswap Simple Json error: '+ JSON.stringify(json))
-			}
-		})
+	// await fetch(BACKEND_URL + '/simple/honeyswap')
+	// 	.then(res => res.json())
+	// 	.then(json => {
+	// 		if(Object.keys(json).length > 0) {
+	// 			honeyswap_data = json
+	// 			console.log('Honeyswap Simple Json is Okay')
+	// 		} else {
+	// 			console.error('Honeyswap Simple Json error: '+ JSON.stringify(json))
+	// 		}
+	// 	})
 
 	await fetch(BACKEND_URL + '/charts/honeyswap')
-		.then(res => res.json())
-		.then(json => {
-			if(Object.keys(json).length > 0) {
-				honeyswap_charts = json
-				console.log('Honeyswap Charts Json is Okay')
-			} else {
-				console.error('Honeyswap Charts Json error: '+ JSON.stringify(json))
-			}
-		})
+	.then(res => res.json())
+	.then(json => {
+		if(Object.keys(json).length > 0) {
+			honeyswap_charts = json
+			console.log('Honeyswap Charts Json is Okay')
+		} else {
+			console.error('Honeyswap Charts Json error: '+ JSON.stringify(json))
+		}
+	})
 }
 
 
@@ -335,9 +335,14 @@ async function launchHoneyswap() {
 
 // Prepare Mongo collections
 async function prepareCollections() {
-  await MONGO_CLIENT.connect()
+	await MONGO_CLIENT.connect()
 	const db = MONGO_CLIENT.db(DN_NAME)
 	collections.coingecko = db.collection('coingecko')
+	collections.bnbChainPancakeSwapSimple = db.collection('bnb-chain_pancakeswap_simple')
+	collections.bnbChainPancakeSwapList = db.collection('bnb-chain_pancakeswap_list')
+	collections.gnosisSimple = db.collection('gnosis_simple')
+	collections.gnosisList = db.collection('gnosis_list')
+	console.log(collections)
 }
 
 
@@ -350,7 +355,7 @@ setTimeout(function(){ launchSpiritswap() }, 7000)
 setTimeout(function(){ launchHoneyswap() }, 8000)
 setTimeout(function(){ launch() }, 3000)
 
-setTimeout(prepareCollections, 250)
+setTimeout(prepareCollections, 750)
 
 
 
@@ -386,32 +391,38 @@ app.use('/beta/public', express.static('beta/public'))
 
 // Coingecko URL
 app.get('/coingecko/:blockchain/:token', async (req, res) => {
-  const query = {
-    $and: [
-      { platforms: { $regex : req.params.blockchain + '-' + req.params.token.toLowerCase() } },
-      { market_cap: { $ne: false } }
-    ]
-  }
-  res.json(await collections.coingecko.findOne(query))
+	const query = {
+		$and: [
+			{ platforms: { $regex : req.params.blockchain + '-' + req.params.token.toLowerCase() } },
+			{ market_cap: { $ne: false } }
+		]
+	}
+	res.json(await collections.coingecko.findOne(query))
 })
 
 // Pancake URLs
-app.get('/pancake/token/:token', (req, res) => {
-	if(
-		Object.keys(tokens_data).includes(req.params.token) ||
-    Object.keys(tokens_data).findIndex(address => tokens_data[address].s === req.params.token) !== -1
-	) {
-		res.sendFile('/index.html', { root: '.' })
-	} else {
-		// TODO Improve error => redirect to homepage
-		res.writeHead(400, {'Content-Type': 'text/html'})
-		res.end('This token does not exist !')
-	}
-})
+// app.get('/pancake/token/:token', (req, res) => {
+// 	if(
+// 		Object.keys(tokens_data).includes(req.params.token) ||
+//     Object.keys(tokens_data).findIndex(address => tokens_data[address].s === req.params.token) !== -1
+// 	) {
+// 		res.sendFile('/index.html', { root: '.' })
+// 	} else {
+// 		// TODO Improve error => redirect to homepage
+// 		res.writeHead(400, {'Content-Type': 'text/html'})
+// 		res.end('This token does not exist !')
+// 	}
+// })
 
-app.get('/pancake/list', (req, res) => res.json(listFilter(tokens_list, tokens_data)))
+app.get('/pancake/list', async (req, res) => {
+	const data = await collections.bnbChainPancakeSwapList.findOne({id: 'list'})
+	res.json(data.list)
+})
 app.get('/pancake/top', (req, res) => res.json(top_tokens))
-app.get('/pancake/simple', (req, res) => res.json(listFilter(tokens_data, tokens_data)))
+app.get('/pancake/simple', async (req, res) => {
+	const data = await collections.bnbChainPancakeSwapSimple.find({}).toArray()
+	res.json(mapFromDbToJson(data))
+})
 app.get('/pancake/charts/:token', (req, res) => {
 	res.json(tokens_charts[req.params.token])
 })
@@ -426,7 +437,7 @@ app.get('/pancake/charts/:token/:base', (req, res) => {
 app.get('(/uniswap)?/token/:token', (req, res) => {
 	if(
 		Object.keys(uniswap_data).includes(req.params.token) ||
-    Object.keys(uniswap_data).findIndex(address => uniswap_data[address].s === req.params.token) !== -1
+		Object.keys(uniswap_data).findIndex(address => uniswap_data[address].s === req.params.token) !== -1
 	) {
 		res.sendFile('/index.html', { root: '.' })
 	} else {
@@ -453,7 +464,7 @@ app.get('(/uniswap)?/charts/:token/:base', (req, res) => {
 app.get('/quickswap/token/:token', (req, res) => {
 	if(
 		Object.keys(quickswap_data).includes(req.params.token) ||
-    Object.keys(quickswap_data).findIndex(address => quickswap_data[address].s === req.params.token) !== -1
+		Object.keys(quickswap_data).findIndex(address => quickswap_data[address].s === req.params.token) !== -1
 	) {
 		res.sendFile('/index.html', { root: '.' })
 	} else {
@@ -480,7 +491,7 @@ app.get('/quickswap/charts/:token/:base', (req, res) => {
 app.get('/spiritswap/token/:token', (req, res) => {
 	if(
 		Object.keys(spiritswap_data).includes(req.params.token) ||
-    Object.keys(spiritswap_data).findIndex(address => spiritswap_data[address].s === req.params.token) !== -1
+		Object.keys(spiritswap_data).findIndex(address => spiritswap_data[address].s === req.params.token) !== -1
 	) {
 		res.sendFile('/index.html', { root: '.' })
 	} else {
@@ -504,22 +515,28 @@ app.get('/spiritswap/charts/:token/:base', (req, res) => {
 })
 
 // Honeyswap URLs
-app.get('/honeyswap/token/:token', (req, res) => {
-	if(
-		Object.keys(honeyswap_data).includes(req.params.token) ||
-    Object.keys(honeyswap_data).findIndex(address => honeyswap_data[address].s === req.params.token) !== -1
-	) {
-		res.sendFile('/index.html', { root: '.' })
-	} else {
-		// TODO Improve error => redirect to homepage
-		res.writeHead(400, {'Content-Type': 'text/html'})
-		res.end('This token does not exist !')
-	}
-})
+// app.get('/honeyswap/token/:token', (req, res) => {
+// 	if(
+// 		Object.keys(honeyswap_data).includes(req.params.token) ||
+//     Object.keys(honeyswap_data).findIndex(address => honeyswap_data[address].s === req.params.token) !== -1
+// 	) {
+// 		res.sendFile('/index.html', { root: '.' })
+// 	} else {
+// 		// TODO Improve error => redirect to homepage
+// 		res.writeHead(400, {'Content-Type': 'text/html'})
+// 		res.end('This token does not exist !')
+// 	}
+// })
 
-app.get('/honeyswap/list', (req, res) => res.json(listFilter(honeyswap_list, honeyswap_data)))
+app.get('/honeyswap/list', async (req, res) => {
+	const data = await collections.gnosisList.findOne({id: 'list'})
+	res.json(data.list)
+})
 app.get('/honeyswap/top', (req, res) => res.json(honeyswap_top))
-app.get('/honeyswap/simple', (req, res) => res.json(listFilter(honeyswap_data, honeyswap_data)))
+app.get('/honeyswap/simple', async (req, res) => {
+	const data = await collections.gnosisSimple.find({}).toArray()
+	res.json(mapFromDbToJson(data))
+})
 app.get('/honeyswap/charts/:token', (req, res) => {
 	res.json(honeyswap_charts[req.params.token])
 })
@@ -549,14 +566,14 @@ app.ws('/ws', async function(ws, req) {
 		console.log(msg)
 		switch (msg.type) {
 			case 'connection':
-				console.log('client connected to WSS')
-				ws.send(JSON.stringify({
-					type: 'connection',
-					data: true
-				}))
-				break
+			console.log('client connected to WSS')
+			ws.send(JSON.stringify({
+				type: 'connection',
+				data: true
+			}))
+			break
 			default:
-				console.log('other')
+			console.log('other')
 		}
 	})
 })
@@ -573,6 +590,21 @@ function listFilter(list, listWithPrices) {
 		}
 	})
 	return filtered_list
+}
+
+
+// useful map - Simple data from DB to Json
+function mapFromDbToJson(data) {
+	const result = {}
+	data.filter(token => token.p > 0).forEach((token) => {
+		result[token.id] = {
+			n: token.n,
+			s: token.s,
+			p: token.p,
+			t: token.t
+		}
+	})
+	return result
 }
 
 // useful Math.random timer

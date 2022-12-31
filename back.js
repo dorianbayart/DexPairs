@@ -8,6 +8,7 @@ import express from 'express'
 import fetch from 'node-fetch'
 import { readFileSync, writeFile, writeFileSync } from 'fs'
 import rateLimit from 'express-rate-limit'
+import { MongoClient } from 'mongodb'
 
 
 /********************************
@@ -43,6 +44,12 @@ const WEEK = 604800000 // 1 week
 const HISTORY_SIZE = process.env.NODE_ENV === 'production' ? 192 : 96 // 45 or 120 seconds
 const HISTORY_SIZE_24H = 96 // 24h / 15min
 const TOP_SIZE = 6
+
+
+/* Mongo DB */
+const MONGO_URL = 'mongodb://localhost:27017'
+const MONGO_CLIENT = new MongoClient(MONGO_URL)
+const DN_NAME = 'DexPairs'
 
 
 /* DexPairs */
@@ -215,11 +222,11 @@ async function launch() {
 	let pancakeswap_volume_file = {}
 
 	let tokens_list = {}
-	let tokens_data = {}
+	// let tokens_data = {}
 	let tokens_charts = {}
 	let pancakeswap_volume = {}
 
-	try {
+	/*try {
 		tokens_data_file = readFileSync(path.join(dir_home, 'pancake-simple.json'), 'utf8')
 		tokens_data = JSON.parse(tokens_data_file.toString())
 		let pathFile = path.join(dir_home, 'save_pancake-simple.json')
@@ -232,7 +239,7 @@ async function launch() {
 		} catch {
 			return
 		}
-	}
+	}*/
 
 	try {
 		tokens_charts_file = readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8')
@@ -264,10 +271,14 @@ async function launch() {
 		}
 	}
 
-	if(Object.keys(tokens_data).length < 1 || Object.keys(tokens_charts).length < 1 || Object.keys(pancakeswap_volume).length < 1) {
+	if(/*Object.keys(tokens_data).length < 1 ||*/ Object.keys(tokens_charts).length < 1 || Object.keys(pancakeswap_volume).length < 1) {
 		return
 	}
 
+	await MONGO_CLIENT.connect()
+	const db = MONGO_CLIENT.db(DN_NAME)
+	const simpleCollection = db.collection('bnb-chain_pancakeswap_simple')
+	const listCollection = db.collection('bnb-chain_pancakeswap_list')
 
 	// get data from PancakeSwap
 	let top = {}
@@ -286,7 +297,7 @@ async function launch() {
 	const bnb_price = top.data ? top.data.bundle.bnbPrice : 0
 	if(bnb_price === 0) return
 
-	tokens.forEach(token => {
+	for(const token of tokens) {
 		const address = token.id
 		const symbol = token.symbol
 		const name = token.name
@@ -294,17 +305,30 @@ async function launch() {
 		const price = price_BNB * bnb_price
 		const volumeUSD = token.tradeVolumeUSD
 
-		// create tokens list
-		tokens_list[address] = symbol
+
+		if(price > 0) {
+			tokens_list[address] = symbol
+
+			const values = {
+				$set: {
+					id: address,
+					s: symbol,
+					n: name,
+					p: price,
+					t: time
+				}
+			}
+			await simpleCollection.updateOne({ id: address }, values, { upsert: true })
+		}
 
 
 		// update tokens simple data
-		tokens_data[address] = {
-			s: symbol,
-			n: name,
-			p: price,
-			t: time
-		}
+		// tokens_data[address] = {
+		// 	s: symbol,
+		// 	n: name,
+		// 	p: price,
+		// 	t: time
+		// }
 
 		// update tokens charts
 		//
@@ -382,20 +406,22 @@ async function launch() {
 				p: price
 			}]
 		}
-	})
+	}
 
 
 	// Sort tokens depending on volume
 	tokens_list = sortTokensByVolume(tokens_list, pancakeswap_volume)
+	await listCollection.updateOne({ id: 'list' }, {$set: { id: 'list', list: tokens_list }}, { upsert: true })
 
 	// build Top 10 list
 	let top_tokens = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
 			const address = Object.keys(tokens_list)[i]
-			const symbol = tokens_list[address]
-			const name = tokens_data[address].n
-			const price = tokens_data[address].p
+			const token = await simpleCollection.findOne({id: address})
+			const symbol = token.s
+			const name = token.n
+			const price = token.p
 			const volume = pancakeswap_volume[address][pancakeswap_volume[address].length-1].v - pancakeswap_volume[address][0].v
 
 			top_tokens[address] = {
@@ -412,12 +438,14 @@ async function launch() {
 
 
 
+
 	/* Store files */
 
 	// Update the tokens list
-	if(Object.keys(tokens_list).length > 0) {
+	if(Math.random() > 0.99) {
+		const list = await listCollection.findOne({id: 'list'})
 		let pathFile = path.join(dir_home, 'pancake.json')
-		writeFile( pathFile, JSON.stringify( tokens_list ), 'utf8', (err) => {
+		writeFile( pathFile, JSON.stringify( list.list ), 'utf8', (err) => {
 			if (err) throw err
 		})
 	}
@@ -431,9 +459,10 @@ async function launch() {
 	}
 
 	// Update the tokens simple data
-	if(Object.keys(tokens_data).length > 0) {
+	if(Math.random() > 0.99) {
+		const simple = await simpleCollection.find({}).toArray()
 		let pathFile = path.join(dir_home, 'pancake-simple.json')
-		writeFile( pathFile, JSON.stringify( tokens_data ), 'utf8', (err) => {
+		writeFile( pathFile, JSON.stringify( simple ), 'utf8', (err) => {
 			if (err) throw err
 		})
 	}
@@ -454,6 +483,8 @@ async function launch() {
 		})
 	}
 
+
+	MONGO_CLIENT.close()
 }
 
 
@@ -1233,11 +1264,11 @@ async function launchHoneyswap() {
 	let honeyswap_volume_file = {}
 
 	let honeyswap_list = {}
-	let honeyswap_data = {}
+	// let honeyswap_data = {}
 	let honeyswap_charts = {}
 	let honeyswap_volume = {}
 
-	try {
+	/*try {
 		honeyswap_data_file = readFileSync(path.join(dir_home, 'honeyswap-simple.json'), 'utf8')
 		honeyswap_data = JSON.parse(honeyswap_data_file.toString())
 		let pathFile = path.join(dir_home, 'save_honeyswap-simple.json')
@@ -1250,7 +1281,7 @@ async function launchHoneyswap() {
 		} catch {
 			return
 		}
-	}
+	}*/
 
 	try {
 		honeyswap_charts_file = readFileSync(path.join(dir_home, 'honeyswap-charts.json'), 'utf8')
@@ -1283,9 +1314,14 @@ async function launchHoneyswap() {
 	}
 
 
-	if(Object.keys(honeyswap_data).length < 1 || Object.keys(honeyswap_charts).length < 1 || Object.keys(honeyswap_volume).length < 1) {
+	if(/*Object.keys(honeyswap_data).length < 1 || */Object.keys(honeyswap_charts).length < 1 || Object.keys(honeyswap_volume).length < 1) {
 		return
 	}
+
+	await MONGO_CLIENT.connect()
+	const db = MONGO_CLIENT.db(DN_NAME)
+	const simpleCollection = db.collection('gnosis_simple')
+	const listCollection = db.collection('gnosis_list')
 
 
 	// get data from Honeyswap
@@ -1298,7 +1334,7 @@ async function launchHoneyswap() {
 	const eth_price = top.data ? top.data.bundle.ethPrice : 0
 	if(eth_price === 0) return
 
-	tokens.forEach(token => {
+	for(const token of tokens) {
 		const address = token.id
 		const symbol = token.symbol
 		const name = token.name
@@ -1306,17 +1342,30 @@ async function launchHoneyswap() {
 		const price = price_ETH * eth_price
 		const volumeUSD = token.tradeVolumeUSD
 
-		// create Honeyswap list
-		honeyswap_list[address] = symbol
+
+		if(price > 0) {
+			honeyswap_list[address] = symbol
+
+			const values = {
+				$set: {
+					id: address,
+					s: symbol,
+					n: name,
+					p: price,
+					t: time
+				}
+			}
+			await simpleCollection.updateOne({ id: address }, values, { upsert: true })
+		}
 
 
 		// update Honeyswap simple data
-		honeyswap_data[address] = {
-			s: symbol,
-			n: name,
-			p: price,
-			t: time
-		}
+		// honeyswap_data[address] = {
+		// 	s: symbol,
+		// 	n: name,
+		// 	p: price,
+		// 	t: time
+		// }
 
 		// update Honeyswap charts
 		//
@@ -1394,19 +1443,21 @@ async function launchHoneyswap() {
 				p: price,
 			}]
 		}
-	})
+	}
 
 	// Sort tokens depending on volume
 	honeyswap_list = sortTokensByVolume(honeyswap_list, honeyswap_volume)
+	await listCollection.updateOne({ id: 'list' }, {$set: { id: 'list', list: honeyswap_list }}, { upsert: true })
 
 	// build Top 10 list of Honeyswap
 	let honeyswap_top = {}
 	if(tokens.length > 0) {
 		for (let i = 0; i < TOP_SIZE; i++) {
 			const address = Object.keys(honeyswap_list)[i]
-			const symbol = honeyswap_list[address]
-			const name = honeyswap_data[address].n
-			const price = honeyswap_data[address].p
+			const token = await simpleCollection.findOne({id: address})
+			const symbol = token.s
+			const name = token.n
+			const price = token.p
 			const volume = honeyswap_volume[address][honeyswap_volume[address].length-1].v - honeyswap_volume[address][0].v
 
 			honeyswap_top[address] = {
@@ -1422,12 +1473,12 @@ async function launchHoneyswap() {
 
 	/* Store files */
 
-	let pathFile
-
+	let pathFile;
 	// Update the Honeyswap list
-	if(Object.keys(honeyswap_list).length > 0) {
+	if(Math.random() > 0.99) {
+		const list = await listCollection.findOne({id:'list'})
 		pathFile = path.join(dir_home, 'honeyswap.json')
-		writeFile( pathFile, JSON.stringify( honeyswap_list ), 'utf8', (err) => {
+		writeFile( pathFile, JSON.stringify( list.list ), 'utf8', (err) => {
 			if (err) throw err
 		})
 	}
@@ -1441,9 +1492,10 @@ async function launchHoneyswap() {
 	}
 
 	// Update the Honeyswap simple data
-	if(Object.keys(honeyswap_data).length > 0) {
+	if(Math.random() > 0.99) {
+		const simple = await simpleCollection.find({}).toArray()
 		pathFile = path.join(dir_home, 'honeyswap-simple.json')
-		writeFile( pathFile, JSON.stringify( honeyswap_data ), 'utf8', (err) => {
+		writeFile( pathFile, JSON.stringify( simple ), 'utf8', (err) => {
 			if (err) throw err
 		})
 	}
@@ -1464,6 +1516,8 @@ async function launchHoneyswap() {
 		})
 	}
 
+
+	MONGO_CLIENT.close()
 }
 
 
@@ -1524,18 +1578,18 @@ const limiter = rateLimit({
 app.use(limiter)
 
 // Pancake URLs
-app.get('/list/pancake', (req, res) => {
-	res.header('Content-Type','application/json')
-	res.sendFile(path.join(dir_home, 'pancake.json'))
-})
+// app.get('/list/pancake', (req, res) => {
+// 	res.header('Content-Type','application/json')
+// 	res.sendFile(path.join(dir_home, 'pancake.json'))
+// })
 app.get('/top/pancake', (req, res) => {
 	res.header('Content-Type','application/json')
 	res.sendFile(path.join(dir_home, 'pancake-top.json'))
 })
-app.get('/simple/pancake', (req, res) => {
-	res.header('Content-Type','application/json')
-	res.sendFile(path.join(dir_home, 'pancake-simple.json'))
-})
+// app.get('/simple/pancake', (req, res) => {
+// 	res.header('Content-Type','application/json')
+// 	res.sendFile(path.join(dir_home, 'pancake-simple.json'))
+// })
 app.get('/charts/pancake', (req, res) => {
 	res.header('Content-Type','application/json')
 	res.sendFile(path.join(dir_home, 'pancake-charts.json'))
@@ -1592,18 +1646,18 @@ app.get('/charts/spiritswap', (req, res) => {
 	res.sendFile(path.join(dir_home, 'spiritswap-charts.json'))
 })
 // Honeyswap URLs
-app.get('/list/honeyswap', (req, res) => {
-	res.header('Content-Type','application/json')
-	res.sendFile(path.join(dir_home, 'honeyswap.json'))
-})
+// app.get('/list/honeyswap', (req, res) => {
+// 	res.header('Content-Type','application/json')
+// 	res.sendFile(path.join(dir_home, 'honeyswap.json'))
+// })
 app.get('/top/honeyswap', (req, res) => {
 	res.header('Content-Type','application/json')
 	res.sendFile(path.join(dir_home, 'honeyswap-top.json'))
 })
-app.get('/simple/honeyswap', (req, res) => {
-	res.header('Content-Type','application/json')
-	res.sendFile(path.join(dir_home, 'honeyswap-simple.json'))
-})
+// app.get('/simple/honeyswap', (req, res) => {
+// 	res.header('Content-Type','application/json')
+// 	res.sendFile(path.join(dir_home, 'honeyswap-simple.json'))
+// })
 app.get('/charts/honeyswap', (req, res) => {
 	res.header('Content-Type','application/json')
 	res.sendFile(path.join(dir_home, 'honeyswap-charts.json'))
