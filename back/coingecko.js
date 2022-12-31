@@ -132,7 +132,7 @@ async function fetchPrices() {
 	let data = await fetch(URL_FETCH_PRICES + parameter)
 	let json = await data.json()
 
-	return json.map((token) => {
+	return json ? json.map((token) => {
 		return {
 			id: token.id,
 			price: token.current_price,
@@ -140,7 +140,7 @@ async function fetchPrices() {
 			market_cap: token.market_cap,
 			market_cap_rank: token.market_cap_rank
 		}
-	})
+	}) : []
 }
 
 
