@@ -1157,7 +1157,6 @@ function updateCharts() {
 		timeframeMS = TIME_1Y
 		break
 	case TIMEFRAME_ALL:
-		timeframeMS = TIME_1Y
 		break
 	case TIMEFRAME_1W:
 	default:
@@ -1166,10 +1165,10 @@ function updateCharts() {
 	}
 
 
-
-
-	tokenChart = tokenChart.filter(dot => Date.now() - dot.t < timeframeMS + intervalMS)
-	baseChart = baseChart.filter(dot => Date.now() - dot.t < timeframeMS + intervalMS)
+	if(timeframeMS > 0) {
+		tokenChart = tokenChart.filter(dot => Date.now() - dot.t < timeframeMS + intervalMS)
+		baseChart = baseChart.filter(dot => Date.now() - dot.t < timeframeMS + intervalMS)
+	}
 
 	let timeData = tokenChart.map(coords => new Date(coords.t))
 	let tokenData = tokenChart.map(coords => {
