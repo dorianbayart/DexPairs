@@ -492,7 +492,15 @@ const getWeb3 = (network) => {
 // Remove the EIP-3770 prefix if needed
 // eth:0x123456 => 0x123456
 const unprefixAddress = (address) => {
-	return address?.includes(':') ? address.split(':')[1] : address
+	return unprefixENSAddress(address?.includes(':') ? address.split(':')[1] : address)
+}
+
+const unprefixENSAddress = (address) => {
+	return address?.includes('|') ? address.split('|')[1] : address
+}
+
+const keepENSName = (address) => {
+	return address?.includes('|') ? address.split('|')[0] : address
 }
 
 

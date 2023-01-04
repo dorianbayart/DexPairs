@@ -116,7 +116,7 @@ function clearAllTimers() {
 }
 
 // search transactions / tokens for the specified wallet address
-function configureWallet(inputAddress) {
+async function configureWallet(inputAddress) {
 	const inputContainer = document.getElementById('input-wallet-container')
 	const globalInformationContainer = document.getElementById('global')
 	const stateContainer = document.getElementById('state')
@@ -159,11 +159,15 @@ function configureWallet(inputAddress) {
 	}
 
 	let validAddresses = []
-	inputAddress.forEach((address) => {
+	for(let address of inputAddress) {
+		if(!address.startsWith('0x') && address.includes('.')) {
+			address += '|' + await getWeb3(NETWORK.ETHEREUM.enum).eth.ens.getAddress(unprefixAddress(address))
+			console.log(`ENS Lookup: ${address}`)
+		}
 		if(getWeb3(NETWORK.ETHEREUM.enum).utils.isAddress(unprefixAddress(address))) {
 			validAddresses.push(address)
 		}
-	})
+	}
 
 
 	if(validAddresses.length === 0) {
@@ -1396,6 +1400,7 @@ async function initializeHTML() {
 		address = sessionStorage.getItem('walletAddress').split(',')
 	}
 	if(address) {
+		address = address.map(addr => keepENSName(addr))
 		document.getElementById('input-wallet').value = address.join(',')
 		configureWallet(address)
 	}
