@@ -335,6 +335,9 @@ async function launchHoneyswap() {
 
 // Prepare Mongo collections
 async function prepareCollections() {
+	if(MONGO_CLIENT) {
+		await MONGO_CLIENT.close()
+	}
 	await MONGO_CLIENT.connect()
 	const db = MONGO_CLIENT.db(DN_NAME)
 	collections.coingecko = db.collection('coingecko')
@@ -343,6 +346,8 @@ async function prepareCollections() {
 	collections.gnosisSimple = db.collection('gnosis_simple')
 	collections.gnosisList = db.collection('gnosis_list')
 	console.log(collections)
+
+	setTimeout(prepareCollections, 60 * 60 * 1000)
 }
 
 
