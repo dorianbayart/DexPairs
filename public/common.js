@@ -85,7 +85,7 @@ const NETWORK = {
 		tokentx: 'https://cronos.crypto.org/explorer/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://cronos.crypto.org/explorer/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: '',
+		// url_data: '',
 		tokenContract: '0x0',
 		tokenSymbol: 'CRO',
 		tokenName: 'Crypto.org Coin',
@@ -195,7 +195,7 @@ const NETWORK = {
 		tokentx: 'https://api.arbiscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.arbiscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.arbiscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: '', // SERVER_URL + '/uniswap-arbitrum',
+		// url_data: '', // SERVER_URL + '/uniswap-arbitrum',
 		tokenContract: '0x0',
 		tokenSymbol: 'AETH',
 		tokenName: 'Ether',
@@ -217,7 +217,7 @@ const NETWORK = {
 		tokentx: 'https://explorer.celo.org/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://explorer.celo.org/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: '', // SERVER_URL + '/ubeswap',
+		// url_data: '', // SERVER_URL + '/ubeswap',
 		tokenContract: '0x0',
 		tokenSymbol: 'CELO',
 		tokenName: 'CELO',
@@ -239,7 +239,7 @@ const NETWORK = {
 		tokentx: 'https://api.snowtrace.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://api.snowtrace.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: '', // SERVER_URL + '/traderjoe',
+		// url_data: '', // SERVER_URL + '/traderjoe',
 		tokenContract: '0x0',
 		tokenSymbol: 'AVAX',
 		tokenName: 'Avalanche',
@@ -418,7 +418,7 @@ function getSimpleData(network, callback) {
 		if (this.readyState == 4 && this.status == 200) {
 			const simple = JSON.parse(this.responseText)
 			if(simple && Object.keys(simple).length > 0) {
-				NETWORK[network].simple_data = JSON.stringify(simple)
+				NETWORK[network].simple_data = simple
 
 				if (callback && typeof callback === 'function') {
 					callback()
@@ -492,7 +492,15 @@ const getWeb3 = (network) => {
 // Remove the EIP-3770 prefix if needed
 // eth:0x123456 => 0x123456
 const unprefixAddress = (address) => {
-	return address?.includes(':') ? address.split(':')[1] : address
+	return unprefixENSAddress(address?.includes(':') ? address.split(':')[1] : address)
+}
+
+const unprefixENSAddress = (address) => {
+	return address?.includes('|') ? address.split('|')[1] : address
+}
+
+const keepENSName = (address) => {
+	return address?.includes('|') ? address.split('|')[0] : address
 }
 
 
@@ -543,7 +551,7 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 		rate = underlyingAssets[network + '-' + searchedAddress].rate
 		debt = underlyingAssets[network + '-' + searchedAddress].debt
 	}
-	let prices = NETWORK[network].simple_data ? JSON.parse(NETWORK[network].simple_data) : null
+	let prices = NETWORK[network].simple_data
 	if(prices && prices[address] && prices[address].p > 0 && (Date.now() - prices[address].t < TIME_1W)) {
 		return prices[address].p * debt * rate
 	}
