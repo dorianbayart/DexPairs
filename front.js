@@ -615,8 +615,8 @@ function mapFromDbToJson(data) {
 // useful Math.random timer
 function getTimer() {
 	if(process.env.NODE_ENV === 'production') {
-		// between 15 and 30 seconds in Production Mode
-		return Math.round((15*Math.random() + 15)*1000)
+		// between 15 and 45 seconds in Production Mode
+		return Math.round((30*Math.random() + 15)*1000)
 	}
 	// between 60 and 180 seconds in Dev Mode
 	return Math.round((120*Math.random() + 60)*1000)
