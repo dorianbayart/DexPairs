@@ -461,7 +461,9 @@ async function getPriceFromRealT(contract, symbol, balance, network) {
 	if(realtTokens.length === 0) {
 		realtTokens = await get(realt_tokens)
 	}
-	const token = realtTokens.find((token) => token.uuid.toLowerCase() === contract.toLowerCase())
+	let token = realtTokens.find((token) =>
+    symbol.toLowerCase().startsWith('armmrealtoken') ? symbol.toLowerCase().includes(token.symbol.toLowerCase()) : token.uuid.toLowerCase() === contract.toLowerCase()
+  )
 	if(token) {
 		return token.tokenPrice
 	}

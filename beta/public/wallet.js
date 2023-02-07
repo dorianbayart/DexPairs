@@ -653,7 +653,7 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 		}
 	}
 	// realt.co
-	else if(transaction.tokenName.toLowerCase().startsWith('realtoken') && balance > 0) {
+	else if((transaction.tokenName.toLowerCase().startsWith('realtoken') || transaction.tokenSymbol.toLowerCase().startsWith('armmrealtoken')) && balance > 0) {
 		price = await getPriceFromRealT(transaction.contractAddress, transaction.tokenSymbol, balance, network)
 		if(price) {
 			return price
