@@ -116,7 +116,7 @@ function clearAllTimers() {
 }
 
 // search transactions / tokens for the specified wallet address
-function configureWallet(inputAddress) {
+async function configureWallet(inputAddress) {
 	const inputContainer = document.getElementById('input-wallet-container')
 	const globalInformationContainer = document.getElementById('global')
 	const stateContainer = document.getElementById('state')
@@ -159,11 +159,15 @@ function configureWallet(inputAddress) {
 	}
 
 	let validAddresses = []
-	inputAddress.forEach((address) => {
+	for(let address of inputAddress) {
+		if(!address.startsWith('0x') && address.includes('.')) {
+			address += '|' + await getWeb3(NETWORK.ETHEREUM.enum).eth.ens.getAddress(unprefixAddress(address))
+			console.log(`ENS Lookup: ${address}`)
+		}
 		if(getWeb3(NETWORK.ETHEREUM.enum).utils.isAddress(unprefixAddress(address))) {
 			validAddresses.push(address)
 		}
-	})
+	}
 
 
 	if(validAddresses.length === 0) {
@@ -649,7 +653,7 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 		}
 	}
 	// realt.co
-	else if(transaction.tokenName.toLowerCase().startsWith('realtoken') && balance > 0) {
+	else if((transaction.tokenName.toLowerCase().startsWith('realtoken') || transaction.tokenSymbol.toLowerCase().startsWith('armmrealtoken')) && balance > 0) {
 		price = await getPriceFromRealT(transaction.contractAddress, transaction.tokenSymbol, balance, network)
 		if(price) {
 			return price
@@ -1396,6 +1400,7 @@ async function initializeHTML() {
 		address = sessionStorage.getItem('walletAddress').split(',')
 	}
 	if(address) {
+		address = address.map(addr => keepENSName(addr))
 		document.getElementById('input-wallet').value = address.join(',')
 		configureWallet(address)
 	}
@@ -1524,9 +1529,8 @@ function toggleNetworkFilter(network) {
 }
 
 function simpleDataTimers() {
-	Object.keys(NETWORK).filter((network) => NETWORK[network].url_data !== '').forEach((network, i) => {
+	Object.keys(NETWORK).filter((network) => typeof NETWORK[network].url_data === 'string').forEach((network, i) => {
 		setTimeout(() => getSimpleData(NETWORK[network].enum, displayWallet), (i+1) * 250)
-
 		if(network === NETWORK.ETHEREUM.enum) {
 			getAaveEthereumUnderlyingAddresses(displayWallet)
 			getCompoundEthereumUnderlyingAddresses(displayWallet)
