@@ -3,10 +3,12 @@
 var CACHE_NAME = 'dexpairs'
 var FILES_TO_CACHE = [
 	'/',
-	'/charts',
-	'/wallet',
-	'/news',
-	'/donate',
+	'/index.html',
+	'/charts.html',
+	'/wallet.html',
+	'/news.html',
+	'/donate.html',
+	'/404.html',
 	'/feed.atom',
 ]
 

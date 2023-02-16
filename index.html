@@ -5,23 +5,35 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
+  <!-- PWA -->
+  <meta name="theme-color" content="#1E2124" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1E2124" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-TileImage" content="/img/background-multichain-min.png">
+  <meta name="msapplication-TileColor" content="#1E2124">
+  <meta name="msapplication-tap-highlight" content="no">
+
   <title>DexPairs.xyz</title>
-  <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Cronos, BSC, xDai, Polygon, Fantom, Arbitrum One, Celo and Avalanche chains." />
+  <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Cronos, BNB Chain, Gnosis, Polygon, Fantom, Arbitrum One, Celo and Avalanche chains." />
   <meta name="author" content="Dorian Bayart" />
-  <meta name="keywords" content="dexpairs, crypto, currency, bitcoin, eth, subgraph, matic, polygon, ethereum, cronos, bsc, fantom, xdai, arbitrum, avalanche, celo, wallet, nft, defi, dex, uniswap, quickswap, pancakeswap, spiritswap, honeyswap" />
+  <meta name="keywords" content="dexpairs, crypto, currency, prices, portfolio, tokens, wallet, nft, bitcoin, ens, eth, subgraph, matic, polygon, ethereum, cronos, bsc, bnb chain, fantom, xdai, gnosis, arbitrum, avalanche, celo, defi, dex, uniswap, quickswap, pancakeswap, spiritswap, honeyswap" />
+  <meta name="robots" content="index, follow" />
 
   <link rel="shortcut icon" type="image/png" href="/img/background-multichain-min.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/img/background-multichain-min.png" />
   <link href="./" rel="canonical" />
 
   <meta property="og:title" content="DexPairs.xyz" />
   <meta property="og:type" content="website" />
-  <meta property="og:description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Polygon, BSC, Fantom and xDai chains." />
+  <meta property="og:description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Cronos, BNB Chain, Gnosis, Polygon, Fantom, Arbitrum One, Celo and Avalanche chains." />
   <meta property="og:url" content="./" />
   <meta property="og:image" content="/img/background-multichain-min.png" />
   <meta property="og:site_name" content="DexPairs" />
 
   <link rel="alternate" type="application/atom+xml" title="DexPairs.xyz News" href="/feed.atom" />
 
+  <link rel="manifest" href="/manifest.json">
   <script src="/public/js/pwa.js"></script>
 
   <link rel="stylesheet" href="./public/colors.css">
@@ -51,9 +63,8 @@
 
 
 
-
   <section class='section-charts'>
-    <h2>Track Prices</h2>
+    <h2>Track Tokens Prices</h2>
     <div class='content-illustration'>
       <div class='content'>
         <ul>
@@ -63,10 +74,11 @@
             (ie: <a href='./charts?dex=UNISWAP&token=AAVE&base=COMP&interval=4h&timeframe=1m' target='_blank'>Aave/Comp</a>, <a href='./charts?dex=PANCAKESWAP&token=Cake&base=DOT&interval=4h&timeframe=1m' target='_blank'>Cake/Dot</a>)
           </li>
           <li>Save up to 6 favorite pairs to monitor</li>
-          <li>Keep an eye on live updated current gas prices</i>
+          <li>Keep an eye on live updated current gas prices</li>
+          <li><i>Soon</i>: Swap tokens directly on DexPairs (powered by Paraswap.io)!</li>
         </ul>
 
-        <a href='./charts' title='Track prices' class='GoTo'>Go to Charts</a>
+        <a href='./charts' title='Track prices' class='GoTo'>Track Tokens Prices on DexPairs.xyz Charts Page</a>
       </div>
       <div class='illustration'>
         <img src='/img/illustrations/undraw_Growing_re_olpi.svg' alt='Track Prices' width='256px' height='192px' loading='lazy'>
@@ -87,12 +99,12 @@
         Cronos
       </li>
       <li>
-        <img src="/img/bsc-icon.svg" alt="BSC Logo" width="32px" height="32px" loading='lazy'>
-        Binance Smart Chain
+        <img src="/img/bsc-icon.svg" alt="BNB Chain Logo" width="32px" height="32px" loading='lazy'>
+        BNB Chain
       </li>
       <li>
-        <img src="/img/xdai-icon.svg" alt="xDai Logo" width="32px" height="32px" loading='lazy'>
-        xDai
+        <img src="/img/xdai-icon.svg" alt="Gnosis Chain (xDai) Logo" width="32px" height="32px" loading='lazy'>
+        Gnosis (xDai)
       </li>
       <li>
         <img src="/img/polygon-icon.svg" alt="Polygon Logo" width="32px" height="32px" loading='lazy'>
@@ -134,12 +146,13 @@
           <li>Display your NFTs collection as a gallery, and share it!</li>
           <li>Estimate your portfolio history value on a global chart (based on Ethereum price evolution)</li>
           <li>List all your transactions, filter by network</li>
-          <li><i>Very soon</i>: Track your whole portfolio (multi-addresses)!</li>
+          <li>Track your whole portfolio (multiple addresses separated by comma)</li>
+          <li>Use your ENS name instead of full ERC-20</li>
 
         </ul>
 
         <div class='go-to-container'>
-          <a href='./wallet' title='Explore your Wallet' class='GoTo'>Go to your Wallet</a>
+          <a href='./wallet' title='Explore your Portfolio' class='GoTo'>Explore your Portfolio on DexPairs.xyz Wallet Page</a>
           <a href='./wallet?address=0x0255c9D3850cacA1152AEB20425C264787661692' title='Open a demo wallet' class='GoToDemoLink'>Open a demo wallet</a>
         </div>
       </div>
@@ -157,7 +170,7 @@
         <ul>
           <li>Keep an eye on current minimal gas fees in realtime</li>
           <li>Use your mobile, tablet or desktop, the design is responsive</li>
-          <li>Subscribe to a dedicated RSS feed - <a href='/news'>Read the news</a>!</li>
+          <li>Subscribe to a dedicated RSS feed - <a href='/news'>Read the DexPairs.xyz News</a>!</li>
           <li><i>Soon</i>: Stay tuned, many more useful features are in the pipe!</li>
 
         </ul>

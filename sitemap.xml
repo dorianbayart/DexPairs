@@ -19,6 +19,12 @@
         <loc>https://dexpairs.xyz/beta/</loc>
     </url>
     <url>
+        <loc>https://dexpairs.xyz/beta/charts</loc>
+    </url>
+    <url>
+        <loc>https://dexpairs.xyz/beta/wallet</loc>
+    </url>
+    <url>
         <loc>https://dexpairs.xyz/feed.atom</loc>
     </url>
 </urlset>
