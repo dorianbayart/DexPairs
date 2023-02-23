@@ -80,6 +80,48 @@ async function callAavePolygonUnderlyingAddresses() {
 }
 
 
+
+// AAVEv3 - Ethereum
+const aave_v3_request = `
+query
+{
+  subTokens(first: 1000) {
+    id
+    underlyingAssetAddress
+    pool {
+      reserves {
+        underlyingAsset
+        symbol
+        name
+        decimals
+        price {
+          priceInEth
+        }
+        aToken {
+          id
+          underlyingAssetAddress
+        }
+        vToken {
+          id
+          underlyingAssetAddress
+        }
+        sToken {
+          id
+          underlyingAssetAddress
+        }
+      }
+    }
+  }
+}
+`
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/aave/protocol-v3
+async function callAaveV3UnderlyingAddresses() {
+	return await get('https://api.thegraph.com/subgraphs/name/aave/protocol-v3', aave_v3_request)
+}
+
+
+
+
 // AAVEv3 - Polygon
 const aave_v3_polygon_request = `
 query
@@ -116,6 +158,46 @@ query
 // Use TheGraph API - https://thegraph.com/hosted-service/subgraph/aave/protocol-v3-polygon
 async function callAaveV3PolygonUnderlyingAddresses() {
 	return await get('https://api.thegraph.com/subgraphs/name/aave/protocol-v3-polygon', aave_v3_polygon_request)
+}
+
+
+
+// AAVEv3 - Arbitrum
+const aave_v3_arbitrum_request = `
+query
+{
+  subTokens(first: 1000) {
+    id
+    underlyingAssetAddress
+    pool {
+      reserves {
+        underlyingAsset
+        symbol
+        name
+        decimals
+        price {
+          priceInEth
+        }
+        aToken {
+          id
+          underlyingAssetAddress
+        }
+        vToken {
+          id
+          underlyingAssetAddress
+        }
+        sToken {
+          id
+          underlyingAssetAddress
+        }
+      }
+    }
+  }
+}
+`
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/aave/protocol-v3-arbitrum
+async function callAaveV3ArbitrumUnderlyingAddresses() {
+	return await get('https://api.thegraph.com/subgraphs/name/aave/protocol-v3-arbitrum', aave_v3_arbitrum_request)
 }
 
 
@@ -306,6 +388,47 @@ async function getAavePolygonUnderlyingAddresses(callback) {
 }
 
 
+
+async function getAaveV3UnderlyingAddresses(callback) {
+	let underlying = {}
+	try {
+		underlying = await callAaveV3UnderlyingAddresses()
+	} catch(error) {
+		console.log(error)
+		// setTimeout(callAaveV3UnderlyingAddresses, 30000)
+		return
+	}
+
+	// setTimeout(callAaveV3UnderlyingAddresses, 300000)
+
+	if(!underlying || !underlying.data) {
+		return
+	}
+	underlying.data.subTokens.forEach((item, i) => {
+		underlyingAssets['ETHEREUM-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: 1
+		}
+	})
+	/*underlying.data.vtokens.forEach((item, i) => {
+		underlyingAssets['ETHEREUM-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+	underlying.data.stokens.forEach((item, i) => {
+		underlyingAssets['ETHEREUM-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})*/
+}
+
+
+
 async function getAaveV3PolygonUnderlyingAddresses(callback) {
 	let underlying = {}
 	try {
@@ -337,6 +460,125 @@ async function getAaveV3PolygonUnderlyingAddresses(callback) {
 	})
 	underlying.data.stokens.forEach((item, i) => {
 		underlyingAssets['POLYGON-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})*/
+}
+
+
+
+async function getAaveV3ArbitrumUnderlyingAddresses(callback) {
+	let underlying = {}
+	try {
+		underlying = await callAaveV3ArbitrumUnderlyingAddresses()
+	} catch(error) {
+		console.log(error)
+		// setTimeout(callAaveV3ArbitrumUnderlyingAddresses, 30000)
+		return
+	}
+
+	// setTimeout(callAaveV3ArbitrumUnderlyingAddresses, 300000)
+
+	if(!underlying || !underlying.data) {
+		return
+	}
+	underlying.data.subTokens.forEach((item, i) => {
+		underlyingAssets['ARBITRUM_ONE-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: 1
+		}
+	})
+	/*underlying.data.vtokens.forEach((item, i) => {
+		underlyingAssets['ARBITRUM_ONE-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+	underlying.data.stokens.forEach((item, i) => {
+		underlyingAssets['ARBITRUM_ONE-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})*/
+}
+
+
+async function getAaveV3OptimismUnderlyingAddresses(callback) {
+	let underlying = {}
+	try {
+		underlying = await callAaveV3OptimismUnderlyingAddresses()
+	} catch(error) {
+		console.log(error)
+		// setTimeout(callAaveV3OptimismUnderlyingAddresses, 30000)
+		return
+	}
+
+	// setTimeout(callAaveV3OptimismUnderlyingAddresses, 300000)
+
+	if(!underlying || !underlying.data) {
+		return
+	}
+	underlying.data.subTokens.forEach((item, i) => {
+		underlyingAssets['OPTIMISM-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: 1
+		}
+	})
+	/*underlying.data.vtokens.forEach((item, i) => {
+		underlyingAssets['OPTIMISM-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+	underlying.data.stokens.forEach((item, i) => {
+		underlyingAssets['OPTIMISM-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})*/
+}
+
+
+
+async function getAaveV3AvalancheUnderlyingAddresses(callback) {
+	let underlying = {}
+	try {
+		underlying = await callAaveV3AvalancheUnderlyingAddresses()
+	} catch(error) {
+		console.log(error)
+		// setTimeout(callAaveV3AvalancheUnderlyingAddresses, 30000)
+		return
+	}
+
+	// setTimeout(callAaveV3AvalancheUnderlyingAddresses, 300000)
+
+	if(!underlying || !underlying.data) {
+		return
+	}
+	underlying.data.subTokens.forEach((item, i) => {
+		underlyingAssets['AVALANCHE-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: 1
+		}
+	})
+	/*underlying.data.vtokens.forEach((item, i) => {
+		underlyingAssets['AVALANCHE-' + item.id] = {
+			address: item.underlyingAssetAddress,
+			rate: 1,
+			debt: -1
+		}
+	})
+	underlying.data.stokens.forEach((item, i) => {
+		underlyingAssets['AVALANCHE-' + item.id] = {
 			address: item.underlyingAssetAddress,
 			rate: 1,
 			debt: -1
