@@ -1534,6 +1534,7 @@ function simpleDataTimers() {
 		if(network === NETWORK.ETHEREUM.enum) {
 			getAaveEthereumUnderlyingAddresses(displayWallet)
 			getCompoundEthereumUnderlyingAddresses(displayWallet)
+			getAaveV3UnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.POLYGON.enum) {
 			getAavePolygonUnderlyingAddresses(displayWallet)
 			getAaveV3PolygonUnderlyingAddresses(displayWallet)
@@ -1541,6 +1542,12 @@ function simpleDataTimers() {
 			getRmmGnosisUnderlyingAddresses(displayWallet)
 		} else if(network === NETWORK.BSC.enum) {
 			getVenusBscUnderlyingAddresses(displayWallet)
+		} else if(network === NETWORK.ARBITRUM_ONE.enum) {
+			getAaveV3ArbitrumUnderlyingAddresses(displayWallet)
+		} /*else if(network === NETWORK.OPTIMISM.enum) {
+			getAaveV3OptimismUnderlyingAddresses(displayWallet)
+		}*/ else if(network === NETWORK.AVALANCHE.enum) {
+			getAaveV3AvalancheUnderlyingAddresses(displayWallet)
 		}
 	})
 	setTimeout(simpleDataTimers, 100000)
