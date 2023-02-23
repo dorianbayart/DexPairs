@@ -202,6 +202,48 @@ async function callAaveV3ArbitrumUnderlyingAddresses() {
 
 
 
+
+
+// AAVEv3 - Avalanche
+const aave_v3_avalanche_request = `
+query
+{
+  subTokens(first: 1000) {
+    id
+    underlyingAssetAddress
+    pool {
+      reserves {
+        underlyingAsset
+        symbol
+        name
+        decimals
+        price {
+          priceInEth
+        }
+        aToken {
+          id
+          underlyingAssetAddress
+        }
+        vToken {
+          id
+          underlyingAssetAddress
+        }
+        sToken {
+          id
+          underlyingAssetAddress
+        }
+      }
+    }
+  }
+}
+`
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/aave/protocol-v3-avalanche
+async function callAaveV3AvalancheUnderlyingAddresses() {
+	return await get('https://api.thegraph.com/subgraphs/name/aave/protocol-v3-avalanche', aave_v3_avalanche_request)
+}
+
+
+
 // RMM (AAVEv2) - Gnosis - RealT
 const rmm_gnosis_request = `
 query
