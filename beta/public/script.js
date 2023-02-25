@@ -30,7 +30,7 @@ let dexList = {
 	},
 	QUICKSWAP: {
 		name: 'QuickSwap',
-		chain: 'Polygon/Matic',
+		chain: 'Polygon',
 		chain_enum: 'POLYGON',
 		url: 'https://quickswap.exchange/',
 		url_swap: 'https://quickswap.exchange/#/swap',
@@ -56,7 +56,7 @@ let dexList = {
 	},
 	SPIRITSWAP: {
 		name: 'SpiritSwap',
-		chain: 'Fantom/Opera',
+		chain: 'Fantom',
 		chain_enum: 'FANTOM',
 		url: 'https://www.spiritswap.finance/',
 		url_swap: 'https://swap.spiritswap.finance/#/swap',
@@ -69,7 +69,7 @@ let dexList = {
 	},
 	HONEYSWAP: {
 		name: 'HoneySwap',
-		chain: 'xDai',
+		chain: 'Gnosis (xDai)',
 		chain_enum: 'XDAI',
 		url: 'https://honeyswap.org/',
 		url_swap: 'https://app.honeyswap.org/#/swap',
