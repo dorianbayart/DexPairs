@@ -101,6 +101,32 @@ async function getPancakeswapTopTokens() {
 	return await get('https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2', pancakeswap_request)
 }
 
+
+
+
+// Get Sushiswap's top on BNB Chain
+const sushiswap_bnb_request = `
+query
+{
+  tokens(first: 1000, orderBy: volumeUSD, orderDirection: desc, where: { volumeUSD_gt: "10", derivedETH_gt: "0" } ) {
+    id
+    name
+    symbol
+    derivedETH,
+    volumeUSD
+  }
+  bundle(id: "1" ) {
+    ethPrice
+  }
+}
+`
+
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/sushiswap/bsc-exchange
+async function getSushiswapBNBTopTokens() {
+	return await get('https://api.thegraph.com/subgraphs/name/sushiswap/bsc-exchange', sushiswap_bnb_request)
+}
+
+
 // Get Uniswap v3 top
 const uniswapV3_request = `
 query
@@ -284,7 +310,7 @@ async function launch() {
 	// get data from PancakeSwap
 	let top = {}
 	try {
-		top = await getPancakeswapTopTokens()
+		top = await getSushiswapBNBTopTokens()
 	} catch(error) {
 		console.log(error)
 		return
@@ -295,16 +321,16 @@ async function launch() {
 	const tokens = top.data ? top.data.tokens : []
 
 	// console.log('Pancakeswap - Bundle', JSON.stringify(top.data.bundle))
-	const bnb_price = top.data ? top.data.bundle.bnbPrice : 0
+	const bnb_price = top.data ? top.data.bundle.ethPrice : 0
 	if(bnb_price === 0) return
 
 	for(const token of tokens) {
 		const address = token.id
 		const symbol = token.symbol
 		const name = token.name
-		const price_BNB = token.derivedBNB
+		const price_BNB = token.derivedETH
 		const price = price_BNB * bnb_price
-		const volumeUSD = token.tradeVolumeUSD
+		const volumeUSD = token.volumeUSD
 
 
 		if(price > 0) {

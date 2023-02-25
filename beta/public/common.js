@@ -113,7 +113,7 @@ const NETWORK = {
 		tokenName: 'BNB',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-		subgraph_url: 'https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2/graphql',
+		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/sushiswap/bsc-exchange',
 		coingecko_name: 'binance-smart-chain'
 	},
 	XDAI: {

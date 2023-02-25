@@ -42,11 +42,11 @@ let dexList = {
 		}
 	},
 	PANCAKESWAP: {
-		name: 'PancakeSwap',
-		chain: 'Binance Smart Chain',
+		name: 'SushiSwap',
+		chain: 'BNB Chain',
 		chain_enum: 'BSC',
-		url: 'https://pancakeswap.finance/',
-		url_swap: 'https://exchange.pancakeswap.finance/#/swap',
+		url: 'https://www.sushi.com/',
+		url_swap: 'https://app.sushi.com/swap?&chainId=56',
 		url_data: SERVER_URL + '/pancake',
 		explorer: 'https://bscscan.com/token/',
 		tokens: {

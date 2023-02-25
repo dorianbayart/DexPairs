@@ -5,6 +5,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
+  <meta name="theme-color" content="#1E2124" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="#1E2124" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-TileImage" content="/img/background-multichain-min.png">
+  <meta name="msapplication-TileColor" content="#1E2124">
+  <meta name="msapplication-tap-highlight" content="no">
+
   <title>DexPairs.xyz - Beta</title>
   <meta name="description" content="Track prices of your tokens on multiple chains through multiple protocols. Explore your Portfolio and display your NFTs as a gallery. Supports Ethereum, Cronos, BNB Chain, Gnosis, Polygon, Fantom, Arbitrum One, Celo and Avalanche chains." />
   <meta name="author" content="Dorian Bayart" />
@@ -12,6 +20,7 @@
   <meta name="robots" content="index, follow" />
 
   <link rel="shortcut icon" type="image/png" href="/img/background-multichain-min.png" />
+  <link rel="apple-touch-icon" type="image/png" href="/img/background-multichain-min.png" />
   <link href="./" rel="canonical" />
 
   <meta property="og:title" content="DexPairs.xyz" />
@@ -23,6 +32,7 @@
 
   <link rel="alternate" type="application/atom+xml" title="DexPairs.xyz News" href="/feed.atom" />
 
+  <link rel="manifest" href="/manifest.json">
   <script src="/public/js/pwa.js"></script>
 
   <link rel="stylesheet" href="./public/colors.css">
@@ -57,21 +67,21 @@
 
 
   <section class='section-charts'>
-    <h2>Track Tokens Prices</h2>
+    <h2>Track Crypto Prices</h2>
     <div class='content-illustration'>
       <div class='content'>
         <ul>
-          <li>Track historical prices of hundreds of tokens, data comes directly from popular DEXes</li>
+          <li>Track historical on-chain prices of hundreds of tokens, data comes directly from popular DEXes using TheGraph protocol</li>
           <li>
             Display price evolution based on any token you choose, and compare token performance<br />
-            (ie: <a href='./charts?dex=UNISWAP&token=AAVE&base=COMP&interval=4h&timeframe=1m' target='_blank'>Aave/Comp</a>, <a href='./charts?dex=PANCAKESWAP&token=Cake&base=DOT&interval=4h&timeframe=1m' target='_blank'>Cake/Dot</a>)
+            (ie: <a href='./charts?dex=UNISWAP&token=AAVE&base=COMP&interval=4h&timeframe=1m' target='_blank'>Aave/Comp</a>, <a href='./charts?dex=HONEYSWAP&token=CRV&base=UNI&interval=4h&timeframe=1m' target='_blank'>Crv/Uni</a>)
           </li>
-          <li>Save up to 6 favorite pairs to monitor</li>
-          <li>Keep an eye on live updated current gas prices</li>
+          <li>Save up to 6 favorite pairs you want to monitor</li>
+          <li>Keep an eye on real-time updated current gas prices</li>
           <li><i>Soon</i>: Swap tokens directly on DexPairs (powered by Paraswap.io)!</li>
         </ul>
 
-        <a href='./charts' title='Track prices' class='GoTo'>Go to Charts page</a>
+        <a href='./charts' title='Track prices' class='GoTo'>Track Crypto Prices</a>
       </div>
       <div class='illustration'>
         <img src='/img/illustrations/undraw_Growing_re_olpi.svg' alt='Track Prices' width='256px' height='192px' loading='lazy'>
@@ -145,7 +155,7 @@
         </ul>
 
         <div class='go-to-container'>
-          <a href='./wallet' title='Explore your Wallet' class='GoTo'>Go to your Wallet</a>
+          <a href='./wallet' title='Explore your Portfolio' class='GoTo'>Explore your Portfolio</a>
           <a href='./wallet?address=0x0255c9D3850cacA1152AEB20425C264787661692' title='Open a demo wallet' class='GoToDemoLink'>Open a demo wallet</a>
         </div>
       </div>
@@ -163,7 +173,7 @@
         <ul>
           <li>Keep an eye on current minimal gas fees in realtime</li>
           <li>Use your mobile, tablet or desktop, the design is responsive</li>
-          <li>Subscribe to a dedicated RSS feed - <a href='/news'>Read the news</a>!</li>
+          <li>Subscribe to a dedicated RSS feed - <a href='/news'>Read the DexPairs.xyz News</a>!</li>
           <li><i>Soon</i>: Stay tuned, many more useful features are in the pipe!</li>
 
         </ul>
