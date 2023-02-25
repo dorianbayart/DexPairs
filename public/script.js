@@ -968,7 +968,7 @@ function initializeHTML() {
 	}
 
 	const params = new URLSearchParams(window.location.search)
-	if(params.has('dex')) {
+	if(params.has('dex') && dexList[params.get('dex')]) {
 		dex = params.get('dex')
 		selectedToken = dexList[dex].tokens.token
 		selectedBase = dexList[dex].tokens.base
