@@ -270,8 +270,10 @@ async function launch() {
 	try {
 		tokens_charts_file = readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8')
 		tokens_charts = JSON.parse(tokens_charts_file.toString())
-		let pathFile = path.join(dir_home, 'save_pancake-charts.json')
-		writeFileSync(pathFile, JSON.stringify( tokens_charts ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_pancake-charts.json')
+			writeFileSync(pathFile, JSON.stringify( tokens_charts ), 'utf8')
+		}
 	} catch(error) {
 		console.log('pancake-charts.json', error)
 		try {
@@ -285,8 +287,10 @@ async function launch() {
 	try {
 		pancakeswap_volume_file = readFileSync(path.join(dir_home, 'pancake-volume.json'), 'utf8')
 		pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
-		let pathFile = path.join(dir_home, 'save_pancake-volume.json')
-		writeFileSync(pathFile, JSON.stringify( pancakeswap_volume ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_pancake-volume.json')
+			writeFileSync(pathFile, JSON.stringify( pancakeswap_volume ), 'utf8')
+		}
 	} catch(error) {
 		console.log('pancake-volume.json', error)
 		try {
@@ -528,12 +532,12 @@ async function launchUniswap() {
 	let uniswap_volume = {}
 
 	try {
-		console.log('Uniswap - readFileSync uniswap-simple.json')
 		uniswap_data_file = readFileSync(path.join(dir_home, 'uniswap-simple.json'), 'utf8')
 		uniswap_data = JSON.parse(uniswap_data_file.toString())
-		let pathFile = path.join(dir_home, 'save_uniswap-simple.json')
-		console.log('Uniswap - writeFileSync save_uniswap-simple.json')
-		writeFileSync(pathFile, JSON.stringify( uniswap_data ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_uniswap-simple.json')
+			writeFileSync(pathFile, JSON.stringify( uniswap_data ), 'utf8')
+		}
 	} catch(error) {
 		console.log('uniswap-simple.json', error)
 		try {
@@ -546,12 +550,12 @@ async function launchUniswap() {
 	}
 
 	try {
-		console.log('Uniswap - readFileSync uniswap-charts.json')
 		uniswap_charts_file = readFileSync(path.join(dir_home, 'uniswap-charts.json'), 'utf8')
 		uniswap_charts = JSON.parse(uniswap_charts_file.toString())
-		let pathFile = path.join(dir_home, 'save_uniswap-charts.json')
-		console.log('Uniswap - writeFileSync save_uniswap-charts.json')
-		writeFileSync(pathFile, JSON.stringify( uniswap_charts ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_uniswap-charts.json')
+			writeFileSync(pathFile, JSON.stringify( uniswap_charts ), 'utf8')
+		}
 	} catch(error) {
 		console.log('uniswap-charts.json', error)
 		try {
@@ -564,12 +568,12 @@ async function launchUniswap() {
 	}
 
 	try {
-		console.log('Uniswap - readFileSync uniswap-volume.json')
 		uniswap_volume_file = readFileSync(path.join(dir_home, 'uniswap-volume.json'), 'utf8')
 		uniswap_volume = JSON.parse(uniswap_volume_file.toString())
-		let pathFile = path.join(dir_home, 'save_uniswap-volume.json')
-		console.log('Uniswap - writeFileSync save_uniswap-volume.json')
-		writeFileSync(pathFile, JSON.stringify( uniswap_volume ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_uniswap-volume.json')
+			writeFileSync(pathFile, JSON.stringify( uniswap_volume ), 'utf8')
+		}
 	} catch(error) {
 		console.log('uniswap-volume.json', error)
 		try {
@@ -604,7 +608,7 @@ async function launchUniswap() {
 	const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
 	if(eth_price === 0) return
 
-	console.log('Uniswap - tokens.length', tokens.length)
+	// console.log('Uniswap - tokens.length', tokens.length)
 
 	tokens.forEach(token => {
 		const address = token.id
@@ -732,7 +736,7 @@ async function launchUniswap() {
 
 	let pathFile
 
-	console.log('Uniswap - write files')
+	// console.log('Uniswap - write files')
 
 	// Update the Uniswap list
 	if(Object.keys(uniswap_list).length > 0) {
@@ -774,7 +778,7 @@ async function launchUniswap() {
 		})
 	}
 
-	console.log('Uniswap - End')
+	// console.log('Uniswap - End')
 
 }
 
@@ -793,12 +797,12 @@ async function launchQuickswap() {
 	let quickswap_volume = {}
 
 	try {
-		console.log('Quickswap - readFileSync quickswap-simple.json')
 		quickswap_data_file = readFileSync(path.join(dir_home, 'quickswap-simple.json'), 'utf8')
 		quickswap_data = JSON.parse(quickswap_data_file.toString())
-		let pathFile = path.join(dir_home, 'save_quickswap-simple.json')
-		console.log('Quickswap - writeFileSync save_quickswap-simple.json')
-		writeFileSync(pathFile, JSON.stringify( quickswap_data ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_quickswap-simple.json')
+			writeFileSync(pathFile, JSON.stringify( quickswap_data ), 'utf8')
+		}
 	} catch(error) {
 		console.log('quickswap-simple.json', error)
 		try {
@@ -811,12 +815,12 @@ async function launchQuickswap() {
 	}
 
 	try {
-		console.log('Quickswap - readFileSync quickswap-charts.json')
 		quickswap_charts_file = readFileSync(path.join(dir_home, 'quickswap-charts.json'), 'utf8')
 		quickswap_charts = JSON.parse(quickswap_charts_file.toString())
-		let pathFile = path.join(dir_home, 'save_quickswap-charts.json')
-		console.log('Quickswap - writeFileSync save_quickswap-charts.json')
-		writeFileSync(pathFile, JSON.stringify( quickswap_charts ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_quickswap-charts.json')
+			writeFileSync(pathFile, JSON.stringify( quickswap_charts ), 'utf8')
+		}
 	} catch(error) {
 		console.log('quickswap-charts.json', error)
 		try {
@@ -829,12 +833,12 @@ async function launchQuickswap() {
 	}
 
 	try {
-		console.log('Quickswap - readFileSync quickswap-volume.json')
 		quickswap_volume_file = readFileSync(path.join(dir_home, 'quickswap-volume.json'), 'utf8')
 		quickswap_volume = JSON.parse(quickswap_volume_file.toString())
-		let pathFile = path.join(dir_home, 'save_quickswap-volume.json')
-		console.log('Quickswap - writeFileSync save_quickswap-volume.json')
-		writeFileSync(pathFile, JSON.stringify( quickswap_volume ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_quickswap-volume.json')
+			writeFileSync(pathFile, JSON.stringify( quickswap_volume ), 'utf8')
+		}
 	} catch(error) {
 		console.log('quickswap-volume.json', error)
 		try {
@@ -865,7 +869,7 @@ async function launchQuickswap() {
 	const eth_price = top.data ? top.data.bundle.ethPrice : 0
 	if(eth_price === 0) return
 
-	console.log('Quickswap - tokens.length', tokens.length)
+	// console.log('Quickswap - tokens.length', tokens.length)
 
 	tokens.forEach(token => {
 		const address = token.id
@@ -993,7 +997,7 @@ async function launchQuickswap() {
 
 	let pathFile
 
-	console.log('Quickswap - write files')
+	// console.log('Quickswap - write files')
 
 	// Update the Quickswap list
 	if(Object.keys(quickswap_list).length > 0) {
@@ -1035,7 +1039,7 @@ async function launchQuickswap() {
 		})
 	}
 
-	console.log('Quickswap - End')
+	// console.log('Quickswap - End')
 
 }
 
@@ -1055,8 +1059,10 @@ async function launchSpiritswap() {
 	try {
 		spiritswap_data_file = readFileSync(path.join(dir_home, 'spiritswap-simple.json'), 'utf8')
 		spiritswap_data = JSON.parse(spiritswap_data_file.toString())
-		let pathFile = path.join(dir_home, 'save_spiritswap-simple.json')
-		writeFileSync(pathFile, JSON.stringify( spiritswap_data ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_spiritswap-simple.json')
+			writeFileSync(pathFile, JSON.stringify( spiritswap_data ), 'utf8')
+		}
 	} catch(error) {
 		console.log('spiritswap-simple.json', error)
 		try {
@@ -1070,8 +1076,10 @@ async function launchSpiritswap() {
 	try {
 		spiritswap_charts_file = readFileSync(path.join(dir_home, 'spiritswap-charts.json'), 'utf8')
 		spiritswap_charts = JSON.parse(spiritswap_charts_file.toString())
-		let pathFile = path.join(dir_home, 'save_spiritswap-charts.json')
-		writeFileSync(pathFile, JSON.stringify( spiritswap_charts ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_spiritswap-charts.json')
+			writeFileSync(pathFile, JSON.stringify( spiritswap_charts ), 'utf8')
+		}
 	} catch(error) {
 		console.log('spiritswap-charts.json', error)
 		try {
@@ -1085,8 +1093,10 @@ async function launchSpiritswap() {
 	try {
 		spiritswap_volume_file = readFileSync(path.join(dir_home, 'spiritswap-volume.json'), 'utf8')
 		spiritswap_volume = JSON.parse(spiritswap_volume_file.toString())
-		let pathFile = path.join(dir_home, 'save_spiritswap-volume.json')
-		writeFileSync(pathFile, JSON.stringify( spiritswap_volume ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_spiritswap-volume.json')
+			writeFileSync(pathFile, JSON.stringify( spiritswap_volume ), 'utf8')
+		}
 	} catch(error) {
 		console.log('spiritswap-volume.json', error)
 		try {
@@ -1313,8 +1323,10 @@ async function launchHoneyswap() {
 	try {
 		honeyswap_charts_file = readFileSync(path.join(dir_home, 'honeyswap-charts.json'), 'utf8')
 		honeyswap_charts = JSON.parse(honeyswap_charts_file.toString())
-		let pathFile = path.join(dir_home, 'save_honeyswap-charts.json')
-		writeFileSync(pathFile, JSON.stringify( honeyswap_charts ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_honeyswap-charts.json')
+			writeFileSync(pathFile, JSON.stringify( honeyswap_charts ), 'utf8')
+		}
 	} catch(error) {
 		console.log('honeyswap-charts.json', error)
 		try {
@@ -1328,8 +1340,10 @@ async function launchHoneyswap() {
 	try {
 		honeyswap_volume_file = readFileSync(path.join(dir_home, 'honeyswap-volume.json'), 'utf8')
 		honeyswap_volume = JSON.parse(honeyswap_volume_file.toString())
-		let pathFile = path.join(dir_home, 'save_honeyswap-volume.json')
-		writeFileSync(pathFile, JSON.stringify( honeyswap_volume ), 'utf8')
+		if(Math.random > 0.99) {
+			let pathFile = path.join(dir_home, 'save_honeyswap-volume.json')
+			writeFileSync(pathFile, JSON.stringify( honeyswap_volume ), 'utf8')
+		}
 	} catch(error) {
 		console.log('honeyswap-volume.json', error)
 		try {
@@ -1596,6 +1610,7 @@ const sortTokensByVolume = (listToSort, listVolume) => {
 
 
 /* server */
+
 const port = process.env.PORT || 3000
 const app = express()
 
@@ -1678,18 +1693,18 @@ app.get('/charts/spiritswap', (req, res) => {
 // 	res.header('Content-Type','application/json')
 // 	res.sendFile(path.join(dir_home, 'honeyswap.json'))
 // })
-app.get('/top/honeyswap', (req, res) => {
+/*app.get('/top/honeyswap', (req, res) => {
 	res.header('Content-Type','application/json')
 	res.sendFile(path.join(dir_home, 'honeyswap-top.json'))
-})
+})*/
 // app.get('/simple/honeyswap', (req, res) => {
 // 	res.header('Content-Type','application/json')
 // 	res.sendFile(path.join(dir_home, 'honeyswap-simple.json'))
 // })
-app.get('/charts/honeyswap', (req, res) => {
+/*app.get('/charts/honeyswap', (req, res) => {
 	res.header('Content-Type','application/json')
 	res.sendFile(path.join(dir_home, 'honeyswap-charts.json'))
-})
+})*/
 
 app.listen(port, () => console.log(`Backend start at ${port}`))
 
