@@ -358,12 +358,15 @@ async function get(url, query = null) {
 document.addEventListener('DOMContentLoaded', function() {
 	web3 = {}
 
-	Object.keys(NETWORK).sort(sortByChainId).forEach((network) => {
-		web3[network] = new Web3(NETWORK[network].rpc)
-		setGas(network)
-	})
+	const url = window.location.href
+	if(url.includes('charts') || url.includes('wallet')) {
+		Object.keys(NETWORK).sort(sortByChainId).forEach((network) => {
+			web3[network] = new Web3(NETWORK[network].rpc)
+			setGas(network)
+		})
 
-	setTimeout(updateGas, 5000)
+		setTimeout(updateGas, 5000)
+	}
 })
 
 
@@ -474,11 +477,13 @@ async function getChartsByAddresses(tokenA, tokenB, network) {
 
 
 
-document.getElementById('gas-realtime-button').addEventListener('click', (e) => {
-	gasIsRealtime = !gasIsRealtime
-	let element = e.target.id ? e.target : e.target.parentElement
-	element.classList.toggle('active', gasIsRealtime)
-})
+if(document.getElementById('gas-realtime-button')) {
+	document.getElementById('gas-realtime-button').addEventListener('click', (e) => {
+		gasIsRealtime = !gasIsRealtime
+		let element = e.target.id ? e.target : e.target.parentElement
+		element.classList.toggle('active', gasIsRealtime)
+	})
+}
 
 
 

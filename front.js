@@ -65,6 +65,11 @@ let spiritswap_top = {}
 let spiritswap_data = {}
 
 
+let statistics = {
+	latests: [],
+	latests_nb: 250,
+}
+
 
 
 // Program - Pancake
@@ -426,13 +431,22 @@ app.ws('/ws', async function(ws, req) {
 	ws.on('message', async function(data) {
 		const msg = JSON.parse(data)
 		console.log(msg)
+		statistics.latests.push(msg)
+		statistics.latests = statistics.latests.slice(-statistics.latests_nb)
 		switch (msg.type) {
 			case 'connection':
-			console.log('client connected to WSS')
-			ws.send(JSON.stringify({
-				type: 'connection',
-				data: true
-			}))
+				console.log('client connected to WSS')
+				ws.send(JSON.stringify({
+					type: 'connection',
+					data: true
+				}))
+			break
+			case 'statistics':
+				console.log('statistics asked')
+				ws.send(JSON.stringify({
+					type: 'statistics',
+					data: statistics
+				}))
 			break
 			default:
 			console.log('other')

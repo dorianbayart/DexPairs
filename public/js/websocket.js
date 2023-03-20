@@ -60,6 +60,9 @@ const socketMessageReceived = (data) => {
     case 'connection':
       console.log('Connected:', msg.data)
       break;
+    case 'statistics':
+      displayStatistics(msg.data)
+      break;
     default:
       console.log('Other:', msg.data)
   }
