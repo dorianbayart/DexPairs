@@ -270,7 +270,7 @@ async function launch() {
 	try {
 		tokens_charts_file = readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8')
 		tokens_charts = JSON.parse(tokens_charts_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_pancake-charts.json')
 			writeFileSync(pathFile, JSON.stringify( tokens_charts ), 'utf8')
 		}
@@ -287,7 +287,7 @@ async function launch() {
 	try {
 		pancakeswap_volume_file = readFileSync(path.join(dir_home, 'pancake-volume.json'), 'utf8')
 		pancakeswap_volume = JSON.parse(pancakeswap_volume_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_pancake-volume.json')
 			writeFileSync(pathFile, JSON.stringify( pancakeswap_volume ), 'utf8')
 		}
@@ -534,7 +534,7 @@ async function launchUniswap() {
 	try {
 		uniswap_data_file = readFileSync(path.join(dir_home, 'uniswap-simple.json'), 'utf8')
 		uniswap_data = JSON.parse(uniswap_data_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_uniswap-simple.json')
 			writeFileSync(pathFile, JSON.stringify( uniswap_data ), 'utf8')
 		}
@@ -552,7 +552,7 @@ async function launchUniswap() {
 	try {
 		uniswap_charts_file = readFileSync(path.join(dir_home, 'uniswap-charts.json'), 'utf8')
 		uniswap_charts = JSON.parse(uniswap_charts_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_uniswap-charts.json')
 			writeFileSync(pathFile, JSON.stringify( uniswap_charts ), 'utf8')
 		}
@@ -570,7 +570,7 @@ async function launchUniswap() {
 	try {
 		uniswap_volume_file = readFileSync(path.join(dir_home, 'uniswap-volume.json'), 'utf8')
 		uniswap_volume = JSON.parse(uniswap_volume_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_uniswap-volume.json')
 			writeFileSync(pathFile, JSON.stringify( uniswap_volume ), 'utf8')
 		}
@@ -799,7 +799,7 @@ async function launchQuickswap() {
 	try {
 		quickswap_data_file = readFileSync(path.join(dir_home, 'quickswap-simple.json'), 'utf8')
 		quickswap_data = JSON.parse(quickswap_data_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_quickswap-simple.json')
 			writeFileSync(pathFile, JSON.stringify( quickswap_data ), 'utf8')
 		}
@@ -817,7 +817,7 @@ async function launchQuickswap() {
 	try {
 		quickswap_charts_file = readFileSync(path.join(dir_home, 'quickswap-charts.json'), 'utf8')
 		quickswap_charts = JSON.parse(quickswap_charts_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_quickswap-charts.json')
 			writeFileSync(pathFile, JSON.stringify( quickswap_charts ), 'utf8')
 		}
@@ -835,7 +835,7 @@ async function launchQuickswap() {
 	try {
 		quickswap_volume_file = readFileSync(path.join(dir_home, 'quickswap-volume.json'), 'utf8')
 		quickswap_volume = JSON.parse(quickswap_volume_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_quickswap-volume.json')
 			writeFileSync(pathFile, JSON.stringify( quickswap_volume ), 'utf8')
 		}
@@ -1059,7 +1059,7 @@ async function launchSpiritswap() {
 	try {
 		spiritswap_data_file = readFileSync(path.join(dir_home, 'spiritswap-simple.json'), 'utf8')
 		spiritswap_data = JSON.parse(spiritswap_data_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_spiritswap-simple.json')
 			writeFileSync(pathFile, JSON.stringify( spiritswap_data ), 'utf8')
 		}
@@ -1076,7 +1076,7 @@ async function launchSpiritswap() {
 	try {
 		spiritswap_charts_file = readFileSync(path.join(dir_home, 'spiritswap-charts.json'), 'utf8')
 		spiritswap_charts = JSON.parse(spiritswap_charts_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_spiritswap-charts.json')
 			writeFileSync(pathFile, JSON.stringify( spiritswap_charts ), 'utf8')
 		}
@@ -1093,7 +1093,7 @@ async function launchSpiritswap() {
 	try {
 		spiritswap_volume_file = readFileSync(path.join(dir_home, 'spiritswap-volume.json'), 'utf8')
 		spiritswap_volume = JSON.parse(spiritswap_volume_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_spiritswap-volume.json')
 			writeFileSync(pathFile, JSON.stringify( spiritswap_volume ), 'utf8')
 		}
@@ -1323,7 +1323,7 @@ async function launchHoneyswap() {
 	try {
 		honeyswap_charts_file = readFileSync(path.join(dir_home, 'honeyswap-charts.json'), 'utf8')
 		honeyswap_charts = JSON.parse(honeyswap_charts_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_honeyswap-charts.json')
 			writeFileSync(pathFile, JSON.stringify( honeyswap_charts ), 'utf8')
 		}
@@ -1340,7 +1340,7 @@ async function launchHoneyswap() {
 	try {
 		honeyswap_volume_file = readFileSync(path.join(dir_home, 'honeyswap-volume.json'), 'utf8')
 		honeyswap_volume = JSON.parse(honeyswap_volume_file.toString())
-		if(Math.random > 0.99) {
+		if(Math.random() > 0.99) {
 			let pathFile = path.join(dir_home, 'save_honeyswap-volume.json')
 			writeFileSync(pathFile, JSON.stringify( honeyswap_volume ), 'utf8')
 		}
