@@ -1275,7 +1275,9 @@ function updateCharts() {
 				aspectRatio: window.matchMedia( '(min-width: 600px)' ).matches ? 2.25 : 1.5,
 				radius: 0,
 				interaction: {
-					mode: 'nearest'
+					mode: 'nearest',
+					axis: 'x',
+					intersect: false,
 				},
 				scales: {
 					x: {
