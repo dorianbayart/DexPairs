@@ -37,7 +37,7 @@ console.log(dir_home)
 
 const VOLUME_SIZE = 12
 const REALTIME = process.env.NODE_ENV === 'production' ? 45000 : 120000 // 45 or 120 seconds
-const OFTEN = 900000 // 15 minutes
+const OFTEN = process.env.NODE_ENV === 'production' ? 900000 : 120000 // 15 minutes or 2 minutes
 const HOURS = 14400000 // 4 hours
 const DAY = 86400000 // 1 day
 const WEEK = 604800000 // 1 week
