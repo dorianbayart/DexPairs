@@ -50,6 +50,11 @@ const TOP_SIZE = 6
 const MONGO_URL = 'mongodb://localhost:27017'
 // const MONGO_CLIENT = new MongoClient(MONGO_URL)
 const DN_NAME = 'DexPairs'
+const MONGO_OPTIONS = { 
+  connectTimeoutMS: 8000,    
+  socketTimeoutMS:  8000, 
+  reconnectTries: 1
+ }
 
 
 /* DexPairs */
@@ -305,7 +310,7 @@ async function launch() {
 		return
 	}
 
-	const MONGO_CLIENT = new MongoClient(MONGO_URL)
+	const MONGO_CLIENT = new MongoClient(MONGO_URL, MONGO_OPTIONS)
 	await MONGO_CLIENT.connect()
 	const db = MONGO_CLIENT.db(DN_NAME)
 	const simpleCollection = db.collection('bnb-chain_pancakeswap_simple')
@@ -1359,7 +1364,7 @@ async function launchHoneyswap() {
 		return
 	}
 
-	const MONGO_CLIENT = new MongoClient(MONGO_URL)
+	const MONGO_CLIENT = new MongoClient(MONGO_URL, MONGO_OPTIONS)
 	await MONGO_CLIENT.connect()
 	const db = MONGO_CLIENT.db(DN_NAME)
 	const simpleCollection = db.collection('gnosis_simple')
