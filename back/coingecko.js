@@ -15,6 +15,11 @@ const URL_FETCH_PRICES = `${BASE_URL}coins/markets?vs_currency=usd&per_page=${PE
 
 const MONGO_URL = 'mongodb://localhost:27017'
 const DN_NAME = 'DexPairs'
+const MONGO_OPTIONS = { 
+  connectTimeoutMS: 8000,    
+  socketTimeoutMS:  8000, 
+  reconnectTries: 1
+ }
 
 
 let tokensList = []
@@ -39,7 +44,7 @@ buildList()
 
 
 async function buildList() {
-	const MONGO_CLIENT = new MongoClient(MONGO_URL)
+	const MONGO_CLIENT = new MongoClient(MONGO_URL, MONGO_OPTIONS)
 	await MONGO_CLIENT.connect()
 	const db = MONGO_CLIENT.db(DN_NAME)
 	const collection = db.collection('coingecko')
