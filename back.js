@@ -256,6 +256,15 @@ async function launch() {
 	// let tokens_data = {}
 	let tokens_charts = {}
 	let pancakeswap_volume = {}
+	
+	// get data from PancakeSwap
+	let top = {}
+	try {
+		top = await getSushiswapBNBTopTokens()
+	} catch(error) {
+		console.log(error)
+		return
+	}
 
 	/*try {
 		tokens_data_file = readFileSync(path.join(dir_home, 'pancake-simple.json'), 'utf8')
@@ -316,14 +325,7 @@ async function launch() {
 	const simpleCollection = db.collection('bnb-chain_pancakeswap_simple')
 	const listCollection = db.collection('bnb-chain_pancakeswap_list')
 
-	// get data from PancakeSwap
-	let top = {}
-	try {
-		top = await getSushiswapBNBTopTokens()
-	} catch(error) {
-		console.log(error)
-		return
-	}
+	
 
 
 	const time = Date.now()
@@ -535,6 +537,28 @@ async function launchUniswap() {
 	let uniswap_data = {}
 	let uniswap_charts = {}
 	let uniswap_volume = {}
+	
+	
+
+	// get data from Uniswap
+	const top = await getUniswapV3TopTokens()
+	const topV2 = await getUniswapV2TopTokens()
+
+
+	const time = Date.now()
+	const tokensV3 = top.data ? top.data.tokens : []
+	const tokensV2 = topV2.data ? topV2.data.tokens : []
+
+	// Keep in v2 only tokens that are not already in v3
+	let filteredv2 = tokensV2.filter(token => !tokensV3.map(item => item.id).includes(token.id))
+	// then concat tokanV2 and filteredTokensV2
+	const tokens = tokensV3.concat(filteredv2)
+
+	const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
+	if(eth_price === 0 || tokens.length === 0) return
+	
+	
+	
 
 	try {
 		uniswap_data_file = readFileSync(path.join(dir_home, 'uniswap-simple.json'), 'utf8')
@@ -595,23 +619,6 @@ async function launchUniswap() {
 		return
 	}
 
-
-	// get data from Uniswap
-	const top = await getUniswapV3TopTokens()
-	const topV2 = await getUniswapV2TopTokens()
-
-
-	const time = Date.now()
-	const tokensV3 = top.data ? top.data.tokens : []
-	const tokensV2 = topV2.data ? topV2.data.tokens : []
-
-	// Keep in v2 only tokens that are not already in v3
-	let filteredv2 = tokensV2.filter(token => !tokensV3.map(item => item.id).includes(token.id))
-	// then concat tokanV2 and filteredTokensV2
-	const tokens = tokensV3.concat(filteredv2)
-
-	const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
-	if(eth_price === 0) return
 
 	// console.log('Uniswap - tokens.length', tokens.length)
 
@@ -800,6 +807,24 @@ async function launchQuickswap() {
 	let quickswap_data = {}
 	let quickswap_charts = {}
 	let quickswap_volume = {}
+	
+	
+	
+
+	// get data from Quickswap
+	const top = await getPolygonSushiSwapTopTokens()
+
+
+
+	const time = Date.now()
+	const tokens = top.data ? top.data.tokens : []
+
+	// console.log('Quickswap - Bundle', JSON.stringify(top.data.bundle))
+	const eth_price = top.data ? top.data.bundle.ethPrice : 0
+	if(eth_price === 0 || tokens.length === 0) return
+	
+	
+	
 
 	try {
 		quickswap_data_file = readFileSync(path.join(dir_home, 'quickswap-simple.json'), 'utf8')
@@ -861,18 +886,6 @@ async function launchQuickswap() {
 		return
 	}
 
-
-	// get data from Quickswap
-	const top = await getPolygonSushiSwapTopTokens()
-
-
-
-	const time = Date.now()
-	const tokens = top.data ? top.data.tokens : []
-
-	// console.log('Quickswap - Bundle', JSON.stringify(top.data.bundle))
-	const eth_price = top.data ? top.data.bundle.ethPrice : 0
-	if(eth_price === 0) return
 
 	// console.log('Quickswap - tokens.length', tokens.length)
 
@@ -1060,6 +1073,21 @@ async function launchSpiritswap() {
 	let spiritswap_data = {}
 	let spiritswap_charts = {}
 	let spiritswap_volume = {}
+	
+	
+	
+	// get data from Spiritswap
+	const top = await getSpiritswapTopTokens()
+
+
+	const time = Date.now()
+	const tokens = top.data ? top.data.tokens : []
+
+	const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
+	if(ftm_price === 0 || tokens.length === 0) return
+	
+	
+	
 
 	try {
 		spiritswap_data_file = readFileSync(path.join(dir_home, 'spiritswap-simple.json'), 'utf8')
@@ -1118,15 +1146,6 @@ async function launchSpiritswap() {
 	}
 
 
-	// get data from Spiritswap
-	const top = await getSpiritswapTopTokens()
-
-
-	const time = Date.now()
-	const tokens = top.data ? top.data.tokens : []
-
-	const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
-	if(ftm_price === 0) return
 
 	tokens.forEach(token => {
 		const address = token.id
@@ -1309,6 +1328,21 @@ async function launchHoneyswap() {
 	// let honeyswap_data = {}
 	let honeyswap_charts = {}
 	let honeyswap_volume = {}
+	
+	
+	
+	// get data from Honeyswap
+	const top = await getHoneyswapTopTokens()
+
+
+	const time = Date.now()
+	const tokens = top.data ? top.data.tokens : []
+
+	const eth_price = top.data ? top.data.bundle.ethPrice : 0
+	if(eth_price === 0 || tokens.length === 0) return
+	
+	
+	
 
 	/*try {
 		honeyswap_data_file = readFileSync(path.join(dir_home, 'honeyswap-simple.json'), 'utf8')
@@ -1371,15 +1405,6 @@ async function launchHoneyswap() {
 	const listCollection = db.collection('gnosis_list')
 
 
-	// get data from Honeyswap
-	const top = await getHoneyswapTopTokens()
-
-
-	const time = Date.now()
-	const tokens = top.data ? top.data.tokens : []
-
-	const eth_price = top.data ? top.data.bundle.ethPrice : 0
-	if(eth_price === 0) return
 
 	for(const token of tokens) {
 		const address = token.id
