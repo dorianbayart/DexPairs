@@ -895,6 +895,8 @@ function displayTokens() {
 			element.querySelector('span.price').innerHTML = token.price ? '$' + precise(token.price) : '-'
 			element.querySelector('span.value').innerHTML = token.price ? displayValue(token.value, token.price, token.tokenDecimal) : '-'
 			element.querySelector('span.balance').innerHTML = displayBalance(token.value, token.tokenDecimal)
+			element.querySelector('span.symbol').innerHTML = token.tokenSymbol ?? '-'
+			element.querySelector('span.name').innerHTML = token.tokenName ?? '-'
 
 		} else {
 
