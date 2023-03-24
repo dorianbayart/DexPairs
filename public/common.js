@@ -182,6 +182,29 @@ const NETWORK = {
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/layer3org/spiritswap-analytics',
 		coingecko_name: 'fantom'
 	},
+	ZKSYNC_ERA: {
+		chainId: 324,
+		enum: 'ZKSYNC_ERA',
+		name: 'zkSync Era',
+		shortName: 'zksync',
+		img: '/img/zksync-icon.svg',
+		color: '#8c8dfc',
+		rpc: 'https://zksync2-mainnet.zksync.io',
+		explorer: 'https://explorer.zksync.io/address/',
+		tokenInfo: 'https://zksync2-mainnet-explorer.zksync.io/token/CONTRACT_ADDRESS',
+		normaltx: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokentx: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: '', //'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: '',
+		tokenContract: '0x000000000000000000000000000000000000800a',
+		tokenSymbol: 'ETH',
+		tokenName: 'Ethereum',
+		tokenDecimal: 18,
+		tokenPriceContract: '0x0000000000000000000000000000000000000000',
+		subgraph_url: '',
+		coingecko_name: ''
+	},
 	ARBITRUM_ONE: {
 		chainId: 42161,
 		enum: 'ARBITRUM_ONE',
@@ -511,11 +534,13 @@ const keepENSName = (address) => {
 
 // Get token balance
 const getTokenBalanceWeb3 = async (contractAddress, address, network) => {
-	if(contractAddress === '0x0' || !address) return
+	if(contractAddress === NETWORK[network].tokenPriceContract || !contractAddress.length || !address) return
 	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
-	return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
-		return value
-	})
+	try {
+		return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
+			return value
+		})
+	} catch {}
 }
 
 const getTokenDecimals = async (contractAddress, network) => {
@@ -548,6 +573,22 @@ const createNetworkImg = (network) => {
 
 /* Utils - Get Price of Address on Network */
 const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
+	if(!searchedAddress || searchedAddress.length === 0) return null
+
+
+	// zkSync
+	if(NETWORK.ZKSYNC_ERA.enum === network) {
+		try {
+			const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress))
+			searchedAddress = token.l1Address === NETWORK.ZKSYNC_ERA.tokenPriceContract ? NETWORK.ETHEREUM.tokenPriceContract : token.l1Address
+			network = NETWORK.ETHEREUM.enum
+		} catch {
+			return null
+		}
+	}
+
+
+
 	let address = searchedAddress
 	let debt = 1
 	let rate = 1
