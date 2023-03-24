@@ -182,6 +182,29 @@ const NETWORK = {
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/layer3org/spiritswap-analytics',
 		coingecko_name: 'fantom'
 	},
+	ZKSYNC_ERA: {
+		chainId: 324,
+		enum: 'ZKSYNC_ERA',
+		name: 'zkSync Era',
+		shortName: 'zksync',
+		img: '/img/zksync-icon.svg',
+		color: '#8c8dfc',
+		rpc: 'https://zksync2-mainnet.zksync.io',
+		explorer: 'https://explorer.zksync.io/address/',
+		tokenInfo: 'https://zksync2-mainnet-explorer.zksync.io/token/CONTRACT_ADDRESS',
+		normaltx: 'https://https://zksync2-mainnet.zkscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokentx: 'https://https://zksync2-mainnet.zkscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: '', //'https://https://zksync2-mainnet.zkscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://https://zksync2-mainnet.zkscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		url_data: '',
+		tokenContract: '0x000000000000000000000000000000000000800a',
+		tokenSymbol: 'ETH',
+		tokenName: 'Ethereum',
+		tokenDecimal: 18,
+		tokenPriceContract: '0x0000000000000000000000000000000000000000',
+		subgraph_url: '',
+		coingecko_name: ''
+	},
 	ARBITRUM_ONE: {
 		chainId: 42161,
 		enum: 'ARBITRUM_ONE',
@@ -566,6 +589,13 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 	}
 
 	return null
+}
+
+/* Utils - Get Price of Address on zkSync */
+const getPriceByAddressZksync = async (searchedAddress, balance, network) => {
+	const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress)
+	const price = await getPriceByAddressNetwork(token.l1Address, balance, NETWORK.ETHEREUM.enum)
+	return price
 }
 
 
