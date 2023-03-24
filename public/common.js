@@ -185,7 +185,7 @@ const NETWORK = {
 	ZKSYNC_ERA: {
 		chainId: 324,
 		enum: 'ZKSYNC_ERA',
-		name: 'zkSync Era',
+		name: 'zkSync Era∎',
 		shortName: 'zksync',
 		img: '/img/zksync-icon.svg',
 		color: '#8c8dfc',
