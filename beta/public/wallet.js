@@ -646,7 +646,7 @@ async function searchTokens(network, address) {
 async function getContractAddressPrice(transaction, network, balance = 1) {
 	let price
 	// beefy.finance
-	if(transaction.tokenName.toLowerCase().startsWith('moo') && balance > 0) {
+	if(transaction.tokenName?.toLowerCase().startsWith('moo') && balance > 0) {
 		price = await getPriceFromBeefy(transaction.contractAddress, transaction.tokenSymbol, balance, network)
 		if(price) {
 			return price
