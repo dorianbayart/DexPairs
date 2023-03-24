@@ -534,11 +534,13 @@ const keepENSName = (address) => {
 
 // Get token balance
 const getTokenBalanceWeb3 = async (contractAddress, address, network) => {
-	if(contractAddress === '0x0' || !address) return
+	if(contractAddress === NETWORK[network].tokenPriceContract || !contractAddress.length || !address) return
 	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
-	return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
-		return value
-	})
+	try {
+		return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
+			return value
+		})
+	} catch {}
 }
 
 const getTokenDecimals = async (contractAddress, network) => {
@@ -571,6 +573,22 @@ const createNetworkImg = (network) => {
 
 /* Utils - Get Price of Address on Network */
 const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
+	if(!searchedAddress || searchedAddress.length === 0) return null
+
+
+	// zkSync
+	if(NETWORK.ZKSYNC_ERA.enum === network) {
+		try {
+			const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress))
+			searchedAddress = token.l1Address === NETWORK.ZKSYNC_ERA.tokenPriceContract ? NETWORK.ETHEREUM.tokenPriceContract : token.l1Address
+			network = NETWORK.ETHEREUM.enum
+		} catch {
+			return null
+		}
+	}
+
+
+
 	let address = searchedAddress
 	let debt = 1
 	let rate = 1
@@ -589,13 +607,6 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 	}
 
 	return null
-}
-
-/* Utils - Get Price of Address on zkSync */
-const getPriceByAddressZksync = async (searchedAddress, balance, network) => {
-	const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress))
-	const price = await getPriceByAddressNetwork(token.l1Address, balance, NETWORK.ETHEREUM.enum)
-	return price
 }
 
 

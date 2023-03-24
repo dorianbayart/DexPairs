@@ -653,26 +653,20 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 		}
 	}
 	// realt.co
-	else if((transaction.tokenName.toLowerCase().startsWith('realtoken') || transaction.tokenSymbol.toLowerCase().startsWith('armmrealtoken')) && balance > 0) {
+	else if((transaction.tokenName?.toLowerCase().startsWith('realtoken') || transaction.tokenSymbol?.toLowerCase().startsWith('armmrealtoken')) && balance > 0) {
 		price = await getPriceFromRealT(transaction.contractAddress, transaction.tokenSymbol, balance, network)
 		if(price) {
 			return price
 		}
 	}
 	// Balancer Pool
-	else if(transaction.tokenSymbol.startsWith('B-') && balance > 0) {
+	else if(transaction.tokenSymbol?.startsWith('B-') && balance > 0) {
 		price = await getPriceFromBalancerPool(transaction.contractAddress, transaction.tokenSymbol, balance, network)
 		if(price) {
 			return price
 		}
 	}
-	// zkSync Era
-	else if(NETWORK.ZKSYNC_ERA.enum === network) {
-		price = await getPriceByAddressZksync(transaction.contractAddress, balance, network)
-		if(price) {
-			return price
-		}
-	}
+
 	return await getPriceByAddressNetwork(transaction.contractAddress, balance, network)
 }
 
@@ -923,17 +917,17 @@ function displayTokens() {
 			li.appendChild(spanNameSymbol)
 
 			let spanSymbol = document.createElement('span')
-			spanSymbol.innerHTML = token.tokenSymbol
+			spanSymbol.innerHTML = token.tokenSymbol ?? '-'
 			spanSymbol.classList.add('symbol')
-			if(token.tokenSymbol.length > 25) spanSymbol.classList.add('small')
+			if(token.tokenSymbol?.length > 25) spanSymbol.classList.add('small')
 			spanNameSymbol.appendChild(spanSymbol)
 			let spanName = document.createElement('span')
-			spanName.innerHTML = token.tokenName
+			spanName.innerHTML = token.tokenName ?? '-'
 			spanName.classList.add('name')
 			spanNameSymbol.appendChild(spanName)
 
 			let spanPrice = document.createElement('span')
-			spanPrice.innerHTML = token.price ? '$' + precise(token.price) : '-'
+			spanPrice.innerHTML = token.price ? '$' + precise(token.price) : ''
 			spanPrice.classList.add('price')
 			li.appendChild(spanPrice)
 
@@ -2033,7 +2027,10 @@ const sortWallet = (a, b) => {
 	if(!a.price && b.price) return 1
 	if(a.price && !b.price) return -1
 	// then sort by name
-	return a.tokenName.localeCompare(b.tokenName)
+	if(a.tokenName && b.tokenName) return a.tokenName.localeCompare(b.tokenName)
+	if(!a.tokenName) return 1
+	if(!b.tokenName) return -1
+	return 0
 }
 /* Utils - sort the NFT wallet */
 const sortNFTWallet = (a, b) => {
@@ -2041,7 +2038,10 @@ const sortNFTWallet = (a, b) => {
 	if(NETWORK[a.network].chainId < NETWORK[b.network].chainId) return -1
 	if(NETWORK[a.network].chainId > NETWORK[b.network].chainId) return 1
 	// then sort by name
-	return a.tokenName.localeCompare(b.tokenName)
+	if(a.tokenName && b.tokenName) return a.tokenName.localeCompare(b.tokenName)
+	if(!a.tokenName) return 1
+	if(!b.tokenName) return -1
+	return 0
 }
 /* Utils - sort the NFT tokens (can have many tokens of the same contract) */
 const sortNFTTokens = (t_a, t_b) => {
@@ -2112,7 +2112,7 @@ const filteredNFTTokens = () => {
 /* Utils - Calculate balance from value */
 const calculateBalance = (balance, decimal) => {
 	if(balance && Math.abs(balance) > 0) {
-		return precise(balance * Math.pow(10, -decimal))
+		return precise(balance * (decimal ? Math.pow(10, -decimal) : 1))
 	}
 	return 0
 }
