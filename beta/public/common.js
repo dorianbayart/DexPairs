@@ -593,7 +593,7 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 
 /* Utils - Get Price of Address on zkSync */
 const getPriceByAddressZksync = async (searchedAddress, balance, network) => {
-	const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress)
+	const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress))
 	const price = await getPriceByAddressNetwork(token.l1Address, balance, NETWORK.ETHEREUM.enum)
 	return price
 }
