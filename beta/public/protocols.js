@@ -332,11 +332,8 @@ async function getAaveEthereumUnderlyingAddresses(callback) {
 		underlying = await callAaveEthereumUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(getAaveEthereumUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(getAaveEthereumUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
@@ -371,11 +368,8 @@ async function getCompoundEthereumUnderlyingAddresses(callback) {
 		underlying = await callCompoundEthereumUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(getCompoundEthereumUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(getCompoundEthereumUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data || !underlying.data.markets) {
 		return
@@ -397,11 +391,8 @@ async function getAavePolygonUnderlyingAddresses(callback) {
 		underlying = await callAavePolygonUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(getAavePolygonUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(getAavePolygonUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
@@ -437,36 +428,21 @@ async function getAaveV3UnderlyingAddresses(callback) {
 		underlying = await callAaveV3UnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(callAaveV3UnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(callAaveV3UnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
 	}
-	underlying.data.subTokens.forEach((item, i) => {
+  underlying.data.subTokens.forEach((item, i) => {
+    const aToken = item.pool.reserves.find(asset => item.id === asset.aToken.id)
+
 		underlyingAssets['ETHEREUM-' + item.id] = {
 			address: item.underlyingAssetAddress,
 			rate: 1,
-			debt: 1
+			debt: aToken ? 1 : -1
 		}
 	})
-	/*underlying.data.vtokens.forEach((item, i) => {
-		underlyingAssets['ETHEREUM-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})
-	underlying.data.stokens.forEach((item, i) => {
-		underlyingAssets['ETHEREUM-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})*/
 }
 
 
@@ -477,36 +453,21 @@ async function getAaveV3PolygonUnderlyingAddresses(callback) {
 		underlying = await callAaveV3PolygonUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(callAaveV3PolygonUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(callAaveV3PolygonUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
 	}
-	underlying.data.subTokens.forEach((item, i) => {
+  underlying.data.subTokens.forEach((item, i) => {
+    const aToken = item.pool.reserves.find(asset => item.id === asset.aToken.id)
+
 		underlyingAssets['POLYGON-' + item.id] = {
 			address: item.underlyingAssetAddress,
 			rate: 1,
-			debt: 1
+			debt: aToken ? 1 : -1
 		}
 	})
-	/*underlying.data.vtokens.forEach((item, i) => {
-		underlyingAssets['POLYGON-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})
-	underlying.data.stokens.forEach((item, i) => {
-		underlyingAssets['POLYGON-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})*/
 }
 
 
@@ -517,36 +478,21 @@ async function getAaveV3ArbitrumUnderlyingAddresses(callback) {
 		underlying = await callAaveV3ArbitrumUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(callAaveV3ArbitrumUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(callAaveV3ArbitrumUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
 	}
 	underlying.data.subTokens.forEach((item, i) => {
+    const aToken = item.pool.reserves.find(asset => item.id === asset.aToken.id)
+
 		underlyingAssets['ARBITRUM_ONE-' + item.id] = {
 			address: item.underlyingAssetAddress,
 			rate: 1,
-			debt: 1
+			debt: aToken ? 1 : -1
 		}
 	})
-	/*underlying.data.vtokens.forEach((item, i) => {
-		underlyingAssets['ARBITRUM_ONE-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})
-	underlying.data.stokens.forEach((item, i) => {
-		underlyingAssets['ARBITRUM_ONE-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})*/
 }
 
 
@@ -556,36 +502,21 @@ async function getAaveV3OptimismUnderlyingAddresses(callback) {
 		underlying = await callAaveV3OptimismUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(callAaveV3OptimismUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(callAaveV3OptimismUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
 	}
-	underlying.data.subTokens.forEach((item, i) => {
+  underlying.data.subTokens.forEach((item, i) => {
+    const aToken = item.pool.reserves.find(asset => item.id === asset.aToken.id)
+
 		underlyingAssets['OPTIMISM-' + item.id] = {
 			address: item.underlyingAssetAddress,
 			rate: 1,
-			debt: 1
+			debt: aToken ? 1 : -1
 		}
 	})
-	/*underlying.data.vtokens.forEach((item, i) => {
-		underlyingAssets['OPTIMISM-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})
-	underlying.data.stokens.forEach((item, i) => {
-		underlyingAssets['OPTIMISM-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})*/
 }
 
 
@@ -596,36 +527,21 @@ async function getAaveV3AvalancheUnderlyingAddresses(callback) {
 		underlying = await callAaveV3AvalancheUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(callAaveV3AvalancheUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(callAaveV3AvalancheUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
 	}
-	underlying.data.subTokens.forEach((item, i) => {
+  underlying.data.subTokens.forEach((item, i) => {
+    const aToken = item.pool.reserves.find(asset => item.id === asset.aToken.id)
+
 		underlyingAssets['AVALANCHE-' + item.id] = {
 			address: item.underlyingAssetAddress,
 			rate: 1,
-			debt: 1
+			debt: aToken ? 1 : -1
 		}
 	})
-	/*underlying.data.vtokens.forEach((item, i) => {
-		underlyingAssets['AVALANCHE-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})
-	underlying.data.stokens.forEach((item, i) => {
-		underlyingAssets['AVALANCHE-' + item.id] = {
-			address: item.underlyingAssetAddress,
-			rate: 1,
-			debt: -1
-		}
-	})*/
 }
 
 
@@ -636,11 +552,8 @@ async function getRmmGnosisUnderlyingAddresses(callback) {
 		underlying = await callRmmGnosisUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(getRmmGnosisUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(getRmmGnosisUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data) {
 		return
@@ -677,11 +590,8 @@ async function getVenusBscUnderlyingAddresses(callback) {
 		underlying = await callVenusBscUnderlyingAddresses()
 	} catch(error) {
 		console.log(error)
-		// setTimeout(getVenusBscUnderlyingAddresses, 30000)
 		return
 	}
-
-	// setTimeout(getVenusBscUnderlyingAddresses, 300000)
 
 	if(!underlying || !underlying.data || !underlying.data.markets) {
 		return
