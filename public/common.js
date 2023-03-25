@@ -603,7 +603,7 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 	}
 
 	if(balance > 0) {
-		return await getCoingeckoPrice(address, network)
+		return (await getCoingeckoPrice(address, network)) * debt * rate
 	}
 
 	return null
