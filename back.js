@@ -41,7 +41,7 @@ const OFTEN = process.env.NODE_ENV === 'production' ? 900000 : 120000 // 15 minu
 const HOURS = 14400000 // 4 hours
 const DAY = 86400000 // 1 day
 const WEEK = 604800000 // 1 week
-const HISTORY_SIZE = process.env.NODE_ENV === 'production' ? 192 : 96 // 45 or 120 seconds
+const HISTORY_SIZE = process.env.NODE_ENV === 'production' ? 192 : 96 // more data on Prod
 const HISTORY_SIZE_24H = 96 // 24h / 15min
 const TOP_SIZE = 6
 
@@ -50,10 +50,10 @@ const TOP_SIZE = 6
 const MONGO_URL = 'mongodb://localhost:27017'
 // const MONGO_CLIENT = new MongoClient(MONGO_URL)
 const DN_NAME = 'DexPairs'
-const MONGO_OPTIONS = { 
-  connectTimeoutMS: 8000,    
-  socketTimeoutMS:  8000, 
-  reconnectTries: 1
+const MONGO_OPTIONS = {
+  connectTimeoutMS: 8000,
+  socketTimeoutMS:  8000,
+  // reconnectTries: 1
  }
 
 
@@ -256,7 +256,7 @@ async function launch() {
 	// let tokens_data = {}
 	let tokens_charts = {}
 	let pancakeswap_volume = {}
-	
+
 	// get data from PancakeSwap
 	let top = {}
 	try {
@@ -325,7 +325,7 @@ async function launch() {
 	const simpleCollection = db.collection('bnb-chain_pancakeswap_simple')
 	const listCollection = db.collection('bnb-chain_pancakeswap_list')
 
-	
+
 
 
 	const time = Date.now()
@@ -537,8 +537,8 @@ async function launchUniswap() {
 	let uniswap_data = {}
 	let uniswap_charts = {}
 	let uniswap_volume = {}
-	
-	
+
+
 
 	// get data from Uniswap
 	const top = await getUniswapV3TopTokens()
@@ -556,9 +556,9 @@ async function launchUniswap() {
 
 	const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
 	if(eth_price === 0 || tokens.length === 0) return
-	
-	
-	
+
+
+
 
 	try {
 		uniswap_data_file = readFileSync(path.join(dir_home, 'uniswap-simple.json'), 'utf8')
@@ -807,9 +807,9 @@ async function launchQuickswap() {
 	let quickswap_data = {}
 	let quickswap_charts = {}
 	let quickswap_volume = {}
-	
-	
-	
+
+
+
 
 	// get data from Quickswap
 	const top = await getPolygonSushiSwapTopTokens()
@@ -822,9 +822,9 @@ async function launchQuickswap() {
 	// console.log('Quickswap - Bundle', JSON.stringify(top.data.bundle))
 	const eth_price = top.data ? top.data.bundle.ethPrice : 0
 	if(eth_price === 0 || tokens.length === 0) return
-	
-	
-	
+
+
+
 
 	try {
 		quickswap_data_file = readFileSync(path.join(dir_home, 'quickswap-simple.json'), 'utf8')
@@ -1073,9 +1073,9 @@ async function launchSpiritswap() {
 	let spiritswap_data = {}
 	let spiritswap_charts = {}
 	let spiritswap_volume = {}
-	
-	
-	
+
+
+
 	// get data from Spiritswap
 	const top = await getSpiritswapTopTokens()
 
@@ -1085,9 +1085,9 @@ async function launchSpiritswap() {
 
 	const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
 	if(ftm_price === 0 || tokens.length === 0) return
-	
-	
-	
+
+
+
 
 	try {
 		spiritswap_data_file = readFileSync(path.join(dir_home, 'spiritswap-simple.json'), 'utf8')
@@ -1328,9 +1328,9 @@ async function launchHoneyswap() {
 	// let honeyswap_data = {}
 	let honeyswap_charts = {}
 	let honeyswap_volume = {}
-	
-	
-	
+
+
+
 	// get data from Honeyswap
 	const top = await getHoneyswapTopTokens()
 
@@ -1340,9 +1340,9 @@ async function launchHoneyswap() {
 
 	const eth_price = top.data ? top.data.bundle.ethPrice : 0
 	if(eth_price === 0 || tokens.length === 0) return
-	
-	
-	
+
+
+
 
 	/*try {
 		honeyswap_data_file = readFileSync(path.join(dir_home, 'honeyswap-simple.json'), 'utf8')

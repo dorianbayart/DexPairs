@@ -213,10 +213,13 @@ async function launchSpiritswap() {
 
 // Prepare Mongo collections
 async function prepareCollections() {
-	if(MONGO_CLIENT) {
-		await MONGO_CLIENT.close()
+	// if(MONGO_CLIENT) {
+	// 	await MONGO_CLIENT.close()
+	// }
+	if(!MONGO_CLIENT) {
+		await MONGO_CLIENT.connect()
 	}
-	await MONGO_CLIENT.connect()
+
 	const db = MONGO_CLIENT.db(DN_NAME)
 	collections.coingecko = db.collection('coingecko')
 	collections.bnbChainPancakeSwapSimple = db.collection('bnb-chain_pancakeswap_simple')

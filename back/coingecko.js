@@ -7,7 +7,7 @@ import { promises as fs } from 'fs'
 import { MongoClient } from 'mongodb'
 
 
-const PER_PAGE = 250
+const PER_PAGE = 200
 const SUPPORTED_PROTOCOLS = ['ethereum', 'cronos', 'binance-smart-chain', 'xdai', 'polygon-pos', 'fantom', 'arbitrum-one', 'celo', 'avalanche']
 const BASE_URL = 'https://api.coingecko.com/api/v3/'
 const URL_LIST_TOKENS = `${BASE_URL}coins/list/?include_platform=true`
@@ -15,10 +15,10 @@ const URL_FETCH_PRICES = `${BASE_URL}coins/markets?vs_currency=usd&per_page=${PE
 
 const MONGO_URL = 'mongodb://localhost:27017'
 const DN_NAME = 'DexPairs'
-const MONGO_OPTIONS = { 
-  connectTimeoutMS: 8000,    
-  socketTimeoutMS:  8000, 
-  reconnectTries: 1
+const MONGO_OPTIONS = {
+  connectTimeoutMS: 8000,
+  socketTimeoutMS:  8000,
+  // reconnectTries: 1
  }
 
 
@@ -54,12 +54,19 @@ async function buildList() {
 		return
 	}
 
-	await updateList(collection)
+  try {
+    await updateList(collection)
+  } catch(e) {
+    console.error(e)
+  }
+
 
 	if(Math.random() < 0.01) { // Sometimes backup file
 		await writeBackupOnDisk()
 	}
-	setTimeout(() => MONGO_CLIENT.close(), 500)
+
+  //setTimeout(() => MONGO_CLIENT.close(), 2500)
+  await MONGO_CLIENT.close()
 }
 
 
