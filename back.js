@@ -6,8 +6,6 @@ import os from 'os'
 import path from 'path'
 import express from 'express'
 import fetch from 'node-fetch'
-import { readFileSync, writeFile, writeFileSync } from 'fs'
-import rateLimit from 'express-rate-limit'
 import { createClient } from 'redis'
 
 
@@ -25,19 +23,15 @@ DexPairs.xyz
 * Backend Server
 *
 * Fetch data from APIs
-* Structure data in JSON
-* Store them as file
-* Expose those files
+* Store them on Redis
 */
 
 
-const dir_home = os.homedir()
-console.log(dir_home)
 
 
 const VOLUME_SIZE = 12
 const REALTIME = process.env.NODE_ENV === 'production' ? 45000 : 120000 // 45 or 120 seconds
-const OFTEN = process.env.NODE_ENV === 'production' ? 900000 : 240000 // 15 minutes or 4 minutes
+const OFTEN = process.env.NODE_ENV === 'production' ? 600000 : 240000 // 10 minutes or 4 minutes
 const HOURS = 14400000 // 4 hours
 const DAY = 86400000 // 1 day
 const WEEK = 604800000 // 1 week
@@ -329,21 +323,6 @@ async function launchEthereum() {
   const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
   if(eth_price === 0 || tokens.length === 0) return
 
-  let uniswap_charts_file = {}
-  let uniswap_charts = {}
-  try {
-		uniswap_charts_file = readFileSync(path.join(dir_home, 'uniswap-charts.json'), 'utf8')
-		uniswap_charts = JSON.parse(uniswap_charts_file.toString())
-	} catch(error) {
-		console.log('uniswap-charts.json, will try to restore', error)
-		try {
-			uniswap_charts_file = readFileSync(path.join(dir_home, 'save_uniswap-charts.json'), 'utf8')
-			uniswap_charts = JSON.parse(uniswap_charts_file.toString())
-		} catch(err) {
-      console.log('Cannot restore save_uniswap-charts.json', err)
-    }
-	}
-
   await redis.connect()
 
   try {
@@ -364,7 +343,7 @@ async function launchEthereum() {
       volumeUSD: token.volumeUSD ? token.volumeUSD : token.tradeVolumeUSD
     }
 
-    await buildCharts(chain, point, data, time, uniswap_charts)
+    await buildCharts(chain, point, data, time)
   }
 
   // build Top 10 list
@@ -386,11 +365,6 @@ async function launchEthereum() {
   }
 
   await redis.quit()
-
-  let pathFile = path.join(dir_home, 'uniswap-charts.json')
-  writeFile( pathFile, JSON.stringify( uniswap_charts ), 'utf8', (err) => {
-    if (err) throw err
-  })
 }
 
 
@@ -408,22 +382,6 @@ async function launchBnbChain() {
 
   const bnb_price = top.data ? top.data.bundle.ethPriceUSD : 0
   if(bnb_price === 0 || tokens.length === 0) return
-
-
-  let tokens_charts_file = {}
-  let tokens_charts = {}
-  try {
-    tokens_charts_file = readFileSync(path.join(dir_home, 'pancake-charts.json'), 'utf8')
-    tokens_charts = JSON.parse(tokens_charts_file.toString())
-  } catch(error) {
-    console.log('pancake-charts.json, will try to restore', error)
-    try {
-      tokens_charts_file = readFileSync(path.join(dir_home, 'save_pancake-charts.json'), 'utf8')
-      tokens_charts = JSON.parse(tokens_charts_file.toString())
-    } catch(err) {
-      console.log('Cannot restore save_pancake-charts.json', err)
-    }
-  }
 
   await redis.connect()
 
@@ -443,7 +401,7 @@ async function launchBnbChain() {
       volumeUSD: token.volumeUSD
     }
 
-    await buildCharts(chain, point, data, time, tokens_charts)
+    await buildCharts(chain, point, data, time)
   }
 
   // build Top 10 list
@@ -465,11 +423,6 @@ async function launchBnbChain() {
   }
 
   await redis.quit()
-
-  let pathFile = path.join(dir_home, 'pancake-charts.json')
-  writeFile( pathFile, JSON.stringify( tokens_charts ), 'utf8', (err) => {
-    if (err) throw err
-  })
 }
 
 
@@ -489,21 +442,6 @@ async function launchGnosis() {
   const xdai_price = top.data ? top.data.bundle.ethPrice : 0
   if(xdai_price === 0 || tokens.length === 0) return
 
-  let tokens_charts_file = {}
-  let tokens_charts = {}
-  try {
-    tokens_charts_file = readFileSync(path.join(dir_home, 'honeyswap-charts.json'), 'utf8')
-    tokens_charts = JSON.parse(tokens_charts_file.toString())
-  } catch(error) {
-    console.log('honeyswap-charts.json, will try to restore', error)
-    try {
-      tokens_charts_file = readFileSync(path.join(dir_home, 'save_honeyswap-charts.json'), 'utf8')
-      tokens_charts = JSON.parse(tokens_charts_file.toString())
-    } catch(err) {
-      console.log('Cannot restore save_honeyswap-charts.json', err)
-    }
-  }
-
   await redis.connect()
 
   try {
@@ -522,7 +460,7 @@ async function launchGnosis() {
       volumeUSD: token.tradeVolumeUSD
     }
 
-    await buildCharts(chain, point, data, time, tokens_charts)
+    await buildCharts(chain, point, data, time)
   }
 
   // build Top 10 list
@@ -544,11 +482,6 @@ async function launchGnosis() {
   }
 
   await redis.quit()
-
-  let pathFile = path.join(dir_home, 'honeyswap-charts.json')
-  writeFile( pathFile, JSON.stringify( tokens_charts ), 'utf8', (err) => {
-    if (err) throw err
-  })
 }
 
 
@@ -566,21 +499,6 @@ async function launchPolygon() {
 
   const matic_price = top.data ? top.data.bundle.maticPriceUSD : 0
   if(matic_price === 0 || tokens.length === 0) return
-
-  let tokens_charts_file = {}
-  let tokens_charts = {}
-  try {
-    tokens_charts_file = readFileSync(path.join(dir_home, 'quickswap-charts.json'), 'utf8')
-    tokens_charts = JSON.parse(tokens_charts_file.toString())
-  } catch(error) {
-    console.log('quickswap-charts.json, will try to restore', error)
-    try {
-      tokens_charts_file = readFileSync(path.join(dir_home, 'save_quickswap-charts.json'), 'utf8')
-      tokens_charts = JSON.parse(tokens_charts_file.toString())
-    } catch(err) {
-      console.log('Cannot restore save_quickswap-charts.json', err)
-    }
-  }
 
   await redis.connect()
 
@@ -600,7 +518,7 @@ async function launchPolygon() {
       volumeUSD: token.volumeUSD
     }
 
-    await buildCharts(chain, point, data, time, tokens_charts)
+    await buildCharts(chain, point, data, time)
   }
 
   // build Top 10 list
@@ -622,11 +540,6 @@ async function launchPolygon() {
   }
 
   await redis.quit()
-
-  let pathFile = path.join(dir_home, 'quickswap-charts.json')
-  writeFile( pathFile, JSON.stringify( tokens_charts ), 'utf8', (err) => {
-    if (err) throw err
-  })
 }
 
 
@@ -646,21 +559,6 @@ async function launchFantom() {
   const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
   if(ftm_price === 0 || tokens.length === 0) return
 
-  let tokens_charts_file = {}
-  let tokens_charts = {}
-  try {
-    tokens_charts_file = readFileSync(path.join(dir_home, 'spiritswap-charts.json'), 'utf8')
-    tokens_charts = JSON.parse(tokens_charts_file.toString())
-  } catch(error) {
-    console.log('spiritswap-charts.json, will try to restore', error)
-    try {
-      tokens_charts_file = readFileSync(path.join(dir_home, 'save_spiritswap-charts.json'), 'utf8')
-      tokens_charts = JSON.parse(tokens_charts_file.toString())
-    } catch(err) {
-      console.log('Cannot restore save_spiritswap-charts.json', err)
-    }
-  }
-
   await redis.connect()
 
   try {
@@ -679,7 +577,7 @@ async function launchFantom() {
       volumeUSD: token.tradeVolumeUSD
     }
 
-    await buildCharts(chain, point, data, time, tokens_charts)
+    await buildCharts(chain, point, data, time)
   }
 
   // build Top 10 list
@@ -701,11 +599,6 @@ async function launchFantom() {
   }
 
   await redis.quit()
-
-  let pathFile = path.join(dir_home, 'spiritswap-charts.json')
-  writeFile( pathFile, JSON.stringify( tokens_charts ), 'utf8', (err) => {
-    if (err) throw err
-  })
 }
 
 
@@ -771,7 +664,7 @@ async function launchArbitrum() {
 
 
 
-const buildCharts = async (chain, point, data, time, tokens_charts = null) => {
+const buildCharts = async (chain, point, data, time) => {
   const address = point.address
   const price = point.price
   const volumeUSD = Number(point.volumeUSD)
@@ -793,11 +686,6 @@ const buildCharts = async (chain, point, data, time, tokens_charts = null) => {
     often = JSON.parse(often_str) ?? often
   } catch(e) {
     console.error(chain+':c1:'+address, e)
-  }
-  if(tokens_charts && tokens_charts[address]?.chart_often?.length > 0) {
-    often = tokens_charts[address].chart_often.concat(often)
-    delete tokens_charts[address].chart_often
-    await redis.set(chain+':c1:'+address, JSON.stringify(often))
   }
   if(often.length === 0 || time - often[often.length-1]['t'] > OFTEN) {
     often.push({
@@ -838,11 +726,6 @@ const buildCharts = async (chain, point, data, time, tokens_charts = null) => {
   } catch(e) {
     console.error(chain+':c2:'+address, e)
   }
-  if(tokens_charts && tokens_charts[address]?.chart_4h?.length > 0) {
-    c2 = tokens_charts[address].chart_4h.concat(c2)
-    delete tokens_charts[address].chart_4h
-    await redis.set(chain+':c2:'+address, JSON.stringify(c2))
-  }
   if(c2.length === 0 || time - c2[c2.length-1]['t'] > HOURS) {
     c2.push({
       t: time,
@@ -861,11 +744,6 @@ const buildCharts = async (chain, point, data, time, tokens_charts = null) => {
   } catch(e) {
     console.error(chain+':c3:'+address, e)
   }
-  if(tokens_charts && tokens_charts[address]?.chart_1d?.length > 0) {
-    c3 = tokens_charts[address].chart_1d.concat(c3)
-    delete tokens_charts[address].chart_1d
-    await redis.set(chain+':c3:'+address, JSON.stringify(c3))
-  }
   if(c3.length === 0 || time - c3[c3.length-1]['t'] > DAY) {
     c3.push({
       t: time,
@@ -883,11 +761,6 @@ const buildCharts = async (chain, point, data, time, tokens_charts = null) => {
     c4 = JSON.parse(c4_str) ?? c4
   } catch(e) {
     console.error(chain+':c4:'+address, e)
-  }
-  if(tokens_charts && tokens_charts[address]?.chart_1w?.length > 0) {
-    c4 = tokens_charts[address].chart_1w.concat(c4)
-    delete tokens_charts[address].chart_1w
-    await redis.set(chain+':c4:'+address, JSON.stringify(c4))
   }
   if(c4.length === 0 || time - c4[c4.length-1]['t'] > WEEK) {
     c4.push({
@@ -936,15 +809,15 @@ async function main() {
 
   setTimeout(launchEthereum, 1000)
 
-  setTimeout(launchBnbChain, 9000)
+  setTimeout(launchBnbChain, 10000)
 
-  setTimeout(launchGnosis, 14000)
+  setTimeout(launchGnosis, 15000)
 
-  setTimeout(launchPolygon, 18000)
+  setTimeout(launchPolygon, 20000)
 
-  setTimeout(launchFantom, 24000)
+  setTimeout(launchFantom, 25000)
 
-  setTimeout(launchArbitrum, 28000)
+  setTimeout(launchArbitrum, 30000)
 }
 
 
