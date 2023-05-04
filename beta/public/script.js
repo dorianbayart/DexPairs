@@ -1,8 +1,7 @@
 'use strict'
 
 let chartsForage, favoritesForage
-let getListTimer, getTopTimer, getSimpleTimer, getFavoritesTimer
-let list = {}
+let getTopTimer, getSimpleTimer, getFavoritesTimer
 let search = ''
 let filteredList = {}
 let topTokens = {}
@@ -13,79 +12,8 @@ let selectedBase = ''
 let tokenCharts = {}
 let baseCharts = {}
 let myChart = null
-let dex = 'UNISWAP'
-let dexList = {
-	UNISWAP: {
-		name: 'Uniswap',
-		chain: 'Ethereum',
-		chain_enum: 'ETHEREUM',
-		url: 'https://uniswap.org/',
-		url_swap: 'https://app.uniswap.org/#/swap',
-		url_data: SERVER_URL,
-		explorer: 'https://etherscan.io/token/',
-		tokens: {
-			token: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-			base: '0xdac17f958d2ee523a2206206994597c13d831ec7'
-		}
-	},
-	QUICKSWAP: {
-		name: 'QuickSwap',
-		chain: 'Polygon',
-		chain_enum: 'POLYGON',
-		url: 'https://quickswap.exchange/',
-		url_swap: 'https://quickswap.exchange/#/swap',
-		url_data: SERVER_URL + '/quickswap',
-		explorer: 'https://polygonscan.com/token/',
-		tokens: {
-			token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-			base: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
-		}
-	},
-	SUSHISWAP: {
-		name: 'SushiSwap',
-		chain: 'BNB Chain',
-		chain_enum: 'BSC',
-		url: 'https://www.sushi.com/',
-		url_swap: 'https://app.sushi.com/swap?&chainId=56',
-		url_data: SERVER_URL + '/pancake',
-		explorer: 'https://bscscan.com/token/',
-		tokens: {
-			token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-			base: '0xe9e7cea3dedca5984780bafc599bd69add087d56'
-		}
-	},
-	SPIRITSWAP: {
-		name: 'SpiritSwap',
-		chain: 'Fantom',
-		chain_enum: 'FANTOM',
-		url: 'https://www.spiritswap.finance/',
-		url_swap: 'https://swap.spiritswap.finance/#/swap',
-		url_data: SERVER_URL + '/spiritswap',
-		explorer: 'https://ftmscan.com/token/',
-		tokens: {
-			token: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
-			base: '0x04068da6c83afcfa0e13ba15a6696662335d5b75'
-		}
-	},
-	HONEYSWAP: {
-		name: 'HoneySwap',
-		chain: 'Gnosis (xDai)',
-		chain_enum: 'XDAI',
-		url: 'https://honeyswap.org/',
-		url_swap: 'https://app.honeyswap.org/#/swap',
-		url_data: SERVER_URL + '/honeyswap',
-		explorer: 'https://blockscout.com/xdai/mainnet/tokens/',
-		tokens: {
-			token: '0x9c58bacc331c9aa871afd802db6379a98e80cedb',
-			base: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
-		}
-	},
-}
+let chain = 'ETHEREUM'
 
-const INTERVAL_15M = '15m'
-const INTERVAL_4H = '4h'
-const INTERVAL_1D = '1d'
-const INTERVAL_1W = '1w'
 const TIMEFRAME_24H = '24h'
 const TIMEFRAME_1W = '1w'
 const TIMEFRAME_1M = '1m'
@@ -101,33 +29,6 @@ const Y_AXIS_TYPES = {
 	logarithmic: 'logarithmic'
 }
 let yAxisType = Y_AXIS_TYPES.linear
-
-
-// get tokens list
-// + put the list on the page
-// + define events to update the main token when selected
-function getList() {
-	let xmlhttp = new XMLHttpRequest()
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			let data = JSON.parse(this.responseText)
-			list = data
-			if(list && Object.keys(list).length > 0) {
-				updateSearchList()
-				sessionStorage.setItem('list', JSON.stringify(list))
-			} else {
-				clearTimeout(getListTimer)
-				getListTimer = setTimeout(getList, 3000)
-			}
-		}
-	}
-	xmlhttp.open('GET', dexList[dex].url_data + '/list', true)
-	xmlhttp.send()
-
-	clearTimeout(getListTimer)
-	getListTimer = setTimeout(getList, Math.round((90*Math.random() + 180)*1000))
-}
-
 
 
 // get top tokens from server
@@ -146,7 +47,7 @@ function getTop() {
 			}
 		}
 	}
-	xmlhttp.open('GET', dexList[dex].url_data + '/top', true)
+	xmlhttp.open('GET', NETWORK[chain].url_data + '/top', true)
 	xmlhttp.send()
 
 	clearTimeout(getTopTimer)
@@ -159,18 +60,19 @@ function getTop() {
 // + update main/base tokens with default ones
 function getSimple(callback) {
 	let xmlhttp = new XMLHttpRequest()
-	xmlhttp.onreadystatechange = function() {
+	xmlhttp.onreadystatechange = async function() {
 		if (this.readyState == 4 && this.status == 200) {
 			let data = JSON.parse(this.responseText)
 			simple = data
 			if(simple && Object.keys(simple).length > 0) {
+				console.log('getSimple got results', Date.now())
 
 				if(selectedToken.length !== 42) {
 					let found = findAddressFromSymbol(selectedToken)
 					if(found) {
 						selectedToken = found
 					} else {
-						selectedToken = dexList[dex].tokens.token
+						selectedToken = NETWORK[chain].tokens.token
 					}
 				}
 
@@ -179,14 +81,20 @@ function getSimple(callback) {
 					if(found) {
 						selectedBase = found
 					} else {
-						selectedBase = dexList[dex].tokens.base
+						selectedBase = NETWORK[chain].tokens.base
 					}
 				}
 
+				updateSearchList()
+
 				setToken(selectedToken)
 				setBase(selectedBase)
-				getCharts()
+				console.log('getSimple before getCharts', Date.now())
+
+				await getCharts()
 				sessionStorage.setItem('simple', JSON.stringify(simple))
+
+				console.log('getSimple before callback', Date.now())
 
 				if(callback) callback()
 			} else {
@@ -195,7 +103,7 @@ function getSimple(callback) {
 			}
 		}
 	}
-	xmlhttp.open('GET', dexList[dex].url_data + '/simple', true)
+	xmlhttp.open('GET', NETWORK[chain].url_data + '/simple', true)
 	xmlhttp.send()
 
 	clearTimeout(getSimpleTimer)
@@ -207,7 +115,7 @@ function getSimple(callback) {
 // get charts data from server
 // + update chart
 async function getCharts() {
-	let data = await getChartsByAddresses(selectedToken, selectedBase, dexList[dex].chain_enum)
+	let data = await getChartsByAddresses(selectedToken, selectedBase, interval, chain)
 	tokenCharts = data[selectedToken]
 	baseCharts = data[selectedBase]
 	if(tokenCharts && Object.keys(tokenCharts).length > 0) {
@@ -231,9 +139,9 @@ function updateSearchList(key) {
 	search = document.getElementById('search_field').value.toLowerCase()
 
 	filteredList = {}
-	Object.keys(list).forEach(function (address) {
+	Object.keys(simple).forEach(function (address) {
 		if(address.toLowerCase().includes(search) || simple[address]?.s?.toLowerCase().includes(search) || simple[address]?.n?.toLowerCase().includes(search)) {
-			filteredList[address] = simple[address]?.s
+			filteredList[address] = simple[address]
 		}
 	})
 
@@ -264,11 +172,11 @@ function selectToken(selected) {
 
 // set list from the list
 function updateList() {
-	if(Object.keys(list).length < 1) {
+	if(Object.keys(simple).length < 1) {
 		return
 	}
 
-	let currentList = search.length > 0 ? filteredList : list
+	let currentList = search.length > 0 ? filteredList : simple
 
 	document.getElementById('list-load-more')?.remove()
 	const ul = document.getElementById('list_ul')
@@ -289,7 +197,7 @@ function updateList() {
 		let li = document.createElement('li')
 		ul.appendChild(li)
 		li.id = address
-		li.innerHTML += currentList[address]
+		li.innerHTML += currentList[address].s
 		li.classList.toggle('active', li.id === selectedToken)
 	}
 
@@ -305,22 +213,24 @@ function updateList() {
 			updateList()
 		})
 	}
+
+	console.log('updateList', Date.now())
 }
 
 // set base list selection
 function updateBaseList() {
-	if(Object.keys(list).length < 1) {
+	if(Object.keys(simple).length < 1) {
 		return
 	}
 
-	let currentList = list
+	let currentList = simple
 
 	document.getElementById('base_select').innerHTML = null
 	let select = document.getElementById('base_select')
 	Object.keys(currentList).forEach(function (address) {
 		let option = document.createElement('option')
 		select.appendChild(option)
-		option.innerHTML += currentList[address]
+		option.innerHTML += currentList[address].s
 		option.value = address
 		option.selected = address === selectedBase
 	})
@@ -336,6 +246,7 @@ function setTop() {
 
 	if(top.children.length) {
 		Array.from(top.children).forEach((item) => {
+			item.removeEventListener('click', eventTopClicked, false)
 			item.remove()
 		})
 	}
@@ -352,7 +263,7 @@ function setTop() {
 		div.classList.add('top-token')
 		div.id = address
 		let img_logo = document.createElement('img')
-		img_logo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + address + '.png'
+		img_logo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + chain.toLowerCase() + '/' + address + '.png'
 		img_logo.width = '20'
 		img_logo.height = '20'
 		img_logo.classList.add('top-logo')
@@ -385,10 +296,7 @@ function setTop() {
 
 		setTopMiniChart(address, miniChart)
 
-		div.addEventListener('click', function(e) {
-			selectedToken = e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id
-			selectToken(selectedToken)
-		})
+		div.addEventListener('click', eventTopClicked, false)
 
 		img_logo.onerror = function() {
 			this.onerror = null
@@ -398,6 +306,10 @@ function setTop() {
 	}
 }
 
+async function eventTopClicked(e) {
+	selectedToken = e.target.id && !e.target.id.includes('chart') ? e.target.id : e.target.parentElement.id
+	selectToken(selectedToken)
+}
 
 async function updateFavorites() {
 	getFavoritesTimer = setTimeout(updateFavorites, 8000)
@@ -410,20 +322,20 @@ async function updateFavorites() {
 	const fav = favorites[favId]
 
 	if((Date.now() - fav.updatedAt)/1000 > 80) {
-		const charts = await getChartsByAddresses(fav.address, fav.base, fav.chain)
+		const charts = await getChartsByAddresses(fav.address, fav.base, INTERVAL_15M, fav.chain)
 		if(!charts[fav.address] || !charts[fav.base]) {
 			return
 		}
-		const lastPriceA = charts[fav.address].chart_often.slice(-1)[0].p
-		const lastPriceB = charts[fav.base].chart_often.slice(-1)[0].p
+		const lastPriceA = charts[fav.address].slice(-1)[0].p
+		const lastPriceB = charts[fav.base].slice(-1)[0].p
 
 		fav.price = lastPriceA / lastPriceB
-		fav.chart = charts[fav.address].chart_often.map(coords => {
-			const baseCoords = charts[fav.base].chart_often.find(base => base.t === coords.t)
+		fav.chart = charts[fav.address].map(coords => {
+			const baseCoords = charts[fav.base].find(base => base.t === coords.t)
 			if(baseCoords) {
 				return { t: coords.t, p: coords.p / baseCoords.p }
 			}
-			const price = estimatePriceInterpolation(charts[fav.base].chart_often, coords.t)
+			const price = estimatePriceInterpolation(charts[fav.base], coords.t)
 			return { t: coords.t, p: price ? coords.p / price : null }
 		})
 		fav.updatedAt = Date.now()
@@ -531,26 +443,25 @@ function setFromFavorite(id) {
 		return
 	}
 
-	const chain = id.split('-')[0]
+	let previousChain = chain
+
+	chain = id.split('-')[0]
 	selectedToken = id.split('-')[1]
 	selectedBase = id.split('-')[2]
-	let previousDex = dex
-	dex = Object.keys(dexList).find(dex => dexList[dex].chain_enum === chain)
 	let dexSelector = document.getElementById('dex-selector')
 	dexSelector.querySelectorAll('option').forEach((option) => {
-		option.selected = dexList[option.value].chain_enum === chain
+		option.selected = option.value === chain
 	})
 	const img = document.getElementById('dex-selection-img')
-	img.src = NETWORK[dexList[dex].chain_enum].img
-	img.alt = dexList[dex].chain + ' Logo'
+	img.src = NETWORK[chain].img
+	img.alt = NETWORK[chain].name + ' Logo'
 	img.title = img.alt
 
-	if(dex !== previousDex) {
-		clearTimeout(getListTimer)
+	if(chain !== previousChain) {
 		clearTimeout(getSimpleTimer)
 		clearTimeout(getTopTimer)
-		getSimple(getList)
-		getTop()
+		getSimple(getTop)
+		//getTop()
 	} else {
 		setBase(selectedBase)
 		selectToken(selectedToken)
@@ -622,12 +533,12 @@ function setToken(addr) {
 		this.src = '/img/icons/empty.png'
 		return true
 	}
-	tokenLogo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
+	tokenLogo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + chain.toLowerCase() + '/' + addr + '.png'
 	document.getElementById('token_symbol').innerHTML = symbol
 	document.getElementById('token_name').innerHTML = simple[addr].n
 	let address = addr.slice(0, 5) + '...' + addr.slice(-5)
 	let a = document.createElement('a')
-	a.href = dexList[dex].explorer + addr
+	a.href = NETWORK[chain].explorer + addr
 	a.target = '_blank'
 	a.textContent = address
 	a.rel = 'noopener'
@@ -651,12 +562,12 @@ function setBase(addr) {
 		this.src = '/img/icons/empty.png'
 		return true
 	}
-	tokenLogo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + dexList[dex].chain_enum.toLowerCase() + '/' + addr + '.png'
+	tokenLogo.src = 'https://raw.githubusercontent.com/dorianbayart/CryptoLogos/main/dist/' + chain.toLowerCase() + '/' + addr + '.png'
 	document.getElementById('base_symbol').innerHTML = symbol
 	document.getElementById('base_name').innerHTML = simple[addr].n
 	let address = addr.slice(0, 5) + '...' + addr.slice(-5)
 	let a = document.createElement('a')
-	a.href = dexList[dex].explorer + addr
+	a.href = NETWORK[chain].explorer + addr
 	a.target = '_blank'
 	a.textContent = address
 	a.rel = 'noopener'
@@ -682,23 +593,24 @@ function setSwapperBase() {
 document.getElementById('dex-selector').addEventListener(
 	'change', function(e) {
 
-		dex = e.target.value
-		selectedToken = dexList[dex].tokens.token
-		selectedBase = dexList[dex].tokens.base
+		chain = e.target.value
+		selectedToken = NETWORK[chain].tokens.token
+		selectedBase = NETWORK[chain].tokens.base
 
 		const img = document.getElementById('dex-selection-img')
-		img.src = NETWORK[dexList[dex].chain_enum].img
-		img.alt = dexList[dex].chain + ' Logo'
+		img.src = NETWORK[chain].img
+		img.alt = NETWORK[chain].name + ' Logo'
 
 		const bodyBackground = document.getElementById('body-background')
-		bodyBackground.style.backgroundImage = 'url(' + NETWORK[dexList[dex].chain_enum].img + ')'
+		bodyBackground.style.backgroundImage = 'url(' + NETWORK[chain].img + ')'
 
-		clearTimeout(getListTimer)
+		console.log('dex-selector', Date.now())
+
 		clearTimeout(getSimpleTimer)
 		clearTimeout(getTopTimer)
 
-		getSimple(getList)
-		getTop()
+		getSimple(getTop)
+		//getTop()
 
 		setSourceDataText()
 	}
@@ -788,32 +700,40 @@ document.getElementById('swapper_switch').addEventListener(
 // Interval selection
 document.getElementById('interval_15m').addEventListener(
 	'click', function(e) {
+		if(interval === INTERVAL_15M) return
+
 		interval = INTERVAL_15M
-		updateCharts()
+		getCharts()
 
 		setActiveInterval(e.target)
 	}
 )
 document.getElementById('interval_4h').addEventListener(
 	'click', function(e) {
+		if(interval === INTERVAL_4H) return
+
 		interval = INTERVAL_4H
-		updateCharts()
+		getCharts()
 
 		setActiveInterval(e.target)
 	}
 )
 document.getElementById('interval_1d').addEventListener(
 	'click', function(e) {
+		if(interval === INTERVAL_1D) return
+
 		interval = INTERVAL_1D
-		updateCharts()
+		getCharts()
 
 		setActiveInterval(e.target)
 	}
 )
 document.getElementById('interval_1w').addEventListener(
 	'click', function(e) {
+		if(interval === INTERVAL_1W) return
+
 		interval = INTERVAL_1W
-		updateCharts()
+		getCharts()
 
 		setActiveInterval(e.target)
 	}
@@ -907,8 +827,8 @@ document.getElementById('share_charts').addEventListener('click', () => {
 /* MAIN */
 initializeHTML()
 
-getSimple(getList)
-getTop()
+getSimple(getTop)
+//getTop()
 
 updateFavorites()
 
@@ -929,13 +849,13 @@ function initializeHTML() {
 	})
 
 	// default tokens
-	selectedToken = dexList[dex].tokens.token
-	selectedBase = dexList[dex].tokens.base
+	selectedToken = NETWORK[chain].tokens.token
+	selectedBase = NETWORK[chain].tokens.base
 
-	if(sessionStorage.getItem('dex') && dexList[sessionStorage.getItem('dex')]) {
-		dex = sessionStorage.getItem('dex')
-		selectedToken = dexList[dex].tokens.token
-		selectedBase = dexList[dex].tokens.base
+	if(sessionStorage.getItem('chain') && NETWORK[sessionStorage.getItem('chain')]) {
+		chain = sessionStorage.getItem('chain')
+		selectedToken = NETWORK[chain].tokens.token
+		selectedBase = NETWORK[chain].tokens.base
 	}
 	if(sessionStorage.getItem('selectedToken')) {
 		selectedToken = sessionStorage.getItem('selectedToken')
@@ -959,19 +879,18 @@ function initializeHTML() {
 		})
 
 
-	if(sessionStorage.getItem('list')) {
-		list = JSON.parse(sessionStorage.getItem('list'))
-		if(list && Object.keys(list).length > 0) { updateSearchList() }
+	if(sessionStorage.getItem('simple')) {
 		topTokens = JSON.parse(sessionStorage.getItem('topTokens'))
 		if(topTokens && Object.keys(topTokens).length > 0) { setTop() }
 		simple = JSON.parse(sessionStorage.getItem('simple'))
+		if(simple && Object.keys(simple).length > 0) { updateSearchList() }
 	}
 
 	const params = new URLSearchParams(window.location.search)
-	if(params.has('dex') && dexList[params.get('dex')]) {
-		dex = params.get('dex')
-		selectedToken = dexList[dex].tokens.token
-		selectedBase = dexList[dex].tokens.base
+	if(params.has('chain') && NETWORK[params.get('chain')]) {
+		chain = params.get('chain')
+		selectedToken = NETWORK[chain].tokens.token
+		selectedBase = NETWORK[chain].tokens.base
 	}
 	if(params.has('token')) {
 		selectedToken = params.get('token')
@@ -991,26 +910,26 @@ function initializeHTML() {
 
 
 	let dexSelector = document.getElementById('dex-selector')
-	Object.keys(dexList).sort(sortDEXByChainId).filter(item => !dexList[item].disabled).forEach((item) => {
+	Object.keys(NETWORK).sort(sortByChainId).filter(item => NETWORK[item].tokens).forEach((item) => {
 		let option = document.createElement('option')
 		dexSelector.appendChild(option)
-		option.innerHTML += dexList[item].chain + ' - ' + dexList[item].name
+		option.innerHTML = NETWORK[item].name
 		option.value = item
-		option.selected = dexList[item].name.toUpperCase() === dex
+		option.selected = item === chain
 	})
 
 	const img = document.getElementById('dex-selection-img')
-	img.src = NETWORK[dexList[dex].chain_enum].img
-	img.alt = dexList[dex].chain + ' Logo'
+	img.src = NETWORK[chain].img
+	img.alt = NETWORK[chain].name + ' Logo'
 
 	const bodyBackground = document.getElementById('body-background')
-	bodyBackground.style.backgroundImage = 'url(' + NETWORK[dexList[dex].chain_enum].img + ')'
+	bodyBackground.style.backgroundImage = 'url(' + NETWORK[chain].img + ')'
 
 	setSourceDataText()
 }
 
 function saveSessionVariables() {
-	sessionStorage.setItem('dex', dex)
+	sessionStorage.setItem('chain', chain)
 	sessionStorage.setItem('selectedToken', selectedToken)
 	sessionStorage.setItem('selectedBase', selectedBase)
 	sessionStorage.setItem('interval', interval)
@@ -1029,17 +948,17 @@ function setSourceDataText() {
 	let source_data = document.getElementById('source_data')
 	source_data.innerHTML = null
 	let a = document.createElement('a')
-	a.href = NETWORK[dexList[dex].chain_enum].subgraph_url
+	a.href = NETWORK[chain].subgraph_url
 	a.target = '_blank'
-	a.innerHTML = 'Source: ' + dexList[dex].name + ' on ' + dexList[dex].chain + ' | TheGraph'
-	a.title = 'Subgraph\'s playground of ' + dexList[dex].name + ' on ' + dexList[dex].chain
+	a.innerHTML = 'Source: ' + NETWORK[chain].name + ' | TheGraph'
+	a.title = 'Subgraph\'s playground of ' + NETWORK[chain].name
 	source_data.appendChild(a)
 }
 
 const setSwapper = async () => {
 	const basic_swapper = document.getElementById('basic_swapper')
 	const paraswap_swapper = document.getElementById('paraswap_swapper')
-	if(PARASWAP_SUPPORTED_CHAINID.includes(NETWORK[dexList[dex].chain_enum].chainId)) {
+	if(PARASWAP_SUPPORTED_CHAINID.includes(NETWORK[chain].chainId)) {
 		// set Paraswap swapper
 		basic_swapper.classList.toggle('none', true)
 		paraswap_swapper.classList.remove('none')
@@ -1047,9 +966,9 @@ const setSwapper = async () => {
 		document.getElementById('paraswap_dest_symbol').innerHTML = simple[selectedBase].s
 		// document.getElementById('paraswap_src_amount').value = 0
 		// document.getElementById('paraswap_dest_amount').value = null
-		const srcDecimals = await getTokenDecimals(selectedToken, dexList[dex].chain_enum)
-		const destDecimals = await getTokenDecimals(selectedBase, dexList[dex].chain_enum)
-		let srcBalance = (await getTokenBalanceWeb3(selectedToken, walletConnected, dexList[dex].chain_enum)) * Math.pow(10, -srcDecimals)
+		const srcDecimals = await getTokenDecimals(selectedToken, chain)
+		const destDecimals = await getTokenDecimals(selectedBase, chain)
+		let srcBalance = (await getTokenBalanceWeb3(selectedToken, walletConnected, chain)) * Math.pow(10, -srcDecimals)
 		if(!srcBalance || srcBalance === 0) {
 			//document.getElementById('paraswap_src_max_amount').classList.toggle('none', true)
 		} else {
@@ -1061,11 +980,11 @@ const setSwapper = async () => {
 		document.getElementById('paraswap_src_max_amount').innerHTML =  "Balance: " + srcBalance
 		document.getElementById('paraswap_src_amount').value = srcAmount
 
-		configureParaswap(selectedToken, selectedBase, srcAmount, srcDecimals, destDecimals, NETWORK[dexList[dex].chain_enum].chainId)
+		configureParaswap(selectedToken, selectedBase, srcAmount, srcDecimals, destDecimals, NETWORK[chain].chainId)
 		document.getElementById('paraswap_dest_amount').value = await getParaswapPrices()
 
 		if(walletConnected) {
-			getTokenAllowance(selectedToken, walletConnected, paraswapTransferProxy, dexList[dex].chain_enum).then(allowed => {
+			getTokenAllowance(selectedToken, walletConnected, paraswapTransferProxy, chain).then(allowed => {
 				paraswapAllowance = allowed
 
 				if(paraswapAllowance * Math.pow(10, -srcDecimals) < Number(document.getElementById('paraswap_src_amount').value)) {
@@ -1117,51 +1036,43 @@ function updateCharts() {
 
 	setSwapper()
 
-	let tokenChart = null, baseChart = null, scaleUnit = 'day'
+	let tokenChart = tokenCharts, baseChart = baseCharts, scaleUnit = 'day'
 	let intervalMS = 0, timeframeMS = 0
 	switch (interval) {
-	case INTERVAL_15M:
-		tokenChart = tokenCharts.chart_often
-		baseChart = baseCharts.chart_often
-		scaleUnit = 'hour'
-		intervalMS = OFTEN
-		break
-	case INTERVAL_1D:
-		tokenChart = tokenCharts.chart_1d
-		baseChart = baseCharts.chart_1d
-		scaleUnit = 'day'
-		intervalMS = DAY
-		break
-	case INTERVAL_1W:
-		tokenChart = tokenCharts.chart_1w
-		baseChart = baseCharts.chart_1w
-		scaleUnit = 'month'
-		intervalMS = WEEK
-		break
-	case INTERVAL_4H:
-	default:
-		tokenChart = tokenCharts.chart_4h
-		baseChart = baseCharts.chart_4h
-		scaleUnit = 'day'
-		intervalMS = HOURS
-		break
+		case INTERVAL_15M:
+			scaleUnit = 'hour'
+			intervalMS = OFTEN
+			break
+		case INTERVAL_1D:
+			scaleUnit = 'day'
+			intervalMS = DAY
+			break
+		case INTERVAL_1W:
+			scaleUnit = 'month'
+			intervalMS = WEEK
+			break
+		case INTERVAL_4H:
+		default:
+			scaleUnit = 'day'
+			intervalMS = HOURS
+			break
 	}
 	switch(timeframe) {
-	case TIMEFRAME_24H:
-		timeframeMS = TIME_24H
-		break
-	case TIMEFRAME_1M:
-		timeframeMS = TIME_1M
-		break
-	case TIMEFRAME_1Y:
-		timeframeMS = TIME_1Y
-		break
-	case TIMEFRAME_ALL:
-		break
-	case TIMEFRAME_1W:
-	default:
-		timeframeMS = TIME_1W
-		break
+		case TIMEFRAME_24H:
+			timeframeMS = TIME_24H
+			break
+		case TIMEFRAME_1M:
+			timeframeMS = TIME_1M
+			break
+		case TIMEFRAME_1Y:
+			timeframeMS = TIME_1Y
+			break
+		case TIMEFRAME_ALL:
+			break
+		case TIMEFRAME_1W:
+		default:
+			timeframeMS = TIME_1W
+			break
 	}
 
 
@@ -1301,15 +1212,17 @@ function updateCharts() {
 
 
 // Add or Remove from Favorites
-function toggleFavorite(selected, base) {
-	const chain = dexList[dex].chain_enum
+async function toggleFavorite(selected, base) {
 	const symbol = simple[selected].s
 	const baseSymbol = simple[base].s
 	const id = chain + '-' + selected + '-' + base
 	if(!favorites[id]) {
 		if(Object.keys(favorites).length < 6) {
-			// let tokenChart = tokenCharts.chart_often
-			let baseChart = baseCharts.chart_often
+
+
+			const charts = await getChartsByAddresses(selected, base, INTERVAL_15M, chain)
+			let tokenChart = charts[selected]
+			let baseChart = charts[base]
 
 			let fav = {
 				address: selected,
@@ -1318,7 +1231,7 @@ function toggleFavorite(selected, base) {
 				base: base,
 				baseSymbol: baseSymbol,
 				price: simple[selected].p / simple[base].p,
-				chart: tokenCharts.chart_often.map(coords => {
+				chart: tokenChart.map(coords => {
 					const baseCoords = baseChart.find(base => base.t === coords.t)
 					if(baseCoords) {
 						return { t: coords.t, p: coords.p / baseCoords.p }
@@ -1346,7 +1259,7 @@ function removeFromFavorite(id) {
 // Add or Remove class on the Favorite icon
 function setFavoriteIcon() {
 	const icon = document.getElementById('token_favorite')
-	const id = dexList[dex].chain_enum + '-' + selectedToken + '-' + selectedBase
+	const id = chain + '-' + selectedToken + '-' + selectedBase
 	if(Object.keys(favorites).includes(id)) {
 		icon.classList.toggle('active', true)
 		icon.title = 'Remove from favorites'
@@ -1373,7 +1286,7 @@ function estimatePriceInterpolation(chart, t) {
 // Update URL with parameters
 function updateURLParams() {
 	const params = new URLSearchParams(window.location.search)
-	params.set('dex', dex)
+	params.set('chain', chain)
 	params.set('token', selectedToken)
 	params.set('base', selectedBase)
 	params.set('interval', interval)

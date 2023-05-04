@@ -43,6 +43,11 @@ const TIME_1W = 1000*60*60*24*7
 const TIME_1M = 1000*60*60*24*30
 const TIME_1Y = 1000*60*60*24*365
 
+const INTERVAL_15M = '15m'
+const INTERVAL_4H = '4h'
+const INTERVAL_1D = '1d'
+const INTERVAL_1W = '1w'
+
 const OFTEN = 900000 // 15 minutes
 const HOURS = 14400000 // 4 hours
 const DAY = 86400000 // 1 day
@@ -63,14 +68,20 @@ const NETWORK = {
 		tokentx: 'https://api.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: SERVER_URL,
+		url_data: SERVER_URL + '/eth',
 		tokenContract: '0x0',
 		tokenSymbol: 'ETH',
 		tokenName: 'Ethereum',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3',
-		coingecko_name: 'ethereum'
+		coingecko_name: 'ethereum',
+		tokens: {
+			token: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+			base: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+		},
+		url: 'https://uniswap.org/',
+		url_swap: 'https://app.uniswap.org/#/swap'
 	},
 	CRONOS: {
 		chainId: 25,
@@ -107,14 +118,20 @@ const NETWORK = {
 		tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.bscscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: SERVER_URL + '/pancake',
+		url_data: SERVER_URL + '/bnb',
 		tokenContract: '0x0',
 		tokenSymbol: 'BNB',
 		tokenName: 'BNB',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/sushiswap/bsc-exchange',
-		coingecko_name: 'binance-smart-chain'
+		coingecko_name: 'binance-smart-chain',
+		tokens: {
+			token: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+			base: '0xe9e7cea3dedca5984780bafc599bd69add087d56'
+		},
+		url: 'https://www.sushi.com/',
+		url_swap: 'https://app.sushi.com/swap?&chainId=56'
 	},
 	XDAI: {
 		chainId: 100,
@@ -129,14 +146,20 @@ const NETWORK = {
 		tokentx: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: null,
 		tokenbalance: 'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: SERVER_URL + '/honeyswap',
+		url_data: SERVER_URL + '/gno',
 		tokenContract: '0x0',
 		tokenSymbol: 'XDAI',
 		tokenName: 'xDai',
 		tokenDecimal: 18,
 		tokenPriceContract: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/kirkins/honeyswap',
-		coingecko_name: 'xdai'
+		coingecko_name: 'xdai',
+		tokens: {
+			token: '0x9c58bacc331c9aa871afd802db6379a98e80cedb',
+			base: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
+		},
+		url: 'https://honeyswap.org/',
+		url_swap: 'https://app.honeyswap.org/#/swap'
 	},
 	POLYGON: {
 		chainId: 137,
@@ -151,14 +174,20 @@ const NETWORK = {
 		tokentx: 'https://api.polygonscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.polygonscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.polygonscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: SERVER_URL + '/quickswap',
+		url_data: SERVER_URL + '/matic',
 		tokenContract: '0x0',
 		tokenSymbol: 'MATIC',
 		tokenName: 'Matic',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/henrydapp/quickswap',
-		coingecko_name: 'polygon-pos'
+		coingecko_name: 'polygon-pos',
+		tokens: {
+			token: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+			base: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
+		},
+		url: 'https://quickswap.exchange/',
+		url_swap: 'https://quickswap.exchange/#/swap'
 	},
 	FANTOM: {
 		chainId: 250,
@@ -173,14 +202,20 @@ const NETWORK = {
 		tokentx: 'https://api.ftmscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.ftmscan.com/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.ftmscan.com/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: SERVER_URL + '/spiritswap',
+		url_data: SERVER_URL + '/ftm',
 		tokenContract: '0x0',
 		tokenSymbol: 'FTM',
 		tokenName: 'Fantom',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/layer3org/spiritswap-analytics',
-		coingecko_name: 'fantom'
+		coingecko_name: 'fantom',
+		tokens: {
+			token: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+			base: '0x04068da6c83afcfa0e13ba15a6696662335d5b75'
+		},
+		url: 'https://www.spiritswap.finance/',
+		url_swap: 'https://swap.spiritswap.finance/#/swap'
 	},
 	ZKSYNC_ERA: {
 		chainId: 324,
@@ -218,14 +253,20 @@ const NETWORK = {
 		tokentx: 'https://api.arbiscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		erc721tx: 'https://api.arbiscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokenbalance: 'https://api.arbiscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
-		url_data: '', // SERVER_URL + '/uniswap-arbitrum',
+		url_data: SERVER_URL + '/arb1',
 		tokenContract: '0x0',
 		tokenSymbol: 'AETH',
 		tokenName: 'Ether',
 		tokenDecimal: 18,
 		tokenPriceContract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', // WETH
 		subgraph_url: 'https://thegraph.com/hosted-service/subgraph/ianlapham/arbitrum-minimal',
-		coingecko_name: 'arbitrum-one'
+		coingecko_name: 'arbitrum-one',
+		tokens: {
+			token: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+			base: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8'
+		},
+		url: 'https://arbitrum.io/',
+		url_swap: 'https://app.uniswap.org/#/swap'
 	},
 	CELO: {
 		chainId: 42220,
@@ -462,7 +503,7 @@ function getSimpleData(network, callback) {
 
 // get charts by address and network
 // params: address, network, callback function
-function getChartsByAddress(address, network, callback) {
+function getChartsByAddress(address, interval, network, callback) {
 	let xmlhttp = new XMLHttpRequest()
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
@@ -481,7 +522,7 @@ function getChartsByAddress(address, network, callback) {
 	xmlhttp.onerror = function() {
 		// console.log('getChartsByAddress', this)
 	}
-	xmlhttp.open('GET', NETWORK[network].url_data + '/charts/' + address, true)
+	xmlhttp.open('GET', NETWORK[network].url_data + '/charts/' + address + '?interval=' + interval, true)
 	xmlhttp.send()
 	loadingChartsByAddress = true
 }
@@ -489,9 +530,9 @@ function getChartsByAddress(address, network, callback) {
 
 // get charts by address and network
 // params: address, network, callback function
-async function getChartsByAddresses(tokenA, tokenB, network) {
+async function getChartsByAddresses(tokenA, tokenB, interval, network) {
 	return new Promise((resolve, reject) => {
-		fetch(NETWORK[network].url_data + '/charts/' + tokenA + '/' + tokenB)
+		fetch(NETWORK[network].url_data + '/charts/' + tokenA + '/' + tokenB + '?interval=' + interval)
 			.then((response) => response.json())
 			.then(resolve)
 			.catch(reject)
@@ -682,9 +723,5 @@ const getColorFromStringWithTransparency = (str, transparency) => {
 // Sort By ChainId
 const sortByChainId = (a, b) => {
 	if(NETWORK[a].chainId > NETWORK[b].chainId) return 1
-	return -1
-}
-const sortDEXByChainId = (a, b) => {
-	if(NETWORK[dexList[a].chain_enum].chainId > NETWORK[dexList[b].chain_enum].chainId) return 1
 	return -1
 }

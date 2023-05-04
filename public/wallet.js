@@ -464,7 +464,7 @@ function getERC721Tx(network, address, callback) {
 				callback(network, address)
 			}
 
-			if(data.result.length > 0) {
+			if(data?.result?.length > 0) {
 				sessionStorage.setItem('latest-fetched-erc721-block-' + address + '-' + network, data.result[data.result.length - 1].blockNumber)
 			}
 
@@ -1879,17 +1879,19 @@ function updateGlobalChart() {
 	}
 	const network = NETWORK.ETHEREUM.enum
 	const address = NETWORK.ETHEREUM.tokenPriceContract
-	let chart = JSON.parse(sessionStorage.getItem(network + '-' + address))
+	let chart
+	if(sessionStorage.getItem(network + '-' + address))
+	chart = JSON.parse(sessionStorage.getItem(network + '-' + address))[address]
 	const lastFetch = sessionStorage.getItem(network + '-' + address + '-lastFetch')
 	const now = new Date().getTime()
-	if(!chart || (chart && !chart.chart_often) || (chart && chart.chart_often && chart.chart_often.length < 1) || (now - lastFetch > 3*60*1000)) {
+	if(!chart || chart.length < 1 || (now - lastFetch > 3*60*1000)) {
 		if(loadingChartsByAddress === false) {
-			getChartsByAddress(NETWORK.ETHEREUM.tokenPriceContract, NETWORK.ETHEREUM.enum, updateGlobalChart)
+			getChartsByAddress(NETWORK.ETHEREUM.tokenPriceContract, INTERVAL_15M, NETWORK.ETHEREUM.enum, updateGlobalChart)
 		}
 		return
 	}
 
-	chart = extractChartByDuration(chart.chart_often, 2 * TIME_24H)
+	chart = extractChartByDuration(chart, 2 * TIME_24H)
 
 	const last_price = chart[chart.length - 1].p
 
