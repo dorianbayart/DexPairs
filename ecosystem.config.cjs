@@ -33,7 +33,7 @@ module.exports = {
 			repo : 'git@github.com:dorianbayart/DexPairs.git',
 			path : '/home/dexpairs/prod',
 			'pre-deploy-local': '',
-			'post-deploy': 'npm install && pm2 startOrReload ecosystem.config.cjs --env production --update-env && pm2 save',
+			'post-deploy': 'npm install && npm run stop || true && pm2 startOrReload ecosystem.config.cjs --env production --update-env && pm2 save',
 			'pre-setup': 'pm2 install pm2-logrotate',
 			env_production: {
 				NODE_ENV: 'production'
