@@ -30,12 +30,11 @@ DexPairs.xyz
 
 
 const VOLUME_SIZE = 12
-const REALTIME = process.env.NODE_ENV === 'production' ? 45000 : 120000 // 45 or 120 seconds
-const OFTEN = process.env.NODE_ENV === 'production' ? 600000 : 240000 // 10 minutes or 4 minutes
+const OFTEN = process.env.NODE_ENV === 'production' ? 900000 : 240000 // 15 minutes or 4 minutes
 const HOURS = 14400000 // 4 hours
 const DAY = 86400000 // 1 day
 const WEEK = 604800000 // 1 week
-const HISTORY_SIZE = process.env.NODE_ENV === 'production' ? 256 : 96 // more data on Prod
+const HISTORY_SIZE = process.env.NODE_ENV === 'production' ? 320 : 96 // more data on Prod
 const HISTORY_SIZE_24H = 96 // 24h / 15min
 const TOP_SIZE = 6
 
@@ -148,7 +147,7 @@ async function getUniswapV3BNBTopTokens() {
 const uniswapV3_arbitrum_request = `
 query
 {
-  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "50000", derivedETH_gt: "0", totalValueLockedUSD_gt: "50000" } ) {
+  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "50000", derivedETH_gt: "0", totalValueLockedUSD_gt: "40000" } ) {
     id
     name
     symbol
@@ -170,7 +169,7 @@ async function getUniswapV3ArbitrumTopTokens() {
 const uniswapV3_request = `
 query
 {
-  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "10000", derivedETH_gt: "0", totalValueLockedUSD_gt: "10000" } ) {
+  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "10000", derivedETH_gt: "0", totalValueLockedUSD_gt: "40000" } ) {
     id
     name
     symbol
@@ -192,7 +191,7 @@ async function getUniswapV3TopTokens() {
 const uniswapV2_request = `
 query
 {
-  tokens(first: 400, orderBy: tradeVolumeUSD, orderDirection: desc, where: { tradeVolumeUSD_gt: "10000", derivedETH_gt: "0" } ) {
+  tokens(first: 400, orderBy: tradeVolumeUSD, orderDirection: desc, where: { tradeVolumeUSD_gt: "100000", derivedETH_gt: "0" } ) {
     id
     name
     symbol
@@ -323,8 +322,6 @@ async function launchEthereum() {
   const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
   if(eth_price === 0 || tokens.length === 0) return
 
-  await redis.connect()
-
   try {
     const data_str = await redis.get(chain+':data')
     data = JSON.parse(data_str) ?? data
@@ -363,8 +360,6 @@ async function launchEthereum() {
   if(Object.keys(data).length > 0) {
     await redis.set(chain+':data', JSON.stringify(data))
   }
-
-  await redis.quit()
 }
 
 
@@ -382,8 +377,6 @@ async function launchBnbChain() {
 
   const bnb_price = top.data ? top.data.bundle.ethPriceUSD : 0
   if(bnb_price === 0 || tokens.length === 0) return
-
-  await redis.connect()
 
   try {
     const data_str = await redis.get(chain+':data')
@@ -421,8 +414,6 @@ async function launchBnbChain() {
   if(Object.keys(data).length > 0) {
     await redis.set(chain+':data', JSON.stringify(data))
   }
-
-  await redis.quit()
 }
 
 
@@ -441,8 +432,6 @@ async function launchGnosis() {
 
   const xdai_price = top.data ? top.data.bundle.ethPrice : 0
   if(xdai_price === 0 || tokens.length === 0) return
-
-  await redis.connect()
 
   try {
     const data_str = await redis.get(chain+':data')
@@ -480,8 +469,6 @@ async function launchGnosis() {
   if(Object.keys(data).length > 0) {
     await redis.set(chain+':data', JSON.stringify(data))
   }
-
-  await redis.quit()
 }
 
 
@@ -499,8 +486,6 @@ async function launchPolygon() {
 
   const matic_price = top.data ? top.data.bundle.maticPriceUSD : 0
   if(matic_price === 0 || tokens.length === 0) return
-
-  await redis.connect()
 
   try {
     const data_str = await redis.get(chain+':data')
@@ -538,8 +523,6 @@ async function launchPolygon() {
   if(Object.keys(data).length > 0) {
     await redis.set(chain+':data', JSON.stringify(data))
   }
-
-  await redis.quit()
 }
 
 
@@ -558,8 +541,6 @@ async function launchFantom() {
 
   const ftm_price = top.data ? top.data.bundle.ftmPrice : 0
   if(ftm_price === 0 || tokens.length === 0) return
-
-  await redis.connect()
 
   try {
     const data_str = await redis.get(chain+':data')
@@ -597,8 +578,6 @@ async function launchFantom() {
   if(Object.keys(data).length > 0) {
     await redis.set(chain+':data', JSON.stringify(data))
   }
-
-  await redis.quit()
 }
 
 
@@ -617,9 +596,6 @@ async function launchArbitrum() {
 
   const eth_price = top.data ? top.data.bundle.ethPriceUSD : 0
   if(eth_price === 0 || tokens.length === 0) return
-
-
-  await redis.connect()
 
   try {
     const data_str = await redis.get(chain+':data')
@@ -657,8 +633,6 @@ async function launchArbitrum() {
   if(Object.keys(data).length > 0) {
     await redis.set(chain+':data', JSON.stringify(data))
   }
-
-  await redis.quit()
 }
 
 
@@ -805,9 +779,9 @@ const buildTop = async (chain, top, data) => {
 
 /* MAIN */
 async function main() {
-  setTimeout(main, REALTIME)
+  await redis.connect()
 
-  setTimeout(launchEthereum, 1000)
+  setTimeout(launchEthereum, 5000)
 
   setTimeout(launchBnbChain, 10000)
 
@@ -818,11 +792,13 @@ async function main() {
   setTimeout(launchFantom, 25000)
 
   setTimeout(launchArbitrum, 30000)
+
+  setTimeout(async () => { await redis.quit() }, 40000)
 }
 
 
 main()
-console.log('Back.js is starting ...')
+console.log('Back.js is working ...')
 
 
 

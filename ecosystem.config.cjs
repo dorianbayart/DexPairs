@@ -11,16 +11,6 @@ module.exports = {
 			PORT: 3003,
 		}
 	}, {
-		name: 'DexPairs_Back',
-		script: 'back.js',
-		exp_backoff_restart_delay: 100,
-		env: {
-			NODE_ENV: 'development',
-		},
-		env_production: {
-			NODE_ENV: 'production',
-		}
-	}, {
 		name: 'DexPairs_Front',
 		script: 'front.js',
 		exp_backoff_restart_delay: 100,
