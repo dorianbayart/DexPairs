@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "xyz.dexpairs.dba",
+                     "sha256_cert_fingerprints": ["69:CF:52:11:E8:D4:8D:A4:7C:2D:A3:10:20:C8:02:D0:B9:4A:6B:A6:5F:62:47:C1:50:3C:13:06:10:90:27:BB"] }
+      }
+]
