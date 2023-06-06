@@ -54,7 +54,7 @@
       "url": "dexpairs.xyz/charts",
       "description": "",
       "icons": [{
-        "src": "/img/icons/activity.svg",
+        "src": "/img/icons/bar-chart-2.svg",
         "sizes": "96x96",
         "type": "image/svg"
       }]
