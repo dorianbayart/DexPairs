@@ -4,6 +4,7 @@
 let underlyingAssets = {}
 let beefyRatio = {}
 let realtTokens = []
+let csmTokens = []
 let balancerPools = {}
 
 
@@ -11,6 +12,8 @@ let balancerPools = {}
 const beefy_ratio = 'https://api.beefy.finance/lps'
 // realt.co - get all tokens
 const realt_tokens = 'https://api.realt.community/v1/token'
+// cleansatmining.com - get all tokens
+const csm_tokens = 'https://yam.cleansatmining.com/tokens.json'
 
 
 // AAVE - Ethereum
@@ -660,6 +663,19 @@ async function getPriceFromRealT(contract, symbol, balance, network) {
   )
 	if(token) {
 		return token.tokenPrice
+	}
+  return
+}
+
+
+/* CleanSatMining */
+async function getPriceFromCSM(contract, symbol, balance, network) {
+	if(csmTokens.length === 0) {
+		csmTokens = await get(csm_tokens)
+	}
+	let token = csmTokens.find((token) => token.contractAddress.toLowerCase() === contract.toLowerCase())
+	if(token) {
+		return token.officialPrice
 	}
   return
 }
