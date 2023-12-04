@@ -12,8 +12,8 @@ let balancerPools = {}
 const beefy_ratio = 'https://api.beefy.finance/lps'
 // realt.co - get all tokens
 const realt_tokens = 'https://api.realt.community/v1/token'
-// cleansatmining.com - get all tokens
-const csm_tokens = 'https://yam.cleansatmining.com/tokens.json'
+// cleansatmining.com - get all tokens - https://yam.cleansatmining.com/tokens.json
+const csm_tokens = 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/public/data/csm_tokens.data'
 
 
 // AAVE - Ethereum
