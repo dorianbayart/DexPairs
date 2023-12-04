@@ -75,7 +75,7 @@ self.addEventListener('fetch', async event => {
 		// console.log('[ServiceWorker][NetworkFirst] ', event.request.url)
 		event.respondWith(
 			caches.open(CACHE_NAME).then(async cache => {
-				return fetch(event.request.url).then(async fetchedResponse => {
+				return fetch(event.request.url, { mode: 'no-cors' }).then(async fetchedResponse => {
 					cache.put(event.request, fetchedResponse.clone())
 					return fetchedResponse
 				}).catch(() => {
