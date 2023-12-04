@@ -659,6 +659,13 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 			return price
 		}
 	}
+	// cleansatmining.com
+	else if((transaction.tokenName?.toLowerCase().startsWith('csm') /*|| transaction.tokenSymbol?.toLowerCase().startsWith('armmcsm')*/) && balance > 0) {
+		price = await getPriceFromCSM(transaction.contractAddress, transaction.tokenSymbol, balance, network)
+		if(price) {
+			return price
+		}
+	}
 	// Balancer Pool
 	else if(transaction.tokenSymbol?.startsWith('B-') && balance > 0) {
 		price = await getPriceFromBalancerPool(transaction.contractAddress, transaction.tokenSymbol, balance, network)
