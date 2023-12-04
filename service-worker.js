@@ -73,6 +73,10 @@ self.addEventListener('fetch', async event => {
 	} else {
 		// Network first, falling back to cache
 		// console.log('[ServiceWorker][NetworkFirst] ', event.request.url)
+		if(event.request.url.includes('cleansat') {
+			console.log(event.request)
+			return
+		}
 		event.respondWith(
 			caches.open(CACHE_NAME).then(async cache => {
 				return fetch(event.request.url).then(async fetchedResponse => {
