@@ -595,7 +595,7 @@ async function searchTokens(network, address) {
 		let balance = 0
 
 		try {
-			if(transaction.contractAddress.length) {
+			if(transaction.contractAddress?.length) {
 				balance = await getTokenBalanceWeb3(transaction.contractAddress, address, network)
 				const price = await getContractAddressPrice(transaction, network, balance)
 				const id = getId(transaction.contractAddress, network)
