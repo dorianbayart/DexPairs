@@ -617,18 +617,6 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 	if(!searchedAddress || searchedAddress.length === 0) return null
 
 
-	// zkSyncEra specific case
-	if(NETWORK.ZKSYNC_ERA.enum === network) {
-		try {
-			const price = await getPriceFromZkSyncEra(searchedAddress)
-			return price
-		} catch {
-			return null
-		}
-	}
-
-
-
 	let address = searchedAddress
 	let debt = 1
 	let rate = 1
