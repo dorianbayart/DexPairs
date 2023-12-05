@@ -6,6 +6,7 @@ let beefyRatio = {}
 let realtTokens = []
 let csmTokens = []
 let balancerPools = {}
+let zkSyncEraTokens = []
 
 
 // beefy.finance - get all ratio
@@ -15,6 +16,8 @@ const realt_tokens = 'https://api.realt.community/v1/token'
 // cleansatmining.com - get all tokens
 const csm_tokens = 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/public/data/csm_tokens.data'
 
+// zkSyncEra
+const zkSyncEra_tokens = 'https://block-explorer-api.mainnet.zksync.io/tokens?minLiquidity=2500&limit=100&page=1'
 
 // AAVE - Ethereum
 const aave_ethereum_request = `
@@ -676,6 +679,19 @@ async function getPriceFromCSM(contract, symbol, balance, network) {
 	let token = csmTokens.find((token) => token.contractAddress.toLowerCase() === contract.toLowerCase())
 	if(token) {
 		return token.officialPrice
+	}
+  return
+}
+
+
+/* zkSync Era */
+async function getPriceFromZkSyncEra(contract) {
+	if(zkSyncEraTokens.length === 0) {
+		zkSyncEraTokens = (await get(zkSyncEra_tokens)).items
+	}
+	let token = zkSyncEraTokens.find((token) => token.l2Address.toLowerCase() === contract.toLowerCase())
+	if(token) {
+		return token.usdPrice
 	}
   return
 }
