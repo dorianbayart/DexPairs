@@ -224,13 +224,13 @@ const NETWORK = {
 		shortName: 'zksync',
 		img: '/img/zksync-icon.svg',
 		color: '#8c8dfc',
-		rpc: 'https://zksync2-mainnet.zksync.io',
+		rpc: 'https://mainnet.era.zksync.io',
 		explorer: 'https://explorer.zksync.io/address/',
-		tokenInfo: 'https://zksync2-mainnet-explorer.zksync.io/token/CONTRACT_ADDRESS',
-		normaltx: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		tokentx: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		erc721tx: '', //'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		tokenbalance: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		tokenInfo: 'https://explorer.zksync.io/address/CONTRACT_ADDRESS',
+		normaltx: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokentx: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
 		url_data: '',
 		tokenContract: '0x000000000000000000000000000000000000800a',
 		tokenSymbol: 'ETH',
@@ -238,7 +238,7 @@ const NETWORK = {
 		tokenDecimal: 18,
 		tokenPriceContract: '0x0000000000000000000000000000000000000000',
 		subgraph_url: '',
-		coingecko_name: ''
+		coingecko_name: 'zksync'
 	},
 	ARBITRUM_ONE: {
 		chainId: 42161,
