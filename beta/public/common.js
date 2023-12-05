@@ -575,7 +575,7 @@ const keepENSName = (address) => {
 
 // Get token balance
 const getTokenBalanceWeb3 = async (contractAddress, address, network) => {
-	if(contractAddress === NETWORK[network].tokenPriceContract || !contractAddress.length || !address) return
+	if(!contractAddress.length || !address) return
 	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
 	try {
 		return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
