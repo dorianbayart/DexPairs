@@ -617,12 +617,11 @@ const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 	if(!searchedAddress || searchedAddress.length === 0) return null
 
 
-	// zkSync
+	// zkSyncEra specific case
 	if(NETWORK.ZKSYNC_ERA.enum === network) {
 		try {
-			const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress))
-			searchedAddress = token.l1Address === NETWORK.ZKSYNC_ERA.tokenPriceContract ? NETWORK.ETHEREUM.tokenPriceContract : token.l1Address
-			network = NETWORK.ETHEREUM.enum
+			const price = await getPriceFromZkSyncEra(searchedAddress)
+			return price
 		} catch {
 			return null
 		}
