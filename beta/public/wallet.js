@@ -673,6 +673,13 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 			return price
 		}
 	}
+	// zkSyncEra network
+	else if(NETWORK.ZKSYNC_ERA.enum === network && balance > 0) {
+		price = await getPriceFromZkSyncEra(transaction.contractAddress)
+		if(price) {
+			return price
+		}
+	}
 
 	return await getPriceByAddressNetwork(transaction.contractAddress, balance, network)
 }
