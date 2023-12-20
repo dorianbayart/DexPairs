@@ -60,6 +60,14 @@ let statistics = {
 }
 
 
+
+const limiter = rateLimit({
+	windowMs: 10*1000, // 10 seconds
+	max: process.env.NODE_ENV === 'production' ? 50 : 100
+})
+
+
+
 /* Const used for charts */
 const INTERVAL_15M = '15m'
 const INTERVAL_4H = '4h'
@@ -103,11 +111,6 @@ async function prepareCollections() {
 setTimeout(prepareCollections, 750)
 
 
-
-const limiter = rateLimit({
-	windowMs: 10*1000, // 10 seconds
-	max: 50
-})
 
 
 /* server */
@@ -238,13 +241,12 @@ const buildChartsData = async (chain, interval, token, base) => {
 /**
 * WebSocket Server
 */
-expressWs(app, server)
+let wss = expressWs(app, server)
 app.ws('/ws', async function(ws, req) {
 	ws.on('message', async function(data) {
 		const msg = JSON.parse(data)
-		console.log(msg)
-		statistics.latests.push(msg)
-		statistics.latests = statistics.latests.slice(-statistics.latests_nb)
+		console.log('msg', msg)
+
 		switch (msg.type) {
 			case 'connection':
 				console.log('client connected to WSS')
@@ -252,21 +254,36 @@ app.ws('/ws', async function(ws, req) {
 					type: 'connection',
 					data: true
 				}))
-			break
+			  break
 			case 'statistics':
-				console.log('statistics asked')
-				ws.send(JSON.stringify({
-					type: 'statistics',
-					data: statistics
-				}))
-			break
+				broadcastStatistics(ws)
+			  break
 			default:
-			console.log('other')
+			  console.log('other')
+		}
+
+		if(msg.url && !msg.url.includes('statistics')) {
+			statistics.latests.push(msg.url)
+			statistics.latests = statistics.latests.slice(-statistics.latests_nb)
+			broadcastStatistics(ws)
 		}
 	})
 })
 
 
+
+
+function broadcastStatistics(ws) {
+	console.log('broadcast')
+	wss.getWss().clients.forEach(client => {
+		//if (client != ws) {
+			client.send(JSON.stringify({
+				type: 'statistics',
+				data: statistics.latests//.filter(stats => stats.type === 'statistics').map(stats => stats.data)
+			}))
+		//}
+	})
+}
 
 
 

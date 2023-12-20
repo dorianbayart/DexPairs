@@ -698,7 +698,9 @@ const precise = (x) => {
 	return Number.parseFloat(x).toPrecision(2)
 }
 const gasRound = (x) => {
-	if(x > 9) { return Math.round(x) }
+	if(x > 19) { return Math.round(x) }
+	if(x < 0.1) { return Math.round(1000 * x) / 1000 }
+	if(x < 1) { return Math.round(100 * x) / 100 }
 	return Math.round(10 * x) / 10
 }
 

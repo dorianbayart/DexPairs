@@ -12,7 +12,7 @@ const connect = async () =>  {
     socket = new WebSocket(socketUrl)
 
     socket.onopen = () => {
-      socketMessageSend({ type: 'connection', data: window.location.href })
+      socketMessageSend({ type: 'connection', url: window.location.href })
       resolve()
     }
 
@@ -53,17 +53,19 @@ const socketMessageSend = (data) => {
 
 // Some data has been received
 const socketMessageReceived = (data) => {
-  console.log(data)
-
   const msg = JSON.parse(data)
   switch (msg.type) {
     case 'connection':
-      console.log('Connected:', msg.data)
       break;
     case 'statistics':
       displayStatistics(msg.data)
       break;
     default:
-      console.log('Other:', msg.data)
   }
+}
+
+const wsSendStatistics = () => {
+	setTimeout(() => {
+		socketMessageSend({ type: 'statistics', url: window.location.href })
+	}, 2500)
 }

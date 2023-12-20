@@ -52,7 +52,6 @@ const displayNews = (urlTitle) => {
 					const item = e.target.id ? e.target : e.target.parentElement
 					displayNews(item.id.split(':')[2])
 				})
-
 		)
 	}
 }

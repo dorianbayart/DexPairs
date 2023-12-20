@@ -3,11 +3,13 @@
 
 
 setTimeout(() => {
-	socketMessageSend({ type: 'statistics', url: window.location.href })
+	socketMessageSend({ type: 'statistics' })
 }, 1000)
 
 const displayStatistics = (statistics) => {
-	console.log(statistics)
-
-	document.getElementById('statistics').innerHTML = JSON.stringify(statistics.latests)
+	// console.log(statistics)
+	const statsHTML = document.getElementById('statistics')
+	if(statsHTML) {
+		statsHTML.innerHTML = JSON.stringify(statistics, null, 2)
+	}
 }

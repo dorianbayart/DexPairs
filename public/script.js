@@ -31,6 +31,7 @@ const Y_AXIS_TYPES = {
 let yAxisType = Y_AXIS_TYPES.linear
 
 
+
 // get top tokens from server
 function getTop() {
 	let xmlhttp = new XMLHttpRequest()
@@ -65,7 +66,7 @@ function getSimple(callback) {
 			let data = JSON.parse(this.responseText)
 			simple = data
 			if(simple && Object.keys(simple).length > 0) {
-				console.log('getSimple got results', Date.now())
+				// console.log('getSimple got results', Date.now())
 
 				if(selectedToken.length !== 42) {
 					let found = findAddressFromSymbol(selectedToken)
@@ -89,12 +90,12 @@ function getSimple(callback) {
 
 				setToken(selectedToken)
 				setBase(selectedBase)
-				console.log('getSimple before getCharts', Date.now())
+				// console.log('getSimple before getCharts', Date.now())
 
 				await getCharts()
 				sessionStorage.setItem('simple', JSON.stringify(simple))
 
-				console.log('getSimple before callback', Date.now())
+				// console.log('getSimple before callback', Date.now())
 
 				if(callback) callback()
 			} else {
@@ -214,7 +215,7 @@ function updateList() {
 		})
 	}
 
-	console.log('updateList', Date.now())
+	// console.log('updateList', Date.now())
 }
 
 // set base list selection
@@ -1299,6 +1300,8 @@ function updateURLParams() {
 		document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href)
 
 		window.history.replaceState(null, fullTitle, window.location.href.split('?')[0] + '?' + params.toString())
+
+		wsSendStatistics()
 	}
 }
 

@@ -89,7 +89,7 @@ const NETWORK = {
 		name: 'Optimistic Ethereum',
 		shortName: 'oeth',
 		img: '/img/optimism-icon.svg',
-		color: '#1c68fb',
+		color: '#e84142',
 		rpc: 'https://mainnet.optimism.io',
 		explorer: 'https://optimistic.etherscan.io',
 		normaltx: 'https://api-optimistic.etherscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
@@ -707,7 +707,9 @@ const precise = (x) => {
 	return Number.parseFloat(x).toPrecision(2)
 }
 const gasRound = (x) => {
-	if(x > 9) { return Math.round(x) }
+	if(x > 19) { return Math.round(x) }
+	if(x < 0.1) { return Math.round(1000 * x) / 1000 }
+	if(x < 1) { return Math.round(100 * x) / 100 }
 	return Math.round(10 * x) / 10
 }
 
