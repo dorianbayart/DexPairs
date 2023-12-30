@@ -83,6 +83,28 @@ const NETWORK = {
 		url: 'https://uniswap.org/',
 		url_swap: 'https://app.uniswap.org/#/swap'
 	},
+	OPTIMISM: {
+		chainId: 10,
+		enum: 'OPTIMISM',
+		name: 'Optimistic Ethereum',
+		shortName: 'oeth',
+		img: '/img/optimism-icon.svg',
+		color: '#e84142',
+		rpc: 'https://mainnet.optimism.io',
+		explorer: 'https://optimistic.etherscan.io',
+		normaltx: 'https://api-optimistic.etherscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokentx: 'https://api-optimistic.etherscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://api-optimistic.etherscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://api-optimistic.etherscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		// url_data: '',
+		tokenContract: '0x0',
+		tokenSymbol: 'OETH',
+		tokenName: 'Ether',
+		tokenDecimal: 18,
+		tokenPriceContract: '0x4200000000000000000000000000000000000006',
+		subgraph_url: '',
+		coingecko_name: 'optimistic-ethereum',
+	},
 	CRONOS: {
 		chainId: 25,
 		enum: 'CRONOS',
@@ -224,13 +246,13 @@ const NETWORK = {
 		shortName: 'zksync',
 		img: '/img/zksync-icon.svg',
 		color: '#8c8dfc',
-		rpc: 'https://zksync2-mainnet.zksync.io',
+		rpc: 'https://mainnet.era.zksync.io',
 		explorer: 'https://explorer.zksync.io/address/',
-		tokenInfo: 'https://zksync2-mainnet-explorer.zksync.io/token/CONTRACT_ADDRESS',
-		normaltx: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		tokentx: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		erc721tx: '', //'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
-		tokenbalance: 'https://zksync2-mainnet.zkscan.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
+		tokenInfo: 'https://explorer.zksync.io/address/CONTRACT_ADDRESS',
+		normaltx: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokentx: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		erc721tx: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=tokennfttx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
+		tokenbalance: 'https://block-explorer-api.mainnet.zksync.io/api?module=account&action=tokenbalance&contractaddress=CONTRACT_ADDRESS&address=WALLET_ADDRESS&tag=latest',
 		url_data: '',
 		tokenContract: '0x000000000000000000000000000000000000800a',
 		tokenSymbol: 'ETH',
@@ -238,7 +260,7 @@ const NETWORK = {
 		tokenDecimal: 18,
 		tokenPriceContract: '0x0000000000000000000000000000000000000000',
 		subgraph_url: '',
-		coingecko_name: ''
+		coingecko_name: 'zksync'
 	},
 	ARBITRUM_ONE: {
 		chainId: 42161,
@@ -575,7 +597,7 @@ const keepENSName = (address) => {
 
 // Get token balance
 const getTokenBalanceWeb3 = async (contractAddress, address, network) => {
-	if(contractAddress === NETWORK[network].tokenPriceContract || !contractAddress.length || !address) return
+	if(!contractAddress.length || !address) return
 	let contract = new (getWeb3(network).eth).Contract(minABI, contractAddress)
 	try {
 		return await contract.methods.balanceOf(unprefixAddress(address)).call(async (error, value) => {
@@ -615,19 +637,6 @@ const createNetworkImg = (network) => {
 /* Utils - Get Price of Address on Network */
 const getPriceByAddressNetwork = async (searchedAddress, balance, network) => {
 	if(!searchedAddress || searchedAddress.length === 0) return null
-
-
-	// zkSync
-	if(NETWORK.ZKSYNC_ERA.enum === network) {
-		try {
-			const token = await get(NETWORK.ZKSYNC_ERA.tokenInfo.replace('CONTRACT_ADDRESS', searchedAddress))
-			searchedAddress = token.l1Address === NETWORK.ZKSYNC_ERA.tokenPriceContract ? NETWORK.ETHEREUM.tokenPriceContract : token.l1Address
-			network = NETWORK.ETHEREUM.enum
-		} catch {
-			return null
-		}
-	}
-
 
 
 	let address = searchedAddress
