@@ -134,7 +134,7 @@ const NETWORK = {
 		shortName: 'bnb',
 		img: '/img/bsc-icon.svg',
 		color: '#f0b931',
-		rpc: 'https://bsc-dataseed.binance.org',
+		rpc: 'https://1rpc.io/bnb',
 		explorer: 'https://bscscan.com/token/',
 		normaltx: 'https://api.bscscan.com/api?module=account&action=txlist&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
 		tokentx: 'https://api.bscscan.com/api?module=account&action=tokentx&address=WALLET_ADDRESS&startblock=START_BLOCK&sort=asc',
