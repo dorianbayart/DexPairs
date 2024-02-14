@@ -147,7 +147,7 @@ async function getUniswapV3BNBTopTokens() {
 const uniswapV3_arbitrum_request = `
 query
 {
-  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "50000", derivedETH_gt: "0", totalValueLockedUSD_gt: "40000" } ) {
+  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "50000", derivedETH_gt: "0", totalValueLockedUSD_gt: "25000" } ) {
     id
     name
     symbol
@@ -169,7 +169,7 @@ async function getUniswapV3ArbitrumTopTokens() {
 const uniswapV3_request = `
 query
 {
-  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "10000", derivedETH_gt: "0", totalValueLockedUSD_gt: "40000" } ) {
+  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "10000", derivedETH_gt: "0", totalValueLockedUSD_gt: "50000" } ) {
     id
     name
     symbol
@@ -213,7 +213,7 @@ async function getUniswapV2TopTokens() {
 const polygon_quickswap_v3_request = `
 query
 {
-  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "10000", derivedMatic_gt: "0", totalValueLockedUSD_gt: "10000" } ) {
+  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "100000", derivedMatic_gt: "0", totalValueLockedUSD_gt: "10000" } ) {
     id
     name
     symbol
@@ -688,8 +688,8 @@ const buildCharts = async (chain, point, data, time) => {
     await redis.set(chain+':vol:'+address, JSON.stringify(volume))
   }
 
-  if(volume.length > 24) { // volume over last few points
-    data[address].v = volume[volume.length-1].v - volume[volume.length-25].v
+  if(volume.length > 4) { // volume over last 24h (or last few points)
+    data[address].v = volume[volume.length-1].v - volume.filter(point => volume[volume.length-1].t - point.t < DAY )[0].v
   }
 
   // c2 is '4 hours'
