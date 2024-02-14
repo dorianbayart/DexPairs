@@ -283,6 +283,7 @@ function setTop() {
 		div.appendChild(div_percentage)
 		let container_chart = document.createElement('div')
 		container_chart.classList.add('top-chart')
+		container_chart.title = 'Last 24h price mini-chart'
 		div.appendChild(container_chart)
 		let canvas_chart = document.createElement('canvas')
 		canvas_chart.id = 'chart_' + address

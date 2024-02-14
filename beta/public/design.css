@@ -63,7 +63,7 @@
 }
 
 #top::before {
-  content: 'Top tokens by USD volume';
+  content: 'Top tokens by USD volume over the last 24h';
   display: block;
   font-size: .85em;
   font-weight: lighter;
