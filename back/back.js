@@ -77,22 +77,22 @@ async function get(url, query = null) {
 const pancakeswap_request = `
 query
 {
-  tokens(first: 1000, orderBy: tradeVolumeUSD, orderDirection: desc, where: { totalLiquidity_gt: "10", derivedBNB_gt: "0" } ) {
+  tokens(first: 1000, orderBy: totalValueLockedUSD, orderDirection: desc, where: { volumeUSD_gt: "10000", derivedETH_gt: "0", totalValueLockedUSD_gt: "25000" } ) {
     id
     name
     symbol
-    derivedBNB
-    tradeVolumeUSD
+    derivedETH
+    volumeUSD
   }
   bundle(id: "1" ) {
-    bnbPrice
+    ethPriceUSD
   }
 }
 `
 
-// Use TheGraph API - https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/pancakeswap/exchange-v3-bsc
 async function getPancakeswapTopTokens() {
-  return await get('https://bsc.streamingfast.io/subgraphs/name/pancakeswap/exchange-v2', pancakeswap_request)
+  return await get('https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-bsc', pancakeswap_request)
 }
 
 
@@ -371,7 +371,7 @@ async function launchBnbChain() {
   let data = {}
 
   // get data from Uniswap
-  const top = await getUniswapV3BNBTopTokens()
+  const top = await getPancakeswapTopTokens()
 
   const time = Date.now()
   const tokens = top.data ? top.data.tokens : []
