@@ -160,9 +160,10 @@ query
 }
 `
 
-// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/ianlapham/arbitrum-minimal
+// Use TheGraph API - https://thegraph.com/hosted-service/subgraph/revert-finance/uniswap-v3-arbitrum
+// https://github.com/revert-finance/uniswap-v3-subgraph
 async function getUniswapV3ArbitrumTopTokens() {
-  return await get('https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-minimal', uniswapV3_arbitrum_request)
+  return await get('https://api.thegraph.com/subgraphs/name/revert-finance/uniswap-v3-arbitrum', uniswapV3_arbitrum_request)
 }
 
 // Get Uniswap v3 top
