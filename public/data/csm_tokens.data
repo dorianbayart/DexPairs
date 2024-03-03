@@ -1,19 +1,24 @@
 [
   {
-    "fullName": "CleanSat Mining Alpha (CSM-ALPHA)",
+    "fullName": "CleanSat Mining Alpha",
     "shortName": "CSM-ALPHA",
     "contractAddress": "0xf8419b6527A24007c2BD81bD1aA3b5a735C1F4c9",
     "marketplaceLink": "https://cleansatmining.com/csm-alpha",
     "officialPrice": 14.05,
+    "supply": 100000,
+    "icon": "https://yam.cleansatmining.net/logo.svg",
     "annualYield": 0.087,
     "netRentYearPerToken": 1.22,
     "currency": "USDT",
     "electricityPrice": 0.0375,
     "sellDate": "31/03/2023",
-    "miningSite": "Parc des Virunga (RDC) (Hydro)",
-    "imageLink": [
-      "https://cleansatmining.com/data/files/virunga-congo.jpg"
-    ],
+    "miningSite": "Parc des Virunga (RDC)",
+    "location": {
+      "aera": "Parc des Virunga",
+      "country": "RDC"
+    },
+    "energy": ["Hydroélectricité"],
+    "imageLink": ["https://cleansatmining.com/data/files/virunga-congo.jpg"],
     "blockchainAddresses": {
       "ethereum": {
         "chainId": 1,
@@ -28,20 +33,25 @@
     }
   },
   {
-    "fullName": "CleanSat Mining Beta (CSM-BETA)",
+    "fullName": "CleanSat Mining Beta",
     "shortName": "CSM-BETA",
     "contractAddress": "0x364D1aAF7a98e26A1F072e926032f154428481d1",
     "marketplaceLink": "https://cleansatmining.com/csm-beta",
     "officialPrice": 12.16,
+    "supply": 100000,
+    "icon": "https://yam.cleansatmining.net/logo.svg",
     "annualYield": 0.035,
     "netRentYearPerToken": 0.4256,
     "currency": "USDT",
     "electricityPrice": 0.0575,
     "sellDate": "31/03/2023",
-    "miningSite": "Barrage d'Itaipu (Paraguay) (Hydro)",
-    "imageLink": [
-      "https://cleansatmining.com/data/files/ddd..jpg"
-    ],
+    "miningSite": "Barrage d'Itaipu (Paraguay)",
+    "location": {
+      "aera": "Barrage d'Itaipu",
+      "country": "Paraguay"
+    },
+    "energy": ["Hydroélectricité"],
+    "imageLink": ["https://cleansatmining.com/data/files/ddd..jpg"],
     "blockchainAddresses": {
       "ethereum": {
         "chainId": 1,
@@ -56,17 +66,25 @@
     }
   },
   {
-    "fullName": "CleanSat Mining Omega (CSM-OMEGA)",
+    "fullName": "CleanSat Mining Omega",
     "shortName": "CSM-OMEGA",
     "contractAddress": "0x203A5080450FFC3e038284082FBF5EBCdc9B053f",
     "marketplaceLink": "https://cleansatmining.com/csm-omega",
     "officialPrice": 14.35,
+    "supply": 100000,
+    "icon": "https://yam.cleansatmining.net/logo.svg",
     "annualYield": 0.097,
     "netRentYearPerToken": 1.39195,
     "currency": "USDT",
-    "electricityPrice": 0.0525,
+    "electricityPrice": 0.025,
+    "electricitySpotPriceUrl": "https://www.nordpoolgroup.com/en/Market-data1/Dayahead/Area-Prices/FI/Daily/?view=table",
     "sellDate": "01/04/2023",
-    "miningSite": "Carélie du Sud (Finlande) (Hydroélectricité)",
+    "miningSite": "Carélie du Sud (Finlande)",
+    "location": {
+      "aera": "Carélie du Sud",
+      "country": "Finlande"
+    },
+    "energy": ["Hydroélectricité"],
     "imageLink": [
       "https://cleansatmining.com/data/files/434184-1260x630-finlande.jpg"
     ],
@@ -84,20 +102,25 @@
     }
   },
   {
-    "fullName": "CleanSat Mining Gamma (CSM-GAMMA)",
+    "fullName": "CleanSat Mining Gamma",
     "shortName": "CSM-GAMMA",
     "contractAddress": "0x71C86CbB71846425De5f3a693e989F4BDd97E98d",
     "marketplaceLink": "https://cleansatmining.com/csm-gamma",
     "officialPrice": 10.86,
+    "supply": 100000,
+    "icon": "https://yam.cleansatmining.net/logo.svg",
     "annualYield": 0.074,
     "netRentYearPerToken": 0.80364,
     "currency": "USDT",
     "electricityPrice": 0.063,
     "sellDate": "15/05/2023",
-    "miningSite": "Åsele (Suède) (Hydroélectricité et éolien)",
-    "imageLink": [
-      "https://cleansatmining.com/data/files/img_3861.jpg"
-    ],
+    "miningSite": "Åsele (Suède)",
+    "location": {
+      "aera": "Åsele",
+      "country": "Suède"
+    },
+    "energy": ["Hydroélectricité", "éolien"],
+    "imageLink": ["https://cleansatmining.com/data/files/img_3861.jpg"],
     "blockchainAddresses": {
       "ethereum": {
         "chainId": 1,
@@ -112,19 +135,26 @@
     }
   },
   {
-    "fullName": "CleanSat Mining Delta (CSM-DELTA)",
+    "fullName": "CleanSat Mining Delta",
     "shortName": "CSM-DELTA",
     "contractAddress": "0x20D2F2d4b839710562D25274A3e98Ea1F0392D24",
     "marketplaceLink": "https://cleansatmining.com/csm-delta",
-    "officialPrice": 6.7,
+    "officialPrice": 7.44,
+    "supply": 219566,
+    "icon": "https://yam.cleansatmining.net/logo.svg",
     "annualYield": null,
     "netRentYearPerToken": null,
     "currency": "USDT",
     "electricityPrice": 0.046,
     "sellDate": "31/07/2023",
     "miningSite": "Oregon (USA) (Hydroélectricité et nucléaire)",
+    "location": {
+      "aera": "Oregon",
+      "country": "USA"
+    },
+    "energy": ["Hydroélectricité", "nucléaire"],
     "imageLink": [
-      "https://cleansatmining.com/data/files/434184-1260x630-finlande.jpg"
+      "https://cleansatmining.com/data/files/mount-hood-reflected-in-mirror-lake-oregon.jpg"
     ],
     "blockchainAddresses": {
       "ethereum": {
