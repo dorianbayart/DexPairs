@@ -3,18 +3,23 @@
 
 let underlyingAssets = {}
 let beefyRatio = {}
+let beefyVaults = []
 let realtTokens = []
 let csmTokens = []
 let balancerPools = {}
+let zkSyncEraTokens = []
 
 
 // beefy.finance - get all ratio
 const beefy_ratio = 'https://api.beefy.finance/lps'
+const beefy_vaults = 'https://api.beefy.finance/vaults'
 // realt.co - get all tokens
 const realt_tokens = 'https://api.realt.community/v1/token'
-// cleansatmining.com - get all tokens - https://yam.cleansatmining.com/tokens.json
+// cleansatmining.com - get all tokens
 const csm_tokens = 'https://raw.githubusercontent.com/dorianbayart/DexPairs/main/public/data/csm_tokens.data'
 
+// zkSyncEra
+const zkSyncEra_tokens = 'https://block-explorer-api.mainnet.zksync.io/tokens?minLiquidity=2500&limit=100&page=1'
 
 // AAVE - Ethereum
 const aave_ethereum_request = `
@@ -634,17 +639,25 @@ async function getCoingeckoPrice(address, network) {
 
 
 /* Beefy.Finance */
-async function getPriceFromBeefy(contract, symbol, balance, network) {
+async function getPriceFromBeefy(transaction, balance, network) {
 	if(Object.keys(beefyRatio).length === 0 || Date.now() - beefyRatio.updatedAt > 60000) {
+    beefyVaults = await get(beefy_vaults)
 		beefyRatio = await get(beefy_ratio)
 		beefyRatio.updatedAt = Date.now()
 	}
-	const key = Object.keys(beefyRatio).find((item) => item.replace(/-/g, '').toLowerCase().endsWith(symbol.replace(/-/g, '').toLowerCase().substr(3)))
+
+  const vault = beefyVaults.find(vault => vault.earnedTokenAddress.toLowerCase() === transaction.contractAddress.toLowerCase())
+
+  if(Number(transaction.tokenDecimal) !== vault.tokenDecimals) {
+    transaction.tokenDecimal = String(vault.tokenDecimals)
+  }
+
+  const key = vault.oracleId
 	if(key) {
 		return beefyRatio[key]
 	} else {
 		try {
-			let underlyingContract = await getBeefyUnderlying(contract, network)
+			let underlyingContract = await getBeefyUnderlying(transaction.contractAddress, network)
 			return await getCoingeckoPrice(underlyingContract, network)
 		} catch {
 			return
@@ -676,6 +689,19 @@ async function getPriceFromCSM(contract, symbol, balance, network) {
 	let token = csmTokens.find((token) => token.contractAddress.toLowerCase() === contract.toLowerCase())
 	if(token) {
 		return token.officialPrice
+	}
+  return
+}
+
+
+/* zkSync Era */
+async function getPriceFromZkSyncEra(contract) {
+	if(zkSyncEraTokens.length === 0) {
+		zkSyncEraTokens = (await get(zkSyncEra_tokens)).items
+	}
+	let token = zkSyncEraTokens.find((token) => token.l2Address.toLowerCase() === contract.toLowerCase())
+	if(token) {
+		return token.usdPrice
 	}
   return
 }

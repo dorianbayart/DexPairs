@@ -31,7 +31,6 @@ const Y_AXIS_TYPES = {
 let yAxisType = Y_AXIS_TYPES.linear
 
 
-
 // get top tokens from server
 function getTop() {
 	let xmlhttp = new XMLHttpRequest()
@@ -1301,8 +1300,6 @@ function updateURLParams() {
 		document.querySelector('meta[property="og:url"]').setAttribute('content', window.location.href)
 
 		window.history.replaceState(null, fullTitle, window.location.href.split('?')[0] + '?' + params.toString())
-
-		wsSendStatistics()
 	}
 }
 

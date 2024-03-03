@@ -595,7 +595,7 @@ async function searchTokens(network, address) {
 		let balance = 0
 
 		try {
-			if(transaction.contractAddress.length) {
+			if(transaction.contractAddress?.length) {
 				balance = await getTokenBalanceWeb3(transaction.contractAddress, address, network)
 				const price = await getContractAddressPrice(transaction, network, balance)
 				const id = getId(transaction.contractAddress, network)
@@ -647,7 +647,7 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 	let price
 	// beefy.finance
 	if(transaction.tokenName?.toLowerCase().startsWith('moo') && balance > 0) {
-		price = await getPriceFromBeefy(transaction.contractAddress, transaction.tokenSymbol, balance, network)
+		price = await getPriceFromBeefy(transaction, balance, network)
 		if(price) {
 			return price
 		}
@@ -669,6 +669,13 @@ async function getContractAddressPrice(transaction, network, balance = 1) {
 	// Balancer Pool
 	else if(transaction.tokenSymbol?.startsWith('B-') && balance > 0) {
 		price = await getPriceFromBalancerPool(transaction.contractAddress, transaction.tokenSymbol, balance, network)
+		if(price) {
+			return price
+		}
+	}
+	// zkSyncEra network
+	else if(NETWORK.ZKSYNC_ERA.enum === network && balance > 0) {
+		price = await getPriceFromZkSyncEra(transaction.contractAddress)
 		if(price) {
 			return price
 		}

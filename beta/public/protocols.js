@@ -3,6 +3,7 @@
 
 let underlyingAssets = {}
 let beefyRatio = {}
+let beefyVaults = []
 let realtTokens = []
 let csmTokens = []
 let balancerPools = {}
@@ -11,6 +12,7 @@ let zkSyncEraTokens = []
 
 // beefy.finance - get all ratio
 const beefy_ratio = 'https://api.beefy.finance/lps'
+const beefy_vaults = 'https://api.beefy.finance/vaults'
 // realt.co - get all tokens
 const realt_tokens = 'https://api.realt.community/v1/token'
 // cleansatmining.com - get all tokens
@@ -637,17 +639,25 @@ async function getCoingeckoPrice(address, network) {
 
 
 /* Beefy.Finance */
-async function getPriceFromBeefy(contract, symbol, balance, network) {
+async function getPriceFromBeefy(transaction, balance, network) {
 	if(Object.keys(beefyRatio).length === 0 || Date.now() - beefyRatio.updatedAt > 60000) {
+    beefyVaults = await get(beefy_vaults)
 		beefyRatio = await get(beefy_ratio)
 		beefyRatio.updatedAt = Date.now()
 	}
-	const key = Object.keys(beefyRatio).find((item) => item.replace(/-/g, '').toLowerCase().endsWith(symbol.replace(/-/g, '').toLowerCase().substr(3)))
+
+  const vault = beefyVaults.find(vault => vault.earnedTokenAddress.toLowerCase() === transaction.contractAddress.toLowerCase())
+
+  if(Number(transaction.tokenDecimal) !== vault.tokenDecimals) {
+    transaction.tokenDecimal = String(vault.tokenDecimals)
+  }
+
+  const key = vault.oracleId
 	if(key) {
 		return beefyRatio[key]
 	} else {
 		try {
-			let underlyingContract = await getBeefyUnderlying(contract, network)
+			let underlyingContract = await getBeefyUnderlying(transaction.contractAddress, network)
 			return await getCoingeckoPrice(underlyingContract, network)
 		} catch {
 			return
